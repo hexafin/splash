@@ -8,18 +8,16 @@
  *
  * @providesModule LayoutAnimation
  * @flow
- * @format
  */
 'use strict';
 
-const PropTypes = require('prop-types');
-const UIManager = require('UIManager');
+var UIManager = require('UIManager');
 
-const keyMirror = require('fbjs/lib/keyMirror');
+var keyMirror = require('fbjs/lib/keyMirror');
 
-const {checkPropTypes} = PropTypes;
+var {checkPropTypes, PropTypes} = require('react');
 
-const TypesEnum = {
+var TypesEnum = {
   spring: true,
   linear: true,
   easeInEaseOut: true,
@@ -27,23 +25,24 @@ const TypesEnum = {
   easeOut: true,
   keyboard: true,
 };
-const Types = keyMirror(TypesEnum);
+var Types = keyMirror(TypesEnum);
 
-const PropertiesEnum = {
+var PropertiesEnum = {
   opacity: true,
   scaleXY: true,
 };
-const Properties = keyMirror(PropertiesEnum);
+var Properties = keyMirror(PropertiesEnum);
 
-const animType = PropTypes.shape({
+var animType = PropTypes.shape({
   duration: PropTypes.number,
   delay: PropTypes.number,
   springDamping: PropTypes.number,
   initialVelocity: PropTypes.number,
-  type: PropTypes.oneOf(Object.keys(Types)).isRequired,
-  property: PropTypes.oneOf(
-    // Only applies to create/delete
-    Object.keys(Properties),
+  type: PropTypes.oneOf(
+    Object.keys(Types)
+  ).isRequired,
+  property: PropTypes.oneOf( // Only applies to create/delete
+    Object.keys(Properties)
   ),
 });
 
@@ -54,9 +53,9 @@ type Anim = {
   initialVelocity?: number,
   type?: $Enum<typeof TypesEnum>,
   property?: $Enum<typeof PropertiesEnum>,
-};
+}
 
-const configType = PropTypes.shape({
+var configType = PropTypes.shape({
   duration: PropTypes.number.isRequired,
   create: animType,
   update: animType,
@@ -68,7 +67,7 @@ type Config = {
   create?: Anim,
   update?: Anim,
   delete?: Anim,
-};
+}
 
 function checkConfig(config: Config, location: string, name: string) {
   checkPropTypes({config: configType}, {config}, location, name);
@@ -79,11 +78,7 @@ function configureNext(config: Config, onAnimationDidEnd?: Function) {
     checkConfig(config, 'config', 'LayoutAnimation.configureNext');
   }
   UIManager.configureNextLayoutAnimation(
-    config,
-    onAnimationDidEnd || function() {},
-    function() {
-      /* unused */
-    },
+    config, onAnimationDidEnd || function() {}, function() { /* unused */ }
   );
 }
 
@@ -104,9 +99,13 @@ function create(duration: number, type, creationProp): Config {
   };
 }
 
-const Presets = {
-  easeInEaseOut: create(300, Types.easeInEaseOut, Properties.opacity),
-  linear: create(500, Types.linear, Properties.opacity),
+var Presets = {
+  easeInEaseOut: create(
+    300, Types.easeInEaseOut, Properties.opacity
+  ),
+  linear: create(
+    500, Types.linear, Properties.opacity
+  ),
   spring: {
     duration: 700,
     create: {
@@ -134,7 +133,7 @@ const Presets = {
  *
  *     UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
  */
-const LayoutAnimation = {
+var LayoutAnimation = {
   /**
    * Schedules an animation to happen on the next layout.
    *
@@ -158,9 +157,15 @@ const LayoutAnimation = {
   Properties,
   checkConfig,
   Presets,
-  easeInEaseOut: configureNext.bind(null, Presets.easeInEaseOut),
-  linear: configureNext.bind(null, Presets.linear),
-  spring: configureNext.bind(null, Presets.spring),
+  easeInEaseOut: configureNext.bind(
+    null, Presets.easeInEaseOut
+  ),
+  linear: configureNext.bind(
+    null, Presets.linear
+  ),
+  spring: configureNext.bind(
+    null, Presets.spring
+  ),
 };
 
 module.exports = LayoutAnimation;

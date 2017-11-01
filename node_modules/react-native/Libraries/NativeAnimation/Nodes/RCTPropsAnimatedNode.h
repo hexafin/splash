@@ -20,6 +20,4 @@
 
 - (void)disconnectFromView:(NSNumber *)viewTag;
 
-- (void)restoreDefaultValues;
-
 @end
