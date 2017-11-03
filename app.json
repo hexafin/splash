@@ -1,4 +1,5 @@
 {
-  "name": "Epoch",
-  "displayName": "Epoch"
+  "expo": {
+    "sdkVersion": "22.0.0"
+  }
 }
