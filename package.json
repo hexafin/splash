@@ -1,67 +1,28 @@
 {
-  "name": "Hexa",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "react-native-scripts": "1.6.0",
-    "jest-expo": "^22.0.0",
-    "react-test-renderer": "16.0.0-beta.5",
-    "rn-nodeify": "^8.2.0"
-  },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
-  "scripts": {
-    "start": "react-native-scripts start",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch",
-    "postinstall": "./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto, --hack"
-  },
-  "jest": {
-    "preset": "jest-expo"
-  },
-  "dependencies": {
-    "@expo/vector-icons": "^6.1.0",
-    "asyncstorage-down": "^4.0.1",
-    "bitcoinjs-lib": "^3.3.0",
-    "buffer": "^4.9.1",
-    "events": "^1.1.1",
-    "expo": "^22.0.0",
-    "path-browserify": "0.0.0",
-    "process": "^0.11.10",
-    "react": "16.0.0-beta.5",
-    "react-native": "^0.49.5",
-    "react-native-crypto": "^2.1.1",
-    "react-native-level-fs": "^3.0.0",
-    "react-native-randombytes": "^3.0.0",
-    "react-navigation": "^1.0.0-beta.15",
-    "readable-stream": "^1.0.33",
-    "stream-browserify": "^1.0.0",
-    "util": "^0.10.3",
-    "vm-browserify": "0.0.4"
-  },
-  "react-native": {
-    "crypto": "react-native-crypto",
-    "path": "path-browserify",
-    "fs": "react-native-level-fs",
-    "_stream_transform": "readable-stream/transform",
-    "_stream_readable": "readable-stream/readable",
-    "_stream_writable": "readable-stream/writable",
-    "_stream_duplex": "readable-stream/duplex",
-    "_stream_passthrough": "readable-stream/passthrough",
-    "stream": "stream-browserify",
-    "vm": "vm-browserify"
-  },
-  "browser": {
-    "crypto": "react-native-crypto",
-    "path": "path-browserify",
-    "fs": "react-native-level-fs",
-    "_stream_transform": "readable-stream/transform",
-    "_stream_readable": "readable-stream/readable",
-    "_stream_writable": "readable-stream/writable",
-    "_stream_duplex": "readable-stream/duplex",
-    "_stream_passthrough": "readable-stream/passthrough",
-    "stream": "stream-browserify",
-    "vm": "vm-browserify"
-  }
+	"name": "Hexa",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest",
+		"postinstall": "./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto, --hack"
+	},
+	"dependencies": {
+		"asyncstorage-down": "^4.0.1",
+		"react": "16.0.0",
+		"react-native": "0.50.3",
+		"bitcoinjs-lib": "^3.3.0",
+		"react-native-randombytes": "^3.0.0",
+    "react-navigation": "^1.0.0-beta.15"
+	},
+	"devDependencies": {
+		"babel-jest": "21.2.0",
+		"babel-preset-react-native": "4.0.0",
+		"jest": "21.2.1",
+		"react-test-renderer": "16.0.0",
+		"rn-nodeify": "^8.2.0"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
 }

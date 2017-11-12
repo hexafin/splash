@@ -35,6 +35,7 @@
 #import <cxxreact/JSBundleType.h>
 #import <cxxreact/JSCExecutor.h>
 #import <cxxreact/JSIndexedRAMBundle.h>
+#include <cxxreact/JSIndexedRAMBundleRegistry.h>
 #import <cxxreact/Platform.h>
 #import <jschelpers/Value.h>
 
@@ -71,6 +72,30 @@ typedef NS_ENUM(NSUInteger, RCTBridgeFields) {
   RCTBridgeFieldParams,
   RCTBridgeFieldCallID,
 };
+
+namespace {
+
+class GetDescAdapter : public JSExecutorFactory {
+public:
+  GetDescAdapter(RCTCxxBridge *bridge, std::shared_ptr<JSExecutorFactory> factory)
+    : bridge_(bridge)
+    , factory_(factory) {}
+  std::unique_ptr<JSExecutor> createJSExecutor(
+      std::shared_ptr<ExecutorDelegate> delegate,
+      std::shared_ptr<MessageQueueThread> jsQueue) override {
+    auto ret = factory_->createJSExecutor(delegate, jsQueue);
+    bridge_.bridgeDescription =
+      [NSString stringWithFormat:@"RCTCxxBridge %s",
+                ret->getDescription().c_str()];
+    return std::move(ret);
+  }
+
+private:
+  RCTCxxBridge *bridge_;
+  std::shared_ptr<JSExecutorFactory> factory_;
+};
+
+}
 
 static bool isRAMBundle(NSData *script) {
   BundleHeader header;
@@ -153,6 +178,7 @@ struct RCTInstanceCallback : public InstanceCallback {
 @synthesize loading = _loading;
 @synthesize valid = _valid;
 @synthesize performanceLogger = _performanceLogger;
+@synthesize bridgeDescription = _bridgeDescription;
 
 + (void)initialize
 {
@@ -302,9 +328,14 @@ struct RCTInstanceCallback : public InstanceCallback {
       BOOL useCustomJSC =
         [self.delegate respondsToSelector:@selector(shouldBridgeUseCustomJSC:)] &&
         [self.delegate shouldBridgeUseCustomJSC:self];
+      // We use the name of the device and the app for debugging & metrics
+      NSString *deviceName = [[UIDevice currentDevice] name];
+      NSString *appName = [[NSBundle mainBundle] bundleIdentifier];
       // The arg is a cache dir.  It's not used with standard JSC.
       executorFactory.reset(new JSCExecutorFactory(folly::dynamic::object
         ("OwnerIdentity", "ReactNative")
+        ("AppIdentity", [(appName ?: @"unknown") UTF8String])
+        ("DeviceIdentity", [(deviceName ?: @"unknown") UTF8String])
         ("UseCustomJSC", (bool)useCustomJSC)
   #if RCT_PROFILE
         ("StartSamplingProfilerOnInit", (bool)self.devSettings.startSamplingProfilerOnLaunch)
@@ -406,14 +437,9 @@ struct RCTInstanceCallback : public InstanceCallback {
     onSourceLoad(error, nil);
   } else {
     [RCTJavaScriptLoader loadBundleAtURL:self.bundleURL onProgress:onProgress onComplete:^(NSError *error, RCTSource *source) {
-      if (error && [self.delegate respondsToSelector:@selector(fallbackSourceURLForBridge:)]) {
-        NSURL *fallbackURL = [self.delegate fallbackSourceURLForBridge:self->_parentBridge];
-        if (fallbackURL && ![fallbackURL isEqual:self.bundleURL]) {
-          RCTLogError(@"Failed to load bundle(%@) with error:(%@ %@)", self.bundleURL, error.localizedDescription, error.localizedFailureReason);
-          self.bundleURL = fallbackURL;
-          [RCTJavaScriptLoader loadBundleAtURL:self.bundleURL onProgress:onProgress onComplete:onSourceLoad];
-          return;
-        }
+      if (error) {
+        RCTLogError(@"Failed to load bundle(%@) with error:(%@ %@)", self.bundleURL, error.localizedDescription, error.localizedFailureReason);
+        return;
       }
       onSourceLoad(error, source);
     }];
@@ -490,6 +516,10 @@ struct RCTInstanceCallback : public InstanceCallback {
   RCT_PROFILE_BEGIN_EVENT(RCTProfileTagAlways, @"-[RCTCxxBridge initializeBridge:]", nil);
   // This can only be false if the bridge was invalidated before startup completed
   if (_reactInstance) {
+#if RCT_DEV
+    executorFactory = std::make_shared<GetDescAdapter>(self, executorFactory);
+#endif
+
     // This is async, but any calls into JS are blocked by the m_syncReady CV in Instance
     _reactInstance->initializeBridge(
       std::make_unique<RCTInstanceCallback>(self),
@@ -1131,25 +1161,7 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithBundleURL:(__unused NSURL *)bundleUR
 {
   RCT_PROFILE_BEGIN_EVENT(RCTProfileTagAlways, @"-[RCTCxxBridge enqueueApplicationScript]", nil);
 
-  [self _tryAndHandleError:^{
-    NSString *sourceUrlStr = deriveSourceURL(url);
-    if (isRAMBundle(script)) {
-      [self->_performanceLogger markStartForTag:RCTPLRAMBundleLoad];
-      auto ramBundle = std::make_unique<JSIndexedRAMBundle>(sourceUrlStr.UTF8String);
-      std::unique_ptr<const JSBigString> scriptStr = ramBundle->getStartupCode();
-      [self->_performanceLogger markStopForTag:RCTPLRAMBundleLoad];
-      [self->_performanceLogger setValue:scriptStr->size() forTag:RCTPLRAMStartupCodeSize];
-      if (self->_reactInstance) {
-        self->_reactInstance->loadUnbundle(std::move(ramBundle), std::move(scriptStr),
-                                           sourceUrlStr.UTF8String, false);
-      }
-    } else if (self->_reactInstance) {
-      self->_reactInstance->loadScriptFromString(std::make_unique<NSDataBigString>(script),
-                                                 sourceUrlStr.UTF8String, false);
-    } else {
-      throw std::logic_error("Attempt to call loadApplicationScript: on uninitialized bridge");
-    }
-  }];
+  [self executeApplicationScript:script url:url async:YES];
 
   RCT_PROFILE_END_EVENT(RCTProfileTagAlways, @"");
 
@@ -1162,6 +1174,13 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithBundleURL:(__unused NSURL *)bundleUR
 
 - (void)executeApplicationScriptSync:(NSData *)script url:(NSURL *)url
 {
+  [self executeApplicationScript:script url:url async:NO];
+}
+
+- (void)executeApplicationScript:(NSData *)script
+                             url:(NSURL *)url
+                           async:(BOOL)async
+{
   [self _tryAndHandleError:^{
     NSString *sourceUrlStr = deriveSourceURL(url);
     if (isRAMBundle(script)) {
@@ -1171,19 +1190,19 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithBundleURL:(__unused NSURL *)bundleUR
       [self->_performanceLogger markStopForTag:RCTPLRAMBundleLoad];
       [self->_performanceLogger setValue:scriptStr->size() forTag:RCTPLRAMStartupCodeSize];
       if (self->_reactInstance) {
-        self->_reactInstance->loadUnbundle(std::move(ramBundle), std::move(scriptStr),
-                                           sourceUrlStr.UTF8String, true);
+        auto registry = std::make_unique<JSIndexedRAMBundleRegistry>(std::move(ramBundle), sourceUrlStr.UTF8String);
+        self->_reactInstance->loadRAMBundle(std::move(registry), std::move(scriptStr),
+                                            sourceUrlStr.UTF8String, !async);
       }
     } else if (self->_reactInstance) {
       self->_reactInstance->loadScriptFromString(std::make_unique<NSDataBigString>(script),
-                                                 sourceUrlStr.UTF8String, true);
+                                                 sourceUrlStr.UTF8String, !async);
     } else {
-      throw std::logic_error("Attempt to call loadApplicationScriptSync: on uninitialized bridge");
+      std::string methodName = async ? "loadApplicationScript" : "loadApplicationScriptSync";
+      throw std::logic_error("Attempt to call " + methodName + ": on uninitialized bridge");
     }
   }];
 }
-
-
 
 - (JSValue *)callFunctionOnModule:(NSString *)module
                            method:(NSString *)method

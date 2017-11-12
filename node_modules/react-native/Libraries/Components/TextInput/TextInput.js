@@ -23,14 +23,23 @@ const ReactNative = require('ReactNative');
 const StyleSheet = require('StyleSheet');
 const Text = require('Text');
 const TextInputState = require('TextInputState');
+/* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
+ * found when Flow v0.54 was deployed. To see the error delete this comment and
+ * run Flow. */
 const TimerMixin = require('react-timer-mixin');
 const TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 const UIManager = require('UIManager');
 const ViewPropTypes = require('ViewPropTypes');
 
+/* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
+ * found when Flow v0.54 was deployed. To see the error delete this comment and
+ * run Flow. */
 const emptyFunction = require('fbjs/lib/emptyFunction');
 const invariant = require('fbjs/lib/invariant');
 const requireNativeComponent = require('requireNativeComponent');
+/* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
+ * found when Flow v0.54 was deployed. To see the error delete this comment and
+ * run Flow. */
 const warning = require('fbjs/lib/warning');
 
 const onlyMultiline = {
@@ -218,6 +227,11 @@ const TextInput = createReactClass({
      * @platform android
      */
     autoGrow: PropTypes.bool,
+    /**
+     * Specifies whether fonts should scale to respect Text Size accessibility settings. The
+     * default is `true`.
+     */
+    allowFontScaling: PropTypes.bool,
     /**
      * If `false`, text is not editable. The default value is `true`.
      */
@@ -557,7 +571,11 @@ const TextInput = createReactClass({
      */
     caretHidden: PropTypes.bool,
   },
-
+  getDefaultProps(): Object {
+    return {
+      allowFontScaling: true,
+    };
+  },
   /**
    * `NativeMethodsMixin` will look for this when invoking `setNativeProps`. We
    * make `this` look like an actual native component class.
@@ -695,7 +713,7 @@ const TextInput = createReactClass({
         'Cannot specify both value and children.'
       );
       if (childCount >= 1) {
-        children = <Text style={props.style}>{children}</Text>;
+        children = <Text style={props.style} allowFontScaling={props.allowFontScaling}>{children}</Text>;
       }
       if (props.inputView) {
         children = [children, props.inputView];
@@ -740,7 +758,9 @@ const TextInput = createReactClass({
       props.style = [props.style, {height: this.state.layoutHeight}];
     }
     props.autoCapitalize =
-      UIManager.AndroidTextInput.Constants.AutoCapitalizationType[this.props.autoCapitalize];
+      UIManager.AndroidTextInput.Constants.AutoCapitalizationType[
+        props.autoCapitalize || 'sentences'
+      ];
     /* $FlowFixMe(>=0.53.0 site=react_native_fb,react_native_oss) This comment
      * suppresses an error when upgrading Flow's support for React. To see the
      * error delete this comment and run Flow. */
