@@ -10,12 +10,6 @@ var random = require('react-native-randombytes').randomBytes
      * @return {object}
      */
 newWallet = function() {
-    function myRng (n) {
-      var buf = new Buffer(n)
-      var num =  Math.floor((Math.random() * (2500000000 * 10)) + 1) //Demo purposes only
-      buf.fill(num)
-      return buf
-    }
     var keyPair = bitcoin.ECPair.makeRandom({
       rng: random
     })
