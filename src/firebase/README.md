@@ -11,35 +11,37 @@ https://cloud.google.com/firestore/docs/concepts/structure-data
 
 ## people
 
-### `first_name`
-### `last_name`
-### `email`
-### `phone_number`
+`first_name`
+`last_name`
+`email`
+`phone_number`
 
-### `phone_type`
+`phone_type`
+
 example values
 - `iPhone 7`
 - `iPhone X`
 - `samsung note`
 
-### `phone_os`
+`phone_os`
+
 example values
 - `ios 11`
 - `ios 10`
 - `android `
 
-### `phone_id`
-### `facebook_id`
-### `coinbase_id`
+`phone_id`
+`facebook_id`
+`coinbase_id`
 *not defined unless coinbase is linked*
 
-### `picture_url`
-### `address`
-### `city`
-### `state`
-### `zip_code`
-### `country`
-### `joined_date`
+`picture_url`
+`address`
+`city`
+`state`
+`zip_code`
+`country`
+`joined_date`
 - timestamp of account creation
 
 
@@ -47,29 +49,30 @@ example values
 
 **note:** Hexa wallets are not the same thing as traditional bitcoin wallets.
 
-### `person_id`
+`person_id`
 
-### `type`
+`type`
+
 values
 - `personal`
 - `group`
 - `merchant`
 
-### `picture_url`
+`picture_url`
 *not defined for personal wallets, as they always use the picture associated with the person*
 
-### `hex`
+`hex`
 - username within hexa system (eg. @john-smith-1)
 
-### `members`
+`members`
 *not defined for personal wallets, as they only have a single member (the owner)*
 - array of people objects
 
-### `transactions`
+`transactions`
 - array of references to transaction documents
 - see transactions docs below
 
-### `created`
+`created`
 - creation timestamp
 
 
@@ -78,18 +81,19 @@ values
 **note:** a group wallet may communicate with another wallet, so the chat my have more than 2 people, 
 but never more than 2 wallets
 
-### `type`
+`type`
+
 values
 - `friend`
 - `merchant`
 
-### `wallets`
+`wallets`
 - tuple of wallet ids
 
-### `members`
+`members`
 - array of people ids
 
-### `messages`
+`messages`
 - subcollection of message documents
 - see messages documentation below
 
@@ -97,28 +101,29 @@ values
 
 Messages are a subcollection of a specific chat between two wallets
 
-### `type`
+`type`
+
 acceptable values
 - `text`
 - `transaction`
 
-### `transaction_id`
+`transaction_id`
 *only defined for transaction type messages*
 - reference to transaction document in the transactions collection
 
-### `to_wallet`
+`to_wallet`
 *only defined for text type messages, as transaction data is in transaction doc*
 - wallet id
 
-### `from_wallet`
+`from_wallet`
 *only defined for text type messages, as transaction data is in transaction doc*
 - wallet id
 
-### `from_person`
+`from_person`
 *only defined for text type messages*
 - person id
 
-### `read_by`
+`read_by`
 - array of person ids
 
 
@@ -127,50 +132,52 @@ acceptable values
 **note:** a hexa transaction is not the same thing as a traditional bitcoin transaction: 
 hexa adds context to bitcoin transactions with relevant information
 
-### `completed`
+`completed`
 - boolean
 
-### `from_wallet`
+`from_wallet`
 - reference to wallet paying
 
-### `from_person`
+`from_person`
 - reference to person paying
 
-### `to_wallet`
+`to_wallet`
 - reference to wallet being paid
 
-### `initator_wallet`
+`initator_wallet`
 - reference to wallet that started the transaction
 - if the transaction has not yet completed, this value determines whether the money is owed or requested
 
-### `initiator_person`
+`initiator_person`
 - reference to person that started the transaction
 
-### `acceptor_wallet`
+`acceptor_wallet`
 - reference to wallet that accepted the transaction
 
-### `acceptor_person`
+`acceptor_person`
 - reference to person that accepted the transaction on behalf of the acceptor wallet
 
-### `fiat`
+`fiat`
+
 values
 - `usd`
 - `eur`
 
-### `amount_fiat`
+`amount_fiat`
 - numerical value
 - eg. `100.00`
 
-### `crypto`
+`crypto`
+
 values
 - `btc`
 - `eth`
 
-### `amount_crypto`
+`amount_crypto`
 - numerical value
 - bitcoin is denoted in Satoshis (smallest fraction of bitcoin)
 
-### `conversion_rate_at_transaction`
+`conversion_rate_at_transaction`
 - from crypto to fiat
 
 
