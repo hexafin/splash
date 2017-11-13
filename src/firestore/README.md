@@ -8,8 +8,9 @@
 For more information check out the Firestore docs
 https://cloud.google.com/firestore/docs/concepts/structure-data
 
+## Entities
 
-## people
+# people
 
 `first_name`
 `last_name`
@@ -45,11 +46,15 @@ example values
 - timestamp of account creation
 
 
-## wallets
+# wallets
 
 **note:** Hexa wallets are not the same thing as traditional bitcoin wallets.
 
-`person_id`
+`ownershipp`
+- array of wallet_id:percentage_ownership pairs
+- personal wallets will initialize to `[(personal_id, 1.0)]`
+- initially, group wallets are assumed to be equally owned
+    - thus they are initialized to `[(person_id, 1.0/number_of_people)...]`
 
 `type`
 
@@ -57,6 +62,8 @@ values
 - `personal`
 - `group`
 - `merchant`
+
+`address_bitcoin`
 
 `picture_url`
 *not defined for personal wallets, as they always use the picture associated with the person*
@@ -72,11 +79,16 @@ values
 - array of references to transaction documents
 - see transactions docs below
 
+`description`
+
+`voting_members`
+- subset of members that have voting priveledges
+
 `created`
 - creation timestamp
 
 
-## chats
+# chats
 
 **note:** a group wallet may communicate with another wallet, so the chat my have more than 2 people, 
 but never more than 2 wallets
@@ -97,7 +109,7 @@ values
 - subcollection of message documents
 - see messages documentation below
 
-## messages
+# messages
 
 Messages are a subcollection of a specific chat between two wallets
 
@@ -127,7 +139,7 @@ acceptable values
 - array of person ids
 
 
-## transactions
+# transactions
 
 **note:** a hexa transaction is not the same thing as a traditional bitcoin transaction: 
 hexa adds context to bitcoin transactions with relevant information
