@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "394379168530",
+    "firebase_url": "https://hexa-dev.firebaseio.com",
+    "project_id": "hexa-dev",
+    "storage_bucket": "hexa-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394379168530:android:5ef360d5452c77cf",
+        "android_client_info": {
+          "package_name": "com.hexa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "394379168530-q6mo3l9tbf9pfpmi1v1dd39kv9v777sp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBETLRi8nAiPBOnuO4yuryhaquR3ArYiBQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
