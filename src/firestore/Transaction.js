@@ -1,5 +1,4 @@
 // import all relevant modules
-import NewBitcoinWallet from 'src/actions/NewBitcoinWallet';
 
 // function sends money from authenticated wallet to specified recipient
 function Pay(to_wallet, from_wallet, category, memo, amount_fiat, amount_crypto, fiat="usd", crypto="btc") {

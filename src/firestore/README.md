@@ -73,6 +73,7 @@ https://cloud.google.com/firestore/docs/concepts/structure-data
     - see transactions docs below
 - `description`
 - `signing_members`
+    - *not defined for personal wallets*
     - subset of members that have signing privileges
 - `created`
     - creation timestamp
