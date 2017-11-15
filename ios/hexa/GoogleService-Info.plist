@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>394379168530-k6i0gj67ml1udopr3akjg4uc5ojrv5t7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.394379168530-k6i0gj67ml1udopr3akjg4uc5ojrv5t7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCdXklAgjogWKkyM8_xmWIuR1dDrYmvFP4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>394379168530</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.hexa</string>
+	<key>PROJECT_ID</key>
+	<string>hexa-dev</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hexa-dev.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:394379168530:ios:e070a34775dfca44</string>
+	<key>DATABASE_URL</key>
+	<string>https://hexa-dev.firebaseio.com</string>
+</dict>
+</plist>
