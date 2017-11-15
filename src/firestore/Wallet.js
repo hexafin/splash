@@ -4,12 +4,12 @@ Wallet.js defines firestore operations with hexa wallets
 
  */
 
-var random = require('react-native-randombytes').randomBytes;
-var bitcoin = require('bitcoinjs-lib');
-
 
 import firebase from 'react-native-firebase';
 let firestore = firebase.firestore();
+
+var random = require('react-native-randombytes').randomBytes;
+var bitcoin = require('bitcoinjs-lib');
 
 
 function NewPersonalWallet(personRef, description) {
@@ -49,6 +49,9 @@ function NewPersonalWallet(personRef, description) {
 function NewGroupWallet(hex, description, members, ownership, signing_members) {
 
     // create hexa wallet
+    var redeemScript = bitcoin.script.multisig.output.encode(2, pubKeys); // 2 of 3
+    var scriptPubKey = bitcoin.script.scriptHash.output.encode(bitcoin.crypto.hash160(redeemScript));
+    var address = bitcoin.address.fromOutputScript(scriptPubKey);
 
     // create group bitcoin wallet with signing structure
     // store private key locally in private_keys object {wallet_id:private_key,...}

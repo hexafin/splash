@@ -1,4 +1,16 @@
-// import all relevant modules
+/*
+
+Teansaction.js defines firestore operations with bitcoin transactions for hexa wallets
+
+ */
+
+
+import firebase from 'react-native-firebase';
+let firestore = firebase.firestore();
+
+var random = require('react-native-randombytes').randomBytes;
+var bitcoin = require('bitcoinjs-lib');
+var txb = new bitcoin.TransactionBuilder;
 
 // function sends money from authenticated wallet to specified recipient
 function Pay(to_wallet, from_wallet, category, memo, amount_fiat, amount_crypto, fiat="usd", crypto="btc") {

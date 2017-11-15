@@ -30,7 +30,7 @@ export default class App extends Component<{}> {
         return (
             <View style={styles.container}>
 
-                <Text style={{ fontSize: 18 }}>
+                <Text style={{ fontSize: 18, padding: 20 }}>
                     {"Sample Firestore Operation"}
                 </Text>
 
@@ -41,7 +41,7 @@ export default class App extends Component<{}> {
                             "338 College Road", "Concord", "MA",
                             "01742", "USA")
                     }}
-                    title="Create New Person"
+                    title="Create New Person and Personal Wallet"
                 />
 
                 <Button
