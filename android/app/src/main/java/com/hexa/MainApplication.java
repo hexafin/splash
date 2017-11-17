@@ -5,6 +5,9 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.bitgo.randombytes.RandomBytesPackage;
 import io.invertase.firebase.RNFirebasePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.bitgo.randombytes.RandomBytesPackage;
+>>>>>>> 9f1c09a2a2c07963975fa182892b51039ba5c48f
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -27,6 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new RandomBytesPackage(),
             new RNFirebasePackage()
+            new VectorIconsPackage(),
+            new RandomBytesPackage()
       );
     }
 

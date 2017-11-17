@@ -15,6 +15,11 @@ var txb = new bitcoin.TransactionBuilder;
 // function sends money from authenticated wallet to specified recipient
 function Pay(to_wallet, from_wallet, category, memo, amount_fiat, amount_crypto, fiat="usd", crypto="btc") {
 
+    // load wallets
+    to_wallet.get().then(wallet => {
+
+    })
+
     // if person has signing permissions
         // create bitcoin transaction and push to blockchain
         // create transaction entity

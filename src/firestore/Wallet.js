@@ -19,9 +19,6 @@ function NewPersonalWallet(personRef, description) {
 
         var hex = GenerateHex(person.data()["first_name"], person.data()["last_name"]);
 
-        var ownership = {};
-        ownership[personRef.id] = 1.0;
-
         var walletName = person.data()["first_name"] + " " + person.data()["last_name"] + "'s Personal Wallet";
 
         // create bitcoin wallet
@@ -46,12 +43,19 @@ function NewPersonalWallet(personRef, description) {
 
 }
 
+
+// TODO: NewGroupWallet
 function NewGroupWallet(hex, description, members, ownership, signing_members) {
 
     // create hexa wallet
     var redeemScript = bitcoin.script.multisig.output.encode(2, pubKeys); // 2 of 3
     var scriptPubKey = bitcoin.script.scriptHash.output.encode(bitcoin.crypto.hash160(redeemScript));
     var address = bitcoin.address.fromOutputScript(scriptPubKey);
+
+
+    // TODO: Group Wallet ownership
+    // var ownership = {};
+    // ownership[personRef.id] = 1.0;
 
     // create group bitcoin wallet with signing structure
     // store private key locally in private_keys object {wallet_id:private_key,...}
@@ -60,6 +64,12 @@ function NewGroupWallet(hex, description, members, ownership, signing_members) {
 
 }
 
+
+/*
+
+GenerateHex finds a unique hex from a person's first and last name
+
+ */
 function GenerateHex(first_name, last_name, num=0) {
 
     // initialize hex
@@ -92,7 +102,7 @@ function HexExists(hex) {
 }
 
 
-/**
+/*
  * Creates a random new wallet (keypair composed by a private key in WIF format and a public key - address).
  *
  * @return {object}

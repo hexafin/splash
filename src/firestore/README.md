@@ -45,8 +45,8 @@ https://cloud.google.com/firestore/docs/concepts/structure-data
 **note:** Hexa wallets are not the same thing as traditional bitcoin wallets.
 
 - `ownership`
-    - array of (wallet_id, percentage_ownership) pairs
-    - personal wallets will initialize to `[(personal_id, 1.0)]`
+    - *not defined for personal wallets*
+    - object with person_id keys and percentage values
     - initially, group wallets are assumed to be equally owned
         - thus they are initialized to `[(person_id, 1.0/number_of_people)...]`
 - `type`
