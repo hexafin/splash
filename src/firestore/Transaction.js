@@ -17,7 +17,16 @@ function Pay(to_wallet, from_wallet, category, memo, amount_fiat, amount_crypto,
 
     // load wallets
     to_wallet.get().then(wallet => {
+        // check signing permissions
+        var votingMembers = wallet.data()["voting_members"];
+        // TODO: get personRef from authentication
+        var personRef = "TODO";
+        if (votingMembers[personRef] == true) {
 
+        }
+        else {
+
+        }
     })
 
     // if person has signing permissions

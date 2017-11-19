@@ -12,6 +12,12 @@ var random = require('react-native-randombytes').randomBytes;
 var bitcoin = require('bitcoinjs-lib');
 
 
+// TODO: function takes wallet and gets bitcoin balance
+function GetBalance(walletRef) {
+
+}
+
+
 function NewPersonalWallet(personRef, description) {
 
     // create hexa wallet
@@ -28,7 +34,6 @@ function NewPersonalWallet(personRef, description) {
 
 
         var newWalletRef = firestore.collection("wallets").add({
-            ownership: ownership,
             type: "personal",
             address_bitcoin: bitcoinWallet.address,
             hex: hex,

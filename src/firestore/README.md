@@ -7,6 +7,7 @@
 
 For more information check out the Firestore docs
 https://cloud.google.com/firestore/docs/concepts/structure-data
+https://rnfirebase.io/
 
 ## Entities
 

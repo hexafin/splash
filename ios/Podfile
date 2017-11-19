@@ -10,6 +10,8 @@ target 'hexa' do
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'hexaTests' do
     inherit! :search_paths
     # Pods for testing
