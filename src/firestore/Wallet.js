@@ -25,7 +25,7 @@ function NewPersonalWallet(personRef, description) {
 
         var hex = GenerateHex(person.data()["first_name"], person.data()["last_name"]);
 
-        var walletName = person.data()["first_name"] + " " + person.data()["last_name"] + "'s Personal Wallet";
+        var walletName = person.data()["first_name"] + " " + person.data()["last_name"];
 
         // create bitcoin wallet
         // TODO: store private key locally in private_keys object {wallet_id:private_key,...}

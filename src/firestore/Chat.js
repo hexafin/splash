@@ -7,13 +7,13 @@ function NewChat(type, wallets) {
 }
 
 
-function NewInternalChat(wallet_id) {
+function NewInternalChat(walletRef) {
 
     // create internal chat for all members of group wallet
 
 }
 
-function NewTextMessage(chat_id, from_person, text) {
+function NewTextMessage(chatRef, fromPersonRef, text) {
 
     // create text message in chat referenced
 
@@ -21,7 +21,7 @@ function NewTextMessage(chat_id, from_person, text) {
 
 }
 
-function NewTransactionMessage(transaction_id) {
+function NewTransactionMessage(transactionRef) {
 
     // get wallets engaged with transaction
 

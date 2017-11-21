@@ -13,10 +13,10 @@ var bitcoin = require('bitcoinjs-lib');
 var txb = new bitcoin.TransactionBuilder;
 
 // function sends money from authenticated wallet to specified recipient
-function Pay(to_wallet, from_wallet, category, memo, amount_fiat, amount_crypto, fiat="usd", crypto="btc") {
+function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypto, fiat="usd", crypto="btc") {
 
     // load wallets
-    to_wallet.get().then(wallet => {
+    toWalletRef.get().then(toWallet => {
         // check signing permissions
         var votingMembers = wallet.data()["voting_members"];
         // TODO: get personRef from authentication
@@ -42,7 +42,7 @@ function Pay(to_wallet, from_wallet, category, memo, amount_fiat, amount_crypto,
 }
 
 // function that requests money from outside wallet to authenticated wallet
-function Request(from_wallet, to_wallet, category, memo, amount_fiat, amount_crypto, fiat="usd", crypto="btc") {
+function Request(fromWalletRef, toWalletRef, category, memo, amountFiat, amountCrypto, fiat="usd", crypto="btc") {
 
     // if person has signing permissions
         // generate bitcoin request hash
@@ -57,7 +57,7 @@ function Request(from_wallet, to_wallet, category, memo, amount_fiat, amount_cry
 }
 
 // function that accepts a transaction
-function Accept(transaction_id) {
+function Accept(transactionRef) {
 
     // if acceptor_person has signing permissions for acceptor_wallet
         // create bitcoin transaction and push to blockchain
@@ -69,7 +69,7 @@ function Accept(transaction_id) {
 }
 
 // function that declines a transaction
-function Decline(transaction_id) {
+function Decline(transactionRef) {
 
     // if acceptor_person has signing permissions for acceptor_wallet
         // update transaction entity
