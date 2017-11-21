@@ -50,7 +50,7 @@ function NewPersonalWallet(personRef, description) {
 
 
 // TODO: NewGroupWallet
-function NewGroupWallet(hex, description, members, ownership, signing_members) {
+function NewGroupWallet(hex, description, memberRefs, ownership, signingMemberRefs) {
 
     // create hexa wallet
     var redeemScript = bitcoin.script.multisig.output.encode(2, pubKeys); // 2 of 3
@@ -75,16 +75,16 @@ function NewGroupWallet(hex, description, members, ownership, signing_members) {
 GenerateHex finds a unique hex from a person's first and last name
 
  */
-function GenerateHex(first_name, last_name, num=0) {
+function GenerateHex(firstName, lastName, num=0) {
 
     // initialize hex
-    var hex = first_name + "-" + last_name;
+    var hex = firstName + "-" + lastName;
     if (num > 0) {
         hex = hex + num.toString();
     }
 
     if (HexExists(hex)) {
-        return GenerateHex(first_name, last_name, num=num+1);
+        return GenerateHex(firstName, lastName, num=num+1);
     }
     else {
         return hex;
@@ -94,9 +94,9 @@ function GenerateHex(first_name, last_name, num=0) {
 
 function HexExists(hex) {
     // check if hex already exists
-    firestore.collection("wallets").where("hex", "=", hex).get().then(check_hex => {
+    firestore.collection("wallets").where("hex", "=", hex).get().then(checkHex => {
 
-        if (check_hex.empty) {
+        if (checkHex.empty) {
             return false;
         }
         else {
