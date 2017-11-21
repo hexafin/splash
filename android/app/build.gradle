@@ -1,3 +1,4 @@
+
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -94,6 +95,10 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+    // because of firestore:
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
@@ -106,6 +111,8 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        // because of firestore:
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -119,6 +126,10 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     // applicationVariants are e.g. debug, release
@@ -137,8 +148,27 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-vector-icons')
     compile project(':react-native-randombytes')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+
+    // RNFirebase required dependencies
+    compile "com.google.firebase:firebase-core:11.4.2"
+    compile "com.google.android.gms:play-services-base:11.4.2"
+
+    // RNFirebase optional dependencies
+    compile "com.google.firebase:firebase-ads:11.4.2"
+    compile "com.google.firebase:firebase-auth:11.4.2"
+    compile "com.google.firebase:firebase-config:11.4.2"
+    compile "com.google.firebase:firebase-crash:11.4.2"
+    compile "com.google.firebase:firebase-database:11.4.2"
+    compile "com.google.firebase:firebase-firestore:11.4.2"
+    compile "com.google.firebase:firebase-messaging:11.4.2"
+    compile "com.google.firebase:firebase-perf:11.4.2"
+    compile "com.google.firebase:firebase-storage:11.4.2"
+
+    compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
@@ -150,3 +180,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
