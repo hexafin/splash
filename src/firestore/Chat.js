@@ -1,15 +1,36 @@
 // import relevant modules
+import firebase from 'react-native-firebase';
+let firestore = firebase.firestore();
 
+// function that creates chat and returns chat reference
 function NewChat(type, wallets) {
 
+    // create walletsObject from input wallets array
+    var walletsObject = {};
+    for (var i = 0; i < wallets.length; i++) {
+        walletsObject[wallets[i]] = true;
+    }
+
     // create friend or merchant chat between two wallets
+    firestore.collection("chats").add({
+        type: type,
+        wallets: walletsObject
+    }).then(chatRef => {
+        return chatRef
+    });
 
 }
 
-
+// function that creates an internal chat and returns a reference to the chat
 function NewInternalChat(walletRef) {
 
     // create internal chat for all members of group wallet
+    firestore.collection("chats").add({
+        type: "internal",
+        wallets: walletRef
+    }).then(chatRef => {
+        return chatRef
+    });
 
 }
 
