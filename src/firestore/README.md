@@ -139,7 +139,7 @@ hexa adds context to bitcoin transactions with relevant information
 - `suggested`
     - boolean
     - always false unless someone without paying permissions initialized a payment
-- `iniated`
+- `initiated`
     - boolean
 - `completed`
     - boolean
@@ -160,8 +160,10 @@ hexa adds context to bitcoin transactions with relevant information
     - this person must have payment permissions. if someone else suggested the transaction, this reference
     is to the person that approved the suggested transaction
 - `acceptor_wallet`
+    - *not defined unless transaction is completed*
     - reference to wallet that accepted the transaction
 - `acceptor_person`
+    - *not defined unless transaction is completed*
     - reference to person that accepted the transaction on behalf of the acceptor wallet
 - `fiat`
     - values
@@ -181,7 +183,7 @@ hexa adds context to bitcoin transactions with relevant information
     price fluctuations in the event of a request
 - `conversion_rate_at_transaction`
     - from crypto to fiat
-- `bitcoin_reference`
+- `blockchain_transaction_id`
     - reference to transaction on blockchain
 - `category`
 - `memo`
@@ -189,6 +191,8 @@ hexa adds context to bitcoin transactions with relevant information
     - *only defined if transaction was suggested*
 - `timestamp_initiated`
 - `timestamp_completed`
+- `timestamp_declined`
+    - *only defined if transaction was declined*
 
 
 

@@ -28,10 +28,10 @@ function NewPersonalWallet(personRef, description) {
         var walletName = person.data()["first_name"] + " " + person.data()["last_name"];
 
         // create bitcoin wallet
-        // TODO: store private key locally in private_keys object {wallet_id:private_key,...}
-
         var bitcoinWallet = NewBitcoinWallet();
 
+        // TODO: store key locally in wallet_id object {bitcoin:WIF,ethereum:ethWiF,...}
+        var wif = bitcoinWallet.wif;
 
         var newWalletRef = firestore.collection("wallets").add({
             type: "personal",
