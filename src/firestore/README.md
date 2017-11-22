@@ -195,7 +195,33 @@ hexa adds context to bitcoin transactions with relevant information
     - *only defined if transaction was declined*
 
 
+### notifications
 
+- `type`
+    - values
+        - `transaction`
+        - `message`
+- `action`
+    - values if type = `transaction`
+        - `pay`
+        - `request`
+        - `accepted`
+        - `declined`
+    - values if type = `message`
+        - `new`
+- `person`
+    - reference to person that received notification
+- `method`
+    - values
+        - `app`
+        - `text`
+        - `email`
+- `content`
+- `format`
+    - `plaintext`
+    - `html`
+        - *only possible if method = `email`*
+- `timestamp`
 
 
 
