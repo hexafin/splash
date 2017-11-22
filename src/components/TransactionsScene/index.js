@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, Text, StyleSheet, SectionList, } from "react-native";
+import { View, Image, Text, StyleSheet, SectionList, TouchableOpacity } from "react-native";
 import TransactionHeader from './TransactionHeader'
 import TransactionLine from './TransactionLine'
 import Icon from 'react-native-vector-icons/Entypo';
@@ -70,7 +70,7 @@ export default class Transactions extends Component {
 		if (completedArray.length !== 0) {
 			sections.push({data: completedArray, icon: 'archive'});
 		}
-		this.setState({oweArray: oweArray, sections: sections });
+		this.setState({sections: sections });
 	}
 
 	componentDidMount() {
@@ -117,7 +117,9 @@ export default class Transactions extends Component {
 	}
 
 	render() {
+		const {navigate} = this.props.navigation;
 		const updateSections = this.updateSections;
+		//TODO: get real btc and usd balance
 		return (
 						<View style={styles.container}>
 							<TransactionHeader activeWallet={this.state.activeWallet}
@@ -140,6 +142,20 @@ export default class Transactions extends Component {
 																		remindCallback={() => { console.log('remind');}}
 																		acceptCallback={() => { console.log('accept');}}
 																		declineCallback={() => { console.log('decline');}}/>} />
+							<View style={styles.footer}>
+								<TouchableOpacity style={styles.footerButton} onPress={() => navigate('ChooseDestinationWallet', {type: 'request', activeWallet: this.state.activeWallet})}>
+									<Icon name={'hand'} color={'#401584'} size={18}/>
+									<Text style={{fontSize: 17, fontWeight: 'bold', color: '#401584', marginLeft: 5}}>
+										Request
+									</Text>
+								</TouchableOpacity>
+								<TouchableOpacity style={styles.footerButton} onPress={() => navigate('ChooseDestinationWallet', {type: 'pay', activeWallet: this.state.activeWallet})}>
+									<Icon name={'paper-plane'} color={'#401584'} size={18}/>
+									<Text style={{fontSize: 17, fontWeight: 'bold', color: '#401584', marginLeft: 5}}>
+										Pay
+									</Text>
+								</TouchableOpacity>
+							</View>
 			</View>
 		);
 	}
@@ -156,5 +172,18 @@ const styles = StyleSheet.create({
 		height: 26,
 		alignItems: 'center',
 		flexDirection: 'row',
+	},
+	footer: {
+		height: 40,
+		flexDirection: 'row',
+		backgroundColor: '#F7F7F7',
+	},
+	footerButton: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderWidth: 1,
+		borderColor: '#E0E0E0',
 	},
 });
