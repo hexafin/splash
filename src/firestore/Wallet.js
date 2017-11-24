@@ -7,16 +7,15 @@ Wallet.js defines firestore operations with hexa wallets
 
 import firebase from 'react-native-firebase';
 let firestore = firebase.firestore();
-
 var random = require('react-native-randombytes').randomBytes;
 var bitcoin = require('bitcoinjs-lib');
 
+import { NewInternalChat } from "./Chat";
 
 // TODO: function takes wallet and gets bitcoin balance
 function GetBalance(walletRef) {
 
 }
-
 
 function NewPersonalWallet(personRef, description) {
 
@@ -33,21 +32,20 @@ function NewPersonalWallet(personRef, description) {
         // TODO: store key locally in wallet_id object {bitcoin:WIF,ethereum:ethWiF,...}
         var wif = bitcoinWallet.wif;
 
-        var newWalletRef = firestore.collection("wallets").add({
+        firestore.collection("wallets").add({
             type: "personal",
             address_bitcoin: bitcoinWallet.address,
             hex: hex,
             name: walletName,
             description: description
+        }).then(walletRef => {
+            return walletRef;
         });
-
-        return newWalletRef;
 
     });
 
 
 }
-
 
 // TODO: NewGroupWallet
 function NewGroupWallet(hex, description, memberRefs, ownership, signingMemberRefs) {
@@ -56,6 +54,11 @@ function NewGroupWallet(hex, description, memberRefs, ownership, signingMemberRe
     var redeemScript = bitcoin.script.multisig.output.encode(2, pubKeys); // 2 of 3
     var scriptPubKey = bitcoin.script.scriptHash.output.encode(bitcoin.crypto.hash160(redeemScript));
     var address = bitcoin.address.fromOutputScript(scriptPubKey);
+
+
+
+    // create internal chat from wallet ref
+    NewInternalChat()
 
 
     // TODO: Group Wallet ownership
@@ -69,12 +72,7 @@ function NewGroupWallet(hex, description, memberRefs, ownership, signingMemberRe
 
 }
 
-
-/*
-
-GenerateHex finds a unique hex from a person's first and last name
-
- */
+// GenerateHex finds a unique hex from a person's first and last name
 function GenerateHex(firstName, lastName, num=0) {
 
     // initialize hex
@@ -106,12 +104,6 @@ function HexExists(hex) {
     });
 }
 
-
-/*
- * Creates a random new wallet (keypair composed by a private key in WIF format and a public key - address).
- *
- * @return {object}
- */
 function NewBitcoinWallet() {
     var keyPair = bitcoin.ECPair.makeRandom({
         rng: random

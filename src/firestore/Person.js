@@ -26,8 +26,11 @@ function NewPerson(firstName, lastName, email, phoneNumber, facebookId, pictureU
         coinbase_id: coinbaseId,
         joined: ts
     }).then(newPersonRef => {
-        NewPersonalWallet(newPersonRef);
-        return newPersonRef;
+        var newWalletRef = NewPersonalWallet(newPersonRef);
+        return {
+            person: newPersonRef,
+            wallet: newWalletRef
+        }
     });
 
 

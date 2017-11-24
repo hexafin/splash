@@ -10,4 +10,10 @@ function TransactionNotification(transactionRef) {
 
 }
 
-export { TransactionNotification }
+function MessageNotification(messageRef) {
+
+    // send appropriate notifications given message details
+
+}
+
+export { TransactionNotification, MessageNotification }

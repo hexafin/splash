@@ -95,7 +95,7 @@ but never more than 2 wallets
     - eg. `{wallet_id1:true, wallet_id2:true}`
     - optimized for firestore queries
     - *not defined for internal chats*
-- `wallet_id`
+- `wallet`
     - *only defined for internal chats*
     - reference to wallet
 - `messages`
@@ -111,20 +111,20 @@ Messages are a subcollection of a specific chat between two wallets
     - acceptable values
         - `text`
         - `transaction`
-- `transaction_id`
+- `transaction`
     - *only defined for transaction type messages*
     - reference to transaction document in the transactions collection
 - `to_wallet`
     - *only defined for text type messages, as transaction data is in transaction doc*
-    - wallet id
+    - wallet reference
     - *not defined for internal chat messages*
 - `from_wallet`
     - *only defined for text type messages, as transaction data is in transaction doc*
-    - wallet id
+    - reference to wallet
     - *not defined for internal chat messages*
 - `from_person`
     - *only defined for text type messages*
-    - person id
+    - reference to person
 - `text`
 - `read_by`
     - array of person ids
@@ -136,6 +136,10 @@ Messages are a subcollection of a specific chat between two wallets
 **note:** a hexa transaction is not the same thing as a traditional bitcoin transaction: 
 hexa adds context to bitcoin transactions with relevant information
 
+- `type`
+    - values
+        - `friend`
+        - `merchant`
 - `suggested`
     - boolean
     - always false unless someone without paying permissions initialized a payment

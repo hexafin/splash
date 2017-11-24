@@ -14,7 +14,8 @@ import { NewChat, NewTransactionMessage } from "./Chat";
 import { TransactionNotification } from "./Notify";
 
 // function sends money from authenticated wallet to specified recipient
-function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypto, fiat="usd", crypto="btc") {
+function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypto, type="friend",
+             fiat="usd", crypto="btc") {
 
     const dateTime = Date.now();
     const timestamp = Math.floor(dateTime / 1000);
@@ -41,6 +42,7 @@ function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypt
 
             // person has signing permissions => create transaction
             firestore.collection("transactions").add({
+                type: type,
                 suggested: false,
                 initiated: true,
                 completed: true,
@@ -71,6 +73,7 @@ function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypt
 
             // person does not have signing permissions
             firestore.collection("transactions").add({
+                type: type,
                 suggested: true,
                 initiated: false,
                 completed: false,
@@ -98,7 +101,8 @@ function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypt
 }
 
 // function that requests money from outside wallet to authenticated wallet
-function Request(fromWalletRef, toWalletRef, category, memo, amountFiat, amountCrypto, fiat="usd", crypto="btc") {
+function Request(fromWalletRef, toWalletRef, category, memo, amountFiat, amountCrypto, type="friend",
+                 fiat="usd", crypto="btc") {
 
     const dateTime = Date.now();
     const timestamp = Math.floor(dateTime / 1000);
@@ -117,6 +121,7 @@ function Request(fromWalletRef, toWalletRef, category, memo, amountFiat, amountC
 
             // person has signing permissions => create transaction request
             firestore.collection("transactions").add({
+                type: type,
                 suggested: false,
                 initiated: true,
                 completed: false,
@@ -143,6 +148,7 @@ function Request(fromWalletRef, toWalletRef, category, memo, amountFiat, amountC
 
             // person does not have signing permissions => create suggested request
             firestore.collection("transactions").add({
+                type: type,
                 suggested: true,
                 initiated: false,
                 completed: false,
