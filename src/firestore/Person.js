@@ -4,37 +4,37 @@ let firestore = firebase.firestore();
 
 import { NewPersonalWallet } from "./Wallet";
 
-function NewPerson(first_name, last_name, email, phone_number, facebook_id, picture_url, address, city, state,
-                   zip_code, country, coinbase_id=null) {
+function NewPerson(firstName, lastName, email, phoneNumber, facebookId, pictureURL, address, city, state,
+                   zipCode, country, coinbaseId=null) {
 
     const dateTime = Date.now();
     const ts = Math.floor(dateTime / 1000);
 
     // create firestore person entity
     firestore.collection("people").add({
-        first_name: first_name,
-        last_name: last_name,
+        first_name: firstName,
+        last_name: lastName,
         email: email,
-        phone_number: phone_number,
-        facebook_id: facebook_id,
-        picture_url: picture_url,
+        phone_number: phoneNumber,
+        facebook_id: facebookId,
+        picture_url: pictureURL,
         address: address,
         city: city,
         state: state,
-        zip_code: zip_code,
+        zip_code: zipCode,
         country: country,
-        coinbase_id: null,
+        coinbase_id: coinbaseId,
         joined: ts
     }).then(newPersonRef => {
-        NewPersonalWallet(newPersonRef);
-
-        return newPersonRef;
+        var newWalletRef = NewPersonalWallet(newPersonRef);
+        return {
+            person: newPersonRef,
+            wallet: newWalletRef
+        }
     });
 
 
 
 }
-
-
 
 export { NewPerson };

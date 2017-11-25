@@ -95,7 +95,7 @@ but never more than 2 wallets
     - eg. `{wallet_id1:true, wallet_id2:true}`
     - optimized for firestore queries
     - *not defined for internal chats*
-- `wallet_id`
+- `wallet`
     - *only defined for internal chats*
     - reference to wallet
 - `messages`
@@ -111,20 +111,20 @@ Messages are a subcollection of a specific chat between two wallets
     - acceptable values
         - `text`
         - `transaction`
-- `transaction_id`
+- `transaction`
     - *only defined for transaction type messages*
     - reference to transaction document in the transactions collection
 - `to_wallet`
     - *only defined for text type messages, as transaction data is in transaction doc*
-    - wallet id
+    - wallet reference
     - *not defined for internal chat messages*
 - `from_wallet`
     - *only defined for text type messages, as transaction data is in transaction doc*
-    - wallet id
+    - reference to wallet
     - *not defined for internal chat messages*
 - `from_person`
     - *only defined for text type messages*
-    - person id
+    - reference to person
 - `text`
 - `read_by`
     - array of person ids
@@ -136,10 +136,14 @@ Messages are a subcollection of a specific chat between two wallets
 **note:** a hexa transaction is not the same thing as a traditional bitcoin transaction: 
 hexa adds context to bitcoin transactions with relevant information
 
+- `type`
+    - values
+        - `friend`
+        - `merchant`
 - `suggested`
     - boolean
     - always false unless someone without paying permissions initialized a payment
-- `iniated`
+- `initiated`
     - boolean
 - `completed`
     - boolean
@@ -160,8 +164,10 @@ hexa adds context to bitcoin transactions with relevant information
     - this person must have payment permissions. if someone else suggested the transaction, this reference
     is to the person that approved the suggested transaction
 - `acceptor_wallet`
+    - *not defined unless transaction is completed*
     - reference to wallet that accepted the transaction
 - `acceptor_person`
+    - *not defined unless transaction is completed*
     - reference to person that accepted the transaction on behalf of the acceptor wallet
 - `fiat`
     - values
@@ -181,7 +187,7 @@ hexa adds context to bitcoin transactions with relevant information
     price fluctuations in the event of a request
 - `conversion_rate_at_transaction`
     - from crypto to fiat
-- `bitcoin_reference`
+- `blockchain_transaction_id`
     - reference to transaction on blockchain
 - `category`
 - `memo`
@@ -189,9 +195,37 @@ hexa adds context to bitcoin transactions with relevant information
     - *only defined if transaction was suggested*
 - `timestamp_initiated`
 - `timestamp_completed`
+- `timestamp_declined`
+    - *only defined if transaction was declined*
 
 
+### notifications
 
+- `type`
+    - values
+        - `transaction`
+        - `message`
+- `action`
+    - values if type = `transaction`
+        - `pay`
+        - `request`
+        - `accepted`
+        - `declined`
+    - values if type = `message`
+        - `new`
+- `person`
+    - reference to person that received notification
+- `method`
+    - values
+        - `app`
+        - `text`
+        - `email`
+- `content`
+- `format`
+    - `plaintext`
+    - `html`
+        - *only possible if method = `email`*
+- `timestamp`
 
 
 
