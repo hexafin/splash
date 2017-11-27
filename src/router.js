@@ -10,6 +10,11 @@ import Transactions from "./components/TransactionsScene";
 import Market from "./components/MarketScene";
 import Friends from "./components/FriendsScene";
 
+import ChooseDestinationWallet from "./components/TransactionScene/ChooseDestinationWallet";
+import SetAmount from "./components/TransactionScene/SetAmount";
+import Confirmation from "./components/TransactionScene/Confirmation";
+
+
 // stack navigator for all onboarding screens
 // export const SignedOut = StackNavigator(
 // 	{
@@ -20,7 +25,7 @@ import Friends from "./components/FriendsScene";
 // 	},
 // );
 
-export const SignedIn = TabNavigator(
+export const HomeTabs = TabNavigator(
 	{
 		Tab1: { screen: Transactions },
 		Tab2: { screen: Market },
@@ -61,3 +66,20 @@ export const createRootNavigator = (signedIn = false) => {
 		},
 	);
 };
+
+
+export const SignedIn = StackNavigator(
+		{
+			HomeTabs: {screen: HomeTabs},
+			ChooseDestinationWallet: { screen: ChooseDestinationWallet },
+			SetAmount: { screen: SetAmount },
+			Confirmation: { screen: Confirmation },
+		},
+		{
+			headerMode: "none",
+			initialRouteName: 'HomeTabs',
+			navigationOptions: {
+				gesturesEnabled: false,
+			},
+		},
+	);
