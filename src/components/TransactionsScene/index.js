@@ -142,6 +142,7 @@ export default class Transactions extends Component {
 																		remindCallback={() => { console.log('remind');}}
 																		acceptCallback={() => { console.log('accept');}}
 																		declineCallback={() => { console.log('decline');}}/>} />
+
 							<View style={styles.footer}>
 								<TouchableOpacity style={styles.footerButton} onPress={() => navigate('ChooseDestinationWallet', {type: 'request', activeWallet: this.state.activeWallet})}>
 									<Icon name={'hand'} color={'#401584'} size={18}/>
@@ -179,9 +180,10 @@ const styles = StyleSheet.create({
 		backgroundColor: '#F7F7F7',
 	},
 	footerButton: {
-		flex: 1,
+		width: "50%",
 		flexDirection: 'row',
 		alignItems: 'center',
+		justifyContent: 'center',
 		borderWidth: 1,
 		borderColor: '#E0E0E0',
 	},
