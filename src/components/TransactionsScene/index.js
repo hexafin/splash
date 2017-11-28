@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
 	footerButton: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'center',
 		alignItems: 'center',
 		borderWidth: 1,
 		borderColor: '#E0E0E0',
