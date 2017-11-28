@@ -1,125 +1,92 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  View,
-  SectionList,
-  Text,
-  StyleSheet,
+    View,
+    SectionList,
+    Text,
+    StyleSheet,
 } from 'react-native';
-import FriendLine from './FriendLine';
-import SearchHeader from './SearchHeader';
 import Icon from 'react-native-vector-icons/Entypo';
+
+import firebase from 'react-native-firebase';
+let firestore = firebase.firestore();
 
 // needs type prop of either 'request' or 'pay'
 
-export default class ChooseDestinationWallet extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      recents: [],
-      allFriends: [],
-      sections: [],
+export default class Wallets extends Component {
+    constructor(props) {
+        super(props);
+        // this.state = {
+        //     personalWallets: [],
+        //     groupWallets: []
+        // };
     };
-  };
 
-  updateSections = (search) => {
-    let sections = [];
-		let recentArray = [];
-		let allFriendsArray = [];
-		const allFriends = this.state.allFriends;
-    const recents = this.state.recents;
+    componentWillMount() {
 
-    //iterate through lists of recents and allfriends and add them to the corresponding sections
+        // TODO: get personRef from redux state
+        var personRef = "TODO";
 
-		for (let wallet of allFriends){
-			if (!search || (wallet.name).toLowerCase().search(search.toLowerCase()) !== -1 ||
-        (wallet.email).toLowerCase().search(search.toLowerCase()) !== -1 || (wallet.phone_number).toLowerCase().search(search.toLowerCase()) !== -1 || (wallet.hex).toLowerCase().search(search.toLowerCase()) !== -1) {
-        allFriendsArray.push(wallet);
-			}
-		}
-    for (let wallet of recents){
-      if (!search || (wallet.name).toLowerCase().search(search.toLowerCase()) !== -1 ||
-        (wallet.email).toLowerCase().search(search.toLowerCase()) !== -1 || (wallet.phone_number).toLowerCase().search(search.toLowerCase()) !== -1 || (wallet.hex).toLowerCase().search(search.toLowerCase()) !== -1) {
-        recentArray.push(wallet);
-      }
+        // sample data
+        // this.setState({
+        //     personalWallets: [
+        //         {name: "wallet1"}
+        //     ],
+        //     groupWallets: [
+        //         {name: "wallet2"}
+        //     ]
+        // });
+
+        // // get all personal wallets
+        // firestore.collection("wallets").where(["type", "=", "personal"], ["person", "=", personRef])
+        //     .onSnapshot().then(personalWallets => {
+        //     this.setState({personalWallets: personalWallets.data()});
+        // });
+        //
+        // // get all group wallets
+        // var membersProp = "members." + personRef;
+        // firestore.collection("wallets").where(["type", "=", "group"], [membersProp, "=", true])
+        //     .onSnapshot().then(groupWallets => {
+        //     this.setState({groupWallets: groupWallets.data()});
+        // });
+
     }
 
-    //put arrays into section format
+    render() {
+        const key = this.props.navigation.state.key;
 
-		if (recentArray.length !== 0) {
-			sections.push({data: recentArray, icon: 'clock', title: 'Recent'});
-		}
-		if (allFriendsArray.length !== 0) {
-			sections.push({data: allFriendsArray, icon: 'users', title: 'All Friends'});
-		}
+        // TODO: get active wallet from redux state
 
-    //add the sections to state
+        const {navigate, goBack} = this.props.navigation;
 
-		this.setState({sections: sections });
-  }
+        return (
 
-  componentDidMount() {
-    const lukas_person = {
-      name: 'Lukas Burger',
-      phone_id: 1,
-      hex: 'lukas',
-      phone_number: '9179401662',
-      email: 'lburger98@gmail.com',
-      picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    };
+            <View style={styles.header}>
+                <View style={styles.topBar}>
+                    <Icon name={'cross'} size={30} color={'#401584'} onPress={() => goBack(key)}/>
+                    <Text style={{fontSize: 22, fontWeight: '600'}}>Wallets</Text>
+                    <Icon name={'cog'} size={30} color={'#401584'} onPress={() => navigate("Settings")}/>
+                </View>
+            </View>
 
-    const mike_person = {
-      name: 'Mike John',
-      phone_id: 2,
-      hex: 'mike',
-      phone_number: '2129410440',
-      email: 'lburger98@gmail.com',
-      picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    };
-
-    // load real data to state here
-    // need to sort recents and add them
-    this.setState({allFriends: [lukas_person, mike_person], recents: []}, function () {
-      this.updateSections('');
-    });
-
-  }
-
-  render() {
-    const { type, activeWallet } = this.props.navigation.state.params;
-    const key = this.props.navigation.state.key;
-
-    const {navigate, goBack} = this.props.navigation;
-
-    return (
-      <View style={{flex: 1}}>
-        <SearchHeader type={type} picture_url={activeWallet.picture_url} searchCallback={this.updateSections.bind(this)} cancelCallback={() => goBack()}/>
-        <SectionList style={{backgroundColor: '#FFFFFF'}}
-          sections={this.state.sections}
-          keyExtractor={item => item.hex}
-          renderSectionHeader={({section}) => <View style={styles.sectionHeader}>
-                                                <View style={{flex:1, paddingLeft: 15}}>
-                                                  <Icon style={{paddingLeft:10}} name={section.icon} size={15.5} color={'#8E8E93'}/>
-                                                </View>
-                                                <View style={{flex:8}}>
-                                                  <Text style={{color: '#8E8E93', fontSize: 15}}>{section.title}</Text>
-                                                </View>
-                                              </View>}
-          renderItem={({item}) => <FriendLine wallet={item} clickCallback={() => navigate('SetAmount', {type: type, activeWallet, activeWallet, destinationWallet: item, go_back_key: key})}/>}
-        />
-      </View>
-    );
-  }
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  sectionHeader: {
-		backgroundColor: '#F0F0F0',
-		height: 26,
-		alignItems: 'center',
-		flexDirection: 'row',
-	},
+    header: {
+        height: 74,
+        backgroundColor: '#F7F7F7',
+        borderBottomWidth: .5,
+        paddingHorizontal: 15,
+        borderBottomColor: '#95989A',
+        justifyContent: 'space-around',
+
+    },
+    topBar: {
+        flex: 1,
+        marginTop: 12,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+    }
 });

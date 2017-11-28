@@ -88,7 +88,7 @@ export default class Transactions extends Component {
 			amount_fiat: 50,
 			category: 'Food',
 			memo: 'Work',
-		}
+		};
 		const transaction2 = {
 			transaction_id: 1,
 			to_wallet: activeWallet,
@@ -97,7 +97,7 @@ export default class Transactions extends Component {
 			amount_fiat: 50,
 			category: 'Food',
 			memo: 'money',
-		}
+		};
 		const transaction3 = {
 			transaction_id: 0,
 			to_wallet: activeWallet,
@@ -106,7 +106,7 @@ export default class Transactions extends Component {
 			amount_fiat: 50,
 			category: 'Food',
 			memo: 'dogs',
-		}
+		};
 
 		//load in active wallet state and transactions ordered by most recent
 		//set dummy data and sort into sections
@@ -125,7 +125,7 @@ export default class Transactions extends Component {
 							<TransactionHeader activeWallet={this.state.activeWallet}
 																 btcBalance={0.06813}
 																 usdBalance={500}
-																 walletCallback={() => { console.log('wallets');}}
+																 walletCallback={() => navigate("Wallets")}
 																 searchCallback={updateSections.bind(this)}/>
 							<SectionList
 							sections={this.state.sections}

@@ -14,20 +14,21 @@ import ChooseDestinationWallet from "./components/TransactionScene/ChooseDestina
 import SetAmount from "./components/TransactionScene/SetAmount";
 import Confirmation from "./components/TransactionScene/Confirmation";
 
-
+import Wallets from "./components/WalletsScene"
+import Settings from "./components/SettingsScene"
 
 
 // stack navigator for all onboarding screens
-export const OnboardingScreen = StackNavigator(
-	{
-		// all onboarding screens in proper order
-	},
-	{
-		headerMode: "none",
-	},
-);
+// export const OnboardingScreen = StackNavigator(
+// 	{
+// 		// all onboarding screens in proper order
+// 	},
+// 	{
+// 		headerMode: "none",
+// 	},
+// );
 
-export const HomeScreen = TabNavigator(
+export const BaseScreen = TabNavigator(
     {
         Home: { screen: Transactions },
         Market: { screen: Market },
@@ -35,7 +36,8 @@ export const HomeScreen = TabNavigator(
     },
     {
         // some of these are default values, they're here as placeholders
-        swipeEnabled: false,
+        swipeEnabled: true,
+        initialRouteName: 'Home',
         //backgroundColor:
         tabBarOptions: {
             showLabel: true,
@@ -52,17 +54,19 @@ export const HomeScreen = TabNavigator(
     }),
 );
 
+//
 export const ApplicationScreen = StackNavigator(
     {
-        Wallets: { screen: WalletsScreen },
-		Home: { screen: HomeScreen },
+        Settings: { screen: Settings },
+        Wallets: { screen: Wallets },
+        Base: { screen: BaseScreen },
         ChooseDestinationWallet: { screen: ChooseDestinationWallet },
         SetAmount: { screen: SetAmount },
         Confirmation: { screen: Confirmation },
     },
     {
         headerMode: "none",
-        initialRouteName: 'HomeScreen',
+        initialRouteName: 'Base',
         navigationOptions: {
             gesturesEnabled: false,
         },
@@ -72,8 +76,8 @@ export const ApplicationScreen = StackNavigator(
 export const CreateRootNavigator = (signedIn = false) => {
 	return StackNavigator(
 		{
-			Onboarding: { screen: onboardingScreen },
-			Application: { screen: applicationScreen }, // uncomment once the stack navigator above is filled
+			//Onboarding: { screen: OnboardingScreen },
+			Application: { screen: ApplicationScreen }
 		},
 		{
 			headerMode: "none",
