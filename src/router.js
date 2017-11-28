@@ -15,51 +15,70 @@ import SetAmount from "./components/TransactionScene/SetAmount";
 import Confirmation from "./components/TransactionScene/Confirmation";
 
 
-// stack navigator for all onboarding screens
-// export const SignedOut = StackNavigator(
-// 	{
-// 		// all onboarding screens in proper order
-// 	},
-// 	{
-// 		headerMode: "none",
-// 	},
-// );
 
-export const HomeTabs = TabNavigator(
+
+// stack navigator for all onboarding screens
+export const OnboardingScreen = StackNavigator(
 	{
-		Tab1: { screen: Transactions },
-		Tab2: { screen: Market },
-		Tab3: { screen: Friends },
+		// all onboarding screens in proper order
 	},
 	{
-		// some of these are default values, they're here as placeholders
-		swipeEnabled: false,
-		//backgroundColor:
-		tabBarOptions: {
-			showLabel: true,
-			activeTintColor: "#FFFFFF",
-			// style: {
-			//   borderTopWidth: 0,
-			//   backgroundColor: "transparent",
-			//
-			// }
-		},
+		headerMode: "none",
 	},
-	(navigationOptions = {
-		tabBarVisible: true,
-	}),
 );
 
-export const createRootNavigator = (signedIn = false) => {
+export const HomeScreen = TabNavigator(
+    {
+        Home: { screen: Transactions },
+        Market: { screen: Market },
+        Friends: { screen: Friends },
+    },
+    {
+        // some of these are default values, they're here as placeholders
+        swipeEnabled: false,
+        //backgroundColor:
+        tabBarOptions: {
+            showLabel: true,
+            activeTintColor: "#FFFFFF",
+            // style: {
+            //   borderTopWidth: 0,
+            //   backgroundColor: "transparent",
+            //
+            // }
+        },
+    },
+    (navigationOptions = {
+        tabBarVisible: true,
+    }),
+);
+
+export const ApplicationScreen = StackNavigator(
+    {
+        Wallets: { screen: WalletsScreen },
+		Home: { screen: HomeScreen },
+        ChooseDestinationWallet: { screen: ChooseDestinationWallet },
+        SetAmount: { screen: SetAmount },
+        Confirmation: { screen: Confirmation },
+    },
+    {
+        headerMode: "none",
+        initialRouteName: 'HomeScreen',
+        navigationOptions: {
+            gesturesEnabled: false,
+        },
+    },
+);
+
+export const CreateRootNavigator = (signedIn = false) => {
 	return StackNavigator(
 		{
-			SignedIn: { screen: SignedIn },
-			// SignedOut: { screen: SignedOut }, // uncomment once the stack navigator above is filled
+			Onboarding: { screen: onboardingScreen },
+			Application: { screen: applicationScreen }, // uncomment once the stack navigator above is filled
 		},
 		{
 			headerMode: "none",
 			mode: "modal",
-			initialRouteName: signedIn ? "SignedIn" : "SignedOut",
+			initialRouteName: signedIn ? "Application" : "Onboarding",
 			navigationOptions: {
 				gesturesEnabled: false,
 			},
@@ -68,18 +87,3 @@ export const createRootNavigator = (signedIn = false) => {
 };
 
 
-export const SignedIn = StackNavigator(
-		{
-			HomeTabs: {screen: HomeTabs},
-			ChooseDestinationWallet: { screen: ChooseDestinationWallet },
-			SetAmount: { screen: SetAmount },
-			Confirmation: { screen: Confirmation },
-		},
-		{
-			headerMode: "none",
-			initialRouteName: 'HomeTabs',
-			navigationOptions: {
-				gesturesEnabled: false,
-			},
-		},
-	);
