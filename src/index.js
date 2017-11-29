@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { createRootNavigator } from "./router";
+import { CreateRootNavigator } from "./router";
 
 export default class App extends Component {
 	constructor(props) {
@@ -20,7 +20,7 @@ export default class App extends Component {
 
 		// if not checked signed in wait to render (prevents this weird screen flashing bug)
 
-		const Layout = createRootNavigator(signedIn);
+		const Layout = CreateRootNavigator(signedIn);
 		return <Layout />;
 	}
 }

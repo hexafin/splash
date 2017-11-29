@@ -14,9 +14,14 @@ import ChooseDestinationWallet from "./components/TransactionScene/ChooseDestina
 import SetAmount from "./components/TransactionScene/SetAmount";
 import Confirmation from "./components/TransactionScene/Confirmation";
 
+import Wallets from "./components/WalletsScene";
+import Settings from "./components/SettingsScene";
+
+import Icon from 'react-native-vector-icons/Entypo';
+
 
 // stack navigator for all onboarding screens
-// export const SignedOut = StackNavigator(
+// export const OnboardingScreen = StackNavigator(
 // 	{
 // 		// all onboarding screens in proper order
 // 	},
@@ -25,41 +30,79 @@ import Confirmation from "./components/TransactionScene/Confirmation";
 // 	},
 // );
 
-export const HomeTabs = TabNavigator(
-	{
-		Tab1: { screen: Transactions },
-		Tab2: { screen: Market },
-		Tab3: { screen: Friends },
-	},
-	{
-		// some of these are default values, they're here as placeholders
-		swipeEnabled: false,
-		//backgroundColor:
-		tabBarOptions: {
-			showLabel: true,
-			activeTintColor: "#FFFFFF",
-			// style: {
-			//   borderTopWidth: 0,
-			//   backgroundColor: "transparent",
-			//
-			// }
-		},
-	},
-	(navigationOptions = {
-		tabBarVisible: true,
-	}),
+export const BaseScreen = TabNavigator(
+    {
+        Home: {
+            screen: Transactions,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"add-to-list"} size={30} color={tintColor}/>
+            })
+        },
+        Market: {
+            screen: Market,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"shop"} size={30} color={tintColor}/>
+            })
+        },
+        Friends: {
+            screen: Friends,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"users"} size={30} color={tintColor}/>
+            })
+        },
+    },
+    {
+        // some of these are default values, they're here as placeholders
+        swipeEnabled: true,
+        initialRouteName: 'Home',
+        //backgroundColor:
+        tabBarOptions: {
+            showLabel: false,
+            activeTintColor: "#401584",
+            showIcon: true
+            // style: {
+            //   borderTopWidth: 0,
+            //   backgroundColor: "transparent",
+            //
+            // }
+        },
+    },
+    (navigationOptions = {
+        tabBarVisible: true,
+    }),
 );
 
-export const createRootNavigator = (signedIn = false) => {
+//
+export const ApplicationScreen = StackNavigator(
+    {
+        Settings: { screen: Settings },
+        Wallets: { screen: Wallets },
+        Base: { screen: BaseScreen },
+        ChooseDestinationWallet: { screen: ChooseDestinationWallet },
+        SetAmount: { screen: SetAmount },
+        Confirmation: { screen: Confirmation },
+    },
+    {
+        headerMode: "none",
+        animationEnabled: true,
+        initialRouteName: 'Base',
+        mode: "modal",
+        navigationOptions: {
+            gesturesEnabled: false,
+        },
+    },
+);
+
+export const CreateRootNavigator = (signedIn = false) => {
 	return StackNavigator(
 		{
-			SignedIn: { screen: SignedIn },
-			// SignedOut: { screen: SignedOut }, // uncomment once the stack navigator above is filled
+			//Onboarding: { screen: OnboardingScreen },
+			Application: { screen: ApplicationScreen }
 		},
 		{
 			headerMode: "none",
 			mode: "modal",
-			initialRouteName: signedIn ? "SignedIn" : "SignedOut",
+			initialRouteName: signedIn ? "Application" : "Onboarding",
 			navigationOptions: {
 				gesturesEnabled: false,
 			},
@@ -68,18 +111,3 @@ export const createRootNavigator = (signedIn = false) => {
 };
 
 
-export const SignedIn = StackNavigator(
-		{
-			HomeTabs: {screen: HomeTabs},
-			ChooseDestinationWallet: { screen: ChooseDestinationWallet },
-			SetAmount: { screen: SetAmount },
-			Confirmation: { screen: Confirmation },
-		},
-		{
-			headerMode: "none",
-			initialRouteName: 'HomeTabs',
-			navigationOptions: {
-				gesturesEnabled: false,
-			},
-		},
-	);

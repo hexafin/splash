@@ -88,7 +88,7 @@ export default class Transactions extends Component {
 			amount_fiat: 50,
 			category: 'Food',
 			memo: 'Work',
-		}
+		};
 		const transaction2 = {
 			transaction_id: 1,
 			to_wallet: activeWallet,
@@ -97,7 +97,7 @@ export default class Transactions extends Component {
 			amount_fiat: 50,
 			category: 'Food',
 			memo: 'money',
-		}
+		};
 		const transaction3 = {
 			transaction_id: 0,
 			to_wallet: activeWallet,
@@ -106,7 +106,7 @@ export default class Transactions extends Component {
 			amount_fiat: 50,
 			category: 'Food',
 			memo: 'dogs',
-		}
+		};
 
 		//load in active wallet state and transactions ordered by most recent
 		//set dummy data and sort into sections
@@ -125,7 +125,7 @@ export default class Transactions extends Component {
 							<TransactionHeader activeWallet={this.state.activeWallet}
 																 btcBalance={0.06813}
 																 usdBalance={500}
-																 walletCallback={() => { console.log('wallets');}}
+																 walletCallback={() => navigate("Wallets")}
 																 searchCallback={updateSections.bind(this)}/>
 							<SectionList
 							sections={this.state.sections}
@@ -142,6 +142,7 @@ export default class Transactions extends Component {
 																		remindCallback={() => { console.log('remind');}}
 																		acceptCallback={() => { console.log('accept');}}
 																		declineCallback={() => { console.log('decline');}}/>} />
+
 							<View style={styles.footer}>
 								<TouchableOpacity style={styles.footerButton} onPress={() => navigate('ChooseDestinationWallet', {type: 'request', activeWallet: this.state.activeWallet})}>
 									<Icon name={'hand'} color={'#401584'} size={18}/>
@@ -165,25 +166,25 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'flex-start',
-		backgroundColor: '#F7F7F7',
+		backgroundColor: '#F7F7F7'
 	},
 	sectionHeader: {
 		backgroundColor: '#F0F0F0',
 		height: 26,
 		alignItems: 'center',
-		flexDirection: 'row',
+		flexDirection: 'row'
 	},
 	footer: {
 		height: 40,
 		flexDirection: 'row',
-		backgroundColor: '#F7F7F7',
+		backgroundColor: '#F7F7F7'
 	},
 	footerButton: {
-		flex: 1,
+		width: "50%",
 		flexDirection: 'row',
-		justifyContent: 'center',
 		alignItems: 'center',
+		justifyContent: 'center',
 		borderWidth: 1,
-		borderColor: '#E0E0E0',
-	},
+		borderColor: '#E0E0E0'
+	}
 });

@@ -57,15 +57,18 @@ https://rnfirebase.io/
         - `merchant`
 - `address_bitcoin`
 - `picture_url`
-    - *not defined for personal wallets, as they always use the picture associated with the person*
+    - *defaults to facebook photo*
 - `hex`
     - username within hexa system (eg. @john-smith-1)
 - `name`
     - text name describing wallet
 - `phone_number`
-    - *not defined for personal wallets, as it defaults to personal phone number*
+    - *defaults to personal phone number*
 - `email`
-    - *not defined for personal wallets, as it defaults to personal email*
+    - *defaults to personal email*
+- `person`
+    - *only defined for personal wallets*
+    - reference to person
 - `members`
     - *not defined for personal wallets, as they only have a single member (the owner)*
     - object of person_id:true entries
