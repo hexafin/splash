@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   },
 	sectionHeader: {
 		height: 44,
+		backgroundColor: '#FFFFFF',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 		borderBottomWidth: .5,
