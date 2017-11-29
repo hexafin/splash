@@ -35,7 +35,7 @@ export const BaseScreen = TabNavigator(
         Home: {
             screen: Transactions,
             navigationOptions: ({ navigation }) => ({
-                tabBarIcon: ({tintColor}) => <Icon name={"home"} size={30} color={tintColor}/>
+                tabBarIcon: ({tintColor}) => <Icon name={"add-to-list"} size={30} color={tintColor}/>
             })
         },
         Market: {
