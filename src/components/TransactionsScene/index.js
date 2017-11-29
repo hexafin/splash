@@ -166,18 +166,18 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'flex-start',
-		backgroundColor: '#F7F7F7',
+		backgroundColor: '#F7F7F7'
 	},
 	sectionHeader: {
 		backgroundColor: '#F0F0F0',
 		height: 26,
 		alignItems: 'center',
-		flexDirection: 'row',
+		flexDirection: 'row'
 	},
 	footer: {
 		height: 40,
 		flexDirection: 'row',
-		backgroundColor: '#F7F7F7',
+		backgroundColor: '#F7F7F7'
 	},
 	footerButton: {
 		width: "50%",
@@ -185,6 +185,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: 1,
-		borderColor: '#E0E0E0',
-	},
+		borderColor: '#E0E0E0'
+	}
 });

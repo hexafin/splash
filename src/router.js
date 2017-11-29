@@ -14,8 +14,10 @@ import ChooseDestinationWallet from "./components/TransactionScene/ChooseDestina
 import SetAmount from "./components/TransactionScene/SetAmount";
 import Confirmation from "./components/TransactionScene/Confirmation";
 
-import Wallets from "./components/WalletsScene"
-import Settings from "./components/SettingsScene"
+import Wallets from "./components/WalletsScene";
+import Settings from "./components/SettingsScene";
+
+import Icon from 'react-native-vector-icons/Entypo';
 
 
 // stack navigator for all onboarding screens
@@ -30,9 +32,24 @@ import Settings from "./components/SettingsScene"
 
 export const BaseScreen = TabNavigator(
     {
-        Home: { screen: Transactions },
-        Market: { screen: Market },
-        Friends: { screen: Friends },
+        Home: {
+            screen: Transactions,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"home"} size={30} color={tintColor}/>
+            })
+        },
+        Market: {
+            screen: Market,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"shop"} size={30} color={tintColor}/>
+            })
+        },
+        Friends: {
+            screen: Friends,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"users"} size={30} color={tintColor}/>
+            })
+        },
     },
     {
         // some of these are default values, they're here as placeholders
@@ -40,8 +57,9 @@ export const BaseScreen = TabNavigator(
         initialRouteName: 'Home',
         //backgroundColor:
         tabBarOptions: {
-            showLabel: true,
-            activeTintColor: "#FFFFFF",
+            showLabel: false,
+            activeTintColor: "#401584",
+            showIcon: true
             // style: {
             //   borderTopWidth: 0,
             //   backgroundColor: "transparent",
@@ -66,7 +84,9 @@ export const ApplicationScreen = StackNavigator(
     },
     {
         headerMode: "none",
+        animationEnabled: true,
         initialRouteName: 'Base',
+        mode: "modal",
         navigationOptions: {
             gesturesEnabled: false,
         },
