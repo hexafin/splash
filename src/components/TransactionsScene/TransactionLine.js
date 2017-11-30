@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
 
+import { colors } from '../../lib/colors';
+
 export default class TransactionLine extends Component {
   render() {
     const transaction = this.props.transaction;
@@ -16,20 +18,20 @@ export default class TransactionLine extends Component {
 
     if (transaction.to_wallet != activeWallet && transaction.completed) {
       btc = "-" + transaction.amount_crypto;
-      btcColor = '#FF3B30';
+      btcColor = colors.red;
       tranDescription = "You paid " + personName + " $" + transaction.amount_fiat;
     } else if (transaction.to_wallet == activeWallet && transaction.completed) {
       btc = "+" + transaction.amount_crypto;
-      btcColor = '#4CD964';
+      btcColor = colors.green;
       tranDescription = personName + " paid you $" + transaction.amount_fiat;
     } else if (request) {
       btc = "-" + transaction.amount_crypto;
       tranDescription = personName + " requests $" + transaction.amount_fiat;
-      btcColor = '#777777';
+      btcColor = colors.darkGray4;
     } else if (owe) {
       btc = "+" + transaction.amount_crypto;
       tranDescription = personName + " owes you $" + transaction.amount_fiat;
-      btcColor = '#777777';
+      btcColor = colors.darkGray4;
     }
 
     return (
@@ -53,13 +55,13 @@ export default class TransactionLine extends Component {
               <View style={{flexDirection: 'row', justifyContent: 'space-between' }}>
               {request &&
                 [
-                <Text key={0} style={{fontSize: 14, marginRight: 12, color: '#4CD964', fontWeight: 'bold' }} onPress={this.props.acceptCallback}>Accept</Text>,
-                <Text key={1} style={{fontSize: 14, color: '#FF3B30', fontWeight: 'bold' }} onPress={this.props.declineCallback}>Decline</Text>
+                <Text key={0} style={{fontSize: 14, marginRight: 12, color: colors.green, fontWeight: 'bold' }} onPress={this.props.acceptCallback}>Accept</Text>,
+                <Text key={1} style={{fontSize: 14, color: colors.red, fontWeight: 'bold' }} onPress={this.props.declineCallback}>Decline</Text>
                 ]
               }
               {owe &&
                 [
-                <Text key={0} style={{fontSize: 14, color: '#8E8E93', fontWeight: 'bold' }} onPress={this.props.remindCallback}>Remind</Text>
+                <Text key={0} style={{fontSize: 14, color: colors.mediumGray2, fontWeight: 'bold' }} onPress={this.props.remindCallback}>Remind</Text>
                 ]
               }
               </View>
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     justifyContent: 'space-around',
     flex: 6,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
     borderBottomWidth: 1,
   },
   lineView: {

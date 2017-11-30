@@ -14,6 +14,8 @@ import Header from '../header'
 import Icon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
+import { colors } from '../../../lib/colors';
+
 //needs props btcExchange and transaction type
 
 export default class SetAmount extends Component {
@@ -33,7 +35,7 @@ export default class SetAmount extends Component {
     if (!isNaN(val) && val !== 0) {
       // convert to btc (now using hardcoded value)
       //TODO: use real btc exchange rate
-      
+
       const btcVal = (0.00012 * val).toFixed(5)
 
       // TODO: write a validator on the amount to check if its possible
@@ -60,17 +62,17 @@ export default class SetAmount extends Component {
           />
           <View style={{marginLeft: 15, justifyContent: 'space-around'}}>
             <Text style={{fontSize: 17}}>{destinationWallet.name}</Text>
-            <Text style={{fontSize: 17, color: '#401584'}}>@{destinationWallet.hex}</Text>
+            <Text style={{fontSize: 17, color: colors.purple}}>@{destinationWallet.hex}</Text>
           </View>
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 15}}>
             <View style={{flexDirection: 'column'}}>
               <View style={styles.textInputView}>
-                <Text style={{fontSize:20, color: '#8E8E93', paddingLeft: 10}}>$</Text>
+                <Text style={{fontSize:20, color: colors.mediumGray2, paddingLeft: 10}}>$</Text>
                 <TextInput autoFocus={true} keyboardType={'numeric'} style={{flex:1}} onChangeText={(text) => this.handleAmount(text)}/>
               </View>
               <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 12}}>
-                <FontAwesomeIcon color={'#8E8E93'} size={12.5} name={'btc'} style={{paddingRight:10}}/>
-                <Text style={{fontSize: 17, color: '#8E8E93'}}>{this.state.btcAmount}</Text>
+                <FontAwesomeIcon color={colors.mediumGray2} size={12.5} name={'btc'} style={{paddingRight:10}}/>
+                <Text style={{fontSize: 17, color: colors.mediumGray2}}>{this.state.btcAmount}</Text>
               </View>
             </View>
           </View>
@@ -87,11 +89,11 @@ export default class SetAmount extends Component {
                  {key: 'd', icon: 'ticket', name: 'Event'},
                  {key: 'f', icon: 'list', name: 'Other'}]}
           renderItem={({item}) => <TouchableOpacity disabled={!this.state.valid} style={styles.categoryLine} onPress={() => navigate('Confirmation', {type: type, activeWallet: activeWallet, destinationWallet: destinationWallet, category: item.name, icon: item.icon, usdAmount: this.state.usdAmount, btcAmount: this.state.btcAmount, go_back_key: go_back_key})}>
-                                    {item.key !== 'e' && [<Icon key={0} name={item.icon} color={'#401584'} size={25}/>]}
-                                    {item.key == 'e' && [<FontAwesomeIcon key={1} name={item.icon} color={'#401584'} size={25}/>]}
+                                    {item.key !== 'e' && [<Icon key={0} name={item.icon} color={colors.purple} size={25}/>]}
+                                    {item.key == 'e' && [<FontAwesomeIcon key={1} name={item.icon} color={colors.purple} size={25}/>]}
                                     <View style={styles.categoryLineText}>
-                                      <Text style={{color: '#401584', fontSize: 17, fontWeight: 'bold'}}>{item.name}</Text>
-                                      <Icon color={'#C7C7CC'} size={13} name={'chevron-thin-right'} />
+                                      <Text style={{color: colors.purple, fontSize: 17, fontWeight: 'bold'}}>{item.name}</Text>
+                                      <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
                                     </View>
                                   </TouchableOpacity>}
         />
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     paddingLeft: 15,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   image: {
     height: 44,
@@ -122,13 +124,13 @@ const styles = StyleSheet.create({
   },
   textInputView: {
     flexDirection: 'row',
-    backgroundColor: '#F0F0F0',
+    backgroundColor: colors.mediumGray3,
     alignItems: 'center',
     width: 107,
     height: 33,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: colors.mediumGray4,
   },
   categoryLine: {
     height: 44,
@@ -144,11 +146,11 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     paddingRight: 10,
     borderBottomWidth: .5,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
   },
   listHeader: {
     paddingBottom: 15,
     borderBottomWidth: .5,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
   }
 });

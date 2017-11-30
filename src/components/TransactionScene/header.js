@@ -3,6 +3,8 @@ import {Text, View, StyleSheet, Image, TextInput} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
+import { colors } from '../../lib/colors';
+
 export default class Header extends Component {
     render() {
         //capitalize first letter of title
@@ -10,7 +12,7 @@ export default class Header extends Component {
         return (
             <View style={styles.header}>
                 <View style={styles.topBar}>
-                    <Icon name={'cross'} size={30} color={'#401584'} onPress={this.props.cancelCallback}/>
+                    <Icon name={'cross'} size={30} color={colors.purple} onPress={this.props.cancelCallback}/>
                     <Text style={{fontSize: 22, fontWeight: '600'}}>{title}</Text>
                     <Image
                         style={styles.image}
@@ -25,10 +27,10 @@ export default class Header extends Component {
 const styles = StyleSheet.create({
     header: {
         height: 74,
-        backgroundColor: '#F7F7F7',
+        backgroundColor: colors.lightGray,
         borderBottomWidth: .5,
         paddingHorizontal: 15,
-        borderBottomColor: '#95989A',
+        borderBottomColor: colors.darkGray2,
         justifyContent: 'space-around',
 
     },
