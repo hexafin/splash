@@ -34,12 +34,10 @@ export default class TransactionLine extends Component {
 
     return (
       <View style={styles.transaction}>
-        <View style={styles.imageView}>
           <Image
           style={styles.image}
           source={{uri: person.picture_url}}
           />
-        </View>
         <View style={styles.descriptionView}>
             <View style={styles.lineView}>
               <Text style={{ fontSize: 15 }}>{tranDescription}</Text>
@@ -76,15 +74,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 71,
   },
-  imageView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
   image: {
+    alignSelf: 'center',
     height: 33,
     width: 33,
     borderRadius: 16.5,
+    marginHorizontal: 10,
   },
   descriptionView: {
     paddingVertical: 10,
