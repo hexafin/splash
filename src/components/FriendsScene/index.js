@@ -88,10 +88,16 @@ export default class Friends extends Component {
         this.setState({
             allFriends: [lukas_person, mike_person],
             popular: [mike_person],
-            sections: [{data: [lukas_person, mike_person], title: 'Popular'}, {
-                data: [lukas_person, mike_person],
-                title: 'All Friends'
-            }]
+            sections: [
+                {
+                    data: [lukas_person, mike_person],
+                    title: 'Popular'
+                },
+                {
+                    data: [lukas_person, mike_person],
+                    title: 'All Friends'
+                }
+            ]
         }, function () {
             this.updateSections('');
         });

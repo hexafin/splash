@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'flex-start',
-		backgroundColor: '#F7F7F7'
+		backgroundColor: '#FFFFFF'
 	},
 	sectionHeader: {
 		backgroundColor: '#F0F0F0',
