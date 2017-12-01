@@ -126,8 +126,7 @@ export default class Friends extends Component {
                                                                   clickCallback={() => console.log('click')}
                                                                   requestCallback={() => navigate('SetAmount', {
                                                                       type: 'request',
-                                                                      activeWallet,
-                                                                      activeWallet,
+                                                                      activeWallet: activeWallet,
                                                                       destinationWallet: item,
                                                                       go_back_key: ''
                                                                   })} payCallback={() => navigate('SetAmount', {
