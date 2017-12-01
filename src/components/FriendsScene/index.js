@@ -111,9 +111,7 @@ export default class Friends extends Component {
             <View style={styles.container}>
                 {/* header */}
                 <FriendsHeader activeWallet={activeWallet}
-                               walletCallback={() => {
-                                   console.log('wallets');
-                               }}
+                               walletCallback={() => navigate("Wallets")}
                                searchCallback={this.updateSections}/>
                 {/* render Friends */}
                 <SectionList style={{backgroundColor: '#FFFFFF', marginLeft: 15}}
