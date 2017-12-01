@@ -4,6 +4,8 @@ import FriendsHeader from "./FriendsHeader";
 import FriendsLine from "./FriendsLine";
 import Icon from 'react-native-vector-icons/Entypo';
 
+import { colors } from '../../lib/colors';
+
 // import selected icon
 // import unselected icon
 
@@ -107,7 +109,7 @@ export default class Friends extends Component {
 													 walletCallback={() => { console.log('wallets');}}
 													 searchCallback={this.updateSections}/>
 				 {/* render Friends */}
-				<SectionList style={{backgroundColor: '#FFFFFF', marginLeft: 15}}
+				<SectionList style={{backgroundColor: colors.white, marginLeft: 15}}
  	        sections={this.state.sections}
  	        keyExtractor={item => item.hex}
  	        renderSectionHeader={({section}) => <View style={styles.sectionHeader}>
@@ -118,8 +120,8 @@ export default class Friends extends Component {
 
 				{/* footer */}
 				<TouchableOpacity style={styles.footer}>
-					<Icon name={'add-user'} size={17} color={'#401584'}/>
-					<Text style={{color: '#401584', fontSize: 17, fontWeight: 'bold', marginLeft: 10}}>Invite Friends</Text>
+					<Icon name={'add-user'} size={17} color={colors.purple}/>
+					<Text style={{color: colors.purple, fontSize: 17, fontWeight: 'bold', marginLeft: 10}}>Invite Friends</Text>
 				</TouchableOpacity>
 			</View>
 		);
@@ -129,21 +131,21 @@ export default class Friends extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-		backgroundColor: '#FFFFFF'
+		backgroundColor: colors.white
   },
 	sectionHeader: {
 		height: 44,
-		backgroundColor: '#FFFFFF',
+		backgroundColor: colors.white,
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 		borderBottomWidth: .5,
-		borderBottomColor: '#C7C7CC',
+		borderBottomColor: colors.darkGray,
 	},
 	footer: {
 		height: 43,
-		backgroundColor: '#F7F7F7',
+		backgroundColor: colors.lightGray,
 		borderWidth: 1,
-		borderColor: '#C7C7CC',
+		borderColor: colors.darkGray,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',

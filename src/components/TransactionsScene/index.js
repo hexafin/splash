@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 // import firebase from 'react-native-firebase';
 // let firestore = firebase.firestore();
 
-
+import { colors } from '../../lib/colors';
 
 // import selected icon
 // import unselected icon
@@ -130,9 +130,9 @@ export default class Transactions extends Component {
 							<SectionList
 							sections={this.state.sections}
 							renderSectionHeader={({section}) => <View style={styles.sectionHeader}>
-																									<Icon name={section.icon} size={14} style={[{color: '#8E8E93', marginLeft:22}, section.number && {color:'#401584'}]}/>
+																									<Icon name={section.icon} size={14} style={[{color: colors.mediumGray2, marginLeft:22}, section.number && {color:colors.purple}]}/>
 																									{section.number &&
-																									<Text style={{fontSize:14, color: '#401584', marginBottom: 2, marginLeft: 2}}>{section.number}</Text>}
+																									<Text style={{fontSize:14, color: colors.purple, marginBottom: 2, marginLeft: 2}}>{section.number}</Text>}
 																									</View>}
 							keyExtractor={item => item[0].transaction_id}
 							renderItem={({item}) => <TransactionLine
@@ -145,14 +145,14 @@ export default class Transactions extends Component {
 
 							<View style={styles.footer}>
 								<TouchableOpacity style={styles.footerButton} onPress={() => navigate('ChooseDestinationWallet', {type: 'request', activeWallet: this.state.activeWallet})}>
-									<Icon name={'hand'} color={'#401584'} size={18}/>
-									<Text style={{fontSize: 17, fontWeight: 'bold', color: '#401584', marginLeft: 5}}>
+									<Icon name={'hand'} color={colors.purple} size={18}/>
+									<Text style={{fontSize: 17, fontWeight: 'bold', color: colors.purple, marginLeft: 5}}>
 										Request
 									</Text>
 								</TouchableOpacity>
 								<TouchableOpacity style={styles.footerButton} onPress={() => navigate('ChooseDestinationWallet', {type: 'pay', activeWallet: this.state.activeWallet})}>
-									<Icon name={'paper-plane'} color={'#401584'} size={18}/>
-									<Text style={{fontSize: 17, fontWeight: 'bold', color: '#401584', marginLeft: 5}}>
+									<Icon name={'paper-plane'} color={colors.purple} size={18}/>
+									<Text style={{fontSize: 17, fontWeight: 'bold', color: colors.purple, marginLeft: 5}}>
 										Pay
 									</Text>
 								</TouchableOpacity>
@@ -166,10 +166,10 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'flex-start',
-		backgroundColor: '#F7F7F7'
+		backgroundColor: colors.lightGray
 	},
 	sectionHeader: {
-		backgroundColor: '#F0F0F0',
+		backgroundColor: colors.mediumGray3,
 		height: 26,
 		alignItems: 'center',
 		flexDirection: 'row'
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
 	footer: {
 		height: 40,
 		flexDirection: 'row',
-		backgroundColor: '#F7F7F7'
+		backgroundColor: colors.lightGray
 	},
 	footerButton: {
 		width: "50%",
@@ -185,6 +185,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		borderWidth: 1,
-		borderColor: '#E0E0E0'
+		borderColor: colors.mediumGray4
 	}
 });

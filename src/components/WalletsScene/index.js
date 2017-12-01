@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
+import { colors } from '../../lib/colors';
+
 import firebase from 'react-native-firebase';
 let firestore = firebase.firestore();
 
@@ -62,9 +64,9 @@ export default class Wallets extends Component {
 
             <View style={styles.header}>
                 <View style={styles.topBar}>
-                    <Icon name={'cross'} size={30} color={'#401584'} onPress={() => goBack(key)}/>
+                    <Icon name={'cross'} size={30} color={colors.purple} onPress={() => goBack(key)}/>
                     <Text style={{fontSize: 22, fontWeight: '600'}}>Wallets</Text>
-                    <Icon name={'cog'} size={30} color={'#401584'} onPress={() => navigate("Settings")}/>
+                    <Icon name={'cog'} size={30} color={colors.purple} onPress={() => navigate("Settings")}/>
                 </View>
             </View>
 
@@ -75,10 +77,10 @@ export default class Wallets extends Component {
 const styles = StyleSheet.create({
     header: {
         height: 74,
-        backgroundColor: '#F7F7F7',
+        backgroundColor: colors.lightGray,
         borderBottomWidth: .5,
         paddingHorizontal: 15,
-        borderBottomColor: '#95989A',
+        borderBottomColor: colors.darkGray2,
         justifyContent: 'space-around',
 
     },
