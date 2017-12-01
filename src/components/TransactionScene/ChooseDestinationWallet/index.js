@@ -9,6 +9,8 @@ import FriendLine from './FriendLine';
 import SearchHeader from './SearchHeader';
 import Icon from 'react-native-vector-icons/Entypo';
 
+import { colors } from '../../../lib/colors';
+
 // needs type prop of either 'request' or 'pay'
 
 export default class ChooseDestinationWallet extends Component {
@@ -93,15 +95,15 @@ export default class ChooseDestinationWallet extends Component {
     return (
       <View style={{flex: 1}}>
         <SearchHeader type={type} picture_url={activeWallet.picture_url} searchCallback={this.updateSections.bind(this)} cancelCallback={() => goBack()}/>
-        <SectionList style={{backgroundColor: '#FFFFFF'}}
+        <SectionList style={{backgroundColor: colors.white}}
           sections={this.state.sections}
           keyExtractor={item => item.hex}
           renderSectionHeader={({section}) => <View style={styles.sectionHeader}>
                                                 <View style={{flex:1, paddingLeft: 15}}>
-                                                  <Icon style={{paddingLeft:10}} name={section.icon} size={15.5} color={'#8E8E93'}/>
+                                                  <Icon style={{paddingLeft:10}} name={section.icon} size={15.5} color={colors.mediumGray2}/>
                                                 </View>
                                                 <View style={{flex:8}}>
-                                                  <Text style={{color: '#8E8E93', fontSize: 15}}>{section.title}</Text>
+                                                  <Text style={{color: colors.mediumGray2, fontSize: 15}}>{section.title}</Text>
                                                 </View>
                                               </View>}
           renderItem={({item}) => <FriendLine wallet={item} clickCallback={() => navigate('SetAmount', {type: type, activeWallet, activeWallet, destinationWallet: item, go_back_key: key})}/>}
@@ -114,10 +116,10 @@ export default class ChooseDestinationWallet extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   sectionHeader: {
-		backgroundColor: '#F0F0F0',
+		backgroundColor: colors.mediumGray3,
 		height: 26,
 		alignItems: 'center',
 		flexDirection: 'row',

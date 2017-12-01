@@ -16,6 +16,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import {NavigationActions} from 'react-navigation'
 
+import { colors } from '../../../lib/colors';
+
 export default class Confirmation extends Component {
 
     constructor(props) {
@@ -53,7 +55,7 @@ export default class Confirmation extends Component {
                         />
                         <View style={{marginLeft: 15, justifyContent: 'space-around'}}>
                             <Text style={{fontSize: 17}}>{destinationWallet.name}</Text>
-                            <Text style={{fontSize: 17, color: '#401584'}}>@{destinationWallet.hex}</Text>
+                            <Text style={{fontSize: 17, color: colors.purple}}>@{destinationWallet.hex}</Text>
                         </View>
                         <View style={{marginLeft: 30, alignItems: 'center'}}>
                             {icon !== 'exchange' && [<Icon key={0} size={37} name={icon}/>]}
@@ -75,7 +77,7 @@ export default class Confirmation extends Component {
                         <TextInput
                             style={{margin: 10, flex: 1, fontSize: 20}}
                             placeholder={'Memo (Optional)'}
-                            placeholderTextColor={'#8E8E93'}
+                            placeholderTextColor={colors.mediumGray2}
                             multiline={true}
                             autoFocus={true}
                             autoCorrect={false}
@@ -85,10 +87,10 @@ export default class Confirmation extends Component {
                         />
                     </View>
                     <View style={styles.walletBox}>
-                        <Text style={{fontSize: 20, color: '#8E8E93', marginLeft: 15}}>Wallet</Text>
+                        <Text style={{fontSize: 20, color: colors.mediumGray2, marginLeft: 15}}>Wallet</Text>
                         <View style={{justifyContent: 'space-around', paddingLeft: 27}}>
                             <Text style={{fontSize: 17}}>{activeWallet.name}</Text>
-                            <Text style={{fontSize: 15, color: '#401584'}}>@{activeWallet.hex}</Text>
+                            <Text style={{fontSize: 15, color: colors.purple}}>@{activeWallet.hex}</Text>
                         </View>
                         <View style={{flex: 1, alignItems: 'flex-end', paddingRight: 10}}>
                             <Image
@@ -99,8 +101,8 @@ export default class Confirmation extends Component {
                     </View>
                 </ScrollView>
                 <TouchableOpacity style={styles.footer} onPress={() => this.confirmTransaction()}>
-                    <Icon color={'#401584'} size={28} name={'fingerprint'}/>
-                    <Text style={{fontSize: 17, color: '#401584', fontWeight: 'bold', paddingLeft: 15}}>Confirm</Text>
+                    <Icon color={colors.purple} size={28} name={'fingerprint'}/>
+                    <Text style={{fontSize: 17, color: colors.purple, fontWeight: 'bold', paddingLeft: 15}}>Confirm</Text>
                 </TouchableOpacity>
                 <KeyboardSpacer/>
             </View>
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
     page: {
         flex: 1,
         paddingHorizontal: 15,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: colors.white,
     },
     topLine: {
         flexDirection: 'row',
@@ -129,19 +131,19 @@ const styles = StyleSheet.create({
     },
     memoBox: {
         height: 156,
-        backgroundColor: '#FAFAFA',
+        backgroundColor: colors.lightGray,
         borderRadius: 20,
         justifyContent: 'flex-start',
-        borderColor: '#E0E0E0',
+        borderColor: colors.mediumGray4,
         borderWidth: 1,
     },
     walletBox: {
         height: 61,
         marginVertical: 15,
-        backgroundColor: '#FAFAFA',
+        backgroundColor: colors.lightGray,
         borderRadius: 31.5,
         borderWidth: 1,
-        borderColor: '#E0E0E0',
+        borderColor: colors.mediumGray4,
         flexDirection: 'row',
         alignItems: 'center'
     },
@@ -150,8 +152,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F7F7F7',
+        backgroundColor: colors.lightGray,
         borderWidth: 1,
-        borderColor: '#E0E0E0',
+        borderColor: colors.mediumGray4,
     },
 });

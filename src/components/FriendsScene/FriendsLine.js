@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import { colors } from '../../lib/colors';
 
 export default class FriendLine extends Component {
   render() {
@@ -32,10 +33,10 @@ export default class FriendLine extends Component {
         {/* request/pay buttons */}
         <View style={styles.buttonsView}>
           <TouchableOpacity style={[styles.button, styles.buttonLeft]} onPress={this.props.requestCallback}>
-            <Text style={{fontSize: 15, fontWeight: 'bold', color: '#401584'}}>Request</Text>
+            <Text style={{fontSize: 15, fontWeight: 'bold', color: colors.purple}}>Request</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonRight]} onPress={this.props.payCallback}>
-            <Text style={{fontSize: 15, fontWeight: 'bold', color: '#401584'}}>Pay</Text>
+            <Text style={{fontSize: 15, fontWeight: 'bold', color: colors.purple}}>Pay</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     height: 55,
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   imageView: {
     flex: 1,
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     flex: 4,
     justifyContent: 'center',
     borderBottomWidth: .5,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
   },
   buttonsView: {
     flex: 4,
@@ -70,12 +71,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     borderBottomWidth: .5,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
   },
   buttonLeft: {
     flex: 4,
     borderRightWidth: 1,
-    borderRightColor: '#E0E0E0',
+    borderRightColor: colors.mediumGray4,
   },
   buttonRight: {
     flex: 3,

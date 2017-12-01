@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { colors } from '../../lib/colors';
+
 export default class TransactionHeader extends Component {
   render() {
     const activeWallet = this.props.activeWallet;
@@ -18,27 +20,27 @@ export default class TransactionHeader extends Component {
             <View style={styles.lineView}>
               <Text style={{fontSize:17}}>{activeWallet.name}</Text>
               <View style={{flexDirection: 'row', alignItems: 'center' }}>
-                <Icon style={{ marginRight: 2, color: '#525252' }} size={14.5} name={'btc'} />
-                <Text style={{color:'#525252', fontWeight: 'bold', fontSize: 17}}>
+                <Icon style={{ marginRight: 2, color: colors.darkGray3 }} size={14.5} name={'btc'} />
+                <Text style={{color:colors.darkGray3, fontWeight: 'bold', fontSize: 17}}>
                   {this.props.btcBalance}
                 </Text>
               </View>
             </View>
             <View style={styles.lineView}>
-              <Text style={{fontSize:15, color:'#401584'}}>@{activeWallet.hex}</Text>
-              <Text style={{color:'#525252', fontWeight: 'bold', fontSize: 17}}>=${this.props.usdBalance}</Text>
+              <Text style={{fontSize:15, color:colors.purple}}>@{activeWallet.hex}</Text>
+              <Text style={{color:colors.darkGray3, fontWeight: 'bold', fontSize: 17}}>=${this.props.usdBalance}</Text>
             </View>
           </View>
           </TouchableOpacity>
         <View style={styles.searchBar}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
-            <Icon style={{ color: '#8E8E93', marginRight: 8 }} size={14} name={'search'}/>
+            <Icon style={{ color: colors.mediumGray2, marginRight: 8 }} size={14} name={'search'}/>
             <TextInput style={{ fontSize: 17, }}
                        placeholder={'Search Transactions'}
-                       placeholderTextColor={'#8E8E93'}
+                       placeholderTextColor={colors.mediumGray2}
                        onChangeText={(text) => { this.props.searchCallback(text)}}/>
           </View>
-          <Text style={{ color: '#8E8E93', fontSize: 25, fontWeight: 'bold', marginRight: 10 }}>Hexa</Text>
+          <Text style={{ color: colors.mediumGray2, fontSize: 25, fontWeight: 'bold', marginRight: 10 }}>Hexa</Text>
         </View>
       </View>
     );
@@ -48,9 +50,9 @@ export default class TransactionHeader extends Component {
 const styles = StyleSheet.create({
   header: {
     height: 120.08,
-    backgroundColor: '#F7F7F7',
+    backgroundColor: colors.lightGray,
     borderBottomWidth: .5,
-    borderBottomColor: '#95989A',
+    borderBottomColor: colors.darkGray2,
   },
   lineView: {
     marginRight: 10,
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1,
-    backgroundColor: '#E8E9EA',
+    backgroundColor: colors.mediumGray,
     marginHorizontal: 10,
     marginVertical: 10,
     borderRadius:10,

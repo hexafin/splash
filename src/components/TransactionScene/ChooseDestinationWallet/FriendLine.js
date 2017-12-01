@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
+import { colors } from '../../../lib/colors';
+
 
 export default class FriendLine extends Component {
   render() {
@@ -26,7 +28,7 @@ export default class FriendLine extends Component {
           <Text style={{fontSize: 14}}>@{wallet.hex}</Text>
         </View>
         <View style={styles.iconView}>
-          <Icon color={'#C7C7CC'} size={13} name={'chevron-thin-right'} />
+          <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
         </View>
       </TouchableOpacity>
     );
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
   container: {
     height: 55,
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.white,
   },
   imageView: {
     flex: 1,
@@ -53,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 7,
     justifyContent: 'center',
     borderBottomWidth: .5,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
   },
   iconView: {
     flex: 1,
@@ -61,6 +63,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     borderBottomWidth: .5,
-    borderBottomColor: '#C7C7CC',
+    borderBottomColor: colors.darkGray,
   },
 });
