@@ -32,16 +32,16 @@ import Icon from 'react-native-vector-icons/Entypo';
 
 export const BaseScreen = TabNavigator(
     {
-        Home: {
-            screen: Transactions,
-            navigationOptions: ({ navigation }) => ({
-                tabBarIcon: ({tintColor}) => <Icon name={"add-to-list"} size={30} color={tintColor}/>
-            })
-        },
         Market: {
             screen: Market,
             navigationOptions: ({ navigation }) => ({
                 tabBarIcon: ({tintColor}) => <Icon name={"shop"} size={30} color={tintColor}/>
+            })
+        },
+        Home: {
+            screen: Transactions,
+            navigationOptions: ({ navigation }) => ({
+                tabBarIcon: ({tintColor}) => <Icon name={"text-document-inverted"} size={30} color={tintColor}/>
             })
         },
         Friends: {
