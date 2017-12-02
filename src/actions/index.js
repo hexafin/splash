@@ -5,6 +5,7 @@ Actions
  */
 
 import {Actions} from "react-native-router-flux"
+//import api from "../api"
 
 /*
 * Basic Action Creators
@@ -121,10 +122,20 @@ export function declineTransactionFailure(transactionRef) {
     return {type: DECLINE_TRANSACTION_FAILURE, transactionRef}
 }
 
+/*
+* Complex Actions
+ */
 
-export const signIn = () => {
+// Sign in function
+export const SignIn = () => {
 
     return (dispatch, getState) => {
+
+        // if already signed in, navigate home
+        const state = getState()
+        if (state.general.signedIn) {
+            Actions.home()
+        }
 
         // initialize sign in
         dispatch(signInInit())
@@ -134,8 +145,30 @@ export const signIn = () => {
         // assuming success
         dispatch(signInSuccess())
         Actions.home()
+    }
+}
+
+export const NewAccount = (account) => {
+
+    return (dispatch, getState) => {
+
+        // initialize new account creation
+        dispatch(newAccountInit())
+
+        try {
+
+            //api.NewAccount(account)
+
+        }
+        catch (error) {
+
+            // error
+            dispatch(newAccountFailure(error))
+
+        }
 
     }
+
 }
 
 

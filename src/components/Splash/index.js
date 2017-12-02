@@ -1,7 +1,7 @@
 // container for splash page
 import Splash from "./Splash"
 import {connect} from "react-redux"
-import {signIn} from "../../actions"
+import {SignIn} from "../../actions"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        signIn
+        SignIn
     }, dispatch)
 }
 

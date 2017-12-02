@@ -10,12 +10,11 @@ import {
 import {colors} from "../../lib/colors"
 
 
-const Splash = ({signIn}) => {
-    console.log(signIn)
+const Splash = ({SignIn}) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Splash Page</Text>
-            <Button style={styles.loginButton} title="Log In" onPress={() => signIn()}/>
+            <Button style={styles.loginButton} title="Log In" onPress={() => SignIn()}/>
         </View>
     )
 }
