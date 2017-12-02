@@ -7,6 +7,8 @@ import Home from "./components/Home"
 import Splash from "./components/Splash"
 import ChooseUsername from "./components/ChooseUsername"
 import Welcome from "./components/Welcome"
+import ConfirmDetails from "./components/ConfirmDetails"
+import ChoosePassword from "./components/ChoosePassword"
 
 
 const RouterWithRedux = connect()(Router)
@@ -15,8 +17,10 @@ const store = configureStore()
 const Scenes = Actions.create(
     <Scene key="root" hideNavBar={true}>
         <Scene key="splash" component={Splash} hideNavBar={true}/>
-        <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true}/>
+        <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true} initial/>
         <Scene key="welcome" component={Welcome} hideNavBar={true}/>
+        <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
+        <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
         <Scene key="home" component={Home} hideNavBar={true}/>
     </Scene>
 )
