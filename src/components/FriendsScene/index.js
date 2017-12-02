@@ -46,6 +46,12 @@ export default class Friends extends Component {
             }
         }
 
+        for (let wallet of allFriends) {
+            if (!search || (wallet.name).toLowerCase().search(search.toLowerCase()) !== -1) {
+                allFriendsArray.push(wallet);
+            }
+        }
+
         //put arrays into section format
 
         if (popularArray.length !== 0) {
@@ -56,7 +62,6 @@ export default class Friends extends Component {
         }
 
         //add the sections to state
-
         this.setState({sections: sections});
     }
 
