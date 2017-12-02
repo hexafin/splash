@@ -6,16 +6,16 @@ import { StackNavigator, TabNavigator, SafeAreaView } from "react-navigation";
 // import sign in
 // import sign up
 
-import Transactions from "./components/TransactionsScene";
-import Market from "./components/MarketScene";
-import Friends from "./components/FriendsScene";
+import Transactions from "../src/components/TransactionsScene/index";
+import Market from "../src/components/MarketScene/index";
+import Friends from "../src/components/FriendsScene/index";
 
-import ChooseDestinationWallet from "./components/TransactionScene/ChooseDestinationWallet";
-import SetAmount from "./components/TransactionScene/SetAmount";
-import Confirmation from "./components/TransactionScene/Confirmation";
+import ChooseDestinationWallet from "../src/components/TransactionScene/ChooseDestinationWallet/index";
+import SetAmount from "../src/components/TransactionScene/SetAmount/index";
+import Confirmation from "../src/components/TransactionScene/Confirmation/index";
 
-import Wallets from "./components/WalletsScene";
-import Settings from "./components/SettingsScene";
+import Wallets from "../src/components/WalletsScene/index";
+import Settings from "../src/components/SettingsScene/index";
 
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -93,7 +93,7 @@ export const ApplicationScreen = StackNavigator(
     },
 );
 
-export const CreateRootNavigator = (signedIn = false) => {
+export const CreateRootNavigator = (signedIn = true) => {
 	return StackNavigator(
 		{
 			//Onboarding: { screen: OnboardingScreen },

@@ -1,26 +1,26 @@
-import React, { Component } from "react";
-import { CreateRootNavigator } from "./router";
+import React, { Component } from 'react'
+import { Provider, connect } from 'react-redux'
+import { Router, Scene } from 'react-native-router-flux'
+import Home from "./components/Home"
+import Splash from "./components/Splash"
+import configureStore from "./store/configureStore"
+
+const store = configureStore()
+const RouterWithRedux = connect()(Router)
 
 export default class App extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			signedIn: true, // placeholder value
-			checkedSignedIn: false,
-		};
-	}
-
-	componentWillMount() {
-		//check to see if the user is signed in with firebase
-	}
-
-	render() {
-		const { signedIn, checkedSignedIn } = this.state;
-
-		// if not checked signed in wait to render (prevents this weird screen flashing bug)
-
-		const Layout = CreateRootNavigator(signedIn);
-		return <Layout />;
-	}
+    render() {
+        return (
+            <Provider store={store}>
+                <RouterWithRedux hideNavBar={true}>
+                    <Scene key="root" hideNavBar={true}>
+                        <Scene key="splash" component={Splash} initial={true} hideNavBar={true}></Scene>
+                        <Scene key="application" hideNavBar={true}>
+                            <Scene key="home" component={Home} hideNavBar={true}/>
+                        </Scene>
+                    </Scene>
+                </RouterWithRedux>
+            </Provider>
+        )
+    }
 }
