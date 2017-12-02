@@ -8,6 +8,9 @@ import {
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
+import Button from "../universal/Button"
+
+import {Actions} from "react-native-router-flux"
 
 
 const ChooseUsername = () => {
@@ -19,12 +22,12 @@ const ChooseUsername = () => {
                 <Text style={styles.headerText}>- it's yours, forever.</Text>
             </View>
             <View style={styles.body}>
-                {/* @username input */}
+                <View style={{backgroundColor: colors.purple, flex: 1}}></View>
                 <Text style={styles.bodyText}>
                     Your username will be the way people can find you in the app and send money to you.
                 </Text>
             </View>
-            <TouchableOpacity style={styles.bottomButton}><Text>test</Text></TouchableOpacity>
+            <Button style={{flex: 0}} title="Set username" onPress={() => Actions.home}/>
         </View>
     )
 }
@@ -35,7 +38,9 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-around",
         backgroundColor: colors.white,
-        padding: 50
+        padding: 20,
+        paddingTop: 50,
+        paddingBottom: 50
     },
     header: {
         flex: 1,
@@ -57,18 +62,17 @@ const styles = StyleSheet.create({
         color: colors.nearBlack
     },
     body: {
-        flex: 2
+        paddingTop: 50,
+        flex: 2,
+        flexDirection: "column",
+        justifyContent: "center"
     },
     bodyText: {
+        flex: 1,
         marginTop: 20,
         color: colors.gray,
         textAlign: "center",
         fontSize: 20
-    },
-    bottomButton: {
-        flex: 0,
-        padding: 20,
-        backgroundColor: colors.purple
     }
 })
 
