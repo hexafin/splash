@@ -9,14 +9,16 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
-
+import BackButton from "../universal/BackButton";
 import {Actions} from "react-native-router-flux"
+
 
 
 const ChooseUsername = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
+                <BackButton onPress={() => Actions.pop()} />
                 <Text style={styles.headerEmoji}>🎅</Text>
                 <Text style={styles.headerText}>Choose your username</Text>
                 <Text style={styles.headerText}>- it's yours, forever.</Text>

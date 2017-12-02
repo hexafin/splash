@@ -9,6 +9,7 @@ import ChooseUsername from "./components/ChooseUsername"
 import Welcome from "./components/Welcome"
 import ConfirmDetails from "./components/ConfirmDetails"
 import ChoosePassword from "./components/ChoosePassword"
+import AddFunds from "./components/AddFunds"
 
 
 const RouterWithRedux = connect()(Router)
@@ -21,6 +22,7 @@ const Scenes = Actions.create(
         <Scene key="welcome" component={Welcome} hideNavBar={true}/>
         <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
         <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
+        <Scene key="addFunds" component={AddFunds} hideNavBar={true}/>
         <Scene key="home" component={Home} hideNavBar={true}/>
     </Scene>
 )

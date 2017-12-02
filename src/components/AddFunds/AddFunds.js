@@ -9,26 +9,23 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
-import BackButton from "../universal/BackButton"
 
 import {Actions} from "react-native-router-flux"
 
 
-const ChoosePassword = () => {
+const AddFunds = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <BackButton onPress={() => Actions.pop()}/>
-                <Text style={styles.headerEmoji}>🤐</Text>
-                <Text style={styles.headerText}>Choose password</Text>
+                <Text style={styles.headerEmoji}>👍</Text>
+                <Text style={styles.headerText}>Wallet created. Now, let's add some funds!</Text>
             </View>
-            <View style={styles.body}>
-                {/* Multi-line input */}
-                <Text style={styles.bodyText}>
-                    Choose something secure 🔒
-                </Text>
+            <View style={styles.containerSpacer}></View>
+            <View style={styles.footer}>
+                <Button title="I don't have bitcoin yet" onPress={() => {}}/>
+                <View style={styles.footerSpacer}></View>
+                <Button title="I already have bitcoin" onPress={() => {}}/>
             </View>
-            <Button style={{flex: 0}} title="All done" onPress={() => Actions.addFunds()}/>
         </View>
     )
 }
@@ -39,12 +36,15 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-around",
         backgroundColor: colors.white,
-        padding: 20,
-        paddingTop: 30,
+        padding: 30,
+        paddingTop: 50,
         paddingBottom: 60
     },
+    containerSpacer: {
+        flex: 1
+    },
     header: {
-        flex: 1,
+        flex: 3,
         flexDirection: "column",
         justifyContent: "center"
     },
@@ -62,22 +62,13 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         color: colors.nearBlack
     },
-    body: {
-        padding: 30,
-        paddingTop: 50,
-        flex: 2,
-        flexDirection: "column",
-        justifyContent: "center"
+    footer: {
+        flex: 0,
+        flexDirection: "column"
     },
-    bodyText: {
-        marginTop: 20,
-        color: colors.gray,
-        textAlign: "center",
-        fontSize: 20,
-        fontWeight: "400",
-        backgroundColor: "transparent",
-        lineHeight: 25
+    footerSpacer: {
+        padding: 10
     }
 })
 
-export default ChoosePassword
+export default AddFunds
