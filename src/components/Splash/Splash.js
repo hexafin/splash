@@ -27,12 +27,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         backgroundColor: colors.white,
         padding: 30
-    },
-    title: {
-        fontSize: 20
-    },
-    loginButton: {
-
     }
 })
 
