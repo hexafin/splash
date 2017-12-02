@@ -8,21 +8,24 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 
-export const Input = ({onChangeText, value, placeholder}) => {
+export const Input = ({onChange, value, placeholder, name}) => {
 
 	return (
-			<TextInput onChangeText={ onChangeText } value={value} placeholder={placeholder} style={[styles.input]}>
+			<TextInput onChangeText={ onChange } name={name} value={value} placeholder={placeholder} style={[styles.input]}>
 			 	</TextInput>
 		)
 }
 
-export const MultiInput = ({children, on}) => {
-	const inputs = children.map((input) => {
-		return input
-	})
-	console.log('inputs', inputs)
+export const MultiInput = ({inputs, on}) => {
+	const handleFormChange = (name) => (value) => {
+  
+
+  }
+
+	
 	return (
 			<View >
+				<TextInput />
 			</View>
 
 		)
