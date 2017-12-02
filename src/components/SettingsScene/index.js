@@ -4,6 +4,7 @@ import {
     SectionList,
     Text,
     StyleSheet,
+    TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
@@ -43,7 +44,7 @@ export default class Settings extends Component {
         const {navigate, goBack} = this.props.navigation;
 
         return (
-
+          <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.topBar}>
                     <Icon name={'cross'} size={30} color={colors.purple} style={styles.backButton} onPress={() => goBack(key)}/>
@@ -51,12 +52,58 @@ export default class Settings extends Component {
                     <View style={styles.topBarSpacer}/>
                 </View>
             </View>
-
+            <View style={styles.page}>
+              <View>
+                <View style={styles.sectionHeader}>
+                  <Text style={{fontSize: 13, color: colors.mediumGray2}}>PROFILE</Text>
+                </View>
+                <TouchableOpacity style={[styles.item, styles.itemBorder]}>
+                  <Text style={{ fontSize: 17 }}>Edit Details</Text>
+                  <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.item, styles.itemBorder]}>
+                  <Text style={{ fontSize: 17 }}>Link to Facebook</Text>
+                  <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.item}>
+                  <Text style={{ fontSize: 17 }}>Link to Coinbase</Text>
+                  <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
+                </TouchableOpacity>
+                <View style={styles.sectionHeader}>
+                  <Text style={{fontSize: 13, color: colors.mediumGray2}}>PREFERENCES</Text>
+                </View>
+                <TouchableOpacity style={[styles.item, styles.itemBorder]}>
+                  <Text style={{ fontSize: 17 }}>Benchmark Currency</Text>
+                  <Text style={{ fontSize: 17, color: colors.darkGray }}>USD</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.item}>
+                  <Text style={{ fontSize: 17 }}>Push Notifications</Text>
+                  <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
+                </TouchableOpacity>
+                <View style={styles.sectionHeader}>
+                  <Text style={{fontSize: 13, color: colors.mediumGray2}}>SECURITY</Text>
+                </View>
+                <TouchableOpacity style={[styles.item, styles.itemBorder]}>
+                  <Text style={{ fontSize: 17 }}>Reset PIN</Text>
+                  <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.item}>
+                  <Text style={{ fontSize: 17 }}>Private Keys</Text>
+                  <Icon color={colors.darkGray} size={13} name={'chevron-thin-right'} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.footerText}>hexa</Text>
+            </View>
+          </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
     header: {
         height: 74,
         backgroundColor: colors.lightGray,
@@ -80,5 +127,34 @@ const styles = StyleSheet.create({
     },
     topBarSpacer: {
         width: 30
-    }
+    },
+    page: {
+      flex: 1,
+      justifyContent: 'space-between',
+      backgroundColor: colors.mediumGray3,
+    },
+    item: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 15,
+      paddingVertical: 13,
+      backgroundColor: colors.white,
+    },
+    itemBorder: {
+      borderBottomWidth: .5,
+      borderBottomColor: colors.darkGray,
+    },
+    sectionHeader: {
+      paddingTop: 15,
+      paddingBottom: 5,
+      paddingLeft: 15,
+    },
+    footerText: {
+      paddingBottom: 20,
+      alignSelf: 'center',
+      fontWeight: 'bold',
+      color: colors.mediumGray2,
+      fontSize: 40,
+    },
 });
