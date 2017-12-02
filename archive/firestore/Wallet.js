@@ -9,12 +9,29 @@ import firebase from 'react-native-firebase';
 let firestore = firebase.firestore();
 var random = require('react-native-randombytes').randomBytes;
 var bitcoin = require('bitcoinjs-lib');
+var axios = require('axios');
 
 import { NewInternalChat } from "./Chat";
 
-// TODO: function takes wallet and gets bitcoin balance
-function GetBalance(walletRef) {
-
+// takes address and returns balance or error
+// calls internal api
+function GetBalance(address) {
+  return new Promise((resolve, reject) => {
+    const APIaddress = 'https://us-central1-hexa-dev.cloudfunctions.net/GetBalance';
+    axios.post(APIaddress, {
+      address: address,
+    })
+    .then(response => {
+      if (response.data.balance !== null){
+        resolve(response.data.balance);
+      } else {
+        reject('Cannot retrieve balance');
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
 }
 
 function NewPersonalWallet(personRef, description) {
@@ -116,4 +133,4 @@ function NewBitcoinWallet() {
     };
 }
 
-export { NewPersonalWallet, NewGroupWallet, GenerateHex, HexExists };
+export { NewPersonalWallet, NewGroupWallet, GenerateHex, HexExists, GetBalance };
