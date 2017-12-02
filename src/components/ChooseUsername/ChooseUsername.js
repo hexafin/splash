@@ -7,14 +7,16 @@ import {
     StyleSheet,
     Button
 } from "react-native"
+import Emoji from "react-native-emoji"
 import {colors} from "../../lib/colors"
 
 
 const Splash = ({SignIn}) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Splash Page</Text>
-            <Button style={styles.loginButton} title="Log In" onPress={() => SignIn()}/>
+            <View style={styles.header}>
+
+            </View>
         </View>
     )
 }
