@@ -27,7 +27,7 @@ const ChooseUsername = () => {
                     Your username will be the way people can find you in the app and send money to you.
                 </Text>
             </View>
-            <Button style={{flex: 0}} title="Set username" onPress={() => Actions.home}/>
+            <Button style={{flex: 0}} title="Set username" onPress={() => Actions.welcome()}/>
         </View>
     )
 }
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
         marginTop: 20,
         color: colors.gray,
         textAlign: "center",
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: "500"
     }
 })
 
