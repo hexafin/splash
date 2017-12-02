@@ -4,5 +4,6 @@ export const colors = {
     green: '#4CD964',
     red: '#FF3B30',
     gray: "#ABABAB",
-    nearBlack: "#333333"
+    nearBlack: "#333333",
+    lightShadow: 'rgba(63,63,63,10)'
 }
