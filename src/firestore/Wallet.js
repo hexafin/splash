@@ -18,33 +18,34 @@ function GetBalance(walletRef) {
 }
 
 function NewPersonalWallet(personRef, description) {
+    return new Promise((resolve, reject) => {
+        // create hexa wallet
+        personRef.get().then(person => {
 
-    // create hexa wallet
-    personRef.get().then(person => {
+            var hex = GenerateHex(person.data()["first_name"].toLowerCase(), person.data()["last_name"].toLowerCase());
 
-        var hex = GenerateHex(person.data()["first_name"], person.data()["last_name"]);
+            var walletName = person.data()["first_name"] + " " + person.data()["last_name"];
 
-        var walletName = person.data()["first_name"] + " " + person.data()["last_name"];
+            // create bitcoin wallet
+            var bitcoinWallet = NewBitcoinWallet();
 
-        // create bitcoin wallet
-        var bitcoinWallet = NewBitcoinWallet();
+            // TODO: store key locally in wallet_id object {bitcoin:WIF,ethereum:ethWiF,...}
+            var wif = bitcoinWallet.wif;
 
-        // TODO: store key locally in wallet_id object {bitcoin:WIF,ethereum:ethWiF,...}
-        var wif = bitcoinWallet.wif;
+            firestore.collection("wallets").add({
+                type: "personal",
+                address_bitcoin: bitcoinWallet.address,
+                hex: hex,
+                name: walletName,
+                description: description,
+                picture_url: person.data()["picture_url"],
+                person: personRef
+            }).then(walletRef => {
+                resolve(walletRef);
+            });
 
-        firestore.collection("wallets").add({
-            type: "personal",
-            address_bitcoin: bitcoinWallet.address,
-            hex: hex,
-            name: walletName,
-            description: description
-        }).then(walletRef => {
-            return walletRef;
         });
-
     });
-
-
 }
 
 // TODO: NewGroupWallet
