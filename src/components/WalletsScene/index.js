@@ -75,11 +75,14 @@ export default class Wallets extends Component {
 
         return (
 
-            <View style={styles.header}>
-                <View style={styles.topBar}>
-                    <Icon name={'cross'} size={30} color={colors.purple} onPress={() => goBack(key)}/>
-                    <Text style={{fontSize: 22, fontWeight: '600'}}>Wallets</Text>
-                    <Icon name={'cog'} size={30} color={colors.purple} onPress={() => navigate("Settings")}/>
+            <View style={styles.container}>
+
+                <View style={styles.header}>
+                    <View style={styles.topBar}>
+                        <Icon name={'cross'} size={30} color={colors.purple} onPress={() => goBack(key)}/>
+                        <Text style={{fontSize: 22, fontWeight: '600'}}>Wallets</Text>
+                        <Icon name={'cog'} size={30} color={colors.purple} onPress={() => navigate("Settings")}/>
+                    </View>
                 </View>
 
                 <SectionList style={styles.sectionWrapper}
@@ -93,14 +96,12 @@ export default class Wallets extends Component {
 
                 <TouchableOpacity style={styles.bottomButton}
                                   onPress={() => CreateTestWallet()}>
-                    <Icon name={'wallet'} size={35} color={'#401584'}/>
+                    <Icon name={'wallet'} size={35} color={colors.purple}/>
                     <View style={{flexDirection: "column", justifyContent:"center"}}>
                         <Text style={styles.bottomButtonTitle}>New Wallet</Text>
                     </View>
                 </TouchableOpacity>
-
             </View>
-
         );
     }
 }
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: colors.white
     },
     header: {
         padding: 33,
@@ -131,16 +132,17 @@ const styles = StyleSheet.create({
         flex: 1
     },
     sectionWrapper: {
-        backgroundColor: "#ffffff"
+        backgroundColor: colors.white
     },
     sectionHeader: {
         marginLeft: 15,
         borderBottomWidth: .5,
-        borderBottomColor: "#95989A",
+        borderBottomColor: colors.darkGray,
         flexDirection: "column",
         justifyContent: "center",
         paddingTop: 15,
-        paddingBottom: 15
+        paddingBottom: 15,
+        backgroundColor: colors.white
     },
     sectionHeaderTitle: {
         fontSize: 18
@@ -154,7 +156,7 @@ const styles = StyleSheet.create({
     bottomButton: {
         flex: 0,
         width: "100%",
-        padding: 15,
+        padding: 12,
         flexDirection: "row",
         justifyContent: "center",
         backgroundColor: "#F7F7F7",

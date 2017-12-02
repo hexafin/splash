@@ -63,118 +63,104 @@ export default class Friends extends Component {
         //add the sections to state
 
         this.setState({sections: sections});
+
+
+        //put arrays into section format
+
+        if (popularArray.length !== 0) {
+            sections.push({data: popularArray, icon: 'clock', title: 'Popular'});
+        }
+        if (allFriendsArray.length !== 0) {
+            sections.push({data: allFriendsArray, icon: 'users', title: 'All Friends'});
+        }
+
+        //add the sections to state
+
+        this.setState({sections: sections});
     }
 
 
-    //put arrays into section format
+    componentDidMount() {
+        const lukas_person = {
+            name: 'Lukas Burger',
+            phone_id: 1,
+            hex: 'lukas',
+            phone_number: '9179401662',
+            email: 'lburger98@gmail.com',
+            picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+        };
 
-    if(popularArray
+        const mike_person = {
+            name: 'Mike John',
+            phone_id: 2,
+            hex: 'mike',
+            phone_number: '2129410440',
+            email: 'lburger98@gmail.com',
+            picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+        };
 
-.
-    length
-!==
-    0
-) {
-    sections
-.
+        // load real data to state here
+        // TODO: need to sort popular and add them
+        this.setState({
+            allFriends: [lukas_person, mike_person],
+            popular: [mike_person],
+            sections: [{data: [lukas_person, mike_person], title: 'Popular'}, {
+                data: [lukas_person, mike_person],
+                title: 'All Friends'
+            }]
+        }, function () {
+            this.updateSections('');
+        });
 
-    push({data: popularArray, icon: 'clock', title: 'Popular'});
-}
-if (allFriendsArray.length !== 0) {
-    sections.push({data: allFriendsArray, icon: 'users', title: 'All Friends'});
-}
+    }
 
-//add the sections to state
+    render() {
+        const activeWallet = {
+            name: 'Bryce Bjork',
+            hex: 'bryce',
+            picture_url: 'https://graph.facebook.com/100003125070004/picture?type=large',
+        };
+        const {navigate} = this.props.navigation;
 
-this.setState({sections: sections});
-}
+        return (
+            <View style={styles.container}>
+                {/* header */}
+                <FriendsHeader activeWallet={activeWallet}
+                               walletCallback={() => {
+                                   console.log('wallets');
+                               }}
+                               searchCallback={this.updateSections}/>
+                {/* render Friends */}
+                <SectionList style={{backgroundColor: colors.white, marginLeft: 15}}
+                             sections={this.state.sections}
+                             keyExtractor={item => item.hex}
+                             renderSectionHeader={({section}) => <View style={styles.sectionHeader}>
+                                 <Text style={{fontSize: 17}}>{section.title}</Text>
+                             </View>}
+                             renderItem={({item}) => <FriendsLine wallet={item}
+                                                                  clickCallback={() => console.log('click')}
+                                                                  requestCallback={() => navigate('SetAmount', {
+                                                                      type: 'request',
+                                                                      activeWallet: activeWallet,
+                                                                      destinationWallet: item,
+                                                                      go_back_key: ''
+                                                                  })} payCallback={() => navigate('SetAmount', {
+                                 type: 'pay',
+                                 activeWallet: activeWallet,
+                                 destinationWallet: item,
+                                 go_back_key: ''
+                             })}/>}
+                />
 
-
-componentDidMount()
-{
-    const lukas_person = {
-        name: 'Lukas Burger',
-        phone_id: 1,
-        hex: 'lukas',
-        phone_number: '9179401662',
-        email: 'lburger98@gmail.com',
-        picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    };
-
-    const mike_person = {
-        name: 'Mike John',
-        phone_id: 2,
-        hex: 'mike',
-        phone_number: '2129410440',
-        email: 'lburger98@gmail.com',
-        picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    };
-
-    // load real data to state here
-    // TODO: need to sort popular and add them
-    this.setState({
-        allFriends: [lukas_person, mike_person],
-        popular: [mike_person],
-        sections: [{data: [lukas_person, mike_person], title: 'Popular'}, {
-            data: [lukas_person, mike_person],
-            title: 'All Friends'
-        }]
-    }, function () {
-        this.updateSections('');
-    });
-
-}
-;
-
-render()
-{
-    const activeWallet = {
-        name: 'Bryce Bjork',
-        hex: 'bryce',
-        picture_url: 'https://graph.facebook.com/100003125070004/picture?type=large',
-    };
-    const {navigate} = this.props.navigation;
-
-    return (
-        <View style={styles.container}>
-            {/* header */}
-            <FriendsHeader activeWallet={activeWallet}
-                           walletCallback={() => {
-                               console.log('wallets');
-                           }}
-                           searchCallback={this.updateSections}/>
-            {/* render Friends */}
-            <SectionList style={{backgroundColor: colors.white, marginLeft: 15}}
-                         sections={this.state.sections}
-                         keyExtractor={item => item.hex}
-                         renderSectionHeader={({section}) => <View style={styles.sectionHeader}>
-                             <Text style={{fontSize: 17}}>{section.title}</Text>
-                         </View>}
-                         renderItem={({item}) => <FriendsLine wallet={item} clickCallback={() => console.log('click')}
-                                                              requestCallback={() => navigate('SetAmount', {
-                                                                  type: 'request',
-                                                                  activeWallet,
-                                                                  activeWallet,
-                                                                  destinationWallet: item,
-                                                                  go_back_key: ''
-                                                              })} payCallback={() => navigate('SetAmount', {
-                             type: 'pay',
-                             activeWallet,
-                             activeWallet,
-                             destinationWallet: item,
-                             go_back_key: ''
-                         })}/>}
-            />
-
-            {/* footer */}
-            <TouchableOpacity style={styles.footer}>
-                <Icon name={'add-user'} size={17} color={colors.purple}/>
-                <Text style={{color: colors.purple, fontSize: 17, fontWeight: 'bold', marginLeft: 10}}>Invite
-                    Friends</Text>
-            </TouchableOpacity>
-        </View>
-    );
-}
+                {/* footer */}
+                <TouchableOpacity style={styles.footer}>
+                    <Icon name={'add-user'} size={17} color={colors.purple}/>
+                    <Text style={{color: colors.purple, fontSize: 17, fontWeight: 'bold', marginLeft: 10}}>Invite
+                        Friends</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
