@@ -40,30 +40,11 @@ export default class Friends extends Component {
 
         //iterate through lists of popular and allfriends and add them to the corresponding arrays
 
-        for (let wallet of allFriends) {
-            if (!search || (wallet.name).toLowerCase().search(search.toLowerCase()) !== -1) {
-                allFriendsArray.push(wallet);
-            }
-        }
         for (let wallet of popular) {
             if (!search || (wallet.name).toLowerCase().search(search.toLowerCase()) !== -1) {
                 popularArray.push(wallet);
             }
         }
-
-        //put arrays into section format
-
-        if (popularArray.length !== 0) {
-            sections.push({data: popularArray, icon: 'clock', title: 'Popular'});
-        }
-        if (allFriendsArray.length !== 0) {
-            sections.push({data: allFriendsArray, icon: 'users', title: 'All Friends'});
-        }
-
-        //add the sections to state
-
-        this.setState({sections: sections});
-
 
         //put arrays into section format
 
