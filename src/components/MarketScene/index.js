@@ -18,7 +18,7 @@ export default class Market extends Component {
 	render() {
 		return (
 			<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-				<Text>market</Text>
+				<Image style={{ height: '100%', width: '100%'}} source={require("./marketComingSoon.png")}/>
 			</View>
 		);
 	}
