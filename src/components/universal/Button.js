@@ -5,6 +5,7 @@ import {
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
+import {defaults} from '../../lib/styles'
 
 const Button = ({primary, onPress, title}) => {
 
@@ -21,12 +22,9 @@ const Button = ({primary, onPress, title}) => {
 const styles = StyleSheet.create({
 	base: {
 		shadowColor: colors.lightShadow,
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 24,
+		shadowOffset: defaults.shadowOffset,
+		shadowOpacity: defaults.shadowOpacity,
+		shadowRadius: defaults.shadowRadius,
 		borderRadius: 5,
 		padding: 20,
 		justifyContent: 'center',

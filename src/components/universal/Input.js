@@ -2,15 +2,29 @@ import React from 'react'
 import {
     StyleSheet,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    View,
 } from "react-native"
 import {colors} from "../../lib/colors"
+import {defaults} from "../../lib/styles"
 
-const Input = ({onChangeText, text, placeholder}) => {
+export const Input = ({onChangeText, value, placeholder}) => {
 
 	return (
-			<TextInput onChangeText={ onChangeText } placeholder={placeholder} style={[styles.input]}>
+			<TextInput onChangeText={ onChangeText } value={value} placeholder={placeholder} style={[styles.input]}>
 			 	</TextInput>
+		)
+}
+
+export const MultiInput = ({children, on}) => {
+	const inputs = children.map((input) => {
+		return input
+	})
+	console.log('inputs', inputs)
+	return (
+			<View >
+			</View>
+
 		)
 }
 
@@ -19,12 +33,9 @@ const Input = ({onChangeText, text, placeholder}) => {
 const styles = StyleSheet.create({
 	input: {
 		shadowColor: colors.lightShadow,
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 24,
+		shadowOffset: defaults.shadowOffset,
+		shadowOpacity: defaults.shadowOpacity,
+		shadowRadius: defaults.shadowRadius,
 		borderRadius: 5,
 		padding: 20,
 		fontSize: 20,
@@ -32,5 +43,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default Input
 
