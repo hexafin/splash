@@ -7,11 +7,9 @@ import {
 import {colors} from "../../lib/colors"
 
 const Button = ({primary, onPress, title}) => {
-  const {base, buttonPrimary, buttonSecondary} = styles
-	const combineStyles = StyleSheet.flatten([base, buttonPrimary])
 
 	return (
-			<TouchableOpacity onPress={ onPress } style={[base, primary ? buttonPrimary : buttonSecondary]}>
+			<TouchableOpacity onPress={ onPress } style={[styles.base, primary ? styles.buttonPrimary : styles.buttonSecondary]}>
 			 	<Text style={[styles.text, primary ? styles.textPrimary : styles.textSecondary]}> 
 			 		{title} 
 			 	</Text>
