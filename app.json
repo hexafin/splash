@@ -1,4 +1,8 @@
 {
-  "name": "hexa",
-  "displayName": "hexa"
+  "expo": {
+    "name": "hexa",
+    "slug": "hexa",
+    "sdkVersion": "23.0.0",
+    "privacy": "public"
+  }
 }

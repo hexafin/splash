@@ -4,7 +4,6 @@ import transactions from "./transactions"
 import routes from "./routes"
 
 const walletApp = combineReducers({
-    routes,
     general,
     transactions
 })
