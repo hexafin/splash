@@ -7,6 +7,7 @@ import {
     StyleSheet
 } from "react-native"
 import Button from '../universal/Button'
+import Input from '../universal/Input'
 import {colors} from "../../lib/colors"
 
 
@@ -15,7 +16,7 @@ const Splash = ({SignIn}) => {
         <View style={styles.container}>
             <Text style={styles.title}>Splash Page</Text>
             <Button title="Log in" onPress={() => SignIn()}/>
-            <Button primary title="Get your wallet" onPress={() => SignIn()}/>
+            <Input placeholder="Your email"/>
         </View>
     )
 }
