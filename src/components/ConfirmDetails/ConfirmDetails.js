@@ -9,27 +9,23 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
-import BackButton from "../universal/BackButton";
+import BackButton from "../universal/BackButton"
+
 import {Actions} from "react-native-router-flux"
 
 
-
-const ChooseUsername = () => {
+const ConfirmDetails = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <BackButton onPress={() => Actions.pop()} />
-                <Text style={styles.headerEmoji}>🎅</Text>
-                <Text style={styles.headerText}>Choose your username</Text>
-                <Text style={styles.headerText}>- it's yours, forever.</Text>
+                <Text style={styles.headerEmoji}>👌</Text>
+                <Text style={styles.headerText}>Everything looking good?</Text>
             </View>
             <View style={styles.body}>
-                <View style={{backgroundColor: colors.purple, flex: 1}}></View>
-                <Text style={styles.bodyText}>
-                    Your username will be the way people can find you in the app and send money to you.
-                </Text>
+                {/* Multi-line input */}
             </View>
-            <Button style={{flex: 0}} title="Set username" onPress={() => Actions.welcome()}/>
+            <Button style={{flex: 0}} title="Finish setup" onPress={() => Actions.choosePassword()}/>
         </View>
     )
 }
@@ -41,8 +37,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: colors.white,
         padding: 20,
-        paddingTop: 50,
-        paddingBottom: 50
+        paddingTop: 30,
+        paddingBottom: 60
     },
     header: {
         flex: 1,
@@ -64,19 +60,12 @@ const styles = StyleSheet.create({
         color: colors.nearBlack
     },
     body: {
+        padding: 30,
         paddingTop: 50,
         flex: 2,
         flexDirection: "column",
         justifyContent: "center"
-    },
-    bodyText: {
-        flex: 1,
-        marginTop: 20,
-        color: colors.gray,
-        textAlign: "center",
-        fontSize: 20,
-        fontWeight: "500"
     }
 })
 
-export default ChooseUsername
+export default ConfirmDetails

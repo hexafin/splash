@@ -4,20 +4,27 @@ import React from "react"
 import {
     View,
     Text,
-    StyleSheet,
-    Button
+    StyleSheet
 } from "react-native"
+import Button from '../universal/Button'
+import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
+import {defaults} from "../../lib/styles"
 
+var { FBLogin, FBLoginManager } = require('react-native-facebook-login');
 
 const Splash = ({SignIn}) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Splash Page</Text>
-            <Button style={styles.loginButton} title="Log In" onPress={() => SignIn()}/>
+            <Button title="Log in" onPress={() => SignIn()}/>
+
+            <FBLogin/>
+
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -25,14 +32,8 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-between",
         backgroundColor: colors.white,
-        padding: 50
+        padding: 30
     },
-    title: {
-        fontSize: 20
-    },
-    loginButton: {
-
-    }
 })
 
 export default Splash
