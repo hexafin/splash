@@ -29,17 +29,14 @@ const ConfirmDetails = ({person}) => {
                         {
                             name: 'name',
                             placeholder: 'Your name',
-                            defaultValue: 'Bryce Bjork'
                         },
                         {
                             name: 'email',
                             placeholder: 'Your email',
-                            defaultValue: 'Bryce Bjork',
                         },
                         {
                             name: 'birthdate',
                             placeholder: 'Your birthdate',
-                            defaultValue: '24/09/1995',
                         },
 
                     ]}
