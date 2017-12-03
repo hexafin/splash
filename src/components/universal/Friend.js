@@ -12,10 +12,12 @@ import {
 // import arrow from '../../assets/icons/arrow-right.svg';
 import {colors} from "../../lib/colors"
 import { createIconSetFromFontello } from 'react-native-vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import fontelloConfig from '../../assets/fonts/config.json';
 const Icon = createIconSetFromFontello(fontelloConfig);
 
-const Friend = ({picture_url, name, username, type, emoji, usdValue, btcValue, friendCallback, acceptCallback, rejectCallback}) => {
+const Friend = ({picture_url, name, username, type, emoji, date, usdValue, btcValue, friendCallback, leftCallback, rightCallback}) => {
     return (
         <TouchableOpacity activeOpacity={(type !== 'friend') ? 1 : 0.5} style={styles.container} onPress={friendCallback}>
           <Image
@@ -23,18 +25,19 @@ const Friend = ({picture_url, name, username, type, emoji, usdValue, btcValue, f
             source={{ uri: picture_url}}
           />
           <View style={styles.userInfo}>
-          {type !== 'transaction' && type !== 'request' && [
+          {type !== 'transaction' && type !== 'request' && type !== 'waiting' && [
             <Text key={0} style={styles.nameText}>{name}</Text>,
             <Text key={1} style={styles.userText}>@{username}</Text>
           ]}
-          {(type == 'transaction' || type == 'request') && [
+          {(type == 'transaction' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
               <Text style={styles.usdText}>${usdValue}</Text>
               <Text style={styles.btcText}>{btcValue} BTC</Text>
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
             <View key={2} style={{ flexDirection: 'row'}}>
-              <Text style={styles.userText}>@{username}</Text>
+              <Text style={[styles.userText, {alignSelf: 'center'}]}>@{username}</Text>
+              <Text style={{fontSize: 13, paddingBottom: 5, paddingLeft: 5}}>{emoji}</Text>
             </View>
           ]}
           </View>
@@ -43,14 +46,25 @@ const Friend = ({picture_url, name, username, type, emoji, usdValue, btcValue, f
           {type === 'friend' && [<Icon key={0} name={'chevron-right'} color={colors.lightGrey} size={15}/>]}
           {type === 'request' && [
             <View key={0} style={{flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.acceptButton} onPress={rejectCallback}>
+              <TouchableOpacity style={styles.leftButton} onPress={leftCallback}>
                 <Icon name={'xshape'} color={colors.red} size={13}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rejectButton} onPress={acceptCallback}>
+              <TouchableOpacity style={styles.rightButton} onPress={rightCallback}>
                 <Icon name={'checkmark'} color={colors.purple} size={15}/>
               </TouchableOpacity>
             </View>
             ]}
+          {type === 'waiting' && [
+            <View key={0} style={{flexDirection: 'row'}}>
+              <TouchableOpacity style={styles.leftButton} onPress={leftCallback}>
+                <Feather name={'trash'} color={colors.lightGrey} size={17}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.rightButton} onPress={rightCallback}>
+                <MaterialIcons name={'access-alarm'} color={colors.grey} size={20}/>
+              </TouchableOpacity>
+            </View>
+            ]}
+          {type === 'transaction' && [<Text key={0} style={styles.dateText}>{date}</Text>]}
           </View>
         </TouchableOpacity>
     )
@@ -107,7 +121,11 @@ const styles = StyleSheet.create({
       fontSize: 30,
       alignSelf: 'center'
     },
-    acceptButton: {
+    dateText: {
+      color: colors.lightGrey,
+      fontSize: 15,
+    },
+    leftButton: {
       justifyContent: 'center',
       alignItems: 'center',
       height: 38,
@@ -119,7 +137,7 @@ const styles = StyleSheet.create({
       shadowRadius: 24,
       marginRight: 8,
     },
-    rejectButton: {
+    rightButton: {
       justifyContent: 'center',
       alignItems: 'center',
       height: 38,
@@ -129,7 +147,7 @@ const styles = StyleSheet.create({
       shadowOffset: {width: 0, height: 6},
       shadowOpacity: 0.1,
       shadowRadius: 24,
-    }
+    },
 });
 
 export default Friend
