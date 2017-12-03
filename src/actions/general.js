@@ -65,25 +65,29 @@ export const SignUpWithFacebook = () => {
                 const credential = firebase.auth.FacebookAuthProvider.credential(data.credentials.token)
 
                 const fields = 'id,name,email,first_name,last_name,gender,picture'
+                const token = data.credentials.token.toString()
 
                 axios.get(
-                    "https://graph.facebook.com/me",
+                    "https://graph.facebook.com/v2.5/me",
                     {params: {
                             fields: fields,
-                            access_token: data.credentials.token.toString()
+                            access_token: token
                         }}
                 ).then(response => {
                     console.log(response)
-                    dispatch(linkFacebookSuccess(response.data))
+                    const facebookData = {
+                        id: response.data.id,
+                        first_name: response.data.first_name,
+                        last_name: response.data.last_name,
+                        picture_url: response.data.picture.data.url,
+                        gender: response.data.gender,
+                        email: response.data.email,
+                        token: token
+                    }
+                    dispatch(linkFacebookSuccess(facebookData))
                     Actions.confirmDetails()
                 }).catch(error => {
                     dispatch(linkFacebookFailure(error))
-                })
-
-                firebase.auth().signInWithCredential(credential).then(() => {
-                    //console.log("successfully authenticated firebase")
-                }).catch((error) => {
-                    // error (linkFacebookFailure(error))
                 })
             } else {
                 dispatch(linkFacebookFailure(error))

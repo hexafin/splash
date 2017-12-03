@@ -23,7 +23,7 @@ const Scenes = Actions.create(
         <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
         <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
         <Scene key="addFunds" component={AddFunds} hideNavBar={true}/>
-        <Scene key="home" component={Home} hideNavBar={true} />
+        <Scene key="home" component={Home} hideNavBar={true}/>
     </Scene>
 )
 

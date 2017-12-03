@@ -18,12 +18,8 @@ const initialState = {
     errorSigningIn: null,
     isLinkingFacebook: false,
     errorLinkingFacebook: null,
-    person: {
-        picture_url: null,
-        username: null,
-        first_name: null,
-        last_name: null,
-    },
+    facebookToken: null,
+    person: {},
     personRef: null,
     isCreatingAccount: false,
     errorCreatingAccount: null
@@ -71,12 +67,13 @@ export default function generalReducer(state = initialState, action) {
             return {
                 ...state,
                 isLinkingFacebook: false,
+                facebookToken: action.data.token,
                 person: {
-                    picture_url: action.picture.data.url,
-                    first_name: action.first_name,
-                    last_name: action.last_name,
-                    gender: action.gender,
-                    facebook_id: action.id
+                    picture_url: action.data.picture_url,
+                    first_name: action.data.first_name,
+                    last_name: action.data.last_name,
+                    gender: action.data.gender,
+                    facebook_id: action.data.id
                 }
             }
 
