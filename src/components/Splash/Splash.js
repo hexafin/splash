@@ -11,7 +11,7 @@ import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 
-var { FBLogin, FBLoginManager } = require('react-native-facebook-login');
+
 
 const Splash = ({SignIn}) => {
     return (
