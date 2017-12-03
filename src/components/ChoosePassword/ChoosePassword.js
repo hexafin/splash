@@ -12,7 +12,8 @@ import Button from "../universal/Button"
 import BackButton from "../universal/BackButton"
 
 import {Actions} from "react-native-router-flux"
-
+import { MultiInputBlock } from '../universal/Input'
+import { reduxForm } from 'redux-form'
 
 const ChoosePassword = () => {
     return (
@@ -23,7 +24,20 @@ const ChoosePassword = () => {
                 <Text style={styles.headerText}>Choose password</Text>
             </View>
             <View style={styles.body}>
-                {/* Multi-line input */}
+                 <MultiInputBlock 
+                    inputs={[
+                        {
+                            name: 'password',
+                            placeholder: 'Choose password'
+                        },
+                        {
+                            name: 'password-confirm',
+                            placeholder: 'Confirm password'
+                        }
+
+                    ]}
+                    secureTextEntry
+                />
                 <Text style={styles.bodyText}>
                     Choose something secure 🔒
                 </Text>
@@ -63,7 +77,6 @@ const styles = StyleSheet.create({
         color: colors.nearBlack
     },
     body: {
-        padding: 30,
         paddingTop: 50,
         flex: 2,
         flexDirection: "column",
@@ -80,4 +93,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ChoosePassword
+export default reduxForm({
+    form: 'onboarding',
+    destroyOnUnmount: false,
+})(ChoosePassword) 

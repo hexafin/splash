@@ -11,7 +11,8 @@ import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
 import BackButton from "../universal/BackButton";
 import {Actions} from "react-native-router-flux"
-
+import { Input } from '../universal/Input'
+import { Field, reduxForm } from 'redux-form'
 
 
 const ChooseUsername = () => {
@@ -24,7 +25,7 @@ const ChooseUsername = () => {
                 <Text style={styles.headerText}>- it's yours, forever.</Text>
             </View>
             <View style={styles.body}>
-                <View style={{backgroundColor: colors.purple, flex: 1}}></View>
+                <Field name='username' placeholder='Choose username' component={Input} ></Field>
                 <Text style={styles.bodyText}>
                     Your username will be the way people can find you in the app and send money to you.
                 </Text>
@@ -75,8 +76,14 @@ const styles = StyleSheet.create({
         color: colors.gray,
         textAlign: "center",
         fontSize: 20,
-        fontWeight: "500"
+        paddingLeft: 20,
+        paddingRight: 20,
+        fontWeight: "500",
+        backgroundColor: 'rgba(0,0,0,0)'
     }
 })
 
-export default ChooseUsername
+export default reduxForm({
+   form: 'onboarding',
+   destroyOnUnmount: false,
+})(ChooseUsername)

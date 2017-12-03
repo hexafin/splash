@@ -1,7 +1,7 @@
 // container for splash page
 import Splash from "./Splash"
 import {connect} from "react-redux"
-import {SignIn} from "../../actions"
+import {SignIn} from "../../actions/general"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {

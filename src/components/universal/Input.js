@@ -9,7 +9,7 @@ import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
 import PropTypes from 'prop-types'
-export const Input = ({onChange, value, placeholder, name,...inputProps, input}) => {
+export const Input = ({onChange, secureTextEntry, value, placeholder, name,...inputProps, input}) => {
 
 	return (
 			<TextInput 
@@ -19,6 +19,7 @@ export const Input = ({onChange, value, placeholder, name,...inputProps, input})
 				placeholder={placeholder} 
 				style={[styles.input]}
 				onBlur={input.onBlur}
+				secureTextEntry={secureTextEntry}
         onFocus={input.onFocus}
         value={input.value}
         />
@@ -26,7 +27,7 @@ export const Input = ({onChange, value, placeholder, name,...inputProps, input})
 		)
 }
 
-export const MultiInput = ({onChange, inputPosition, value, placeholder, name,...inputProps, input}) => {
+export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, placeholder, name,...inputProps, input}) => {
 	
 	const inputStyle = [styles.multiInput]
 	if (inputPosition == 'firstInput') {
@@ -43,6 +44,7 @@ export const MultiInput = ({onChange, inputPosition, value, placeholder, name,..
 					placeholder={placeholder} 
 					style={[inputStyle, inputStyle == 'firstInput' : styles.firstInput, inputStyle == 'lastInput' : style.lastInput]}
 					onBlur={input.onBlur}
+					secureTextEntry={secureTextEntry}
 					// style={styles.multiInput}
 	        onFocus={input.onFocus}
 	        value={input.value}
@@ -58,7 +60,7 @@ export const MultiInput = ({onChange, inputPosition, value, placeholder, name,..
 * 	placeholder: String: input-placeholder  --> visible placeholder
 *
 **/
-export const MultiInputBlock = ({inputs}) => {
+export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 	const renderInputs = inputs.map((field, index) => {
 		let inputPosition = null
 		if (index == 0) {
@@ -74,6 +76,7 @@ export const MultiInputBlock = ({inputs}) => {
 							placeholder={field.placeholder} 
 							component={MultiInput} 
 							inputPosition={inputPosition}
+							secureTextEntry={secureTextEntry}
 					 />
 	}) 
 	return (

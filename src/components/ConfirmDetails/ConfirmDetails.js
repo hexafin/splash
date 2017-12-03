@@ -12,7 +12,8 @@ import Button from "../universal/Button"
 import BackButton from "../universal/BackButton"
 
 import {Actions} from "react-native-router-flux"
-
+import { MultiInputBlock } from '../universal/Input'
+import { reduxForm } from 'redux-form'
 
 const ConfirmDetails = () => {
     return (
@@ -23,7 +24,23 @@ const ConfirmDetails = () => {
                 <Text style={styles.headerText}>Everything looking good?</Text>
             </View>
             <View style={styles.body}>
-                {/* Multi-line input */}
+                <MultiInputBlock 
+                    inputs={[
+                        {
+                            name: 'name',
+                            placeholder: 'Your name'
+                        },
+                        {
+                            name: 'email',
+                            placeholder: 'Your email'
+                        },
+                        {
+                            name: 'birthdate',
+                            placeholder: 'Your date of birth'
+                        },
+
+                    ]}
+                />
             </View>
             <Button style={{flex: 0}} title="Finish setup" onPress={() => Actions.choosePassword()}/>
         </View>
@@ -60,7 +77,6 @@ const styles = StyleSheet.create({
         color: colors.nearBlack
     },
     body: {
-        padding: 30,
         paddingTop: 50,
         flex: 2,
         flexDirection: "column",
@@ -68,4 +84,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ConfirmDetails
+export default reduxForm({
+   form: 'onboarding',
+   destroyOnUnmount: false,
+})(ConfirmDetails)
