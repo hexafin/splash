@@ -27,6 +27,8 @@
     "react-native": "0.50.3",
     "react-native-crypto": "^2.1.1",
     "react-native-emoji": "^1.2.0",
+    "react-native-facebook-login": "^1.6.0",
+    "react-native-fbsdk": "^0.6.3",
     "react-native-firebase": "^3.1.0",
     "react-native-fontawesome": "^5.7.0",
     "react-native-http": "github:tradle/react-native-http#834492d",

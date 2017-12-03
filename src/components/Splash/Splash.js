@@ -11,6 +11,7 @@ import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 
+var { FBLogin, FBLoginManager } = require('react-native-facebook-login');
 
 const Splash = ({SignIn}) => {
     return (
@@ -18,7 +19,7 @@ const Splash = ({SignIn}) => {
             <Text style={styles.title}>Splash Page</Text>
             <Button title="Log in" onPress={() => SignIn()}/>
 
-
+            <FBLogin/>
 
         </View>
     )
