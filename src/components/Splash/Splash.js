@@ -7,10 +7,10 @@ import {
     StyleSheet
 } from "react-native"
 import Button from '../universal/Button'
-import { Input, MultiInput } from '../universal/Input'
+import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 
 
 const Splash = ({SignIn}) => {
@@ -18,11 +18,15 @@ const Splash = ({SignIn}) => {
         <View style={styles.container}>
             <Text style={styles.title}>Splash Page</Text>
             <Button title="Log in" onPress={() => SignIn()}/>
-            <View style={styles.multiInputContainer}>
-            <Field name='email' placeholder="email" component={MultiInput} inputPosition="firstInput" />
-            <Field name='name' placeholder="name" component={MultiInput}  />
-            <Field name='phone' placeholder="phone" component={MultiInput} inputPosition="lastInput" />
-            </View>
+
+
+            <MultiInputBlock inputs={[
+                {name: 'email', placeholder: 'fuckyea'},
+                {name: 'dude', placeholder: 'yas'},
+                 {name: 'mann', placeholder: 'yas'},
+                ]}/>
+
+
    
 
         </View>
@@ -41,10 +45,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         padding: 30
     },
-    multiInputContainer: {
-        ...defaults.shadow,
-        backgroundColor: 'rgba(63,63,63, 0)',
-    }
 })
 
 // export default Splash

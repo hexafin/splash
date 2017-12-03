@@ -7,7 +7,8 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
-
+import { Field } from 'redux-form'
+import PropTypes from 'prop-types'
 export const Input = ({onChange, value, placeholder, name,...inputProps, input}) => {
 
 	return (
@@ -50,6 +51,48 @@ export const MultiInput = ({onChange, inputPosition, value, placeholder, name,..
 }
 
 
+/**
+* MultiInputBlock 
+* @param inputs = array of objects with the following properties
+* 	name: String: input-name --> this will be the name in the redux store
+* 	placeholder: String: input-placeholder  --> visible placeholder
+*
+**/
+export const MultiInputBlock = ({inputs}) => {
+	const renderInputs = inputs.map((field, index) => {
+		let inputPosition = null
+		if (index == 0) {
+			inputPosition = 'firstInput'
+		} else if (index == inputs.length - 1) {
+			inputPosition = 'lastInput'
+		} else {
+			inputPosition = null
+		}
+		return <Field 
+							name={field.name} 
+							key={index}
+							placeholder={field.placeholder} 
+							component={MultiInput} 
+							inputPosition={inputPosition}
+					 />
+	}) 
+	return (
+			<View style={styles.multiInputContainer}>
+				{renderInputs}
+			</View>
+		)
+}
+
+MultiInputBlock.propTypes = {
+   inputs: PropTypes.arrayOf(PropTypes.shape({
+     name: PropTypes.string.isRequired,
+     placeholder: PropTypes.string.isRequired,
+   })).isRequired,
+}
+
+
+
+
 
 const styles = StyleSheet.create({
 	input: {
@@ -73,7 +116,11 @@ const styles = StyleSheet.create({
 	lastInput: {
 		borderBottomLeftRadius: 5,
 		borderBottomRightRadius: 5,
-	}
+	},
+	 multiInputContainer: {
+        ...defaults.shadow,
+        backgroundColor: 'rgba(63,63,63, 0)',
+    }
 
 })
 
