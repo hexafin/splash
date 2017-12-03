@@ -9,9 +9,11 @@ import firebase from 'react-native-firebase';
 let firestore = firebase.firestore();
 var random = require('react-native-randombytes').randomBytes;
 var bitcoin = require('bitcoinjs-lib');
+var bitcoinTransaction = require('bitcoin-transaction');
 
 import { NewChat, NewTransactionMessage } from "./Chat";
 import { TransactionNotification } from "./Notify";
+import { GetBalance } from "./Wallet";
 
 // function sends money from authenticated wallet to specified recipient
 function Pay(toWalletRef, fromWalletRef, category, memo, amountFiat, amountCrypto, type="friend",
@@ -278,15 +280,35 @@ function Decline(transactionRef) {
     });
 }
 
-// TODO: function that builds bitcoin tx
-function BuildBitcoinTransaction() {
-    // https://github.com/bitcoinjs/bitcoinjs-lib/issues/339
-
-    return "TODO"
+// takes from, to, privateKey, amtSantoshi
+// outputs txHash or error
+function BuildBitcoinTransaction(from, to, privateKey, amtSantoshi) {
+  GetBalance(from).then((balanceSantoshi) => {
+    if (amtSantoshi <= balanceSantoshi) {
+      bitcoinTransaction.sendTransaction({
+        from: from,
+        to: to,
+        privKeyWIF: key,
+        // TODO: figure out better way of converting to BTC
+        btc: amtSantoshi*0.00000001,
+        fee: 'hour',
+        dryrun: true,
+        network: "mainnet"
+      }).then(txHash => {
+        return txHash;
+      }).catch(error => {
+        return 'Error: cannot build transaction';
+      });
+    } else {
+      return 'Error: not enough btc.';
+    }
+  }).catch(error => {
+    return 'Error: unable to get btc balance.';
+  });
 }
 
 // TODO: cloud function => on blockchain update for hexa wallets, refresh wallet balance, send appropriate notifications
 
 // TODO: cloud function => on transaction doc update/creation, if completed = true, push tx to blockchain
 
-export { Pay, Request, Accept, Decline };
+export { Pay, Request, Accept, Decline, BuildBitcoinTransaction };

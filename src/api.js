@@ -12,71 +12,80 @@ function GenerateUsername(firstName, lastName, num=0) {
         username = username + num.toString();
     }
 
-    if (UsernameExists(username)) {
-        return GenerateUsername(firstName, lastName, num=num+1);
-    }
-    else {
-        return username;
-    }
+    UsernameExists(username).then(exists => {
+        if (exists) {
+            return GenerateUsername(firstName, lastName, num=num+1);
+        }
+        else {
+            return username
+        }
+    })
 
 }
 
 function UsernameExists(username) {
-    // check if hex already exists
-    firestore.collection("people").where("username", "=", username).get().then(checkUsername => {
+    return new Promise((resolve, reject) => {
+        // check if hex already exists
+        firestore.collection("people").where("username", "=", username).get().then(checkUsername => {
 
-        if (checkUsername.empty) {
-            return false;
-        }
-        else {
-            return true;
-        }
+            if (checkUsername.empty) {
+                resolve(false)
+            }
+            else {
+                resolve(true)
+            }
 
-    });
+        }).catch(error => {
+            reject(error)
+        });
+    })
 }
 
 function NewBitcoinWallet() {
     var keyPair = bitcoin.ECPair.makeRandom({
         rng: random
-    });
+    })
     return {
         keyPair: keyPair,
         wif: keyPair.toWIF(),
         address: keyPair.getAddress()
-    };
+    }
 }
 
-export const NewAccount = ({firstName, lastName, email, phoneNumber, facebookId, pictureURL, address, city, state,
+export const NewAccount = ({username, firstName, lastName, email, phoneNumber, facebookId, pictureURL, address, city, state,
                            zipCode, country, coinbaseId=null}) => {
 
-    return new Promise ()
+    return new Promise ((resolve, reject) => {
 
-    const username = GenerateUsername(firstName, lastName)
-    const bitcoinWallet = NewBitcoinWallet()
+        const bitcoinWallet = NewBitcoinWallet()
 
-    const dateTime = Date.now();
-    const ts = Math.floor(dateTime / 1000);
+        const dateTime = Date.now();
+        const ts = Math.floor(dateTime / 1000);
 
-    firestore.collection("people").add({
-        username: username,
-        first_name: firstName,
-        last_name: lastName,
-        email: email,
-        phone_number: phoneNumber,
-        facebook_id: facebookId,
-        picture_url: pictureURL,
-        address: address,
-        city: city,
-        state: state,
-        zip_code: zipCode,
-        country: country,
-        address_bitcoin: bitcoinWallet.address,
-        coinbase_id: coinbaseId,
-        joined: ts
-    }).then(personRef => {
-        personRef.get().then(person => {
-            dispatch(newAccountSuccess(person))
+        firestore.collection("people").add({
+            username: username,
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            phone_number: phoneNumber,
+            facebook_id: facebookId,
+            picture_url: pictureURL,
+            address: address,
+            city: city,
+            state: state,
+            zip_code: zipCode,
+            country: country,
+            address_bitcoin: bitcoinWallet.address,
+            coinbase_id: coinbaseId,
+            joined: ts
+        }).then(personRef => {
+            personRef.get().then(person => {
+                resolve((person, personRef))
+            })
+        }).catch(error => {
+            reject(error)
         })
+
     })
 
 }
