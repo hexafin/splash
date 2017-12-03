@@ -10,7 +10,6 @@ import Button from '../universal/Button'
 import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
-import { reduxForm } from 'redux-form'
 
 
 const Splash = ({SignIn}) => {
@@ -20,22 +19,11 @@ const Splash = ({SignIn}) => {
             <Button title="Log in" onPress={() => SignIn()}/>
 
 
-            <MultiInputBlock inputs={[
-                {name: 'email', placeholder: 'fuckyea'},
-                {name: 'dude', placeholder: 'yas'},
-                 {name: 'mann', placeholder: 'yas'},
-                ]}/>
-
-
-   
 
         </View>
     )
 }
 
-export default reduxForm({
-  form: 'test'
-})(Splash)
 
 const styles = StyleSheet.create({
     container: {
@@ -47,4 +35,4 @@ const styles = StyleSheet.create({
     },
 })
 
-// export default Splash
+export default Splash
