@@ -75,13 +75,14 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         flexDirection: 'row',
         alignItems: 'center',
+        marginVertical: 10,
         paddingHorizontal: 18,
         paddingVertical: 15,
         borderRadius: 5,
-        shadowColor: '#3F3F3F',
+        shadowColor: colors.lightShadow,
         shadowOffset: {width: 0, height: 8},
         shadowOpacity: 0.1,
-        shadowRadius: 24,
+        shadowRadius: 10,
     },
     image: {
       height: 50,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
       shadowColor: '#3F3F3F',
       shadowOffset: {width: 0, height: 6},
       shadowOpacity: 0.1,
-      shadowRadius: 24,
+      shadowRadius: 10,
       marginRight: 8,
     },
     rightButton: {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
       shadowColor: '#3F3F3F',
       shadowOffset: {width: 0, height: 6},
       shadowOpacity: 0.1,
-      shadowRadius: 24,
+      shadowRadius: 10,
     },
 });
 

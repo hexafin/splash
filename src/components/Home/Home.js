@@ -7,14 +7,73 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
+    SectionList,
 } from "react-native"
 import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
+import Friend from '../universal/Friend';
 
 import {Actions} from "react-native-router-flux"
 
+//dummy data to be removed
+const request = {type: 'request', name: 'Maddy Kennedy', username: 'mads', picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+                usdValue: 50, btcValue: 0.045, emoji: '😍', date: '1:00 11/17'}
+const waiting = {type: 'waiting', name: 'Maddy Kennedy', username: 'mads', picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+                usdValue: 50, btcValue: 0.045, emoji: '😍', date: '1:00 11/17'}
+const transaction = {type: 'transaction', name: 'Maddy Kennedy', username: 'mads', picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+                usdValue: 50, btcValue: 0.045, emoji: '😍', date: '1:00 11/17'}
+
+const transactions_dummy = [request, request, request, waiting, waiting, waiting, transaction, transaction, transaction]
 
 const Home = ({person, transactions}) => {
+
+  // render blank screen w/o transactions
+  const renderBlank = (
+            <View key={0} style={{flex: 1, padding: 30}}>
+              <Text style={styles.bodyTitle}>
+                  Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
+              </Text>
+              <Button title="Send Bitcoin"/>
+              <View style={styles.bodySpacer}/>
+              <Button title="Request Bitcoin"/>
+            </View>
+    )
+
+  const sections = [
+    {data: [], title: 'Requests', type: 'request'},
+    {data: [], title: 'Waiting on', type: 'waiting'},
+    {data: [], title: 'History', type: 'transaction'},
+  ];
+
+  // build and order sections from transaction data
+  // TODO: use real transaction data structure to organize
+  // use transactions_dummy instead of transactions to load dummy data
+  const buildSections = sections.map((section, sectionIndex) => {
+      let data = [];
+      for (let i = 0; i<transactions.length; i++) {
+        const transaction = transactions[i];
+        if (transaction.type == section.type) {
+          data.push({ ...transaction, key: (sectionIndex.toString() + i.toString())})
+        }
+      }
+      if (data.length == 0) {
+        return { ...section, title: '' }
+      }
+      return { ...section, data: data }
+    });
+
+    //create sectionList with built data
+    const renderSections = (
+        <View key={0} style={{flex:1}}>
+          <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
+            stickySectionHeadersEnabled={false}
+            renderItem={({item}) => <Friend { ...item }/>}
+            renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+            sections={buildSections}
+          />
+        </View>
+    )
+
     return (
         <View style={styles.container}>
             <View style={styles.profile}>
@@ -29,14 +88,10 @@ const Home = ({person, transactions}) => {
                 <Text style={styles.balanceBTC}>0.0024 BTC</Text>
                 <Text style={styles.balanceDescription}>Your bitcoin</Text>
             </View>
-            <View style={styles.body}>
-                <Text style={styles.bodyTitle}>
-                    Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
-                </Text>
-                <Button title="Send Bitcoin"/>
-                <View style={styles.bodySpacer}/>
-                <Button title="Request Bitcoin"/>
-            </View>
+            {/* if there are no transactions render blank*/}
+            { transactions.length == 0 && renderBlank}
+            {/* if there are  transactions render them in sectionList*/}
+            { transactions.length !== 0 && renderSections}
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => {}} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
@@ -110,11 +165,15 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: colors.nearBlack
     },
-    body: {
-        flex: 1,
-        padding: 30,
+    sectionHeader: {
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      paddingTop: 5,
+      color: colors.nearBlack,
+      fontWeight: '900',
+      fontSize: 19,
     },
     bodyTitle: {
+        alignSelf: 'center',
         fontSize: 18,
         fontWeight: "bold",
         color: colors.nearBlack,
