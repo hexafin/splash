@@ -7,7 +7,9 @@ import {
     StyleSheet
 } from "react-native"
 import Button from '../universal/Button'
+import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
+import {defaults} from "../../lib/styles"
 
 
 const Splash = ({SignIn}) => {
@@ -15,10 +17,13 @@ const Splash = ({SignIn}) => {
         <View style={styles.container}>
             <Text style={styles.title}>Splash Page</Text>
             <Button title="Log in" onPress={() => SignIn()}/>
-            <Button primary title="Get your wallet" onPress={() => SignIn()}/>
+
+
+
         </View>
     )
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -27,7 +32,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         backgroundColor: colors.white,
         padding: 30
-    }
+    },
 })
 
 export default Splash
