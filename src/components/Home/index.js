@@ -1,12 +1,21 @@
 // container for Home page
 import Home from "./Home"
 import {connect} from "react-redux"
+import {SignIn} from "../../actions/general";
+import {bindActionCreators} from "redux";
 
 const mapStatetoProps = state => {
-    console.log(state)
     return {
-        signedIn: state.signedIn
+        person: state.general.person,
+        personRef: state.general.personRef,
+        transactions: state.transactions
     }
 }
 
-export default connect(mapStatetoProps)(Home)
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        SignIn
+    }, dispatch)
+}
+
+export default connect(mapStatetoProps, mapDispatchToProps)(Home)
