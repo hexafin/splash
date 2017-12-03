@@ -22,12 +22,13 @@ const Splash = ({SignIn}) => {
                 style={styles.splashImage}
                 source={require('../../assets/images/people-splash.png')} 
             />
-
-            <Text style={styles.title}>splash</Text>
-            <Text> An easy way to send
-            and get bitcoin from 
-            your friends✌️
-            </Text>
+            <View style={styles.content}>
+                <Text style={styles.logo}>splash</Text>
+                <Text style={styles.tagline}> An easy way to send
+                and get bitcoin from 
+                your friends✌️
+                </Text>
+            </View>
             <Button title="Log in" onPress={() => SignIn()}/>
 
 
@@ -53,6 +54,24 @@ const styles = StyleSheet.create({
         width: 700,
         height: 700,
     },
+    content: {
+        marginTop: 70,
+    },
+    logo: {
+        backgroundColor: 'rgba(0,0,0,0)',
+        fontSize: 35,
+        fontWeight: '800',
+        fontStyle: 'italic',
+        textAlign: 'center',
+        color: colors.white,
+    },
+    tagline: {
+        backgroundColor: 'rgba(0,0,0,0)',
+        fontSize: 20,
+        color: colors.white,
+        textAlign: 'center',
+        fontWeight: '500',
+    }
 })
 
 export default Splash
