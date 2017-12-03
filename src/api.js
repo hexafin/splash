@@ -3,26 +3,6 @@ let firestore = firebase.firestore()
 let random = require('react-native-randombytes').randomBytes;
 let bitcoin = require('bitcoinjs-lib');
 
-// GenerateUsername finds a unique username from a person's first and last name
-function GenerateUsername(firstName, lastName, num=0) {
-
-    // initialize hex
-    var username = firstName.toLowerCase() + "-" + lastName.toLowerCase();
-    if (num > 0) {
-        username = username + num.toString();
-    }
-
-    UsernameExists(username).then(exists => {
-        if (exists) {
-            return GenerateUsername(firstName, lastName, num=num+1);
-        }
-        else {
-            return username
-        }
-    })
-
-}
-
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
         // check if hex already exists
@@ -52,8 +32,8 @@ function NewBitcoinWallet() {
     }
 }
 
-export const NewAccount = ({username, firstName, lastName, email, phoneNumber, facebookId, pictureURL, address, city, state,
-                           zipCode, country, coinbaseId=null}) => {
+const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pictureURL, address=null, city=null,
+                    state=null, zipCode=null, country=null, phoneNumber=null, coinbaseId=null}) => {
 
     return new Promise ((resolve, reject) => {
 
@@ -62,7 +42,8 @@ export const NewAccount = ({username, firstName, lastName, email, phoneNumber, f
         const dateTime = Date.now();
         const ts = Math.floor(dateTime / 1000);
 
-        firestore.collection("people").add({
+        firestore.collection("people").doc(uid).update({
+            joined: ts,
             username: username,
             first_name: firstName,
             last_name: lastName,
@@ -70,17 +51,16 @@ export const NewAccount = ({username, firstName, lastName, email, phoneNumber, f
             phone_number: phoneNumber,
             facebook_id: facebookId,
             picture_url: pictureURL,
-            address: address,
-            city: city,
-            state: state,
-            zip_code: zipCode,
-            country: country,
             address_bitcoin: bitcoinWallet.address,
-            coinbase_id: coinbaseId,
-            joined: ts
+            // address: address,
+            // city: city,
+            // state: state,
+            // zip_code: zipCode,
+            // country: country,
+            // coinbase_id: coinbaseId,
         }).then(personRef => {
             personRef.get().then(person => {
-                resolve((person, personRef))
+                resolve(person)
             })
         }).catch(error => {
             reject(error)

@@ -42,7 +42,7 @@ const ConfirmDetails = () => {
                     ]}
                 />
             </View>
-            <Button style={{flex: 0}} title="Finish setup" onPress={() => Actions.choosePassword()}/>
+            <Button style={{flex: 0}} title="Finish setup" onPress={() => Actions.home()}/>
         </View>
     )
 }

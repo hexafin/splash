@@ -14,7 +14,7 @@ import BackButton from "../universal/BackButton"
 import {Actions} from "react-native-router-flux"
 
 
-const Welcome = ({SignUpWithFacebook}) => {
+const Welcome = ({LinkFacebook}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -32,7 +32,7 @@ const Welcome = ({SignUpWithFacebook}) => {
                 </Text>
             </View>
             <View style={styles.footer}>
-                <Button title="Sign up with Facebook" onPress={() => SignUpWithFacebook()}/>
+                <Button title="Sign up with Facebook" onPress={() => LinkFacebook()}/>
                 <Text style={styles.footerText}>
                     We will never post using your account.
                     We just use it to authenticate you and find your friends,
