@@ -17,8 +17,8 @@ const store = configureStore()
 
 const Scenes = Actions.create(
     <Scene key="root" hideNavBar={true}>
-        <Scene key="splash" component={Splash} hideNavBar={true} />
-        <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true} initial/>
+        <Scene key="splash" component={Splash} hideNavBar={true} initial/>
+        <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true} />
         <Scene key="welcome" component={Welcome} hideNavBar={true}/>
         <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
         <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
