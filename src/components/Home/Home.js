@@ -93,13 +93,13 @@ const Home = ({person, transactions}) => {
             {/* if there are  transactions render them in sectionList*/}
             { transactions.length !== 0 && renderSections}
             <View style={styles.footer}>
-                <TouchableOpacity onPress={() => {}} style={styles.footerButton}>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
                         Request
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.footerDivider}/>
-                <TouchableOpacity onPress={() => {}} style={styles.footerButton}>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'pay'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
                         Pay
                     </Text>
