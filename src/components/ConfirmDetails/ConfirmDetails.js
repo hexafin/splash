@@ -15,7 +15,7 @@ import {Actions} from "react-native-router-flux"
 import { MultiInputBlock } from '../universal/Input'
 import { reduxForm } from 'redux-form'
 
-const ConfirmDetails = () => {
+const ConfirmDetails = ({person, CreateNewAccount}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -42,7 +42,7 @@ const ConfirmDetails = () => {
                     ]}
                 />
             </View>
-            <Button style={{flex: 0}} title="Finish setup" onPress={() => Actions.home()}/>
+            <Button style={{flex: 0}} title="Finish setup" onPress={() => CreateNewAccount()}/>
         </View>
     )
 }

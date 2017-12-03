@@ -4,11 +4,6 @@ import { FBLoginManager } from 'react-native-facebook-login'
 var axios = require('axios');
 import firebase from 'react-native-firebase'
 
-export const NEW_ACCOUNT_INIT = "NEW_ACCOUNT_INIT"
-export function newAccountInit() {
-    return {type: NEW_ACCOUNT_INIT}
-}
-
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
 export function linkFacebookInit() {
     return {type: LINK_FACEBOOK_INIT}
@@ -24,14 +19,19 @@ export function linkFacebookFailure(error) {
     return {type: LINK_FACEBOOK_FAILURE, error}
 }
 
+export const NEW_ACCOUNT_INIT = "NEW_ACCOUNT_INIT"
+export function newAccountInit() {
+    return {type: NEW_ACCOUNT_INIT}
+}
+
 export const NEW_ACCOUNT_SUCCESS = "NEW_ACCOUNT_SUCCESS"
 export function newAccountSuccess(person) {
     return {type: NEW_ACCOUNT_SUCCESS, person}
 }
 
 export const NEW_ACCOUNT_FAILURE = "NEW_ACCOUNT_FAILURE"
-export function newAccountFailure() {
-    return {type: NEW_ACCOUNT_FAILURE}
+export function newAccountFailure(error) {
+    return {type: NEW_ACCOUNT_FAILURE, error}
 }
 
 export const FIREBASE_AUTH_INIT = "FIREBASE_AUTH_INIT"
@@ -67,7 +67,6 @@ export const LinkFacebook = () => {
                 const firebaseCredential = firebase.auth.FacebookAuthProvider.credential(data.credentials.token)
                 dispatch(firebaseAuthInit())
                 firebase.auth().signInWithCredential(firebaseCredential).then(user => {
-                    console.log(user)
                     dispatch(firebaseAuthSuccess(user.uid))
                 }).catch(error => {
                     dispatch(firebaseAuthError(error))
@@ -119,16 +118,17 @@ export const CreateNewAccount = () => {
         if (state.general.authenticated) {
 
             const inputPerson = {
-                username: "GET FROM REDUX FORM",
-                firstName: "GET FROM REDUX FORM",
-                lastName: "GET FROM REDUX FORM",
-                email: "GET FROM REDUX FORM",
+                username: state.form.onboarding.registeredFields.username,
+                firstName: state.form.onboarding.registeredFields.firstName,
+                lastName: state.form.onboarding.registeredFields.lastName,
+                email: state.form.onboarding.registeredFields.email,
                 facebookId: state.general.person.facebook_id,
                 pictureURL: state.general.person.picture_url
             }
 
             api.NewAccount(state.general.uid, inputPerson).then(person => {
                 dispatch(newAccountSuccess(person))
+                Actions.home()
             }).catch(error => {
                 // error
                 dispatch(newAccountFailure(error))
