@@ -1,10 +1,13 @@
 
 import {
-    SIGN_OUT,
     NEW_TRANSACTION_INIT,
     NEW_TRANSACTION_SUCCESS,
     NEW_TRANSACTION_FAILURE
-} from "../actions/index";
+} from "../actions/transactions";
+
+import {
+    SIGN_OUT
+} from "../actions/general"
 
 var initialState = {
     items: [],

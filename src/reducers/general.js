@@ -7,13 +7,14 @@ import {
     NEW_ACCOUNT_SUCCESS,
     NEW_ACCOUNT_FAILURE,
     SIGN_OUT
-} from "../actions";
+} from "../actions/general";
 
 const initialState = {
     signedIn: false,
     isSigningIn: false,
     errorSigningIn: null,
     person: null,
+    personRef: null,
     isCreatingAccount: false,
     errorCreatingAccount: null
 };
@@ -32,7 +33,8 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isSigningIn: false,
                 signedIn: true,
-                person: action.person
+                person: action.person,
+                personRef: action.personRef
             }
 
         case SIGN_IN_FAILURE:
@@ -53,7 +55,8 @@ export default function generalReducer(state = initialState, action) {
             return {
                 ...state,
                 isCreatingAccount: false,
-                person: action.person
+                person: action.person,
+                personRef: action.personRef
             }
 
         case NEW_ACCOUNT_FAILURE:
