@@ -4,7 +4,8 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    KeyboardAvoidingView
 } from "react-native"
 import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
@@ -16,7 +17,7 @@ import { Field, reduxForm } from 'redux-form'
 
 const ChooseUsername = () => {
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior="height" style={styles.container}>
             <View style={styles.header}>
                 <BackButton onPress={() => Actions.pop()} />
                 <Text style={styles.headerEmoji}>🎅</Text>
@@ -27,14 +28,14 @@ const ChooseUsername = () => {
                 <View style={styles.usernameWrapper}>
                     <Text style={styles.atSign}>@</Text>
                     <Field style={styles.usernameField} name='username' placeholder='Choose username' component={Input}
-                           autoCapitalize="none" autoCorrect={false} spellCheck={false}></Field>
+                           autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}></Field>
                 </View>
                 <Text style={styles.bodyText}>
                     Your username will be the way people can find you in the app and send money to you.
                 </Text>
             </View>
             <Button style={{flex: 0}} title="Set username" onPress={() => Actions.welcome()}/>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -45,8 +46,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: colors.white,
         padding: 20,
-        paddingTop: 50,
-        paddingBottom: 50
+        paddingTop: 30,
+        paddingBottom: 0
     },
     header: {
         flex: 1,
@@ -81,14 +82,14 @@ const styles = StyleSheet.create({
         flex: 1
     },
     body: {
-        paddingTop: 50,
-        flex: 2,
+        paddingTop: 20,
+        flex: 1,
         flexDirection: "column",
         justifyContent: "center"
     },
     bodyText: {
         flex: 1,
-        marginTop: 20,
+        marginTop: 15,
         color: colors.gray,
         textAlign: "center",
         fontSize: 20,

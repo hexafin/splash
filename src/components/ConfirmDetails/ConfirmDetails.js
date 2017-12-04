@@ -4,7 +4,8 @@ import {
     View,
     Text,
     StyleSheet,
-    TouchableOpacity
+    TouchableOpacity,
+    KeyboardAvoidingView
 } from "react-native"
 import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
@@ -17,7 +18,7 @@ import { reduxForm } from 'redux-form'
 
 const ConfirmDetails = ({CreateNewAccount}) => {
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="height">
             <View style={styles.header}>
                 <BackButton onPress={() => Actions.pop()} />
                 <Text style={styles.headerEmoji}>👌</Text>
@@ -42,7 +43,7 @@ const ConfirmDetails = ({CreateNewAccount}) => {
                 />
             </View>
             <Button style={{flex: 0}} title="Finish setup" onPress={() => CreateNewAccount()}/>
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -53,11 +54,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: colors.white,
         padding: 20,
-        paddingTop: 30,
-        paddingBottom: 60
+        paddingTop: 30
     },
     header: {
-        flex: 1,
         flexDirection: "column",
         justifyContent: "center"
     },
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     },
     body: {
         paddingTop: 50,
-        flex: 2,
+        flex: 1,
         flexDirection: "column",
         justifyContent: "center"
     }
