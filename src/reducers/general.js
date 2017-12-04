@@ -66,7 +66,8 @@ export default function generalReducer(state = initialState, action) {
                     first_name: action.data.first_name,
                     last_name: action.data.last_name,
                     gender: action.data.gender,
-                    facebook_id: action.data.id
+                    facebook_id: action.data.id,
+                    email: action.email
                 }
             }
 

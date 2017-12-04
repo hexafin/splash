@@ -27,7 +27,8 @@ const ChooseUsername = () => {
             <View style={styles.body}>
                 <View style={styles.usernameWrapper}>
                     <Text style={styles.atSign}>@</Text>
-                    <Field style={styles.usernameField} name='username' placeholder='Choose username' component={Input} autoCapitalize="none"></Field>
+                    <Field style={styles.usernameField} name='username' placeholder='Choose username' component={Input}
+                           autoCapitalize="none" spellbryceCheck={false} autoCorrect={false}></Field>
                 </View>
                 <Text style={styles.bodyText}>
                     Your username will be the way people can find you in the app and send money to you.
@@ -68,14 +69,17 @@ const styles = StyleSheet.create({
         color: colors.nearBlack
     },
     usernameWrapper: {
-        flexDirection: "row"
+        flexDirection: "row",
+        justifyContent: "center"
     },
     atSign: {
         fontSize: 28,
-        color: colors.gray
+        color: colors.gray,
+        paddingTop: 14,
+        paddingRight: 10
     },
     usernameField: {
-
+        flex: 1
     },
     body: {
         paddingTop: 50,

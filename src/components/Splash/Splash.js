@@ -11,10 +11,11 @@ import Button from '../universal/Button'
 import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
+import {Actions} from "react-native-router-flux"
 
 
 
-const Splash = ({SignIn}) => {
+const Splash = () => {
     return (
         <View style={styles.container}>
             <Image 
@@ -29,9 +30,7 @@ const Splash = ({SignIn}) => {
                 your friends✌️
                 </Text>
             </View>
-            <Button title="Log in" onPress={() => SignIn()}/>
-
-            <FBLogin/>
+            <Button title="Get started" onPress={() => Actions.chooseUsername()}/>
 
         </View>
     )
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "space-between",
         backgroundColor: colors.white,
         padding: 30,
         position: 'relative'
