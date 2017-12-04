@@ -42,26 +42,26 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
         const dateTime = Date.now();
         const ts = Math.floor(dateTime / 1000);
 
-        firestore.collection("people").doc(uid).update({
+        const newPerson = {
             joined: ts,
             username: username,
             first_name: firstName,
             last_name: lastName,
             email: email,
-            phone_number: phoneNumber,
             facebook_id: facebookId,
             picture_url: pictureURL,
             address_bitcoin: bitcoinWallet.address,
+            // phone_number: phoneNumber,
             // address: address,
             // city: city,
             // state: state,
             // zip_code: zipCode,
             // country: country,
             // coinbase_id: coinbaseId,
-        }).then(personRef => {
-            personRef.get().then(person => {
-                resolve(person)
-            })
+        }
+
+        firestore.collection("people").doc(uid).set(newPerson).then(() => {
+            resolve(newPerson)
         }).catch(error => {
             reject(error)
         })
@@ -91,17 +91,17 @@ function GetBalance(address) {
     });
 }
 
-// takes from, to, privateKey, amtSantoshi
+// takes from, to, privateKey, amtSatoshi
 // outputs txHash or error
-function BuildBitcoinTransaction(from, to, privateKey, amtSantoshi) {
+function BuildBitcoinTransaction(from, to, privateKey, amtSatoshi) {
     GetBalance(from).then((balanceSantoshi) => {
-        if (amtSantoshi <= balanceSantoshi) {
+        if (amtSantoshi < balanceSantoshi) {
             bitcoinTransaction.sendTransaction({
                 from: from,
                 to: to,
                 privKeyWIF: key,
                 // TODO: figure out better way of converting to BTC
-                btc: amtSantoshi*0.00000001,
+                btc: amtSatoshi*0.00000001,
                 fee: 'hour',
                 dryrun: true,
                 network: "mainnet"
@@ -117,6 +117,9 @@ function BuildBitcoinTransaction(from, to, privateKey, amtSantoshi) {
         return 'Error: unable to get btc balance.';
     });
 }
+
+// new transaction
+function NewTransaction() {}
 
 export default api = {
     NewAccount: NewAccount,

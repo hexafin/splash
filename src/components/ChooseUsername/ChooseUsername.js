@@ -1,4 +1,3 @@
-// presentational component for splash page
 
 import React from "react"
 import {
@@ -101,6 +100,6 @@ const styles = StyleSheet.create({
 })
 
 export default reduxForm({
-   form: 'onboarding',
+   form: 'username',
    destroyOnUnmount: false,
 })(ChooseUsername)

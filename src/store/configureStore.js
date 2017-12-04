@@ -1,8 +1,17 @@
 
-import { createStore, applyMiddleware, compose } from 'redux';
-import reducers from '../reducers/index';
+import { createStore, applyMiddleware, compose } from 'redux'
+import { persistStore, persistCombineReducers } from "redux-persist"
+import storage from 'redux-persist/es/storage'
+import reducers from '../reducers'
 import thunkMiddleware from "redux-thunk"
-import {createLogger} from 'redux-logger';
+import {createLogger} from 'redux-logger'
+
+const config = {
+    key: 'root',
+    storage
+}
+
+const persistReducers = persistCombineReducers(config, reducers)
 
 const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ })
 
@@ -11,13 +20,9 @@ export default function configureStore () {
 
     const store = compose(
         applyMiddleware(...middleware)
-    )(createStore)(reducers);
+    )(createStore)(persistReducers);
 
-    // if (module.hot) {
-    //     module.hot.accept(() => {
-    //         const nextRootReducer = require('../reducers/index').default
-    //         store.replaceReducer(nextRootReducer)
-    //     })
-    // }
+    persistStore(store)
+
     return store
 }
