@@ -3,16 +3,14 @@ package com.hexa;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.magus.fblogin.FacebookLoginPackage;
 import com.tradle.react.UdpSocketsModule;
 import com.peel.react.TcpSocketsModule;
 import com.peel.react.rnos.RNOSModule;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
->>>>>>> 9f1c09a2a2c07963975fa182892b51039ba5c48f
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -33,11 +31,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new FacebookLoginPackage(),
             new UdpSocketsModule(),
             new TcpSocketsModule(),
             new RNOSModule(),
-            new LinearGradientPackage(),
-            new FBSDKPackage(),
             new RandomBytesPackage(),
             new RNFirebasePackage()
             new VectorIconsPackage(),
