@@ -6,7 +6,7 @@ import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
     return {
-        username: state.form.onboarding.values.username
+        username: state.form.username.values.username
     }
 }
 

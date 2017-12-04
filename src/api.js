@@ -42,26 +42,26 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
         const dateTime = Date.now();
         const ts = Math.floor(dateTime / 1000);
 
-        firestore.collection("people").doc(uid).update({
+        const newPerson = {
             joined: ts,
             username: username,
             first_name: firstName,
             last_name: lastName,
             email: email,
-            phone_number: phoneNumber,
             facebook_id: facebookId,
             picture_url: pictureURL,
             address_bitcoin: bitcoinWallet.address,
+            // phone_number: phoneNumber,
             // address: address,
             // city: city,
             // state: state,
             // zip_code: zipCode,
             // country: country,
             // coinbase_id: coinbaseId,
-        }).then(personRef => {
-            personRef.get().then(person => {
-                resolve(person)
-            })
+        }
+
+        firestore.collection("people").doc(uid).set(newPerson).then(() => {
+            resolve(newPerson)
         }).catch(error => {
             reject(error)
         })

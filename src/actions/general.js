@@ -117,10 +117,10 @@ export const CreateNewAccount = () => {
         if (state.general.authenticated) {
 
             const inputPerson = {
-                username: state.form.onboarding.registeredFields.username,
-                firstName: state.form.onboarding.registeredFields.firstName,
-                lastName: state.form.onboarding.registeredFields.lastName,
-                email: state.form.onboarding.registeredFields.email,
+                username: state.form.username.values.username,
+                firstName: state.form.onboarding.values.first_name,
+                lastName: state.form.onboarding.values.last_name,
+                email: state.general.person.email,
                 gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
                 pictureURL: state.general.person.picture_url
@@ -141,3 +141,5 @@ export const CreateNewAccount = () => {
 
     }
 }
+
+//

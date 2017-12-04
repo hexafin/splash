@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
 })
 
 export default reduxForm({
-   form: 'onboarding',
+   form: 'username',
    destroyOnUnmount: false,
 })(ChooseUsername)

@@ -2,7 +2,7 @@ import {ActionConst} from "react-native-router-flux"
 
 const initialState = {
     scene: {},
-};
+}
 
 export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
@@ -11,11 +11,9 @@ export default function reducer(state = initialState, action = {}) {
             return {
                 ...state,
                 scene: action.routeName,
-            };
-
-        // ...other actions
+            }
 
         default:
-            return state;
+            return state
     }
 }
