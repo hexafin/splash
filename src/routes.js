@@ -9,6 +9,7 @@ import Welcome from "./components/Welcome"
 import ConfirmDetails from "./components/ConfirmDetails"
 import ChoosePassword from "./components/ChoosePassword"
 import AddFunds from "./components/AddFunds"
+import Transaction from "./components/Transaction"
 
 export const scenes = Actions.create(
     <Scene key="root" hideNavBar={true}>
@@ -19,6 +20,7 @@ export const scenes = Actions.create(
         <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
         <Scene key="addFunds" component={AddFunds} hideNavBar={true}/>
         <Scene key="home" component={Home} hideNavBar={true}/>
+        <Scene key="transaction" component={Transaction} hideNavBar={true}/>
     </Scene>
 )
 
