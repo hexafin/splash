@@ -6,7 +6,14 @@ import {bindActionCreators} from "redux"
 import {CreateNewAccount} from "../../actions/general";
 
 const mapStateToProps = (state) => {
-    return {}
+	const person = state.general.person
+    return {
+    	initialValues: {
+    		first_name: person.first_name,
+    		last_name: person.last_name,
+    		email: person.email,
+    	}
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {

@@ -15,6 +15,7 @@ import {Actions} from "react-native-router-flux"
 import { MultiInputBlock } from '../universal/Input'
 import { reduxForm } from 'redux-form'
 
+
 const ConfirmDetails = ({CreateNewAccount}) => {
     return (
         <View style={styles.container}>
@@ -27,19 +28,13 @@ const ConfirmDetails = ({CreateNewAccount}) => {
                 <MultiInputBlock 
                     inputs={[
                         {
-                            name: 'firstName',
-                            placeholder: 'Your first name'
-
-                        },
-                        {
-                            name: 'lastName',
-                            placeholder: 'Your last name'
+                            name: 'first_name',
+                            placeholder: 'Your name'
                         },
                         {
                             name: 'email',
                             placeholder: 'Your email'
                         }
-
                     ]}
                 />
             </View>
