@@ -60,7 +60,7 @@ export const LinkFacebook = () => {
 
         dispatch(linkFacebookInit())
 
-        FBLoginManager.loginWithPermissions(["public_profile", "email","user_friends","user_birthday"], function(error, data){
+        FBLoginManager.loginWithPermissions(["public_profile", "email","user_friends"], function(error, data){
             if (!error) {
 
                 // firebase auth
@@ -89,8 +89,7 @@ export const LinkFacebook = () => {
                         picture_url: response.data.picture.data.url,
                         gender: response.data.gender,
                         email: response.data.email,
-                        token: token,
-                        birthday: response.data.birthday
+                        token: token
                     }
                     dispatch(linkFacebookSuccess(facebookData))
                     Actions.confirmDetails()
@@ -122,6 +121,7 @@ export const CreateNewAccount = () => {
                 firstName: state.form.onboarding.registeredFields.firstName,
                 lastName: state.form.onboarding.registeredFields.lastName,
                 email: state.form.onboarding.registeredFields.email,
+                gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
                 pictureURL: state.general.person.picture_url
             }
