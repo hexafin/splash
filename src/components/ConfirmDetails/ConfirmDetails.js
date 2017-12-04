@@ -15,7 +15,7 @@ import {Actions} from "react-native-router-flux"
 import { MultiInputBlock } from '../universal/Input'
 import { reduxForm } from 'redux-form'
 
-const ConfirmDetails = () => {
+const ConfirmDetails = ({person}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -28,15 +28,15 @@ const ConfirmDetails = () => {
                     inputs={[
                         {
                             name: 'name',
-                            placeholder: 'Your name'
+                            placeholder: 'Your name',
                         },
                         {
                             name: 'email',
-                            placeholder: 'Your email'
+                            placeholder: 'Your email',
                         },
                         {
                             name: 'birthdate',
-                            placeholder: 'Your date of birth'
+                            placeholder: 'Your birthdate',
                         },
 
                     ]}

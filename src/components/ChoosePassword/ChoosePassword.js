@@ -20,7 +20,7 @@ const ChoosePassword = () => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <BackButton onPress={() => Actions.pop()}/>
-                <Text style={styles.headerEmoji}>🤐</Text>
+                <Text style={styles.headerEmoji}>👩‍🎨</Text>
                 <Text style={styles.headerText}>Choose password</Text>
             </View>
             <View style={styles.body}>
