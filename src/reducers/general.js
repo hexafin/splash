@@ -21,6 +21,8 @@ const initialState = {
     facebookToken: null,
     person: {},
     uid: null,
+    balanceBTC: null,
+    balanceUSD: null,
     isCreatingAccount: false,
     errorCreatingAccount: null
 };

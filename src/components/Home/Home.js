@@ -55,9 +55,9 @@ const Home = ({person, transactions}) => {
             <Text style={styles.bodyTitle}>
                 Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
             </Text>
-            <Button title="Deposit Bitcoin"/>
+            <Button title="Deposit bitcoin 💸"/>
             <View style={styles.bodySpacer}/>
-            <Button title="Request Bitcoin"/>
+            <Button title="Ask a friend for bitcoin 🎁"/>
         </View>
     )
 
