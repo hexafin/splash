@@ -16,8 +16,7 @@ import { MultiInputBlock } from '../universal/Input'
 import { reduxForm } from 'redux-form'
 
 
-const ConfirmDetails = () => {
-    
+const ConfirmDetails = ({CreateNewAccount}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -29,9 +28,12 @@ const ConfirmDetails = () => {
                 <MultiInputBlock 
                     inputs={[
                         {
-
                             name: 'first_name',
-                            placeholder: 'Your name'
+                            placeholder: 'Your first name'
+                        },
+                        {
+                            name: 'last_name',
+                            placeholder: 'Your last name'
                         },
                         {
                             name: 'email',
@@ -40,7 +42,7 @@ const ConfirmDetails = () => {
                     ]}
                 />
             </View>
-            <Button style={{flex: 0}} title="Finish setup" onPress={() => Actions.choosePassword()}/>
+            <Button style={{flex: 0}} title="Finish setup" onPress={() => CreateNewAccount()}/>
         </View>
     )
 }

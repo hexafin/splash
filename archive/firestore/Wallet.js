@@ -13,27 +13,6 @@ var axios = require('axios');
 
 import { NewInternalChat } from "./Chat";
 
-// takes address and returns balance or error
-// calls internal api
-function GetBalance(address) {
-  return new Promise((resolve, reject) => {
-    const APIaddress = 'https://us-central1-hexa-dev.cloudfunctions.net/GetBalance';
-    axios.post(APIaddress, {
-      address: address,
-    })
-    .then(response => {
-      if (response.data.balance !== null){
-        resolve(response.data.balance);
-      } else {
-        reject('Cannot retrieve balance');
-      }
-    })
-    .catch(error => {
-      reject(error);
-    });
-  });
-}
-
 function NewPersonalWallet(personRef, description) {
     return new Promise((resolve, reject) => {
         // create hexa wallet
@@ -133,4 +112,4 @@ function NewBitcoinWallet() {
     };
 }
 
-export { NewPersonalWallet, NewGroupWallet, GenerateHex, HexExists, GetBalance };
+export { NewPersonalWallet, NewGroupWallet, GenerateHex, HexExists };

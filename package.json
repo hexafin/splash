@@ -25,6 +25,7 @@
     "dns.js": "^1.0.1",
     "domain-browser": "^1.1.7",
     "events": "^1.1.1",
+    "expo": "^23.0.6",
     "https-browserify": "0.0.1",
     "path-browserify": "0.0.0",
     "process": "^0.11.10",
