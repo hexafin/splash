@@ -1,4 +1,3 @@
-// presentational component for splash page
 
 import React from "react"
 import {

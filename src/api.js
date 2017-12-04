@@ -91,17 +91,17 @@ function GetBalance(address) {
     });
 }
 
-// takes from, to, privateKey, amtSantoshi
+// takes from, to, privateKey, amtSatoshi
 // outputs txHash or error
-function BuildBitcoinTransaction(from, to, privateKey, amtSantoshi) {
+function BuildBitcoinTransaction(from, to, privateKey, amtSatoshi) {
     GetBalance(from).then((balanceSantoshi) => {
-        if (amtSantoshi <= balanceSantoshi) {
+        if (amtSantoshi < balanceSantoshi) {
             bitcoinTransaction.sendTransaction({
                 from: from,
                 to: to,
                 privKeyWIF: key,
                 // TODO: figure out better way of converting to BTC
-                btc: amtSantoshi*0.00000001,
+                btc: amtSatoshi*0.00000001,
                 fee: 'hour',
                 dryrun: true,
                 network: "mainnet"
@@ -117,6 +117,9 @@ function BuildBitcoinTransaction(from, to, privateKey, amtSantoshi) {
         return 'Error: unable to get btc balance.';
     });
 }
+
+// new transaction
+function NewTransaction() {}
 
 export default api = {
     NewAccount: NewAccount,
