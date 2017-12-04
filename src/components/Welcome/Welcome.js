@@ -14,18 +14,18 @@ import BackButton from "../universal/BackButton"
 import {Actions} from "react-native-router-flux"
 
 
-const Welcome = ({LinkFacebook}) => {
+const Welcome = ({username, LinkFacebook}) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <BackButton onPress={() => Actions.pop()}/>
                 <Text style={styles.headerEmoji}>🙌</Text>
                 <Text style={styles.headerText}>Welcome on board,</Text>
-                <Text style={styles.headerUsername}>@bryce</Text>
+                <Text style={styles.headerUsername}>@{username}</Text>
             </View>
             <View style={styles.body}>
                 <Text style={styles.bodyText}>
-                    Your friends will be able to send money to <Text style={{color: colors.purple}}>@bryce</Text>.
+                    Your friends will be able to send money to <Text style={{color: colors.purple}}>@{username}</Text>.
                 </Text>
                 <Text style={styles.bodyText}>
                     Finish setting up your account to save your username

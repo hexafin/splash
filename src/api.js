@@ -70,7 +70,57 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
 
 }
 
+// takes address and returns balance or error
+// calls internal api
+function GetBalance(address) {
+    return new Promise((resolve, reject) => {
+        const APIaddress = 'https://us-central1-hexa-dev.cloudfunctions.net/GetBalance';
+        axios.post(APIaddress, {
+            address: address,
+        })
+            .then(response => {
+                if (response.data.balance !== null){
+                    resolve(response.data.balance);
+                } else {
+                    reject('Cannot retrieve balance');
+                }
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+// takes from, to, privateKey, amtSantoshi
+// outputs txHash or error
+function BuildBitcoinTransaction(from, to, privateKey, amtSantoshi) {
+    GetBalance(from).then((balanceSantoshi) => {
+        if (amtSantoshi <= balanceSantoshi) {
+            bitcoinTransaction.sendTransaction({
+                from: from,
+                to: to,
+                privKeyWIF: key,
+                // TODO: figure out better way of converting to BTC
+                btc: amtSantoshi*0.00000001,
+                fee: 'hour',
+                dryrun: true,
+                network: "mainnet"
+            }).then(txHash => {
+                return txHash;
+            }).catch(error => {
+                return 'Error: cannot build transaction';
+            });
+        } else {
+            return 'Error: not enough btc.';
+        }
+    }).catch(error => {
+        return 'Error: unable to get btc balance.';
+    });
+}
+
 export default api = {
     NewAccount: NewAccount,
-    UsernameExists: UsernameExists
+    UsernameExists: UsernameExists,
+    GetBalance: GetBalance,
+
 }

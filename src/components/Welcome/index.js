@@ -5,7 +5,9 @@ import {LinkFacebook} from "../../actions/general"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
-    return state
+    return {
+        username: state.form.onboarding.registeredFields.username
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
