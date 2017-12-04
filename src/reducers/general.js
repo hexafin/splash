@@ -1,8 +1,8 @@
 
 import {
-    SIGN_IN_INIT,
-    SIGN_IN_SUCCESS,
-    SIGN_IN_FAILURE,
+    FIREBASE_AUTH_INIT,
+    FIREBASE_AUTH_SUCCESS,
+    FIREBASE_AUTH_FAILURE,
     LINK_FACEBOOK_INIT,
     LINK_FACEBOOK_SUCCESS,
     LINK_FACEBOOK_FAILURE,
@@ -13,14 +13,14 @@ import {
 } from "../actions/general";
 
 const initialState = {
-    signedIn: false,
-    isSigningIn: false,
-    errorSigningIn: null,
+    authenticated: false,
+    isAuthenticating: false,
+    errorAuthenticating: null,
     isLinkingFacebook: false,
     errorLinkingFacebook: null,
     facebookToken: null,
     person: {},
-    personRef: null,
+    uid: null,
     isCreatingAccount: false,
     errorCreatingAccount: null
 };
@@ -28,33 +28,26 @@ const initialState = {
 export default function generalReducer(state = initialState, action) {
     switch(action.type) {
 
-        case SIGN_IN_INIT:
+        case FIREBASE_AUTH_INIT:
             return {
                 ...state,
-                isSigningIn: true
+                isAuthenticating: true
             }
 
-        case SIGN_IN_SUCCESS:
+        case FIREBASE_AUTH_SUCCESS:
             return {
                 ...state,
-                isSigningIn: false,
-                signedIn: true,
-                person: action.person,
-                personRef: action.personRef
+                isAuthenticating: false,
+                authenticated: true,
+                uid: action.uid
             }
 
-        case SIGN_IN_FAILURE:
+        case FIREBASE_AUTH_FAILURE:
             return {
                 ...state,
-                isSigningIn: false,
-                signedIn: false,
-                errorSigningIn: action.error
-            }
-
-        case NEW_ACCOUNT_INIT:
-            return {
-                ...state,
-                isCreatingAccount: true
+                isAuthenticating: false,
+                authenticated: false,
+                errorAuthenticating: action.error
             }
 
         case LINK_FACEBOOK_INIT:
@@ -73,7 +66,8 @@ export default function generalReducer(state = initialState, action) {
                     first_name: action.data.first_name,
                     last_name: action.data.last_name,
                     gender: action.data.gender,
-                    facebook_id: action.data.id
+                    facebook_id: action.data.id,
+                    email: action.data.email
                 }
             }
 
@@ -82,6 +76,12 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isLinkingFacebook: false,
                 errorLinkingFacebook: action.error
+            }
+
+        case NEW_ACCOUNT_INIT:
+            return {
+                ...state,
+                isCreatingAccount: true
             }
 
         case NEW_ACCOUNT_SUCCESS:

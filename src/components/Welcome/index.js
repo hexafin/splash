@@ -1,16 +1,18 @@
 // container for splash page
 import Welcome from "./Welcome"
 import {connect} from "react-redux"
-import {SignUpWithFacebook} from "../../actions/general"
+import {LinkFacebook} from "../../actions/general"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
-    return state
+    return {
+        username: state.form.onboarding.values.username
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        SignUpWithFacebook
+        LinkFacebook
     }, dispatch)
 }
 

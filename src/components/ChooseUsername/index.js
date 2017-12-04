@@ -4,9 +4,9 @@ import {connect} from "react-redux"
 // TODO: import UsernameExists and update page
 import {bindActionCreators} from "redux"
 
-const mapStateToProps = (state) => {
-    return state
-}
+// const mapStateToProps = (state) => {
+//     return state
+// }
 
 // const mapDispatchToProps = (dispatch) => {
 //     return bindActionCreators({
@@ -14,4 +14,4 @@ const mapStateToProps = (state) => {
 //     }, dispatch)
 // }
 
-export default connect(mapStateToProps)(ChooseUsername)
+export default connect()(ChooseUsername)
