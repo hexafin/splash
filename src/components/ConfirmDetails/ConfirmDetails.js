@@ -15,6 +15,7 @@ import {Actions} from "react-native-router-flux"
 import { MultiInputBlock } from '../universal/Input'
 import { reduxForm } from 'redux-form'
 
+
 const ConfirmDetails = () => {
     
     return (
@@ -28,6 +29,7 @@ const ConfirmDetails = () => {
                 <MultiInputBlock 
                     inputs={[
                         {
+
                             name: 'first_name',
                             placeholder: 'Your name'
                         },
