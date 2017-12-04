@@ -2,6 +2,11 @@
   "name": "Hexa",
   "version": "0.0.1",
   "private": true,
+  "rnpm": {
+    "assets": [
+      "resources"
+    ]
+  },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
@@ -29,6 +34,7 @@
     "react-native": "0.50.3",
     "react-native-crypto": "^2.1.1",
     "react-native-emoji": "^1.2.0",
+    "react-native-facebook-login": "^1.6.0",
     "react-native-fbsdk": "^0.6.3",
     "react-native-firebase": "^3.1.0",
     "react-native-fontawesome": "^5.7.0",

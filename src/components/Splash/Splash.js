@@ -31,7 +31,7 @@ const Splash = ({SignIn}) => {
             </View>
             <Button title="Log in" onPress={() => SignIn()}/>
 
-
+            <FBLogin/>
 
         </View>
     )
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
-        justifyContent: "space-between",
+        justifyContent: "center",
         backgroundColor: colors.white,
         padding: 30,
         position: 'relative'
