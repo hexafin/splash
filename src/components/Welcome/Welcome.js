@@ -47,11 +47,10 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "space-around",
-        backgroundColor: colors.white,
-        padding: 20,
-        paddingTop: 30
+        backgroundColor: colors.white
     },
     header: {
+        paddingTop: 20,
         flex: 1,
         flexDirection: "column",
         justifyContent: "center"
@@ -79,8 +78,7 @@ const styles = StyleSheet.create({
         color: colors.purple
     },
     body: {
-        padding: 30,
-        paddingTop: 10,
+        padding: 20,
         flex: 1,
         flexDirection: "column",
         justifyContent: "center"
@@ -104,6 +102,7 @@ const styles = StyleSheet.create({
         lineHeight: 23
     },
     footer: {
+        padding: 20,
         flex: 0,
         flexDirection: "column"
     }

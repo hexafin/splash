@@ -18,8 +18,8 @@ import { Field, reduxForm } from 'redux-form'
 const ChooseUsername = () => {
     return (
         <KeyboardAvoidingView behavior="height" style={styles.container}>
+            <BackButton onPress={() => Actions.pop()} />
             <View style={styles.header}>
-                <BackButton onPress={() => Actions.pop()} />
                 <Text style={styles.headerEmoji}>🎅</Text>
                 <Text style={styles.headerText}>Choose your username</Text>
                 <Text style={styles.headerText}>- it's yours, forever.</Text>
@@ -44,10 +44,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "space-around",
-        backgroundColor: colors.white,
-        padding: 20,
-        paddingTop: 30,
-        paddingBottom: 0
+        backgroundColor: colors.white
     },
     header: {
         flex: 1,
@@ -83,6 +80,8 @@ const styles = StyleSheet.create({
     },
     body: {
         paddingTop: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
         flex: 1,
         flexDirection: "column",
         justifyContent: "center"
