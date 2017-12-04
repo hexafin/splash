@@ -9,6 +9,8 @@ import Welcome from "./components/Welcome"
 import ConfirmDetails from "./components/ConfirmDetails"
 import ChoosePassword from "./components/ChoosePassword"
 import ManageFunds from "./components/ManageFunds"
+import SetAmount from "./components/SetAmount"
+import Receipt from "./components/Receipt"
 import Transaction from "./components/Transaction"
 import Wallet from "./components/Wallet"
 import Profile from "./components/Profile"
@@ -30,6 +32,8 @@ const scenes = Actions.create(
                 <Scene key="manageFunds" component={ManageFunds} hideNavBar={true}/>
                 <Scene key="home" component={Home} hideNavBar={true}/>
                 <Scene key="transaction" component={Transaction} hideNavBar={true}/>
+                <Scene key="setamount" component={SetAmount} hideNavBar={true} />
+                <Scene key="receipt" component={Receipt} hideNavBar={true} />
             </Scene>
             <Scene key="wallet" component={Wallet} hideNavBar={true}/>
             <Scene key="profile" component={Profile} hideNavBar={true}/>
