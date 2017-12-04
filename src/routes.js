@@ -13,14 +13,18 @@ import Transaction from "./components/Transaction"
 
 export const scenes = Actions.create(
     <Scene key="root" hideNavBar={true}>
-        <Scene key="splash" component={Splash} hideNavBar={true} initial/>
-        <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true}/>
-        <Scene key="welcome" component={Welcome} hideNavBar={true}/>
-        <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
-        <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
-        <Scene key="addFunds" component={AddFunds} hideNavBar={true}/>
-        <Scene key="home" component={Home} hideNavBar={true}/>
-        <Scene key="transaction" component={Transaction} hideNavBar={true}/>
+        <Scene key="onboarding" hideNavBar={true}>
+            <Scene key="splash" component={Splash} hideNavBar={true} initial/>
+            <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true}/>
+            <Scene key="welcome" component={Welcome} hideNavBar={true}/>
+            <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
+            <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
+        </Scene>
+        <Scene key="application" hideNavBar={true}>
+            <Scene key="addFunds" component={AddFunds} hideNavBar={true}/>
+            <Scene key="home" component={Home} hideNavBar={true}/>
+            <Scene key="transaction" component={Transaction} hideNavBar={true}/>
+        </Scene>
     </Scene>
 )
 

@@ -49,8 +49,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: colors.white,
         padding: 20,
-        paddingTop: 30,
-        paddingBottom: 50
+        paddingTop: 30
     },
     header: {
         flex: 1,

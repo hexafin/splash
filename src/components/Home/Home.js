@@ -55,9 +55,9 @@ const Home = ({person, transactions}) => {
             <Text style={styles.bodyTitle}>
                 Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
             </Text>
-            <Button title="Deposit bitcoin 💸"/>
+            <Button title="Deposit bitcoin 💸" onPress={() => Actions.addFunds()}/>
             <View style={styles.bodySpacer}/>
-            <Button title="Ask a friend for bitcoin 🎁"/>
+            <Button title="Ask a friend for bitcoin 🎁" onPress={() => Actions.transaction({transactionType: 'request'})}/>
         </View>
     )
 
@@ -98,18 +98,18 @@ const Home = ({person, transactions}) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.profile}>
+            <TouchableOpacity style={styles.profile}>
                 <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
                 <View style={styles.profileTextWrapper}>
                     <Text style={styles.profileUsername}>@{person.username}</Text>
                     <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
                 </View>
-            </View>
-            <View style={styles.balance}>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.balance}>
                 <Text style={styles.balanceUSD}>$50</Text>
                 <Text style={styles.balanceBTC}>0.0024 BTC</Text>
                 <Text style={styles.balanceDescription}>Your bitcoin</Text>
-            </View>
+            </TouchableOpacity>
             {/* if there are no transactions render blank*/}
             {transactions.items.length == 0 && renderBlank}
             {/* if there are  transactions render them in sectionList*/}
