@@ -4,7 +4,14 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
-    return state
+	const person = state.general.person
+    return {
+    	initialValues: {
+    		first_name: person.first_name,
+    		last_name: person.last_name,
+    		email: person.email,
+    	}
+    }
 }
 
 // const mapDispatchToProps = (dispatch) => {

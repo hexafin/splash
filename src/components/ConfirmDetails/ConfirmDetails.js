@@ -16,6 +16,7 @@ import { MultiInputBlock } from '../universal/Input'
 import { reduxForm } from 'redux-form'
 
 const ConfirmDetails = () => {
+    
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -27,18 +28,13 @@ const ConfirmDetails = () => {
                 <MultiInputBlock 
                     inputs={[
                         {
-                            name: 'name',
+                            name: 'first_name',
                             placeholder: 'Your name'
                         },
                         {
                             name: 'email',
                             placeholder: 'Your email'
-                        },
-                        {
-                            name: 'birthdate',
-                            placeholder: 'Your date of birth'
-                        },
-
+                        }
                     ]}
                 />
             </View>
