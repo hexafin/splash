@@ -19,8 +19,8 @@ import { reduxForm } from 'redux-form'
 const ConfirmDetails = ({CreateNewAccount}) => {
     return (
         <KeyboardAvoidingView style={styles.container} behavior="height">
+            <BackButton onPress={() => Actions.pop()} />
             <View style={styles.header}>
-                <BackButton onPress={() => Actions.pop()} />
                 <Text style={styles.headerEmoji}>👌</Text>
                 <Text style={styles.headerText}>Everything looking good?</Text>
             </View>
@@ -51,14 +51,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
-        justifyContent: "space-around",
-        backgroundColor: colors.white,
-        padding: 20,
-        paddingTop: 30
+        justifyContent: "center",
+        backgroundColor: colors.white
     },
     header: {
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "center",
+        flex: 1
     },
     headerEmoji: {
         fontSize: 40,
@@ -75,10 +74,11 @@ const styles = StyleSheet.create({
         color: colors.nearBlack
     },
     body: {
-        paddingTop: 50,
+        padding: 20,
+        paddingTop: 10,
         flex: 1,
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "flex-start"
     }
 })
 

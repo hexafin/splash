@@ -77,6 +77,8 @@ export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 							component={MultiInput} 
 							inputPosition={inputPosition}
 							secureTextEntry={secureTextEntry}
+                            autoCorrect={false}
+							spellCheck={false}
 					 />
 	}) 
 	return (

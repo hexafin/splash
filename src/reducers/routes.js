@@ -10,9 +10,9 @@ export default function reducer(state = initialState, action = {}) {
         case ActionConst.FOCUS:
 
             // autofocus username input on choose username page
-            if (action.routeName == "chooseUsername") {
-                state.form.username.RegisteredFields
-            }
+            // if (action.routeName == "chooseUsername") {
+            //     state.form.username.RegisteredFields
+            // }
             return {
                 ...state,
                 scene: action.routeName,
