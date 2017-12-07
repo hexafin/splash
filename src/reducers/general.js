@@ -9,6 +9,9 @@ import {
     NEW_ACCOUNT_INIT,
     NEW_ACCOUNT_SUCCESS,
     NEW_ACCOUNT_FAILURE,
+    UPDATE_ACCOUNT_INIT,
+    UPDATE_ACCOUNT_SUCCESS,
+    UPDATE_ACCOUNT_FAILURE,
     SIGN_OUT
 } from "../actions/general";
 
@@ -24,7 +27,9 @@ const initialState = {
     balanceBTC: null,
     balanceUSD: null,
     isCreatingAccount: false,
-    errorCreatingAccount: null
+    errorCreatingAccount: null,
+    isUpdatingAccount: false,
+    errorUpdatingAccount: null
 };
 
 export default function generalReducer(state = initialState, action) {
@@ -90,8 +95,7 @@ export default function generalReducer(state = initialState, action) {
             return {
                 ...state,
                 isCreatingAccount: false,
-                person: action.person,
-                personRef: action.personRef
+                person: action.person
             }
 
         case NEW_ACCOUNT_FAILURE:
@@ -99,6 +103,26 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isCreatingAccount: false,
                 errorCreatingAccount: action.error
+            }
+
+        case UPDATE_ACCOUNT_INIT:
+            return {
+                ...state,
+                isUpdatingAccount: true
+            }
+
+        case UPDATE_ACCOUNT_SUCCESS:
+            return {
+                ...state,
+                isUpdatingAccount: false,
+                person: action.person
+            }
+
+        case UPDATE_ACCOUNT_FAILURE:
+            return {
+                ...state,
+                isUpdatingAccount: false,
+                errorUpdatingAccount: action.error
             }
 
         case SIGN_OUT:

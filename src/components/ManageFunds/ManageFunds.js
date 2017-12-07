@@ -10,20 +10,22 @@ import {colors} from "../../lib/colors"
 import Button from "../universal/Button"
 
 import {Actions} from "react-native-router-flux"
+import BackButton from "../universal/BackButton";
 
 
-const AddFunds = () => {
+const ManageFunds = () => {
     return (
         <View style={styles.container}>
+            <BackButton onPress={() => Actions.pop()} />
             <View style={styles.header}>
-                <Text style={styles.headerEmoji}>👍</Text>
-                <Text style={styles.headerText}>Wallet created. Now, let's add some funds!</Text>
+                <Text style={styles.headerEmoji}>👩‍</Text>
+                <Text style={styles.headerText}>Would you like to deposit or withdraw?</Text>
             </View>
-            <View style={styles.containerSpacer}></View>
+            <View style={styles.containerSpacer}/>
             <View style={styles.footer}>
-                <Button title="I don't have bitcoin yet" onPress={() => {}}/>
-                <View style={styles.footerSpacer}></View>
-                <Button title="I already have bitcoin" onPress={() => {}}/>
+                <Button title="Deposit" onPress={() => {}}/>
+                <View style={styles.footerSpacer}/>
+                <Button title="Withdraw" onPress={() => {}}/>
             </View>
         </View>
     )
@@ -70,4 +72,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddFunds
+export default ManageFunds

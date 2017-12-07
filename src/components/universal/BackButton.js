@@ -1,4 +1,3 @@
-// presentational component for splash page
 
 import React from "react"
 import {
@@ -26,7 +25,7 @@ const BackButton = ({onPress, type="left"}) => {
 const styles = StyleSheet.create({
     baseBackButton: {
         position: "absolute",
-        top: 30,
+        top: 40,
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",

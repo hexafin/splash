@@ -42,7 +42,9 @@ const ConfirmDetails = ({CreateNewAccount}) => {
                     ]}
                 />
             </View>
-            <Button style={{flex: 0}} title="Finish setup" onPress={() => CreateNewAccount()}/>
+            <View style={styles.footer}>
+                <Button title="Finish setup" onPress={() => CreateNewAccount()}/>
+            </View>
         </KeyboardAvoidingView>
     )
 }
@@ -79,6 +81,10 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "column",
         justifyContent: "flex-start"
+    },
+    footer: {
+        flex: 0,
+        padding: 20
     }
 })
 
