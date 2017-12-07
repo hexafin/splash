@@ -1,5 +1,5 @@
 // container for splash page
-import AddFunds from "./AddFunds"
+import ManageFunds from "./ManageFunds"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 
@@ -13,4 +13,4 @@ const mapStateToProps = (state) => {
 //     }, dispatch)
 // }
 
-export default connect(mapStateToProps)(AddFunds)
+export default connect(mapStateToProps)(ManageFunds)

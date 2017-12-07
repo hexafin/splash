@@ -28,7 +28,7 @@ const ChooseUsername = () => {
                 <View style={styles.usernameWrapper}>
                     <Text style={styles.atSign}>@</Text>
                     <Field style={styles.usernameField} name='username' placeholder='Choose username' component={Input}
-                           autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}></Field>
+                           autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>
                 </View>
                 <Text style={styles.bodyText}>
                     Your username will be the way people can find you in the app and send money to you.

@@ -1,7 +1,8 @@
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
-let random = require('react-native-randombytes').randomBytes;
-let bitcoin = require('bitcoinjs-lib');
+let random = require('react-native-randombytes').randomBytes
+let bitcoin = require('bitcoinjs-lib')
+var axios = require('axios')
 
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
@@ -70,6 +71,24 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
 
 }
 
+const UpdateAccount = (uid, {updateDict}) => {
+
+    return new Promise ((resolve, reject) => {
+
+        firestore.collection("people").doc(uid).update(updateDict).then(() => {
+            firestore.collection("people").doc(uid).get().then(person => {
+                resolve(person)
+            }).catch(error => {
+                reject(error)
+            })
+        }).catch(error => {
+            reject(error)
+        })
+
+    })
+
+}
+
 // takes address and returns balance or error
 // calls internal api
 function GetBalance(address) {
@@ -121,9 +140,26 @@ function BuildBitcoinTransaction(from, to, privateKey, amtSatoshi) {
 // new transaction
 function NewTransaction() {}
 
+// log
+function Log(type, content) {
+    if (type == "feedback") {
+
+        const data = {
+            text: content
+        }
+
+        axios.post("https://hooks.slack.com/services/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", data).then(response => {
+            return response
+        }).catch(error => {
+            return error
+        })
+    }
+}
+
 export default api = {
     NewAccount: NewAccount,
+    UpdateAccount: UpdateAccount,
     UsernameExists: UsernameExists,
     GetBalance: GetBalance,
-
+    Log: Log
 }

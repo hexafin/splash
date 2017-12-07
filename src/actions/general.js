@@ -1,8 +1,9 @@
 import {Actions} from "react-native-router-flux"
 import api from "../api"
 import { FBLoginManager } from 'react-native-facebook-login'
-var axios = require('axios');
+var axios = require('axios')
 import firebase from 'react-native-firebase'
+let firestore = firebase.firestore()
 
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
 export function linkFacebookInit() {
@@ -32,6 +33,21 @@ export function newAccountSuccess(person) {
 export const NEW_ACCOUNT_FAILURE = "NEW_ACCOUNT_FAILURE"
 export function newAccountFailure(error) {
     return {type: NEW_ACCOUNT_FAILURE, error}
+}
+
+export const UPDATE_ACCOUNT_INIT = "UPDATE_ACCOUNT_INIT"
+export function updateAccountInit() {
+    return {type: UPDATE_ACCOUNT_INIT}
+}
+
+export const UPDATE_ACCOUNT_SUCCESS = "UPDATE_ACCOUNT_SUCCESS"
+export function updateAccountSuccess(updatedPerson) {
+    return {type: UPDATE_ACCOUNT_SUCCESS, updatedPerson}
+}
+
+export const UPDATE_ACCOUNT_FAILURE = "UPDATE_ACCOUNT_FAILURE"
+export function updateAccountFailure(error) {
+    return {type: UPDATE_ACCOUNT_FAILURE, error}
 }
 
 export const FIREBASE_AUTH_INIT = "FIREBASE_AUTH_INIT"
@@ -123,7 +139,8 @@ export const CreateNewAccount = () => {
                 email: state.general.person.email,
                 gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
-                pictureURL: state.general.person.picture_url
+                pictureURL: state.general.person.picture_url,
+                default_currency: "usd"
             }
 
             api.NewAccount(state.general.uid, inputPerson).then(person => {
@@ -142,4 +159,57 @@ export const CreateNewAccount = () => {
     }
 }
 
-//
+// update account
+export const UpdateAccount = (updateDict) => {
+    return (dispatch, getState) => {
+
+        // initialize account update
+        dispatch(updateAccountInit())
+
+        // get state
+        const state = getState()
+
+        // update firestore
+        api.UpdateAccount(state.general.uid, updateDict).then(updatedPerson => {
+            dispatch(updateAccountSuccess(updatedPerson))
+        }).catch(error => {
+            dispatch(updateAccountFailure(error))
+        })
+
+    }
+}
+
+// load App
+export const LoadApp = () => {
+    return (dispatch, getState) => {
+        const state = getState()
+
+        if (state.general.authenticated) {
+            Actions.home()
+        }
+        else {
+            Actions.splash()
+        }
+    }
+}
+
+// submit feedback
+export const SubmitFeedback = (type) => {
+    return (dispatch, getState) => {
+
+        // get state
+        const state = getState()
+
+        const feedback = state.form.feedback.values.feedback
+
+        if (type == "positive") {
+            api.Log("feedback", "👍 - "+feedback)
+            Actions.thanks({thanksType: "positiveFeedback"})
+        }
+        else {
+            api.Log("feedback", "👎 - "+feedback)
+            Actions.thanks({thanksType: "negativeFeedback"})
+        }
+
+    }
+}

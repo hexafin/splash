@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 15,
-        paddingTop: 30
+        paddingTop: 40
     },
     pageTitle: {
         color: colors.nearBlack,

@@ -7,7 +7,8 @@ import {bindActionCreators} from "redux";
 const mapStatetoProps = state => {
     return {
         person: state.general.person,
-        personRef: state.general.personRef,
+        balanceBTC: state.general.balanceBTC,
+        balanceUSD: state.general.balanceUSD,
         transactions: state.transactions
     }
 }
