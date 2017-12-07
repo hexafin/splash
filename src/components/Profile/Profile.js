@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     },
     body: {
         padding: 30,
+        paddingTop: 0,
         flexDirection: "column",
         justifyContent: "space-between"
     },
