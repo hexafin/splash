@@ -155,7 +155,8 @@ class Home extends Component {
             <ScrollView key={0} style={{flex: 1}}>
 
                 <View style={styles.homeButtons}>
-                    <EmojiButton emoji="💸" onPress={() => Actions.manageFunds()}/>
+                    <EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>
+                    <View style={styles.emojiSpacer}/>
                     <EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>
                 </View>
 
@@ -172,26 +173,34 @@ class Home extends Component {
             <View style={styles.container}>
 
                 <View style={styles.header}>
-                    <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
-                        <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
-                        <View style={styles.profileTextWrapper}>
-                            <Text style={styles.profileUsername}>@{person.username}</Text>
-                            <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
-                        </View>
-                    </TouchableOpacity>
 
-                    <View style={styles.feedback}>
-                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
-                        <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
+                    <View style={styles.topBar}>
+                        <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
+                            <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
+                            <View style={styles.profileTextWrapper}>
+                                <Text style={styles.profileUsername}>@{person.username}</Text>
+                                <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <View style={styles.feedback}>
+                            <Text style={styles.feedbackText}>Feedback</Text>
+                            <View style={styles.feedbackButtons}>
+                                <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
+                                <View style={styles.emojiSpacer}/>
+                                <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
+                            </View>
+                        </View>
+
                     </View>
 
-                </View>
+                    <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
+                        <Text style={styles.balanceUSD}>$50</Text>
+                        <Text style={styles.balanceBTC}>.00333 BTC</Text>
+                        <Text style={styles.balanceDescription}>Your bitcoin</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
-                    <Text style={styles.balanceUSD}>$50</Text>
-                    <Text style={styles.balanceBTC}>.00333 BTC</Text>
-                    <Text style={styles.balanceDescription}>Your bitcoin</Text>
-                </TouchableOpacity>
+                </View>
 
                 {/* if there are no transactions render blank*/}
                 {transactions.items.length == 0 && renderBlank}
@@ -224,9 +233,13 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     header: {
+        flexDirection: "column",
+    },
+    topBar: {
         paddingTop: 10,
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        backgroundColor: colors.white,
     },
     profile: {
         flexDirection: "row",
@@ -253,13 +266,33 @@ const styles = StyleSheet.create({
         color: colors.gray
     },
     feedback: {
+        flexDirection: "column",
+        justifyContent: "center",
+        position: "absolute",
+        top: 15,
+        right: 20
+    },
+    feedbackButtons: {
         flexDirection: "row",
-        alignItems: "center"
+        justifyContent: "center"
+    },
+    feedbackText: {
+        textAlign: "center",
+        color: colors.lightGray,
+        padding: 5,
+        fontSize: 12,
+        backgroundColor: "transparent",
+        fontWeight: "300"
+    },
+    emojiSpacer: {
+        width: 10
     },
     balance: {
         padding: 20,
+        paddingTop: 0,
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: "transparent"
     },
     balanceUSD: {
         textAlign: "center",
@@ -282,7 +315,8 @@ const styles = StyleSheet.create({
     },
     homeButtons: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        paddingTop: 10
     },
     sectionHeader: {
         backgroundColor: 'rgba(0, 0, 0, 0)',

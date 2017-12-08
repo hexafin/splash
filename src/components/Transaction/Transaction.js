@@ -2,6 +2,7 @@
 import React from "react"
 import {
     View,
+    ScrollView,
     Text,
     StyleSheet,
     SectionList,
@@ -12,6 +13,7 @@ import Button from "../universal/Button"
 import Friend from "../universal/Friend"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
+import EmojiButton from "../universal/EmojiButton";
 import {Actions} from "react-native-router-flux"
 
 //dummy data
@@ -67,14 +69,19 @@ const Transaction = ({transactionType = 'pay'}) => {
 
     //create sectionList with built data
     const renderSections = (
-        <View key={0} style={{flex: 1}}>
+        <ScrollView key={0} style={styles.body}>
+
+            {/*<View style={styles.searchButtons}>*/}
+                {/*<EmojiButton title="Send to bitcoin address" emoji="🤷‍♀️" />*/}
+            {/*</View>*/}
+
             <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                          stickySectionHeadersEnabled={false}
                          renderItem={({item}) => <Friend {...item}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />
-        </View>
+        </ScrollView>
     )
 
     return (
@@ -83,7 +90,7 @@ const Transaction = ({transactionType = 'pay'}) => {
             <View style={styles.header}>
                 <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
             </View>
-            <View style={{paddingHorizontal: 15}}>
+            <View style={styles.search}>
                 <Input input={{}} placeholder={'Search for username, email, etc.'}/>
             </View>
             {renderSections}
@@ -108,6 +115,16 @@ const styles = StyleSheet.create({
         color: colors.nearBlack,
         fontSize: 26,
         fontWeight: '900',
+    },
+    search: {
+        padding: 15
+    },
+    searchButtons: {
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
+    body: {
+        paddingTop: 0
     },
     sectionHeader: {
         backgroundColor: 'rgba(0, 0, 0, 0)',
