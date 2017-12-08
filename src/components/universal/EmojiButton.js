@@ -9,6 +9,8 @@ import {defaults} from '../../lib/styles'
 
 const EmojiButton = ({onPress, emoji, style}) => {
 
+
+
 	return (
 			<TouchableOpacity onPress={ onPress } style={[styles.base, style]}>
 			 	<Text style={styles.text}>

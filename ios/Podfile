@@ -7,13 +7,12 @@ target 'hexa' do
 
   # Pods for hexa
 
+  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
   pod 'React', :path => '../node_modules/react-native'
 
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
-
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'hexaTests' do
     inherit! :search_paths

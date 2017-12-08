@@ -156,7 +156,7 @@ class Home extends Component {
 
                 <View style={styles.homeButtons}>
                     <EmojiButton emoji="💸" onPress={() => Actions.manageFunds()}/>
-                    <EmojiButton emoji="🎁"/>
+                    <EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>
                 </View>
 
                 <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
@@ -188,8 +188,8 @@ class Home extends Component {
                 </View>
 
                 <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
-                    <Text style={styles.balanceUSD}>${balanceUSD}</Text>
-                    <Text style={styles.balanceBTC}>{balanceBTC} BTC</Text>
+                    <Text style={styles.balanceUSD}>$50</Text>
+                    <Text style={styles.balanceBTC}>.00333 BTC</Text>
                     <Text style={styles.balanceDescription}>Your bitcoin</Text>
                 </TouchableOpacity>
 
