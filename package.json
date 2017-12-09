@@ -41,6 +41,7 @@
     "react-native-fontawesome": "^5.7.0",
     "react-native-http": "github:tradle/react-native-http#834492d",
     "react-native-iphone-x-helper": "^1.0.1",
+    "react-native-keyboard-aware-scroll-view": "^0.4.1",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-level-fs": "^3.0.0",
     "react-native-os": "^1.1.0",

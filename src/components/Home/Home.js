@@ -154,10 +154,11 @@ class Home extends Component {
         const renderSections = (
             <ScrollView key={0} style={{flex: 1}}>
 
-                <View style={styles.homeButtons}>
-                    <EmojiButton emoji="💸" onPress={() => Actions.manageFunds()}/>
-                    <EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>
-                </View>
+                {/*<View style={styles.homeButtons}>*/}
+                    {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
+                    {/*<View style={styles.emojiSpacer}/>*/}
+                    {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
+                {/*</View>*/}
 
                 <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                              stickySectionHeadersEnabled={false}
@@ -172,26 +173,27 @@ class Home extends Component {
             <View style={styles.container}>
 
                 <View style={styles.header}>
-                    <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
-                        <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
-                        <View style={styles.profileTextWrapper}>
-                            <Text style={styles.profileUsername}>@{person.username}</Text>
-                            <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
-                        </View>
-                    </TouchableOpacity>
 
-                    <View style={styles.feedback}>
-                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
-                        <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
+                    <View style={styles.topBar}>
+                        <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
+                            <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
+                            <View style={styles.profileTextWrapper}>
+                                <Text style={styles.profileUsername}>@{person.username}</Text>
+                                <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
+                            </View>
+                        </TouchableOpacity>
+
+
+
                     </View>
 
-                </View>
+                    <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
+                        <Text style={styles.balanceUSD}>$50</Text>
+                        <Text style={styles.balanceBTC}>.00333 BTC</Text>
+                        <Text style={styles.balanceDescription}>Your bitcoin</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
-                    <Text style={styles.balanceUSD}>$50</Text>
-                    <Text style={styles.balanceBTC}>.00333 BTC</Text>
-                    <Text style={styles.balanceDescription}>Your bitcoin</Text>
-                </TouchableOpacity>
+                </View>
 
                 {/* if there are no transactions render blank*/}
                 {transactions.items.length == 0 && renderBlank}
@@ -220,13 +222,18 @@ class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         ...defaults.container,
+        paddingBottom: 0,
         flexDirection: "column",
         justifyContent: "space-around"
     },
     header: {
+        flexDirection: "column",
+    },
+    topBar: {
         paddingTop: 10,
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        backgroundColor: colors.white,
     },
     profile: {
         flexDirection: "row",
@@ -252,14 +259,15 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: colors.gray
     },
-    feedback: {
-        flexDirection: "row",
-        alignItems: "center"
+    emojiSpacer: {
+        width: 10
     },
     balance: {
         padding: 20,
+        paddingTop: 0,
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "center",
+        backgroundColor: "transparent"
     },
     balanceUSD: {
         textAlign: "center",
@@ -282,7 +290,8 @@ const styles = StyleSheet.create({
     },
     homeButtons: {
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        paddingTop: 10
     },
     sectionHeader: {
         backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -315,7 +324,8 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 24,
-        backgroundColor: colors.white
+        paddingBottom: 20,
+        backgroundColor: colors.purple
     },
     footerDivider: {
         width: 1,
@@ -325,13 +335,13 @@ const styles = StyleSheet.create({
         width: "50%",
         padding: 20,
         justifyContent: 'center',
-        backgroundColor: colors.white
+        backgroundColor: colors.purple
     },
     footerButtonText: {
         fontSize: 20,
         textAlign: 'center',
         fontWeight: '600',
-        color: colors.purple
+        color: colors.white
     }
 })
 

@@ -2,6 +2,7 @@
 import React from "react"
 import {
     View,
+    ScrollView,
     Text,
     StyleSheet,
     SectionList,
@@ -10,7 +11,9 @@ import {colors} from "../../lib/colors"
 import Friend from "../universal/Friend"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
+import EmojiButton from "../universal/EmojiButton";
 import {Actions} from "react-native-router-flux"
+import {defaults} from "../../lib/styles";
 
 //dummy data
 const recent = {
@@ -65,14 +68,19 @@ const Transaction = ({transactionType = 'pay'}) => {
 
     //create sectionList with built data
     const renderSections = (
-        <View key={0} style={{flex: 1}}>
+        <ScrollView key={0} style={styles.body}>
+
+            {/*<View style={styles.searchButtons}>*/}
+                {/*<EmojiButton title="Send to bitcoin address" emoji="🤷‍♀️" />*/}
+            {/*</View>*/}
+
             <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                          stickySectionHeadersEnabled={false}
                          renderItem={({item}) => <Friend {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />
-        </View>
+        </ScrollView>
     )
 
     return (
@@ -81,7 +89,7 @@ const Transaction = ({transactionType = 'pay'}) => {
             <View style={styles.header}>
                 <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
             </View>
-            <View style={{paddingHorizontal: 15}}>
+            <View style={styles.search}>
                 <Input input={{}} placeholder={'Search for username, email, etc.'}/>
             </View>
             {renderSections}
@@ -93,8 +101,7 @@ export default Transaction;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: colors.white
+        ...defaults.container,
     },
     header: {
         flexDirection: 'row',
@@ -106,6 +113,16 @@ const styles = StyleSheet.create({
         color: colors.nearBlack,
         fontSize: 26,
         fontWeight: '900',
+    },
+    search: {
+        padding: 15
+    },
+    searchButtons: {
+        flexDirection: "row",
+        justifyContent: "space-around"
+    },
+    body: {
+        paddingTop: 0
     },
     sectionHeader: {
         backgroundColor: 'rgba(0, 0, 0, 0)',

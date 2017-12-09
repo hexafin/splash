@@ -17,13 +17,14 @@ import Button from "../universal/Button"
 import Friend from "../universal/Friend"
 import {Input, MultiInput, MultiInputBlock} from "../universal/Input"
 import BackButton from "../universal/BackButton"
+import EmojiButton from "../universal/EmojiButton"
 import {Actions} from "react-native-router-flux"
 import {reduxForm, Field} from "redux-form";
 
 const Profile = ({person}) => {
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="height">
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
             <BackButton onPress={() => Actions.pop()} type="right"/>
             <View style={styles.header}>
                 <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
@@ -63,6 +64,16 @@ const Profile = ({person}) => {
 
                     <Field style={styles.currencyField} name='default_currency' placeholder='Currency' component={Input}
                            autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={false}/>
+
+                    <Text style={styles.sectionHeader}>Feedback</Text>
+
+                    <View style={styles.feedbackButtons}>
+
+                        <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
+
+                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
+                    </View>
+
                 </View>
 
                 <Button title="Logout" onPress={() => Actions.splash()}/>
@@ -131,6 +142,11 @@ const styles = StyleSheet.create({
     },
     bodySpacer: {
         height: 50
+    },
+    feedbackButtons: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        padding: 10
     },
     footer: {
         flexDirection: "column",

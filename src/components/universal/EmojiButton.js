@@ -7,17 +7,27 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 
-const EmojiButton = ({onPress, emoji, style}) => {
+const EmojiButton = ({onPress, emoji, title=null}) => {
 
+	if (title != null) {
+        return (
+            <TouchableOpacity onPress={ onPress } style={[styles.base, styles.titled]}>
+                <Text style={styles.text}>
+                    {title} {emoji}
+                </Text>
+            </TouchableOpacity>
+        )
+	}
+	else {
+        return (
+            <TouchableOpacity onPress={ onPress } style={[styles.base]}>
+                <Text style={styles.text}>
+                    {emoji}
+                </Text>
+            </TouchableOpacity>
+        )
+	}
 
-
-	return (
-			<TouchableOpacity onPress={ onPress } style={[styles.base, style]}>
-			 	<Text style={styles.text}>
-					{emoji}
-			 	</Text>
-			</TouchableOpacity>
-		)
 }
 
 
@@ -28,15 +38,19 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.15,
 		shadowRadius: defaults.shadowRadius,
 		borderRadius: 20,
-		width: 40,
+		minWidth: 40,
 		height: 40,
-		margin: 10,
 		justifyContent: 'center',
 		alignItems: "center",
 	},
+	titled: {
+		padding: 10,
+		shadowOpacity: defaults.shadowOpacity
+	},
 	text: {
-		fontSize: 20,
+		fontSize: 14,
 		textAlign: 'center',
+		color: colors.nearBlack
 	}
 })
 

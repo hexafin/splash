@@ -7,6 +7,7 @@ import {
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
+import {defaults} from "../../lib/styles"
 import Button from "../universal/Button"
 import BackButton from "../universal/BackButton"
 
@@ -44,10 +45,9 @@ const Welcome = ({username, LinkFacebook}) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        ...defaults.container,
         flexDirection: "column",
         justifyContent: "space-around",
-        backgroundColor: colors.white
     },
     header: {
         paddingTop: 20,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "flex-start"
     },
     bodyText: {
         marginTop: 20,
