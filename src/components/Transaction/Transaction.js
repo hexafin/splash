@@ -13,6 +13,7 @@ import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
 import EmojiButton from "../universal/EmojiButton";
 import {Actions} from "react-native-router-flux"
+import {defaults} from "../../lib/styles";
 
 //dummy data
 const recent = {
@@ -100,8 +101,7 @@ export default Transaction;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: colors.white
+        ...defaults.container,
     },
     header: {
         flexDirection: 'row',

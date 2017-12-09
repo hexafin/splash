@@ -1,5 +1,10 @@
 import {ActionConst, Actions} from "react-native-router-flux"
 
+import firebase from "react-native-firebase"
+let analytics = firebase.analytics()
+
+analytics.setAnalyticsCollectionEnabled(true)
+
 const initialState = {
     scene: {},
 }
@@ -9,10 +14,8 @@ export default function reducer(state = initialState, action = {}) {
         // focus action is dispatched when a new screen comes into focus
         case ActionConst.FOCUS:
 
-            // autofocus username input on choose username page
-            // if (action.routeName == "chooseUsername") {
-            //     state.form.username.RegisteredFields
-            // }
+            analytics.setCurrentScreen(action.routeName)
+
             return {
                 ...state,
                 scene: action.routeName,

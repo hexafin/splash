@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         backgroundColor: 'rgba(0,0,0,0)',
-        fontSize: 35,
+        fontSize: 40,
         fontWeight: '800',
         fontStyle: 'italic',
         textAlign: 'center',
@@ -66,7 +66,9 @@ const styles = StyleSheet.create({
     },
     tagline: {
         backgroundColor: 'rgba(0,0,0,0)',
-        fontSize: 20,
+        fontSize: 25,
+        paddingTop: 20,
+        paddingHorizontal: 40,
         color: colors.white,
         textAlign: 'center',
         fontWeight: '500',

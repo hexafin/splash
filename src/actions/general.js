@@ -4,6 +4,8 @@ import { FBLoginManager } from 'react-native-facebook-login'
 var axios = require('axios')
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
+let analytics = firebase.analytics()
+analytics.setAnalyticsCollectionEnabled(true)
 
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
 export function linkFacebookInit() {
@@ -108,6 +110,7 @@ export const LinkFacebook = () => {
                         token: token
                     }
                     dispatch(linkFacebookSuccess(facebookData))
+
                     Actions.confirmDetails()
                 }).catch(error => {
                     dispatch(linkFacebookFailure(error))
@@ -146,6 +149,7 @@ export const CreateNewAccount = () => {
             api.NewAccount(state.general.uid, inputPerson).then(person => {
                 dispatch(newAccountSuccess(person))
                 Actions.home()
+
             }).catch(error => {
                 // error
                 dispatch(newAccountFailure(error))

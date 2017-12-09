@@ -1,3 +1,7 @@
+import firebase from 'react-native-firebase'
+let analytics = firebase.analytics()
+analytics.setAnalyticsCollectionEnabled(true)
+
 
 import {
     FIREBASE_AUTH_INIT,
@@ -42,6 +46,9 @@ export default function generalReducer(state = initialState, action) {
             }
 
         case FIREBASE_AUTH_SUCCESS:
+
+            analytics.setUserId(action.iud)
+
             return {
                 ...state,
                 isAuthenticating: false,

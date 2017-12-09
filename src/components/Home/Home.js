@@ -154,11 +154,11 @@ class Home extends Component {
         const renderSections = (
             <ScrollView key={0} style={{flex: 1}}>
 
-                <View style={styles.homeButtons}>
-                    <EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>
-                    <View style={styles.emojiSpacer}/>
-                    <EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>
-                </View>
+                {/*<View style={styles.homeButtons}>*/}
+                    {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
+                    {/*<View style={styles.emojiSpacer}/>*/}
+                    {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
+                {/*</View>*/}
 
                 <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                              stickySectionHeadersEnabled={false}
@@ -183,14 +183,7 @@ class Home extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <View style={styles.feedback}>
-                            <Text style={styles.feedbackText}>Feedback</Text>
-                            <View style={styles.feedbackButtons}>
-                                <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
-                                <View style={styles.emojiSpacer}/>
-                                <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
-                            </View>
-                        </View>
+
 
                     </View>
 
@@ -229,6 +222,7 @@ class Home extends Component {
 const styles = StyleSheet.create({
     container: {
         ...defaults.container,
+        paddingBottom: 0,
         flexDirection: "column",
         justifyContent: "space-around"
     },
@@ -264,25 +258,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         color: colors.gray
-    },
-    feedback: {
-        flexDirection: "column",
-        justifyContent: "center",
-        position: "absolute",
-        top: 15,
-        right: 20
-    },
-    feedbackButtons: {
-        flexDirection: "row",
-        justifyContent: "center"
-    },
-    feedbackText: {
-        textAlign: "center",
-        color: colors.lightGray,
-        padding: 5,
-        fontSize: 12,
-        backgroundColor: "transparent",
-        fontWeight: "300"
     },
     emojiSpacer: {
         width: 10
@@ -349,7 +324,8 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 24,
-        backgroundColor: colors.white
+        paddingBottom: 20,
+        backgroundColor: colors.purple
     },
     footerDivider: {
         width: 1,
@@ -359,13 +335,13 @@ const styles = StyleSheet.create({
         width: "50%",
         padding: 20,
         justifyContent: 'center',
-        backgroundColor: colors.white
+        backgroundColor: colors.purple
     },
     footerButtonText: {
         fontSize: 20,
         textAlign: 'center',
         fontWeight: '600',
-        color: colors.purple
+        color: colors.white
     }
 })
 
