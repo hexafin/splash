@@ -45,16 +45,13 @@ https://rnfirebase.io/
 
 ### transactions
 
-**note:** a hexa transaction is not the same thing as a traditional bitcoin transaction: 
+**note:** a hexa transaction is not the same thing as a traditional bitcoin transaction:
 hexa adds context to bitcoin transactions with relevant information
 
 - `type`
     - values
-        - `friend`
-        - `merchant`
-- `suggested`
-    - boolean
-    - always false unless someone without paying permissions initialized a payment
+        - `payment`
+        - `request`
 - `initiated`
     - boolean
 - `completed`
@@ -66,11 +63,6 @@ hexa adds context to bitcoin transactions with relevant information
     - reference to person paying
 - `to_person`
     - reference to person being paid
-- `initiator_person`
-    - reference to person that started the transaction
-- `acceptor_person`
-    - *not defined unless transaction is completed*
-    - reference to person that accepted the transaction on behalf of the acceptor wallet
 - `fiat`
     - values
         - `usd`
@@ -85,16 +77,13 @@ hexa adds context to bitcoin transactions with relevant information
 - `amount_crypto`
     - numerical value
     - bitcoin is denoted in Satoshis (smallest fraction of bitcoin)
-    - **note:** this value is not set until the transaction is completed, so the acceptor does not subject themselves to 
+    - **note:** this value is not set until the transaction is completed, so the acceptor does not subject themselves to
     price fluctuations in the event of a request
 - `conversion_rate_at_transaction`
     - from crypto to fiat
-- `blockchain_transaction_id`
+- `transaction_id`
     - reference to transaction on blockchain
-- `category`
-- `memo`
-- `timestamp_suggested`
-    - *only defined if transaction was suggested*
+- `emoji`
 - `timestamp_initiated`
 - `timestamp_completed`
 - `timestamp_declined`
@@ -128,10 +117,3 @@ hexa adds context to bitcoin transactions with relevant information
     - `html`
         - *only possible if method = `email`*
 - `timestamp`
-
-
-
-
-
-
-
