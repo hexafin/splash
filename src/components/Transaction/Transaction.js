@@ -6,10 +6,8 @@ import {
     Text,
     StyleSheet,
     SectionList,
-    TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
-import Button from "../universal/Button"
 import Friend from "../universal/Friend"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
@@ -77,7 +75,7 @@ const Transaction = ({transactionType = 'pay'}) => {
 
             <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                          stickySectionHeadersEnabled={false}
-                         renderItem={({item}) => <Friend {...item}/>}
+                         renderItem={({item}) => <Friend {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />
