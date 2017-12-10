@@ -69,9 +69,10 @@ const Profile = ({person}) => {
 
                     <View style={styles.feedbackButtons}>
 
+                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
+
                         <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
 
-                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
                     </View>
 
                 </View>
