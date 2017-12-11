@@ -24,7 +24,7 @@ import {reduxForm, Field} from "redux-form";
 const Profile = ({person}) => {
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView style={styles.container} behavior="height">
             <BackButton onPress={() => Actions.pop()} type="right"/>
             <View style={styles.header}>
                 <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
@@ -69,9 +69,10 @@ const Profile = ({person}) => {
 
                     <View style={styles.feedbackButtons}>
 
+                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
+
                         <EmojiButton emoji="👍" onPress={() => Actions.feedback({feedbackType: "positive"})}/>
 
-                        <EmojiButton emoji="👎" onPress={() => Actions.feedback({feedbackType: "negative"})}/>
                     </View>
 
                 </View>

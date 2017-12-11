@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
         flex: 0,
         padding: 20,
         ...ifIphoneX({
-            paddingBottom: 40
+            marginBottom: 20
         }),
         flexDirection: "row",
         justifyContent: "center",
