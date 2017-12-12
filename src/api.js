@@ -113,8 +113,8 @@ function GetBalance(address) {
 // takes from, to, privateKey, amtSatoshi
 // outputs txHash or error
 function BuildBitcoinTransaction(from, to, privateKey, amtSatoshi) {
-    GetBalance(from).then((balanceSantoshi) => {
-        if (amtSantoshi < balanceSantoshi) {
+    GetBalance(from).then((balanceSatoshi) => {
+        if (amtSatoshi < balanceSatoshi) {
             bitcoinTransaction.sendTransaction({
                 from: from,
                 to: to,
