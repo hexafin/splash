@@ -16,6 +16,9 @@ import {
     UPDATE_ACCOUNT_INIT,
     UPDATE_ACCOUNT_SUCCESS,
     UPDATE_ACCOUNT_FAILURE,
+    UPDATE_BALANCE_INIT,
+    UPDATE_BALANCE_SUCCESS,
+    UPDATE_BALANCE_FAILURE,
     SIGN_OUT
 } from "../actions/general";
 
@@ -27,13 +30,15 @@ const initialState = {
     errorLinkingFacebook: null,
     facebookToken: null,
     person: {},
+    privateKey: null,
     uid: null,
-    balanceBTC: null,
-    balanceUSD: null,
+    balance: null,
     isCreatingAccount: false,
     errorCreatingAccount: null,
     isUpdatingAccount: false,
-    errorUpdatingAccount: null
+    errorUpdatingAccount: null,
+    isUpdatingBalance: false,
+    errorUpdatingBalance: null
 };
 
 export default function generalReducer(state = initialState, action) {
@@ -102,7 +107,8 @@ export default function generalReducer(state = initialState, action) {
             return {
                 ...state,
                 isCreatingAccount: false,
-                person: action.person
+                person: action.person,
+                privateKey: action.privateKey,
             }
 
         case NEW_ACCOUNT_FAILURE:
@@ -132,6 +138,26 @@ export default function generalReducer(state = initialState, action) {
                 errorUpdatingAccount: action.error
             }
 
+        case UPDATE_BALANCE_INIT:
+            return {
+                ...state,
+                isUpdatingBalance: true
+            }
+
+        case UPDATE_BALANCE_SUCCESS:
+            return {
+                ...state,
+                isUpdatingBalance: false,
+                balance: action.balance
+            }
+
+        case UPDATE_BALANCE_FAILURE:
+            return {
+                ...state,
+                isUpdatingBalance: false,
+                errorUpdatingBalance: action.error
+            }
+
         case SIGN_OUT:
             return initialState
 
@@ -140,4 +166,3 @@ export default function generalReducer(state = initialState, action) {
 
     }
 }
-

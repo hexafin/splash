@@ -2,13 +2,13 @@
 import React, {Component} from 'react';
 import {
     View,
-    KeyboardAvoidingView,
     Text,
     StyleSheet,
     ScrollView,
     TextInput,
     TouchableOpacity,
 } from 'react-native';
+import {connect} from "react-redux";
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import BackButton from "../universal/BackButton";
@@ -92,19 +92,19 @@ export default class SetAmount extends Component {
                     <Friend {...this.props.to} type={'none'}/>
                     <Text style={styles.sectionHeader}>Select category</Text>
                 </View>
-                <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps="never">
+                <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={'never'}>
                     {this.renderEmojis()}
                 </ScrollView>
                 <View style={styles.footerWrapper}>
                     <TouchableOpacity style={styles.footer}
                                       disabled={(this.state.btcAmount <= 0 || this.state.selectedEmojiFirst == null)}
-                                      onPress={() => Actions.receipt({
-                                          transactionType: this.props.transactionType,
-                                          to: this.props.to,
-                                          emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
-                                          usdAmount: this.state.usdAmount,
-                                          btcAmount: this.state.btcAmount
-                                      })}>
+                                      onPress={() => this.props.CreateTransaction({
+                                                                                  type: this.props.transactionType,
+                                                                                  other_person: this.props.to, // TODO: get real person ref
+                                                                                  emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
+                                                                                  amtUSD: this.state.usdAmount,
+                                                                                  amtBTC: this.state.btcAmount,
+                                                                                  })}>
                         {this.props.transactionType == 'pay' &&
                         <Text style={styles.footerButtonText}>
                             Pay

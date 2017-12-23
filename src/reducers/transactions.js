@@ -10,7 +10,6 @@ import {
 } from "../actions/general"
 
 var initialState = {
-    items: [],
     isCreatingTransaction: false,
     transactionBeingCreated: null
 };
@@ -23,13 +22,14 @@ export default function transactionsReducer(state = initialState, action) {
             return {
                 ...state,
                 isCreatingTransaction: true,
+                errorCreatingTransaction: null,
                 transactionBeingCreated: action.transaction
             }
 
         case NEW_TRANSACTION_SUCCESS:
             return {
                 ...state,
-                items: state.items.push(action.transaction),
+                errorCreatingTransaction: null,
                 isCreatingTransaction: false,
                 transactionBeingCreated: null
             }
@@ -50,6 +50,3 @@ export default function transactionsReducer(state = initialState, action) {
 
     }
 }
-
-
-

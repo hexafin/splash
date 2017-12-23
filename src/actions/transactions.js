@@ -1,6 +1,7 @@
 
 import {Actions} from "react-native-router-flux"
 import api from "../api"
+const SATOSHI_CONVERSION = 100000000;
 
 export const GET_TRANSACTIONS_INIT = "GET_TRANSACTIONS_INIT";
 export function getTransactionsInit() {
@@ -23,13 +24,13 @@ export function newTransactionInit(transaction) {
 }
 
 export const NEW_TRANSACTION_SUCCESS = "NEW_TRANSACTION_SUCCESS";
-export function newTransactionSuccess(transaction) {
-    return {type: NEW_TRANSACTION_SUCCESS, transaction}
+export function newTransactionSuccess() {
+    return {type: NEW_TRANSACTION_SUCCESS}
 }
 
 export const NEW_TRANSACTION_FAILURE = "NEW_TRANSACTION_FAILURE";
-export function newTransactionFailure(transaction) {
-    return {type: NEW_TRANSACTION_FAILURE, transaction}
+export function newTransactionFailure(error) {
+    return {type: NEW_TRANSACTION_FAILURE, error}
 }
 
 export const ACCEPT_TRANSACTION_INIT = "ACCEPT_TRANSACTION_INIT";
@@ -63,11 +64,28 @@ export function declineTransactionFailure(transactionRef) {
     return {type: DECLINE_TRANSACTION_FAILURE, transactionRef}
 }
 
+export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const fromAddress = state.general.person.address_bitcoin;
+    const uid = state.general.uid;
+    const exchangeRate = state.general.balance.exchangeRate;
+    const satoshi = Math.floor(amtBTC*SATOSHI_CONVERSION);
+    const toAddress = '12kZjgtaRftmbdieUeXnScbnbF9AqU6gTh' //using dummy, should pull from personRef
+    const key = state.general.privateKey; //pull from redux persist
 
+    if (type == 'pay') {
+      const transaction = {
+                  transactionType: type,
+                  to: other_person, //need to get person ref here
+                  emoji: emoji,
+                  usdAmount: amtUSD,
+                  btcAmount: amtBTC,
+                }
 
-
-
-
-
-
-
+      dispatch(newTransactionInit(transaction));
+      Actions.receipt(transaction); // w/ tran info
+      dispatch(newTransactionSuccess());
+    }
+  }
+}

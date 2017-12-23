@@ -20,7 +20,7 @@ import Landing from "./components/Landing"
 
 
 const scenes = Actions.create(
-    <Scene key="root" hideNavBar={true}>
+    <Scene key="root" hideNavBar={true} panHandlers={null}>
         <Scene key="modal" hideNavBar={true} modal>
             <Scene key="landing" component={Landing} hideNavBar={true} initial/>
             <Scene key="stack">
