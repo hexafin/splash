@@ -73,7 +73,7 @@ export default class SetAmount extends Component {
 
     render() {
         return (
-            <KeyboardAwareScrollView style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.page}>
                     <BackButton onPress={() => Actions.pop()} type="right"/>
                     <Text style={styles.pageTitle}>Choose amount</Text>
@@ -92,28 +92,30 @@ export default class SetAmount extends Component {
                     <Friend {...this.props.to} type={'none'}/>
                     <Text style={styles.sectionHeader}>Select category</Text>
                 </View>
-                <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={true}>
+                <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps="never">
                     {this.renderEmojis()}
                 </ScrollView>
-                <TouchableOpacity style={styles.footer}
-                                  disabled={(this.state.btcAmount <= 0 || this.state.selectedEmojiFirst == null)}
-                                  onPress={() => Actions.receipt({
-                                      transactionType: this.props.transactionType,
-                                      to: this.props.to,
-                                      emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
-                                      usdAmount: this.state.usdAmount,
-                                      btcAmount: this.state.btcAmount
-                                  })}>
-                    {this.props.transactionType == 'pay' &&
-                    <Text style={styles.footerButtonText}>
-                        Pay
-                    </Text>}
-                    {this.props.transactionType == 'request' &&
-                    <Text style={styles.footerButtonText}>
-                        Request payment
-                    </Text>}
-                </TouchableOpacity>
-            </KeyboardAwareScrollView>
+                <View style={styles.footerWrapper}>
+                    <TouchableOpacity style={styles.footer}
+                                      disabled={(this.state.btcAmount <= 0 || this.state.selectedEmojiFirst == null)}
+                                      onPress={() => Actions.receipt({
+                                          transactionType: this.props.transactionType,
+                                          to: this.props.to,
+                                          emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
+                                          usdAmount: this.state.usdAmount,
+                                          btcAmount: this.state.btcAmount
+                                      })}>
+                        {this.props.transactionType == 'pay' &&
+                        <Text style={styles.footerButtonText}>
+                            Pay
+                        </Text>}
+                        {this.props.transactionType == 'request' &&
+                        <Text style={styles.footerButtonText}>
+                            Request payment
+                        </Text>}
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 }
@@ -162,13 +164,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
+    footerWrapper: {
+        backgroundColor: colors.purple
+    },
     footer: {
         flex: 0,
         padding: 20,
         ...ifIphoneX({
             paddingBottom: 40
+        }, {
+            paddingBottom: 20
         }),
-        paddingBottom: 20,
         flexDirection: "row",
         justifyContent: "center",
         shadowColor: colors.lightShadow,
