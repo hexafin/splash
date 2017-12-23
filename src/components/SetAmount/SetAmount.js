@@ -95,24 +95,26 @@ export default class SetAmount extends Component {
                 <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={'never'}>
                     {this.renderEmojis()}
                 </ScrollView>
-                <TouchableOpacity style={styles.footer}
-                                  disabled={(this.state.btcAmount <= 0 || this.state.selectedEmojiFirst == null)}
-                                  onPress={() => this.props.CreateTransaction({
-                                                                              type: this.props.transactionType,
-                                                                              other_person: this.props.to, // TODO: get real person ref
-                                                                              emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
-                                                                              amtUSD: this.state.usdAmount,
-                                                                              amtBTC: this.state.btcAmount,
-                                                                              })}>
-                    {this.props.transactionType == 'pay' &&
-                    <Text style={styles.footerButtonText}>
-                        Pay
-                    </Text>}
-                    {this.props.transactionType == 'request' &&
-                    <Text style={styles.footerButtonText}>
-                        Request payment
-                    </Text>}
-                </TouchableOpacity>
+                <View style={styles.footerWrapper}>
+                    <TouchableOpacity style={styles.footer}
+                                      disabled={(this.state.btcAmount <= 0 || this.state.selectedEmojiFirst == null)}
+                                      onPress={() => this.props.CreateTransaction({
+                                                                                  type: this.props.transactionType,
+                                                                                  other_person: this.props.to, // TODO: get real person ref
+                                                                                  emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
+                                                                                  amtUSD: this.state.usdAmount,
+                                                                                  amtBTC: this.state.btcAmount,
+                                                                                  })}>
+                        {this.props.transactionType == 'pay' &&
+                        <Text style={styles.footerButtonText}>
+                            Pay
+                        </Text>}
+                        {this.props.transactionType == 'request' &&
+                        <Text style={styles.footerButtonText}>
+                            Request payment
+                        </Text>}
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
@@ -162,13 +164,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
+    footerWrapper: {
+        backgroundColor: colors.purple
+    },
     footer: {
         flex: 0,
         padding: 20,
         ...ifIphoneX({
             paddingBottom: 40
+        }, {
+            paddingBottom: 20
         }),
-        paddingBottom: 20,
         flexDirection: "row",
         justifyContent: "center",
         shadowColor: colors.lightShadow,
