@@ -178,8 +178,8 @@ class Home extends Component {
                         <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
                             <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
                             <View style={styles.profileTextWrapper}>
-                                <Text style={styles.profileUsername}>@{person.username}</Text>
                                 <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
+                                <Text style={styles.profileUsername}>@{person.username}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -188,8 +188,8 @@ class Home extends Component {
                     </View>
 
                     <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
-                        <Text style={styles.balanceUSD}>$50</Text>
-                        <Text style={styles.balanceBTC}>.00333 BTC</Text>
+                        <Text style={styles.balanceUSD}>${balanceUSD}</Text>
+                        <Text style={styles.balanceBTC}>{balanceBTC} BTC</Text>
                         <Text style={styles.balanceDescription}>Your bitcoin</Text>
                     </TouchableOpacity>
 

@@ -28,8 +28,8 @@ export function newAccountInit() {
 }
 
 export const NEW_ACCOUNT_SUCCESS = "NEW_ACCOUNT_SUCCESS"
-export function newAccountSuccess(person) {
-    return {type: NEW_ACCOUNT_SUCCESS, person}
+export function newAccountSuccess(person, privateKey) {
+    return {type: NEW_ACCOUNT_SUCCESS, person, privateKey}
 }
 
 export const NEW_ACCOUNT_FAILURE = "NEW_ACCOUNT_FAILURE"
@@ -51,6 +51,22 @@ export const UPDATE_ACCOUNT_FAILURE = "UPDATE_ACCOUNT_FAILURE"
 export function updateAccountFailure(error) {
     return {type: UPDATE_ACCOUNT_FAILURE, error}
 }
+
+export const UPDATE_BALANCE_INIT = "UPDATE_BALANCE_INIT"
+export function updateBalanceInit() {
+    return {type: UPDATE_BALANCE_INIT}
+}
+
+export const UPDATE_BALANCE_SUCCESS = "UPDATE_BALANCE_SUCCESS"
+export function updateBalanceSuccess(balance) {
+    return {type: UPDATE_BALANCE_SUCCESS, balance}
+}
+
+export const UPDATE_BALANCE_FAILURE = "UPDATE_BALANCE_FAILURE"
+export function updateBalanceFailure(error) {
+    return {type: UPDATE_BALANCE_FAILURE, error}
+}
+
 
 export const FIREBASE_AUTH_INIT = "FIREBASE_AUTH_INIT"
 export function firebaseAuthInit() {
@@ -146,9 +162,10 @@ export const CreateNewAccount = () => {
                 default_currency: "usd"
             }
 
-            api.NewAccount(state.general.uid, inputPerson).then(person => {
-                dispatch(newAccountSuccess(person))
-                Actions.home()
+            api.NewAccount(state.general.uid, inputPerson).then(response => {
+                dispatch(newAccountSuccess(response.person, response.privateKey))
+                const action = LoadApp();
+                action(dispatch, getState);
 
             }).catch(error => {
                 // error
@@ -186,12 +203,22 @@ export const UpdateAccount = (updateDict) => {
 // load App
 export const LoadApp = () => {
     return (dispatch, getState) => {
+        // TODO: loading screen
+        dispatch(updateBalanceInit())
         const state = getState()
 
         if (state.general.authenticated) {
-            Actions.home()
-        }
-        else {
+            const address = state.general.person.address_bitcoin
+
+            api.GetBalance(address).then((balance) => {
+              dispatch(updateBalanceSuccess(balance))
+              Actions.home()
+
+            }).catch((error) => {
+              dispatch(updateBalanceFailure(error))
+              //TODO: do something if error
+            })
+        } else {
             Actions.splash()
         }
     }
