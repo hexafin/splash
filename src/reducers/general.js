@@ -19,6 +19,9 @@ import {
     UPDATE_BALANCE_INIT,
     UPDATE_BALANCE_SUCCESS,
     UPDATE_BALANCE_FAILURE,
+    UPDATE_FRIENDS_INIT,
+    UPDATE_FRIENDS_SUCCESS,
+    UPDATE_FRIENDS_FAILURE,
     SIGN_OUT
 } from "../actions/general";
 
@@ -38,7 +41,9 @@ const initialState = {
     isUpdatingAccount: false,
     errorUpdatingAccount: null,
     isUpdatingBalance: false,
-    errorUpdatingBalance: null
+    errorUpdatingBalance: null,
+    isUpdatingFriends: false,
+    errorUpdatingFriends: null
 };
 
 export default function generalReducer(state = initialState, action) {
@@ -156,6 +161,26 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isUpdatingBalance: false,
                 errorUpdatingBalance: action.error
+            }
+
+        case UPDATE_FRIENDS_INIT:
+            return {
+                ...state,
+                isUpdatingFriends: true
+            }
+
+        case UPDATE_FRIENDS_SUCCESS:
+            return {
+                ...state,
+                isUpdatingFriends: false,
+                friends: action.friends
+            }
+
+        case UPDATE_FRIENDS_FAILURE:
+            return {
+                ...state,
+                isUpdatingFriends: false,
+                errorUpdatingFriends: action.error
             }
 
         case SIGN_OUT:

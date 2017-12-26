@@ -3,7 +3,9 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
-    return state
+  return {
+      friends: state.general.friends
+  }
 }
 
 

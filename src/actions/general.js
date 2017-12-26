@@ -67,6 +67,20 @@ export function updateBalanceFailure(error) {
     return {type: UPDATE_BALANCE_FAILURE, error}
 }
 
+export const UPDATE_FRIENDS_INIT = "UPDATE_FRIENDS_INIT"
+export function updateFriendsInit() {
+    return {type: UPDATE_FRIENDS_INIT}
+}
+
+export const UPDATE_FRIENDS_SUCCESS = "UPDATE_FRIENDS_SUCCESS"
+export function updateFriendsSuccess(friends) {
+    return {type: UPDATE_FRIENDS_SUCCESS, friends}
+}
+
+export const UPDATE_FRIENDS_FAILURE = "UPDATE_FRIENDS_FAILURE"
+export function updateFriendsFailure(error) {
+    return {type: UPDATE_FRIENDS_FAILURE, error}
+}
 
 export const FIREBASE_AUTH_INIT = "FIREBASE_AUTH_INIT"
 export function firebaseAuthInit() {
@@ -209,10 +223,20 @@ export const LoadApp = () => {
 
         if (state.general.authenticated) {
             const address = state.general.person.address_bitcoin
+            const user_id = state.general.person.facebook_id
+            const access_token = state.general.facebookToken
 
             api.GetBalance(address).then((balance) => {
               dispatch(updateBalanceSuccess(balance))
-              Actions.home()
+
+              dispatch(updateFriendsInit())
+              api.LoadFriends(user_id, access_token).then(friends => {
+                dispatch(updateFriendsSuccess(friends))
+                Actions.home()
+              }).catch(error => {
+                dispatch(updateFriendsFailure(error))
+                //TODO: do something if error
+              })
 
             }).catch((error) => {
               dispatch(updateBalanceFailure(error))

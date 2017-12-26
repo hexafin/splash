@@ -31,16 +31,15 @@ const friend = {
     emoji: '😍'
 }
 
-const friends = [friend, friend, friend]
-const recents = [recent, recent, recent]
+const recents = []
 
-const Transaction = ({transactionType = 'pay'}) => {
+const Transaction = ({transactionType = 'pay', friends}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
 
     const sections = [
-        {data: [], title: 'Recents'},
+      //  {data: [], title: 'Recents'},
         {data: [], title: 'Friends'},
     ];
 
@@ -51,13 +50,15 @@ const Transaction = ({transactionType = 'pay'}) => {
         if (section.title == 'Recents') {
             for (let i = 0; i < recents.length; i++) {
                 const friend = recents[i];
-                data.push({...friend, key: (sectionIndex.toString() + i.toString())})
+                const name = friend.first_name + ' ' + friend.last_name
+                data.push({...friend, type: 'friend', name: name, key: (sectionIndex.toString() + i.toString())})
             }
         }
         if (section.title == 'Friends') {
             for (let i = 0; i < friends.length; i++) {
                 const friend = friends[i];
-                data.push({...friend, key: (sectionIndex.toString() + i.toString())})
+                const name = friend.first_name + ' ' + friend.last_name
+                data.push({...friend, type: 'friend', name: name, key: (sectionIndex.toString() + i.toString())})
             }
         }
         if (data.length == 0) {
@@ -74,7 +75,7 @@ const Transaction = ({transactionType = 'pay'}) => {
                 {/*<EmojiButton title="Send to bitcoin address" emoji="🤷‍♀️" />*/}
             {/*</View>*/}
 
-            <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
+            <SectionList style={{padding: 15}}
                          stickySectionHeadersEnabled={false}
                          renderItem={({item}) => <Friend {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     body: {
-        paddingTop: 0
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     },
     sectionHeader: {
         backgroundColor: 'rgba(0, 0, 0, 0)',

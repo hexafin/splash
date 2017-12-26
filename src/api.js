@@ -120,7 +120,7 @@ function BuildBitcoinTransaction(from, to, privateKey, amtBTC) {
     return new Promise((resolve, reject) => {
 
       GetBalance(from).then((balanceSatoshi) => {
-      
+
           if (amtBTC < balanceSatoshi*0.00000001) {
               bitcoinTransaction.sendTransaction({
                   from: from,
@@ -207,7 +207,37 @@ function NewTransaction(uid, type, other_person, emoji, conversion_rate_at_trans
         })
 
     })
+}
 
+function LoadFriends(user_id, access_token) {
+  // get facebook friends
+  return new Promise ((resolve, reject) => {
+
+    const APIaddress = "https://graph.facebook.com/v2.11/$/friends".replace('$', user_id)
+    const friends = []
+
+    axios.get(
+        APIaddress,
+        {params: {
+                access_token: access_token
+            }}
+    ).then(response => {
+      const friendsData = response.data.data
+      for (friend of friendsData) {
+
+        firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
+          if (!person.empty) {
+            friends.push(person.docs[0].data())
+          }
+        }).catch(error => {
+            reject(error)
+        });
+      }
+      resolve(friends)
+    }).catch(error => {
+      reject(error)
+    })
+  })
 }
 
 // log
@@ -232,6 +262,7 @@ export default api = {
     UsernameExists: UsernameExists,
     BuildBitcoinTransaction: BuildBitcoinTransaction,
     NewTransaction: NewTransaction,
+    LoadFriends: LoadFriends,
     GetBalance: GetBalance,
     Log: Log
 }
