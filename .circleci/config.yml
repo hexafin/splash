@@ -1,0 +1,11 @@
+version: 2
+
+dependencies:
+  pre:
+    #
+
+deployment:
+  staging:
+    branch: staging
+    commands:
+      -
