@@ -33,7 +33,7 @@ const friend = {
 
 const recents = []
 
-const Transaction = ({transactionType = 'pay', friends}) => {
+const Transaction = ({transactionType = 'pay', friends, friendsSearchChange}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
@@ -50,15 +50,13 @@ const Transaction = ({transactionType = 'pay', friends}) => {
         if (section.title == 'Recents') {
             for (let i = 0; i < recents.length; i++) {
                 const friend = recents[i];
-                const name = friend.first_name + ' ' + friend.last_name
-                data.push({...friend, type: 'friend', name: name, key: (sectionIndex.toString() + i.toString())})
+                data.push({...friend, type: 'friend', key: (sectionIndex.toString() + i.toString())})
             }
         }
         if (section.title == 'Friends') {
             for (let i = 0; i < friends.length; i++) {
                 const friend = friends[i];
-                const name = friend.first_name + ' ' + friend.last_name
-                data.push({...friend, type: 'friend', name: name, key: (sectionIndex.toString() + i.toString())})
+                data.push({...friend, type: 'friend', key: (sectionIndex.toString() + i.toString())})
             }
         }
         if (data.length == 0) {
@@ -91,7 +89,7 @@ const Transaction = ({transactionType = 'pay', friends}) => {
                 <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
             </View>
             <View style={styles.search}>
-                <Input input={{}} placeholder={'Search for username, email, etc.'}/>
+                <Input input={{}} placeholder={'Search for name, email, etc.'} onChange={friendsSearchChange}/>
             </View>
             {renderSections}
         </View>
