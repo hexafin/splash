@@ -4,7 +4,9 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
-    return state
+    return {
+      isCreatingTransaction: state.transactions.isCreatingTransaction
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
