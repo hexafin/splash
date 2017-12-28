@@ -12,23 +12,23 @@ import PropTypes from 'prop-types'
 export const Input = ({onChange, secureTextEntry, value, placeholder, name,...inputProps, input}) => {
 
 	return (
-			<TextInput 
+			<TextInput
 				{...inputProps}
-				onChangeText={ input.onChange } 
-				name={name} value={value} 
-				placeholder={placeholder} 
+				onChangeText={ onChange }
+				name={name} value={value}
+				placeholder={placeholder}
 				style={[styles.input]}
 				onBlur={input.onBlur}
 				secureTextEntry={secureTextEntry}
         onFocus={input.onFocus}
         value={input.value}
         />
-			
+
 		)
 }
 
 export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, placeholder, name,...inputProps, input}) => {
-	
+
 	const inputStyle = [styles.multiInput]
 	if (inputPosition == 'firstInput') {
 		inputStyle.push(styles.firstInput)
@@ -37,24 +37,24 @@ export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, pla
 	}
 
 	return (
-				<TextInput 
+				<TextInput
 					{...inputProps}
-					onChangeText={ input.onChange } 
-					name={name} value={value} 
-					placeholder={placeholder} 
+					onChangeText={ onChange } 
+					name={name} value={value}
+					placeholder={placeholder}
 					style={[inputStyle, inputStyle == 'firstInput' : styles.firstInput, inputStyle == 'lastInput' : style.lastInput]}
 					onBlur={input.onBlur}
 					secureTextEntry={secureTextEntry}
 					// style={styles.multiInput}
 	        onFocus={input.onFocus}
 	        value={input.value}
-        />	
+        />
 		)
 }
 
 
 /**
-* MultiInputBlock 
+* MultiInputBlock
 * @param inputs = array of objects with the following properties
 * 	name: String: input-name --> this will be the name in the redux store
 * 	placeholder: String: input-placeholder  --> visible placeholder
@@ -70,17 +70,17 @@ export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 		} else {
 			inputPosition = null
 		}
-		return <Field 
-							name={field.name} 
+		return <Field
+							name={field.name}
 							key={index}
-							placeholder={field.placeholder} 
-							component={MultiInput} 
+							placeholder={field.placeholder}
+							component={MultiInput}
 							inputPosition={inputPosition}
 							secureTextEntry={secureTextEntry}
                             autoCorrect={false}
 							spellCheck={false}
 					 />
-	}) 
+	})
 	return (
 			<View style={styles.multiInputContainer}>
 				{renderInputs}
@@ -128,6 +128,3 @@ const styles = StyleSheet.create({
     }
 
 })
-
-
-

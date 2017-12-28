@@ -82,6 +82,11 @@ export function updateFriendsFailure(error) {
     return {type: UPDATE_FRIENDS_FAILURE, error}
 }
 
+export const FRIENDS_SEARCH_CHANGE = "FRIENDS_SEARCH_CHANGE"
+export function friendsSearchChange(query) {
+    return {type: FRIENDS_SEARCH_CHANGE, query}
+}
+
 export const FIREBASE_AUTH_INIT = "FIREBASE_AUTH_INIT"
 export function firebaseAuthInit() {
     return {type: FIREBASE_AUTH_INIT}

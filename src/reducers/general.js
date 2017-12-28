@@ -22,6 +22,7 @@ import {
     UPDATE_FRIENDS_INIT,
     UPDATE_FRIENDS_SUCCESS,
     UPDATE_FRIENDS_FAILURE,
+    FRIENDS_SEARCH_CHANGE,
     SIGN_OUT
 } from "../actions/general";
 
@@ -33,6 +34,7 @@ const initialState = {
     errorLinkingFacebook: null,
     facebookToken: null,
     person: {},
+    friends: [],
     privateKey: null,
     uid: null,
     balance: null,
@@ -43,6 +45,7 @@ const initialState = {
     isUpdatingBalance: false,
     errorUpdatingBalance: null,
     isUpdatingFriends: false,
+    friendsSearchQuery: '',
     errorUpdatingFriends: null
 };
 
@@ -182,6 +185,12 @@ export default function generalReducer(state = initialState, action) {
                 isUpdatingFriends: false,
                 errorUpdatingFriends: action.error
             }
+
+        case FRIENDS_SEARCH_CHANGE:
+          return {
+            ...state,
+            friendsSearchQuery: action.query
+          }
 
         case SIGN_OUT:
             return initialState
