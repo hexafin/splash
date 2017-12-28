@@ -6,6 +6,7 @@ import {
     StyleSheet,
     ScrollView,
     TextInput,
+    ActivityIndicator,
     TouchableOpacity,
 } from 'react-native';
 import {connect} from "react-redux";
@@ -105,14 +106,16 @@ export default class SetAmount extends Component {
                                                                                   amtUSD: this.state.usdAmount,
                                                                                   amtBTC: this.state.btcAmount,
                                                                                   })}>
-                        {this.props.transactionType == 'pay' &&
-                        <Text style={styles.footerButtonText}>
-                            Pay
-                        </Text>}
-                        {this.props.transactionType == 'request' &&
-                        <Text style={styles.footerButtonText}>
-                            Request payment
-                        </Text>}
+                        {this.props.transactionType == 'pay' && !this.props.isCreatingTransaction &&
+                          <Text style={styles.footerButtonText}>
+                              Pay
+                          </Text>}
+                        {this.props.transactionType == 'request' && !this.props.isCreatingTransaction &&
+                          <Text style={styles.footerButtonText}>
+                              Request payment
+                          </Text>}
+                        {this.props.isCreatingTransaction &&
+                          <ActivityIndicator size="large" color="white" />}
                     </TouchableOpacity>
                 </View>
             </View>
