@@ -16,7 +16,6 @@ import BackButton from "../universal/BackButton";
 import {Actions} from "react-native-router-flux"
 import Friend from "../universal/Friend"
 import EmojiCircle from "../universal/EmojiCircle"
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
 // list of emojis to be rendered. 3 per row

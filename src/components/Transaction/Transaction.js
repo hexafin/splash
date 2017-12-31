@@ -89,7 +89,7 @@ const Transaction = ({transactionType = 'pay', friends, friendsSearchChange}) =>
                 <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
             </View>
             <View style={styles.search}>
-                <Input input={{}} placeholder={'Search for name, email, etc.'} onChange={friendsSearchChange}/>
+                <Input input={{onChange: friendsSearchChange}} placeholder={'Search for name, email, etc.'}/>
             </View>
             {renderSections}
         </View>
