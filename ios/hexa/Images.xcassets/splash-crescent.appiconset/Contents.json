@@ -3,55 +3,55 @@
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "splash-letter-8.png",
+      "filename" : "splash-crescent-2.png",
       "scale" : "2x"
     },
     {
       "size" : "20x20",
       "idiom" : "iphone",
-      "filename" : "splash-letter-5.png",
+      "filename" : "splash-crescent-5.png",
       "scale" : "3x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "splash-letter-6.png",
+      "filename" : "splash-crescent-3.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "splash-letter-4.png",
+      "filename" : "splash-crescent-4.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "splash-letter-9.png",
+      "filename" : "splash-crescent-9.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "splash-letter-7.png",
+      "filename" : "splash-crescent-6.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "splash-letter-2.png",
+      "filename" : "splash-crescent-8.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "splash-letter-3.png",
+      "filename" : "splash-crescent-7.png",
       "scale" : "3x"
     },
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "splash-letter-1.png",
+      "filename" : "splash-crescent-1.png",
       "scale" : "1x"
     }
   ],
