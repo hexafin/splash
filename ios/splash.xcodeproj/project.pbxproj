@@ -1610,7 +1610,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 12D8FBC9AE489477815E65F0 /* Pods-hexa.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "Coin Logo";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "splash-crescent";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bryce Bjork (29C64V5GZB)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: Bryce Bjork (29C64V5GZB)";
@@ -1654,7 +1654,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A93195BF23D40A86A3B0A00B /* Pods-hexa.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "Coin Logo";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "splash-crescent";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bryce Bjork (29C64V5GZB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
