@@ -34,8 +34,9 @@ function NewBitcoinWallet() {
     }
 }
 
-const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pictureURL, address=null, city=null,
-                    state=null, zipCode=null, country=null, phoneNumber=null, coinbaseId=null}) => {
+const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pictureURL, defaultCurrency="USD",
+                    address=null, city=null, state=null, zipCode=null, country=null, phoneNumber=null,
+                    coinbaseId=null}) => {
 
     return new Promise ((resolve, reject) => {
 
@@ -51,15 +52,15 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
             last_name: lastName,
             email: email,
             facebook_id: facebookId,
-            picture_url: pictureURL,
-            address_bitcoin: bitcoinWallet.address,
+            coinbase_id: coinbaseId,
+            default_currency: defaultCurrency
+            // picture_url: pictureURL,
             // phone_number: phoneNumber,
             // address: address,
             // city: city,
             // state: state,
             // zip_code: zipCode,
             // country: country,
-            // coinbase_id: coinbaseId,
         }
 
         firestore.collection("people").doc(uid).set(newPerson).then(() => {
