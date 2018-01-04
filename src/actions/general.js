@@ -1,10 +1,12 @@
 import {Actions} from "react-native-router-flux"
 import api from "../api"
 import { FBLoginManager } from 'react-native-facebook-login'
+import {NativeModules, NativeEventEmitter} from 'react-native'
 var axios = require('axios')
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
 let analytics = firebase.analytics()
+let CoinbaseApi = require('NativeModules').CoinbaseApi;
 analytics.setAnalyticsCollectionEnabled(true)
 
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
@@ -20,6 +22,21 @@ export function linkFacebookSuccess(data) {
 export const LINK_FACEBOOK_FAILURE = "LINK_FACEBOOK_FAILURE"
 export function linkFacebookFailure(error) {
     return {type: LINK_FACEBOOK_FAILURE, error}
+}
+
+export const LINK_COINBASE_INIT = "LINK_COINBASE_INIT"
+export function linkCoinbaseInit() {
+    return {type: LINK_COINBASE_INIT}
+}
+
+export const LINK_COINBASE_SUCCESS = "LINK_COINBASE_SUCCESS"
+export function linkCoinbaseSuccess(data) {
+    return {type: LINK_COINBASE_SUCCESS, data}
+}
+
+export const LINK_COINBASE_FAILURE = "LINK_COINBASE_FAILURE"
+export function linkCoinbaseFailure(error) {
+    return {type: LINK_COINBASE_FAILURE, error}
 }
 
 export const NEW_ACCOUNT_INIT = "NEW_ACCOUNT_INIT"
@@ -80,6 +97,11 @@ export function updateFriendsSuccess(friends) {
 export const UPDATE_FRIENDS_FAILURE = "UPDATE_FRIENDS_FAILURE"
 export function updateFriendsFailure(error) {
     return {type: UPDATE_FRIENDS_FAILURE, error}
+}
+
+export const FRIENDS_SEARCH_CHANGE = "FRIENDS_SEARCH_CHANGE"
+export function friendsSearchChange(query) {
+    return {type: FRIENDS_SEARCH_CHANGE, query}
 }
 
 export const FIREBASE_AUTH_INIT = "FIREBASE_AUTH_INIT"
@@ -152,6 +174,36 @@ export const LinkFacebook = () => {
     }
 }
 
+export const LinkCoinbase = () => {
+    return (dispatch, getState) => {
+    const state = getState()
+    dispatch(linkCoinbaseInit())
+    CoinbaseApi.startAuthentication('ClientID', 'ClientSecret') //TODO: replace these values
+    const { EventEmitter } = NativeModules;
+    eventEmitter = new NativeEventEmitter(EventEmitter);
+    eventEmitter.addListener("CoinbaseOAuthComplete", (data) => {
+      if(data.access_token && data.refresh_token && data.expires_in) {
+        let t = new Date();
+        t.setSeconds(t.getSeconds() + data.expires_in);
+
+        const coinbase_data = {coinbase_access_token: data.access_token, coinbase_refresh_token: data.refresh_token, coinbase_expires_at: t.toString()}
+
+        api.UpdateAccount(state.general.uid, coinbase_data).then(() => {
+          dispatch(linkCoinbaseSuccess(coinbase_data))
+
+          const action = LoadApp()
+          action(dispatch, getState)
+        }).catch((error) => {
+          dispatch(linkCoinbaseFailure(error))
+        })
+      } else {
+        dispatch(linkCoinbaseFailure(data))
+      }
+    });
+    EventEmitter.startObserving();
+  }
+}
+
 // create new account
 export const CreateNewAccount = () => {
     return (dispatch, getState) => {
@@ -178,9 +230,8 @@ export const CreateNewAccount = () => {
 
             api.NewAccount(state.general.uid, inputPerson).then(response => {
                 dispatch(newAccountSuccess(response.person, response.privateKey))
-                const action = LoadApp();
-                action(dispatch, getState);
 
+                Actions.coinbase()
             }).catch(error => {
                 // error
                 dispatch(newAccountFailure(error))

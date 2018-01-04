@@ -25,7 +25,7 @@ const ConfirmDetails = ({CreateNewAccount}) => {
                 <Text style={styles.headerText}>Everything looking good?</Text>
             </View>
             <View style={styles.body}>
-                <MultiInputBlock 
+                <MultiInputBlock
                     inputs={[
                         {
                             name: 'first_name',
@@ -43,7 +43,7 @@ const ConfirmDetails = ({CreateNewAccount}) => {
                 />
             </View>
             <View style={styles.footer}>
-                <Button title="Finish setup" onPress={() => CreateNewAccount()}/>
+                <Button title="Continue" onPress={() => CreateNewAccount()}/>
             </View>
         </KeyboardAvoidingView>
     )

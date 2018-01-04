@@ -10,6 +10,9 @@ import {
     LINK_FACEBOOK_INIT,
     LINK_FACEBOOK_SUCCESS,
     LINK_FACEBOOK_FAILURE,
+    LINK_COINBASE_INIT,
+    LINK_COINBASE_SUCCESS,
+    LINK_COINBASE_FAILURE,
     NEW_ACCOUNT_INIT,
     NEW_ACCOUNT_SUCCESS,
     NEW_ACCOUNT_FAILURE,
@@ -22,6 +25,7 @@ import {
     UPDATE_FRIENDS_INIT,
     UPDATE_FRIENDS_SUCCESS,
     UPDATE_FRIENDS_FAILURE,
+    FRIENDS_SEARCH_CHANGE,
     SIGN_OUT
 } from "../actions/general";
 
@@ -30,9 +34,12 @@ const initialState = {
     isAuthenticating: false,
     errorAuthenticating: null,
     isLinkingFacebook: false,
+    isLinkingCoinbase: false,
+    errorLinkingCoinbase: null,
     errorLinkingFacebook: null,
     facebookToken: null,
     person: {},
+    friends: [],
     privateKey: null,
     uid: null,
     balance: null,
@@ -43,6 +50,7 @@ const initialState = {
     isUpdatingBalance: false,
     errorUpdatingBalance: null,
     isUpdatingFriends: false,
+    friendsSearchQuery: '',
     errorUpdatingFriends: null
 };
 
@@ -86,6 +94,7 @@ export default function generalReducer(state = initialState, action) {
                 isLinkingFacebook: false,
                 facebookToken: action.data.token,
                 person: {
+                    ...state.person,
                     picture_url: action.data.picture_url,
                     first_name: action.data.first_name,
                     last_name: action.data.last_name,
@@ -100,6 +109,31 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isLinkingFacebook: false,
                 errorLinkingFacebook: action.error
+            }
+
+        case LINK_COINBASE_INIT:
+            return {
+                ...state,
+                isLinkingCoinbase: true
+            }
+
+        case LINK_COINBASE_SUCCESS:
+            return {
+                ...state,
+                isLinkingCoinbase: false,
+                person: {
+                    ...state.person,
+                    coinbase_access_token: action.data.coinbase_access_token,
+                    coinbase_refresh_token: action.data.coinbase_refresh_token,
+                    coinbase_expires_at: action.data.coinbase_expires_at,
+                }
+            }
+
+        case LINK_COINBASE_FAILURE:
+            return {
+                ...state,
+                isLinkingCoinbase: false,
+                errorLinkingCoinbase: action.error
             }
 
         case NEW_ACCOUNT_INIT:
@@ -182,6 +216,12 @@ export default function generalReducer(state = initialState, action) {
                 isUpdatingFriends: false,
                 errorUpdatingFriends: action.error
             }
+
+        case FRIENDS_SEARCH_CHANGE:
+          return {
+            ...state,
+            friendsSearchQuery: action.query
+          }
 
         case SIGN_OUT:
             return initialState

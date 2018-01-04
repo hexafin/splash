@@ -11,13 +11,20 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "AppDelegate.h"
 #import <Firebase.h>
+#import "CoinbaseOAuth.h"
+#import "CoinbaseApi.h"
+#import "EventEmitter.h"
+#import <React/RCTBridge.h>
+#import <React/RCTEventEmitter.h>
 @import Firebase;
 @import UIKit;
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
-@implementation AppDelegate
+@implementation AppDelegate {
+  RCTEventEmitter *_eventDispatcher;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -27,7 +34,7 @@
   // jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   // DEVELOP WITH NODE
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"hexa"
                                                initialProperties:nil
@@ -48,11 +55,40 @@
     [FBSDKAppEvents activateApp];
 }
 
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation];
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+  BOOL success = NO;
+  if ([[url scheme] isEqualToString:@"com.hexa-splash.coinbase-oauth"]) {
+    [CoinbaseOAuth finishOAuthAuthenticationForUrl:url
+                                          clientId:[CoinbaseApi getClientId]
+                                      clientSecret:[CoinbaseApi getClientSecret]
+                                        completion:^(id result, NSError *error) {
+                                          if (error) {
+                                            [[[UIAlertView alloc] initWithTitle:@"OAuth Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                          } else {
+                                            /* Send an app event with the API key */
+                                            /* { */
+                                            /*     "access_token" = xxxxxxxxxxxxxxxxxxxxxxxxxx; */
+                                            /*     "expires_in" = 7200; */
+                                            /*     "refresh_token" = yyyyyyyyyyyyyyyyyyyyyyyyyy; */
+                                            /*     "scope" = "user balance transfer"; */
+                                            /*     "token_type" = bearer; */
+                                            /* } */
+                                            [EventEmitter emitEventWithName:@"CoinbaseOAuthComplete" andPayload:result];
+                                          }
+                                        }];
+        success = YES;
+      }
+  
+  if (!success) {
+    success = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                             openURL:url
+                                                   sourceApplication:sourceApplication
+                                                          annotation:annotation];
+  }
+  return success;
 }
 
 @end

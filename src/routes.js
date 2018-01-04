@@ -6,6 +6,7 @@ import Home from "./components/Home"
 import Splash from "./components/Splash"
 import ChooseUsername from "./components/ChooseUsername"
 import Welcome from "./components/Welcome"
+import Coinbase from "./components/Coinbase"
 import ConfirmDetails from "./components/ConfirmDetails"
 import ChoosePassword from "./components/ChoosePassword"
 import ManageFunds from "./components/ManageFunds"
@@ -27,6 +28,7 @@ const scenes = Actions.create(
                 <Scene key="splash" component={Splash} hideNavBar={true}/>
                 <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true}/>
                 <Scene key="welcome" component={Welcome} hideNavBar={true}/>
+                <Scene key="coinbase" component={Coinbase} hideNavBar={true}/>
                 <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
                 <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
                 <Scene key="manageFunds" component={ManageFunds} hideNavBar={true}/>

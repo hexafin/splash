@@ -76,7 +76,7 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
 
 }
 
-const UpdateAccount = (uid, {updateDict}) => {
+const UpdateAccount = (uid, updateDict) => {
 
     return new Promise ((resolve, reject) => {
 
@@ -228,7 +228,9 @@ function LoadFriends(user_id, access_token) {
 
         firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
           if (!person.empty) {
-            friends.push(person.docs[0].data())
+            const newFriend = person.docs[0].data()
+            const name = newFriend.first_name + ' ' + newFriend.last_name
+            friends.push({...newFriend, name})
           }
         }).catch(error => {
             reject(error)

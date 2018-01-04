@@ -5,6 +5,7 @@ import {
     Text,
     StyleSheet,
     TouchableOpacity,
+    TextInput,
     KeyboardAvoidingView
 } from "react-native"
 import {colors} from "../../lib/colors"
