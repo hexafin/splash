@@ -75,7 +75,7 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
 
 }
 
-const UpdateAccount = (uid, {updateDict}) => {
+const UpdateAccount = (uid, updateDict) => {
 
     return new Promise ((resolve, reject) => {
 

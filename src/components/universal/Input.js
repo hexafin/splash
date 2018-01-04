@@ -14,7 +14,7 @@ export const Input = ({onChange, secureTextEntry, value, placeholder, name,...in
 	return (
 			<TextInput
 				{...inputProps}
-				onChangeText={ onChange }
+				onChangeText={ input.onChange }
 				name={name} value={value}
 				placeholder={placeholder}
 				style={[styles.input]}
@@ -39,7 +39,7 @@ export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, pla
 	return (
 				<TextInput
 					{...inputProps}
-					onChangeText={ onChange } 
+					onChangeText={ onChange }
 					name={name} value={value}
 					placeholder={placeholder}
 					style={[inputStyle, inputStyle == 'firstInput' : styles.firstInput, inputStyle == 'lastInput' : style.lastInput]}
