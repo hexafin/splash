@@ -93,6 +93,26 @@ const UpdateAccount = (uid, updateDict) => {
 
 }
 
+const HandleCoinbase = (uid, coinbaseDict) => {
+  //get coinbase user info and update firebase
+  
+  return new Promise ((resolve, reject) => {
+    const AuthStr = 'Bearer '.concat(coinbaseDict.coinbase_access_token);
+    axios.get('https://api.coinbase.com/v2/user', { headers: { Authorization: AuthStr } }).then(response => {
+      const coinbaseData = response.data
+
+      const updateData = { coinbase_id: coinbaseData.data.id, coinbase_info: {...coinbaseDict, ...coinbaseData.data}}
+      UpdateAccount(uid, updateData).then(() => {
+        resolve(updateData)
+      }).catch((error) => {
+        reject(error)
+      })
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
 // takes address and returns balance or error
 // calls internal api
 function GetBalance(address) {
@@ -262,6 +282,7 @@ export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
     UsernameExists: UsernameExists,
+    HandleCoinbase: HandleCoinbase,
     BuildBitcoinTransaction: BuildBitcoinTransaction,
     NewTransaction: NewTransaction,
     LoadFriends: LoadFriends,
