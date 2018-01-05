@@ -48,7 +48,7 @@ RCT_EXPORT_METHOD(startAuthentication:(NSString *)clientId clientSecret:(NSStrin
   [CoinbaseApi setClientId:clientId];
   [CoinbaseApi setClientSecret:clientSecret];
   [CoinbaseOAuth startOAuthAuthenticationWithClientId:clientId
-         scope:@"user balance transfer"
+         scope:@"wallet:user:read"
    redirectUri:@"com.hexa-splash.coinbase-oauth://coinbase-oauth"
           meta:nil];
 }
