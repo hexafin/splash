@@ -38,6 +38,7 @@ const initialState = {
     errorLinkingCoinbase: null,
     errorLinkingFacebook: null,
     facebookToken: null,
+    coinbase_info: {},
     person: {},
     friends: [],
     privateKey: null,
@@ -123,10 +124,9 @@ export default function generalReducer(state = initialState, action) {
                 isLinkingCoinbase: false,
                 person: {
                     ...state.person,
-                    coinbase_access_token: action.data.coinbase_access_token,
-                    coinbase_refresh_token: action.data.coinbase_refresh_token,
-                    coinbase_expires_at: action.data.coinbase_expires_at,
-                }
+                    coinbase_id: action.data.coinbase_id,
+                },
+                coinbase_info: action.data.coinbase_info,
             }
 
         case LINK_COINBASE_FAILURE:

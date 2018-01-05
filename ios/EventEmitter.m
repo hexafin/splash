@@ -24,7 +24,7 @@ RCT_EXPORT_METHOD(startObserving)
                                              object:nil];
 }
 
-- (void)stopObserving
+RCT_EXPORT_METHOD(stopObserving)
 {
   [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
