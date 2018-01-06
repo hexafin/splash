@@ -7,8 +7,8 @@ import {bindActionCreators} from "redux";
 const mapStatetoProps = state => {
     return {
         person: state.general.person,
-        balanceBTC: state.general.balance.btc,
-        balanceUSD: (state.general.balance.usd).toFixed(2),
+        balanceBTC: (state.general.balance.BTC).toFixed(6),
+        balanceUSD: 0, // TODO: use exchange rate to get USD from BTC
         transactions: state.transactions
     }
 }

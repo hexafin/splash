@@ -11,7 +11,6 @@ import {
 
 var initialState = {
     isCreatingTransaction: false,
-    transactionBeingCreated: null
 };
 
 export default function transactionsReducer(state = initialState, action) {
@@ -23,7 +22,6 @@ export default function transactionsReducer(state = initialState, action) {
                 ...state,
                 isCreatingTransaction: true,
                 errorCreatingTransaction: null,
-                transactionBeingCreated: action.transaction
             }
 
         case NEW_TRANSACTION_SUCCESS:
@@ -31,14 +29,12 @@ export default function transactionsReducer(state = initialState, action) {
                 ...state,
                 errorCreatingTransaction: null,
                 isCreatingTransaction: false,
-                transactionBeingCreated: null
             }
 
         case NEW_TRANSACTION_FAILURE:
             return {
                 ...state,
                 isCreatingTransaction: false,
-                transactionBeingCreated: null,
                 errorCreatingTransaction: action.error
             }
 

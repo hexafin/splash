@@ -19,8 +19,8 @@ export function getTransactionsFailure() {
 }
 
 export const NEW_TRANSACTION_INIT = "NEW_TRANSACTION_INIT";
-export function newTransactionInit(transaction) {
-    return {type: NEW_TRANSACTION_INIT, transaction}
+export function newTransactionInit() {
+    return {type: NEW_TRANSACTION_INIT,}
 }
 
 export const NEW_TRANSACTION_SUCCESS = "NEW_TRANSACTION_SUCCESS";
@@ -66,26 +66,49 @@ export function declineTransactionFailure(transactionRef) {
 
 export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) => {
   return (dispatch, getState) => {
+    //TODO: fee handling and requests
+    //TODO: make sure has enough balance
+
     const state = getState();
-    const fromAddress = state.general.person.address_bitcoin;
     const uid = state.general.uid;
-    const exchangeRate = state.general.balance.exchangeRate;
+    const balance = state.general.balance
     const satoshi = Math.floor(amtBTC*SATOSHI_CONVERSION);
-    const toAddress = '12kZjgtaRftmbdieUeXnScbnbF9AqU6gTh' //using dummy, should pull from personRef
-    const key = state.general.privateKey; //pull from redux persist
+    const receipt = {
+      transactionType: type,
+      to: other_person,
+      emoji: emoji,
+      btcAmount: amtBTC,
+      usdAmount: amtUSD,
+    }
 
-    if (type == 'pay') {
-      const transaction = {
-                  transactionType: type,
-                  to: other_person, //need to get person ref here
-                  emoji: emoji,
-                  usdAmount: amtUSD,
-                  btcAmount: amtBTC,
-                }
+    dispatch(newTransactionInit());
 
-      dispatch(newTransactionInit(transaction));
-      Actions.receipt(transaction); // w/ tran info
-      dispatch(newTransactionSuccess());
+    if (type == 'pay' && satoshi < balance.satoshi) {
+      api.getUidFromFB(other_person.facebook_id).then(toId => {
+        if (type == 'pay') {
+
+          const transaction = {
+            from_id: uid,
+            to_id: toId,
+            amount: satoshi,
+            fee: null,
+            relative_amount: amtUSD,
+            emoji: emoji
+          }
+
+          api.NewTransaction(transaction).then(() => {
+            Actions.receipt(receipt); // w/ tran info
+            dispatch(newTransactionSuccess());
+          }).catch(error => {
+            dispatch(newTransactionFailure(error))
+          })
+        }
+
+      }).catch(error => {
+        dispatch(newTransactionFailure(error))
+      })
+    } else {
+      dispatch(newTransactionFailure('Error: not enough BTC'))
     }
   }
 }

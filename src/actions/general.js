@@ -280,12 +280,12 @@ export const LoadApp = () => {
         const state = getState()
 
         if (state.general.authenticated) {
-            const address = state.general.person.address_bitcoin
+            const uid = state.general.uid
             const user_id = state.general.person.facebook_id
             const access_token = state.general.facebookToken
 
-            api.GetBalance(address).then((balance) => {
-              dispatch(updateBalanceSuccess(balance))
+            api.GetBalance(uid).then((balance) => {
+              dispatch(updateBalanceSuccess({satoshi: balance, BTC: balance*0.00000001}))
 
               dispatch(updateFriendsInit())
               api.LoadFriends(user_id, access_token).then(friends => {
