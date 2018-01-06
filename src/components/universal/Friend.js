@@ -17,7 +17,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import fontelloConfig from '../../assets/fonts/config.json';
 const Icon = createIconSetFromFontello(fontelloConfig);
 
-const Friend = ({picture_url, name, username, type, emoji, date, usdValue, btcValue, friendCallback, leftCallback, rightCallback}) => {
+const Friend = ({picture_url, name, username, type, emoji, date, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
     return (
         <TouchableOpacity activeOpacity={(type !== 'friend') ? 1 : 0.5} style={styles.container} onPress={friendCallback}>
           <Image
@@ -31,8 +31,8 @@ const Friend = ({picture_url, name, username, type, emoji, date, usdValue, btcVa
           ]}
           {(type == 'transaction' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-              <Text style={styles.usdText}>${usdValue}</Text>
-              <Text style={styles.btcText}>{btcValue} BTC</Text>
+              <Text style={styles.usdText}>${relative_amount}</Text>
+              <Text style={styles.btcText}>{amount} {currency}</Text>
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
             <View key={2} style={{ flexDirection: 'row'}}>

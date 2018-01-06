@@ -4,6 +4,7 @@ let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
 let bitcoinTransaction = require('bitcoin-transaction')
 var axios = require('axios')
+const SATOSHI_CONVERSION = 100000000;
 
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
@@ -42,7 +43,7 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
         const bitcoinWallet = NewBitcoinWallet()
 
         const dateTime = Date.now();
-        const ts = Math.floor(dateTime / 1000);
+        const ts = Math.floor(dateTime*1.0 / 1000);
 
         const newPerson = {
             joined: ts,
@@ -183,7 +184,76 @@ function GetUidFromFB(facebook_id) {
   })
 }
 
-function LoadFriends(facebook_id, access_token) {
+function LoadTransactions(uid) {
+  const getTransactions = (direction) => {
+    return new Promise ((resolve, reject) => {
+      const transactions = []
+      let index = 0
+      firestore.collection("transactions").where(direction, "==", uid).get().then(query => {
+        if(query.empty) {
+          resolve([])
+        }
+        query.forEach(doc => {
+          transactions.push(doc.data())
+          firestore.collection("people").doc(doc.data().to_id).get().then(response => {
+            const person = response.data()
+            transactions[index] = {
+                                   ...transactions[index],
+                                   ...person,
+                                   name: person.first_name + " " + person.last_name,
+                                   type: 'transaction',
+                                  }
+            index += 1
+            if(query.size == index) {
+              resolve(transactions)
+            }
+          }).catch(error => {
+            reject(error)
+          })
+        })
+      }).catch(error => {
+          reject(error)
+      })
+    })
+  }
+
+  return new Promise ((resolve, reject) => {
+    // get transactions from me and to me
+    Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
+      const result = values[0].concat(values[1])
+      //sort by timestamp_completed
+      result.sort((a, b) => {
+        return b.timestamp_completed - a.timestamp_completed
+      })
+
+      // convert satoshi to BTC and make timestamp_completed readable as date
+      const resultLength = result.length
+      for(let i = 0; i < resultLength; i++) {
+        let date = new Date(result[i].timestamp_completed*1000);
+        let hours = date.getHours()
+        let amPM = ''
+        if (hours > 12) {
+          hours -= 12
+          amPM = 'PM'
+        } else {
+          amPM = 'AM'
+        }
+        let minutes = date.getMinutes()
+        if (minutes < 10) {
+          minutes = "0" + minutes
+        }
+        result[i].date = hours + ":" + minutes + amPM + " " + (1+date.getMonth()) + '/' + date.getDate()
+        result[i].amount = ((result[i].amount*1.0)/SATOSHI_CONVERSION).toFixed(4)
+      }
+
+      resolve(result)
+    }).catch(errors => {
+      reject(errors)
+    })
+  })
+}
+
+function LoadFriends(user_id, access_token) {
   // get facebook friends
   return new Promise ((resolve, reject) => {
 
@@ -240,6 +310,7 @@ export default api = {
     GetUidFromFB: GetUidFromFB,
     NewTransaction: NewTransaction,
     LoadFriends: LoadFriends,
+    LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,
     GetExchangeRate: GetExchangeRate,
     Log: Log
