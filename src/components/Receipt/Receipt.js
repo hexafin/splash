@@ -15,14 +15,14 @@ import {Actions} from "react-native-router-flux"
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
 
-const Receipt = ({transactionType, to, emoji, btcAmount, usdAmount, LoadApp}) => (
+const Receipt = ({transactionType, to, emoji, amount, relative_amount, LoadApp}) => (
     <View style={styles.container}>
         <View style={styles.page}>
             {transactionType == 'pay' && <Text style={styles.header}>Payment sent 🚀</Text>}
             {transactionType == 'request' && <Text style={styles.header}>Request sent 🚀</Text>}
             <View style={styles.balance}>
-                <Text style={styles.balanceUSD}>${usdAmount}</Text>
-                <Text style={styles.balanceBTC}>{btcAmount} BTC</Text>
+                <Text style={styles.balanceUSD}>${relative_amount}</Text>
+                <Text style={styles.balanceBTC}>{amount} BTC</Text>
             </View>
             <Friend {...to} emoji={emoji} type={'emoji'}/>
             {transactionType == 'request' &&

@@ -43,7 +43,8 @@ const initialState = {
     friends: [],
     privateKey: null,
     uid: null,
-    balance: null,
+    crypto: null,
+    exchangeRate: {},
     isCreatingAccount: false,
     errorCreatingAccount: null,
     isUpdatingAccount: false,
@@ -187,7 +188,10 @@ export default function generalReducer(state = initialState, action) {
             return {
                 ...state,
                 isUpdatingBalance: false,
-                balance: action.balance
+                crypto: action.balance,
+                exchangeRate: {
+                  BTC: action.exchangeRate
+                }
             }
 
         case UPDATE_BALANCE_FAILURE:

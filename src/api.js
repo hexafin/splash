@@ -54,12 +54,6 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
             facebook_id: facebookId,
             picture_url: pictureURL,
             address_bitcoin: bitcoinWallet.address,
-            crypto: {
-              BTC: {
-                address: null,
-                balance: 0,
-              }
-            },
             // phone_number: phoneNumber,
             // address: address,
             // city: city,
@@ -126,7 +120,7 @@ function GetBalance(uid) {
     return new Promise((resolve, reject) => {
       firestore.collection("people").doc(uid).get().then(person => {
           if(person.exists) {
-            resolve(person.data().crypto.BTC.balance)
+            resolve(person.data().crypto)
           } else {
             reject("Error: person does not exist")
           }
@@ -136,48 +130,20 @@ function GetBalance(uid) {
     });
 }
 
-// takes from, to, privateKey, amtSatoshi
-// outputs txHash or error
-function BuildBitcoinTransaction(from, to, privateKey, amtBTC) {
-    return new Promise((resolve, reject) => {
-
-      GetBalance(from).then((balanceSatoshi) => {
-
-          if (amtBTC < balanceSatoshi*0.00000001) {
-              bitcoinTransaction.sendTransaction({
-                  from: from,
-                  to: to,
-                  privKeyWIF: privateKey,
-                  // TODO: figure out better way of converting to BTC
-                  btc: amtBTC,
-                  fee: 'hour',
-                  dryrun: true,
-                  network: "mainnet",
-                  // feesProvider: bitcoinTransaction.providers.fees.mainnet.earn,
-                  // utxoProvider: bitcoinTransaction.providers.utxo.mainnet.blockchain,
-              }).then(txHex => {
-                  const tx = bitcoin.Transaction.fromHex(txhex);
-                  const txid = tx.getId();
-                  resolve({
-                    txid: txid,
-                    txhex: txhex,
-                  });
-              }).catch(error => {
-                  reject(error);
-              });
-          } else {
-              reject('Error: not enough btc.');
-          }
-      }).catch(error => {
-          reject(error);
-      });
+function GetExchangeRate(currency='BTC') {
+  return new Promise((resolve, reject) => {
+    const APIaddress = 'https://api.coinbase.com/v2/exchange-rates?currency=$'.replace('$', currency)
+    axios.get(APIaddress).then(response => {
+      resolve(response.data.data.rates)
+    }).catch(error => {
+      reject(error)
+    })
   })
 }
 
 // new transaction
 function NewTransaction({from_id, to_id, amount, fee, emoji, relative_amount, type='friend', relative_currency='USD', currency='BTC'}) {
 
-    // TODO: process differently if type='request'
 
     return new Promise ((resolve, reject) => {
 
@@ -206,7 +172,7 @@ function NewTransaction({from_id, to_id, amount, fee, emoji, relative_amount, ty
     })
 }
 
-function getUidFromFB(facebook_id) {
+function GetUidFromFB(facebook_id) {
   return new Promise ((resolve, reject) => {
     firestore.collection("people").where("facebook_id", "==", facebook_id).get().then(query => {
       const person = query.docs[0]
@@ -217,11 +183,11 @@ function getUidFromFB(facebook_id) {
   })
 }
 
-function LoadFriends(user_id, access_token) {
+function LoadFriends(facebook_id, access_token) {
   // get facebook friends
   return new Promise ((resolve, reject) => {
 
-    const APIaddress = "https://graph.facebook.com/v2.11/$/friends".replace('$', user_id)
+    const APIaddress = "https://graph.facebook.com/v2.11/$/friends".replace('$', facebook_id)
     const friends = []
 
     axios.get(
@@ -271,10 +237,10 @@ export default api = {
     UpdateAccount: UpdateAccount,
     UsernameExists: UsernameExists,
     HandleCoinbase: HandleCoinbase,
-    getUidFromFB: getUidFromFB,
-    BuildBitcoinTransaction: BuildBitcoinTransaction,
+    GetUidFromFB: GetUidFromFB,
     NewTransaction: NewTransaction,
     LoadFriends: LoadFriends,
     GetBalance: GetBalance,
+    GetExchangeRate: GetExchangeRate,
     Log: Log
 }

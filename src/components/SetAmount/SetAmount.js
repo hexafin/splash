@@ -64,10 +64,8 @@ export default class SetAmount extends Component {
 
     // real time convert USD to bitcoin and save to state
     inputChange = (e) => {
-        //TODO: use real btc exchange rate
-        const btcExchange = 0.004
         const usdAmount = e.replace(/[^\d.-]/g, '')
-        const btcAmount = (btcExchange * usdAmount).toFixed(4)
+        const btcAmount = (usdAmount/this.props.btcExchangeRate).toFixed(4)
         this.setState({usdAmount: usdAmount, btcAmount: btcAmount})
     }
 

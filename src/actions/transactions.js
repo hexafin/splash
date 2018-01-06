@@ -71,20 +71,13 @@ export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) =
 
     const state = getState();
     const uid = state.general.uid;
-    const balance = state.general.balance
+    const balance = state.general.crypto.BTC.balance
     const satoshi = Math.floor(amtBTC*SATOSHI_CONVERSION);
-    const receipt = {
-      transactionType: type,
-      to: other_person,
-      emoji: emoji,
-      btcAmount: amtBTC,
-      usdAmount: amtUSD,
-    }
 
     dispatch(newTransactionInit());
 
-    if (type == 'pay' && satoshi < balance.satoshi) {
-      api.getUidFromFB(other_person.facebook_id).then(toId => {
+    if (type == 'pay' && satoshi < balance) {
+      api.GetUidFromFB(other_person.facebook_id).then(toId => {
         if (type == 'pay') {
 
           const transaction = {
@@ -96,8 +89,9 @@ export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) =
             emoji: emoji
           }
 
-          api.NewTransaction(transaction).then(() => {
-            Actions.receipt(receipt); // w/ tran info
+          api.NewTransaction(transaction).then(receipt => {
+            const btcAmount = (receipt.amount/SATOSHI_CONVERSION).toFixed(4)
+            Actions.receipt({...receipt, type: undefined, transactionType: type, to: other_person, amount: btcAmount}); // w/ tran info
             dispatch(newTransactionSuccess());
           }).catch(error => {
             dispatch(newTransactionFailure(error))
