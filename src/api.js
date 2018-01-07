@@ -195,12 +195,14 @@ function LoadTransactions(uid) {
         }
         query.forEach(doc => {
           transactions.push(doc.data())
-          firestore.collection("people").doc(doc.data().to_id).get().then(response => {
+          const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
+          firestore.collection("people").doc(doc.data()[otherPersonId]).get().then(response => {
             const person = response.data()
             transactions[index] = {
                                    ...transactions[index],
                                    ...person,
                                    name: person.first_name + " " + person.last_name,
+                                   date: ConvertTimestampToDate(transactions[index].timestamp_completed),
                                    type: 'transaction',
                                   }
             index += 1
@@ -225,27 +227,6 @@ function LoadTransactions(uid) {
       result.sort((a, b) => {
         return b.timestamp_completed - a.timestamp_completed
       })
-
-      // convert satoshi to BTC and make timestamp_completed readable as date
-      const resultLength = result.length
-      for(let i = 0; i < resultLength; i++) {
-        let date = new Date(result[i].timestamp_completed*1000);
-        let hours = date.getHours()
-        let amPM = ''
-        if (hours > 12) {
-          hours -= 12
-          amPM = 'PM'
-        } else {
-          amPM = 'AM'
-        }
-        let minutes = date.getMinutes()
-        if (minutes < 10) {
-          minutes = "0" + minutes
-        }
-        result[i].date = hours + ":" + minutes + amPM + " " + (1+date.getMonth()) + '/' + date.getDate()
-        result[i].amount = ((result[i].amount*1.0)/SATOSHI_CONVERSION).toFixed(4)
-      }
-
       resolve(result)
     }).catch(errors => {
       reject(errors)
@@ -253,7 +234,24 @@ function LoadTransactions(uid) {
   })
 }
 
-function LoadFriends(user_id, access_token) {
+function ConvertTimestampToDate(timestamp) {
+  let date = new Date(timestamp*1000);
+  let hours = date.getHours()
+  let amPM = ''
+  if (hours > 12) {
+    hours -= 12
+    amPM = 'PM'
+  } else {
+    amPM = 'AM'
+  }
+  let minutes = date.getMinutes()
+  if (minutes < 10) {
+    minutes = "0" + minutes
+  }
+  return hours + ":" + minutes + amPM + " " + (1+date.getMonth()) + '/' + date.getDate()
+}
+
+function LoadFriends(facebook_id, access_token) {
   // get facebook friends
   return new Promise ((resolve, reject) => {
 
