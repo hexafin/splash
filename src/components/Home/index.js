@@ -13,7 +13,7 @@ const mapStatetoProps = state => {
         person: state.general.person,
         balanceBTC: (BTC).toFixed(4),
         balanceUSD: (BTC*USDExchangeRate).toFixed(2),
-        transactions: state.transactions
+        transactions: state.transactions.transactions
     }
 }
 

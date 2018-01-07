@@ -9,6 +9,8 @@ let analytics = firebase.analytics()
 let CoinbaseApi = require('NativeModules').CoinbaseApi;
 analytics.setAnalyticsCollectionEnabled(true)
 
+import {LoadTransactions} from "./transactions"
+
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
 export function linkFacebookInit() {
     return {type: LINK_FACEBOOK_INIT}
@@ -283,6 +285,9 @@ export const LoadApp = () => {
             const uid = state.general.uid
             const facebook_id = state.general.person.facebook_id
             const access_token = state.general.facebookToken
+
+            const loadTransactions = LoadTransactions()
+            loadTransactions(dispatch, getState)
 
             api.GetBalance(uid).then((balance) => {
 

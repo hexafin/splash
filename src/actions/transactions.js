@@ -14,8 +14,8 @@ export function getTransactionsSuccess(transactions) {
 }
 
 export const GET_TRANSACTIONS_FAILURE = "GET_TRANSACTIONS_FAILURE";
-export function getTransactionsFailure() {
-    return {type: GET_TRANSACTIONS_FAILURE}
+export function getTransactionsFailure(error) {
+    return {type: GET_TRANSACTIONS_FAILURE, error}
 }
 
 export const NEW_TRANSACTION_INIT = "NEW_TRANSACTION_INIT";
@@ -104,5 +104,17 @@ export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) =
     } else {
       dispatch(newTransactionFailure('Error: not enough BTC'))
     }
+  }
+}
+
+export const LoadTransactions = (uid) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    dispatch(getTransactionsInit())
+    api.LoadTransactions(state.general.uid).then(transactions => {
+      dispatch(getTransactionsSuccess(transactions))
+    }).catch(error => {
+      dispatch(getTransactionsFailure(error))
+    })
   }
 }

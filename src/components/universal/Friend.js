@@ -1,4 +1,3 @@
-// presentational component for friend entry
 
 import React from "react"
 import {
@@ -16,8 +15,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import fontelloConfig from '../../assets/fonts/config.json';
 const Icon = createIconSetFromFontello(fontelloConfig);
+const SATOSHI_CONVERSION = 100000000;
 
-const Friend = ({picture_url, name, username, type, emoji, date, usdValue, btcValue, friendCallback, leftCallback, rightCallback}) => {
+// presentational component for friend or transaction entry
+//can have type waiting, request, transaction, friend, emoji, or none depending on usage
+const Friend = ({picture_url, name, username, type, emoji, date, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
+    const convertedAmount = (amount*1.0/SATOSHI_CONVERSION).toFixed(4)
     return (
         <TouchableOpacity activeOpacity={(type !== 'friend') ? 1 : 0.5} style={styles.container} onPress={friendCallback}>
           <Image
@@ -31,8 +34,8 @@ const Friend = ({picture_url, name, username, type, emoji, date, usdValue, btcVa
           ]}
           {(type == 'transaction' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-              <Text style={styles.usdText}>${usdValue}</Text>
-              <Text style={styles.btcText}>{btcValue} BTC</Text>
+              <Text style={styles.relativeAmountText}>${relative_amount}</Text>
+              <Text style={styles.amountText}>{convertedAmount} {currency}</Text>
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
             <View key={2} style={{ flexDirection: 'row'}}>
@@ -107,12 +110,12 @@ const styles = StyleSheet.create({
       color: '#333333',
       fontWeight: '600',
     },
-    usdText: {
+    relativeAmountText: {
       fontWeight: '600',
       fontSize: 16,
       color: colors.purple,
     },
-    btcText: {
+    amountText: {
       paddingLeft: 5,
       fontSize: 12,
       color: '#A1A1A1',
