@@ -64,39 +64,53 @@ export function declineTransactionFailure(transactionRef) {
     return {type: DECLINE_TRANSACTION_FAILURE, transactionRef}
 }
 
-export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) => {
+export const CreateTransaction = ({transactionType, other_person, emoji, relative_amount, amount}) => {
   return (dispatch, getState) => {
     //TODO: fee handling and requests
-    //TODO: make sure has enough balance
 
     const state = getState();
     const uid = state.general.uid;
     const balance = state.general.crypto.BTC.balance
-    const satoshi = Math.floor(amtBTC*SATOSHI_CONVERSION);
+    const satoshi = Math.floor(amount*SATOSHI_CONVERSION);
+    let transaction = {}
 
     dispatch(newTransactionInit());
 
-    if (type == 'pay' && satoshi < balance) {
-      api.GetUidFromFB(other_person.facebook_id).then(toId => {
-        if (type == 'pay') {
+    if ((transactionType == 'pay' && satoshi < balance) || transactionType == 'request') {
+      api.GetUidFromFB(other_person.facebook_id).then(otherId => {
 
-          const transaction = {
+        if (transactionType == 'pay') {
+
+          transaction = {
+            transactionType: transactionType,
             from_id: uid,
-            to_id: toId,
+            to_id: otherId,
             amount: satoshi,
             fee: null,
-            relative_amount: amtUSD,
+            relative_amount: relative_amount,
             emoji: emoji
           }
+        } else {
+
+          transaction = {
+            transactionType: transactionType,
+            from_id: otherId,
+            to_id: uid,
+            amount: satoshi,
+            fee: null,
+            relative_amount: relative_amount,
+            emoji: emoji
+          }
+        }
+
 
           api.NewTransaction(transaction).then(receipt => {
             const btcAmount = (receipt.amount/SATOSHI_CONVERSION).toFixed(4)
-            Actions.receipt({...receipt, type: undefined, transactionType: type, to: other_person, amount: btcAmount}); // w/ tran info
+            Actions.receipt({...receipt, type: undefined, transactionType: transactionType, to: other_person, amount: btcAmount}); // w/ tran info
             dispatch(newTransactionSuccess());
           }).catch(error => {
             dispatch(newTransactionFailure(error))
           })
-        }
 
       }).catch(error => {
         dispatch(newTransactionFailure(error))

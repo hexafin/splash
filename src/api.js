@@ -143,33 +143,57 @@ function GetExchangeRate(currency='BTC') {
 }
 
 // new transaction
-function NewTransaction({from_id, to_id, amount, fee, emoji, relative_amount, type='friend', relative_currency='USD', currency='BTC'}) {
-
+function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type='friend', relative_currency='USD', currency='BTC'}) {
 
     return new Promise ((resolve, reject) => {
 
         const dateTime = Date.now();
         const timestamp_initiated = Math.floor(dateTime / 1000);
+        if (transactionType == 'pay') {
+          const newTransaction = {
+            from_id: from_id,
+            to_id: to_id,
+            amount: amount,
+            relative_amount: relative_amount,
+            fee: fee,
+            emoji: emoji,
+            type: type,
+            currency: currency,
+            relative_currency: relative_currency,
+            timestamp_initiated: timestamp_initiated,
+            timestamp_completed: timestamp_initiated
+          }
 
-        const newTransaction = {
-          from_id: from_id,
-          to_id: to_id,
-          amount: amount,
-          relative_amount: relative_amount,
-          fee: fee,
-          emoji: emoji,
-          type: type,
-          currency: currency,
-          relative_currency: relative_currency,
-          timestamp_initiated: timestamp_initiated,
-          timestamp_completed: timestamp_initiated
+          firestore.collection("transactions").add(newTransaction).then(() => {
+              resolve(newTransaction)
+          }).catch(error => {
+              reject(error)
+          })
+        } else {
+          const newRequest = {
+            from_id: from_id,
+            to_id: to_id,
+            amount: amount,
+            relative_amount: relative_amount,
+            fee: fee,
+            emoji: emoji,
+            type: type,
+            accepted: false,
+            declined: false,
+            number_of_reminders: 0,
+            currency: currency,
+            relative_currency: relative_currency,
+            timestamp_initiated: timestamp_initiated,
+            timestamp_completed: null,
+            timestamp_declined: null,
+          }
+
+          firestore.collection("requests").add(newRequest).then(() => {
+              resolve(newRequest)
+          }).catch(error => {
+              reject(error)
+          })
         }
-
-        firestore.collection("transactions").add(newTransaction).then(() => {
-            resolve(newTransaction)
-        }).catch(error => {
-            reject(error)
-        })
     })
 }
 
@@ -193,26 +217,26 @@ function LoadTransactions(uid) {
         if(query.empty) {
           resolve([])
         }
-        query.forEach(doc => {
-          transactions.push(doc.data())
+        for(let i = 0; i < query.size; i++) {
+
           const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
-          firestore.collection("people").doc(doc.data()[otherPersonId]).get().then(response => {
+          firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
             const person = response.data()
-            transactions[index] = {
-                                   ...transactions[index],
-                                   ...person,
-                                   name: person.first_name + " " + person.last_name,
-                                   date: ConvertTimestampToDate(transactions[index].timestamp_completed),
-                                   type: 'transaction',
-                                  }
-            index += 1
-            if(query.size == index) {
-              resolve(transactions)
-            }
+            const transaction = query.docs[i].data()
+            transactions.push({
+                               ...transaction,
+                               ...person,
+                               name: person.first_name + " " + person.last_name,
+                               date: ConvertTimestampToDate(transaction.timestamp_completed),
+                               type: 'transaction',
+                              })
+          if(query.size == (i+1)) {
+            resolve(transactions)
+          }
           }).catch(error => {
             reject(error)
           })
-        })
+        }
       }).catch(error => {
           reject(error)
       })
