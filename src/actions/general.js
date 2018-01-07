@@ -75,8 +75,8 @@ export function updateBalanceInit() {
 }
 
 export const UPDATE_BALANCE_SUCCESS = "UPDATE_BALANCE_SUCCESS"
-export function updateBalanceSuccess(balance) {
-    return {type: UPDATE_BALANCE_SUCCESS, balance}
+export function updateBalanceSuccess(balance, exchangeRate) {
+    return {type: UPDATE_BALANCE_SUCCESS, balance, exchangeRate}
 }
 
 export const UPDATE_BALANCE_FAILURE = "UPDATE_BALANCE_FAILURE"
@@ -280,15 +280,20 @@ export const LoadApp = () => {
         const state = getState()
 
         if (state.general.authenticated) {
-            const address = state.general.person.address_bitcoin
-            const user_id = state.general.person.facebook_id
+            const uid = state.general.uid
+            const facebook_id = state.general.person.facebook_id
             const access_token = state.general.facebookToken
 
-            api.GetBalance(address).then((balance) => {
-              dispatch(updateBalanceSuccess(balance))
+            api.GetBalance(uid).then((balance) => {
+
+              api.GetExchangeRate().then(exchangeRate => {
+                dispatch(updateBalanceSuccess(balance, exchangeRate))
+              }).catch(error => {
+                dispatch(updateBalanceFailure(error))
+              })
 
               dispatch(updateFriendsInit())
-              api.LoadFriends(user_id, access_token).then(friends => {
+              api.LoadFriends(facebook_id, access_token).then(friends => {
                 dispatch(updateFriendsSuccess(friends))
                 Actions.home()
               }).catch(error => {

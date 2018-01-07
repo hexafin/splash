@@ -3,12 +3,16 @@ import Home from "./Home"
 import {connect} from "react-redux"
 import {SignIn} from "../../actions/general";
 import {bindActionCreators} from "redux";
+import api from '../../api'
 
 const mapStatetoProps = state => {
+    const BTC = (state.general.crypto.BTC.balance*0.00000001)
+    const USDExchangeRate = parseFloat(state.general.exchangeRate.BTC.USD)
+
     return {
         person: state.general.person,
-        balanceBTC: state.general.balance.btc,
-        balanceUSD: (state.general.balance.usd).toFixed(2),
+        balanceBTC: (BTC).toFixed(4),
+        balanceUSD: (BTC*USDExchangeRate).toFixed(2),
         transactions: state.transactions
     }
 }
