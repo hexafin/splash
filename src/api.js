@@ -226,11 +226,9 @@ function LoadTransactions(uid) {
             transactions.push({
                                ...transaction,
                                ...person,
-                               name: person.first_name + " " + person.last_name,
-                               date: ConvertTimestampToDate(transaction.timestamp_completed),
                                type: 'transaction',
                               })
-          if(query.size == (i+1)) {
+          if(query.size == transactions.length) {
             resolve(transactions)
           }
           }).catch(error => {
@@ -294,14 +292,15 @@ function LoadFriends(facebook_id, access_token) {
         firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
           if (!person.empty) {
             const newFriend = person.docs[0].data()
-            const name = newFriend.first_name + ' ' + newFriend.last_name
-            friends.push({...newFriend, name})
+            friends.push(newFriend)
+            if (friends.length == friendsData.length) {
+              resolve(friends)
+            }
           }
         }).catch(error => {
             reject(error)
         });
       }
-      resolve(friends)
     }).catch(error => {
       reject(error)
     })
@@ -335,5 +334,6 @@ export default api = {
     LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,
     GetExchangeRate: GetExchangeRate,
+    ConvertTimestampToDate: ConvertTimestampToDate,
     Log: Log
 }

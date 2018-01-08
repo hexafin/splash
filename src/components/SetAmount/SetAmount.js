@@ -65,7 +65,7 @@ export default class SetAmount extends Component {
     // real time convert USD to bitcoin and save to state
     inputChange = (e) => {
         const relativeAmount = e.replace(/[^\d.-]/g, '')
-        const amount = (relativeAmount/this.props.btcExchangeRate).toFixed(4)
+        const amount = (relativeAmount/this.props.ExchangeRate).toFixed(4)
         this.setState({relativeAmount: relativeAmount, amount: amount})
     }
 
@@ -81,10 +81,10 @@ export default class SetAmount extends Component {
                             keyboardType={'numeric'}
                             maxLength={7}
                             autoFocus={true}
-                            style={styles.balanceUSD}
+                            style={styles.balanceRelativeCurrency}
                             onChangeText={this.inputChange}
                             value={(this.state.relativeAmount == '' ? '' : '$' + this.state.relativeAmount)}/>
-                        <Text style={styles.balanceBTC}>{this.state.amount} BTC</Text>
+                        <Text style={styles.balanceCurrency}>{this.state.amount} BTC</Text>
                     </View>
                     <Text style={styles.sectionHeader}>Recipient</Text>
                     <Friend {...this.props.to} type={'none'}/>
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center"
     },
-    balanceUSD: {
+    balanceRelativeCurrency: {
         textAlign: "center",
         fontSize: 39,
         fontWeight: "700",
         color: colors.purple
     },
-    balanceBTC: {
+    balanceCurrency: {
         textAlign: "center",
         fontSize: 14,
         color: colors.gray

@@ -14,13 +14,16 @@ import { createIconSetFromFontello } from 'react-native-vector-icons';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import fontelloConfig from '../../assets/fonts/config.json';
+import api from '../../api';
 const Icon = createIconSetFromFontello(fontelloConfig);
 const SATOSHI_CONVERSION = 100000000;
 
 // presentational component for friend or transaction entry
 //can have type waiting, request, transaction, friend, emoji, or none depending on usage
-const Friend = ({picture_url, name, username, type, emoji, date, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
+const Friend = ({picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
     const convertedAmount = (amount*1.0/SATOSHI_CONVERSION).toFixed(4)
+    const name = first_name + ' ' + last_name
+    const date = api.ConvertTimestampToDate(timestamp_completed)
     return (
         <TouchableOpacity activeOpacity={(type !== 'friend') ? 1 : 0.5} style={styles.container} onPress={friendCallback}>
           <Image
