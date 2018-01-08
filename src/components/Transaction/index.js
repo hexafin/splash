@@ -8,7 +8,8 @@ const friendSearch = (friends, query) => {
   const upperQuery = query.toUpperCase()
   const result = []
   for (friend of friends) {
-    if (friend.username.toUpperCase().includes(upperQuery) || friend.name.toUpperCase().includes(upperQuery) || friend.email.toUpperCase().includes(upperQuery)) {
+    const name = friend.first_name + ' ' + friend.last_name
+    if (friend.username.toUpperCase().includes(upperQuery) || name.toUpperCase().includes(upperQuery) || friend.email.toUpperCase().includes(upperQuery)) {
       result.push(friend)
     }
   }

@@ -32,8 +32,8 @@ export default class SetAmount extends Component {
         this.state = {
             selectedEmojiFirst: null,
             selectedEmojiSecond: null,
-            btcAmount: 0,
-            usdAmount: '',
+            amount: 0,
+            relativeAmount: '',
         };
 
     }
@@ -64,9 +64,9 @@ export default class SetAmount extends Component {
 
     // real time convert USD to bitcoin and save to state
     inputChange = (e) => {
-        const usdAmount = e.replace(/[^\d.-]/g, '')
-        const btcAmount = (usdAmount/this.props.btcExchangeRate).toFixed(4)
-        this.setState({usdAmount: usdAmount, btcAmount: btcAmount})
+        const relativeAmount = e.replace(/[^\d.-]/g, '')
+        const amount = (relativeAmount/this.props.ExchangeRate).toFixed(4)
+        this.setState({relativeAmount: relativeAmount, amount: amount})
     }
 
     render() {
@@ -81,10 +81,10 @@ export default class SetAmount extends Component {
                             keyboardType={'numeric'}
                             maxLength={7}
                             autoFocus={true}
-                            style={styles.balanceUSD}
+                            style={styles.balanceRelativeCurrency}
                             onChangeText={this.inputChange}
-                            value={(this.state.usdAmount == '' ? '' : '$' + this.state.usdAmount)}/>
-                        <Text style={styles.balanceBTC}>{this.state.btcAmount} BTC</Text>
+                            value={(this.state.relativeAmount == '' ? '' : '$' + this.state.relativeAmount)}/>
+                        <Text style={styles.balanceCurrency}>{this.state.amount} BTC</Text>
                     </View>
                     <Text style={styles.sectionHeader}>Recipient</Text>
                     <Friend {...this.props.to} type={'none'}/>
@@ -95,13 +95,13 @@ export default class SetAmount extends Component {
                 </ScrollView>
                 <View style={styles.footerWrapper}>
                     <TouchableOpacity style={styles.footer}
-                                      disabled={(this.state.btcAmount <= 0 || this.state.selectedEmojiFirst == null)}
+                                      disabled={(this.state.amount <= 0 || this.state.selectedEmojiFirst == null)}
                                       onPress={() => this.props.CreateTransaction({
-                                                                                  type: this.props.transactionType,
+                                                                                  transactionType: this.props.transactionType,
                                                                                   other_person: this.props.to, // TODO: get real person ref
                                                                                   emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
-                                                                                  amtUSD: this.state.usdAmount,
-                                                                                  amtBTC: this.state.btcAmount,
+                                                                                  relative_amount: this.state.relativeAmount,
+                                                                                  amount: this.state.amount,
                                                                                   })}>
                         {this.props.transactionType == 'pay' && !this.props.isCreatingTransaction &&
                           <Text style={styles.footerButtonText}>
@@ -140,13 +140,13 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center"
     },
-    balanceUSD: {
+    balanceRelativeCurrency: {
         textAlign: "center",
         fontSize: 39,
         fontWeight: "700",
         color: colors.purple
     },
-    balanceBTC: {
+    balanceCurrency: {
         textAlign: "center",
         fontSize: 14,
         color: colors.gray
