@@ -31,11 +31,11 @@ const Friend = ({picture_url, first_name, last_name, username, type, emoji, time
             source={{ uri: picture_url}}
           />
           <View style={styles.userInfo}>
-          {type !== 'transaction' && type !== 'request' && type !== 'waiting' && [
+          {type !== 'pay' && type !== 'request' && type !== 'waiting' && [
             <Text key={0} style={styles.nameText}>{name}</Text>,
             <Text key={1} style={styles.userText}>@{username}</Text>
           ]}
-          {(type == 'transaction' || type == 'request' || type == 'waiting') && [
+          {(type == 'pay' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
               <Text style={styles.relativeAmountText}>${relative_amount}</Text>
               {amount !== null && <Text style={styles.amountText}>{convertedAmount} {currency}</Text>}
@@ -70,7 +70,7 @@ const Friend = ({picture_url, first_name, last_name, username, type, emoji, time
               </TouchableOpacity>
             </View>
             ]}
-          {type === 'transaction' && [<Text key={0} style={styles.dateText}>{date}</Text>]}
+          {type === 'pay' && [<Text key={0} style={styles.dateText}>{date}</Text>]}
           </View>
         </TouchableOpacity>
     )
