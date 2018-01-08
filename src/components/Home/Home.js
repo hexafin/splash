@@ -20,7 +20,7 @@ import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
-const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
+const Home = ({uid, person, crypto, exchangeRate, transactions, requests, waiting}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -49,10 +49,10 @@ const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
     // build and order sections from transaction data
     const buildSections = sections.map((section, sectionIndex) => {
         let data = [];
-        for (let i = 0; i < transactions.length; i++) {
-            const transaction = transactions[i];
-            if (transaction.type == section.type) {
-                data.push({...transaction, key: (sectionIndex.toString() + i.toString())})
+        const items = transactions.concat(requests, waiting)
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type == section.type) {
+                data.push({...items[i], key: (sectionIndex.toString() + i.toString())})
             }
         }
         if (data.length == 0) {
@@ -101,8 +101,8 @@ const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
                 </View>
 
                 <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
-                    <Text style={styles.balanceUSD}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
-                    <Text style={styles.balanceBTC}>{balance} BTC</Text>
+                    <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
+                    <Text style={styles.balanceCurrency}>{balance} BTC</Text>
                     <Text style={styles.balanceDescription}>Your bitcoin</Text>
                 </TouchableOpacity>
 
@@ -182,13 +182,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "transparent"
     },
-    balanceUSD: {
+    balanceRelativeCurrency: {
         textAlign: "center",
         fontSize: 30,
         fontWeight: "bold",
         color: colors.purple
     },
-    balanceBTC: {
+    balanceCurrency: {
         textAlign: "center",
         fontSize: 12,
         fontWeight: "400",

@@ -296,69 +296,101 @@ function GetUidFromFB(facebook_id) {
     })
 }
 
-function LoadTransactions(uid) {
-    const getTransactions = (direction) => {
-        return new Promise((resolve, reject) => {
-            const transactions = []
-            let index = 0
-            firestore.collection("transactions").where(direction, "==", uid).get().then(query => {
-                if (query.empty) {
-                    resolve([])
-                }
-                for (let i = 0; i < query.size; i++) {
+function LoadTransactions(uid, transactionType) {
+  const getTransactions = (direction) => {
+    return new Promise ((resolve, reject) => {
+      const transactions = []
+      const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
+      let collection = ''
 
-                    const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
-                    firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
-                        const person = response.data()
-                        const transaction = query.docs[i].data()
-                        transactions.push({
-                            ...transaction,
-                            ...person,
-                            type: 'transaction',
-                        })
-                        if (query.size == transactions.length) {
-                            resolve(transactions)
-                        }
-                    }).catch(error => {
-                        reject(error)
-                    })
-                }
-            }).catch(error => {
-                reject(error)
-            })
-        })
-    }
+      if(transactionType == 'pay') {
+        collection = 'transactions'
+      } else {
+        collection = 'requests'
+      }
 
-    return new Promise((resolve, reject) => {
-        // get transactions from me and to me
-        Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
-            const result = values[0].concat(values[1])
-            //sort by timestamp_completed
-            result.sort((a, b) => {
-                return b.timestamp_completed - a.timestamp_completed
-            })
-            resolve(result)
-        }).catch(errors => {
-            reject(errors)
+      firestore.collection(collection).where(direction, "==", uid).get().then(query => {
+
+        if(query.empty) {
+          resolve([])
+        }
+
+        for(let i = 0; i < query.size; i++) {
+          firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
+            const person = response.data()
+            const transaction = query.docs[i].data()
+
+            if (transactionType != 'request' || (transaction.accepted == false && transaction.declined == false)) {
+              if (direction == 'to_id' && transactionType == 'request') {
+                transactions.push({
+                                   ...transaction,
+                                   ...person,
+                                   type: 'waiting',
+                                  })
+              } else {
+                transactions.push({
+                                   ...transaction,
+                                   ...person,
+                                   type: transactionType,
+                                  })
+              }
+            }
+          if(query.size == transactions.length) {
+            resolve(transactions)
+          }
+          }).catch(error => {
+            reject(error)
+          })
+        }
+      }).catch(error => {
+          reject(error)
+      })
+    })
+  }
+
+  return new Promise ((resolve, reject) => {
+    // get transactions from me and to me
+    Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
+      if (transactionType == 'pay') {
+        const result = values[0].concat(values[1])
+        //sort by timestamp_completed
+        result.sort((a, b) => {
+          return b.timestamp_completed - a.timestamp_completed
         })
+        resolve(result)
+      } else {
+        //sort by timestamp_initiated
+        values[0].sort((a, b) => {
+          return b.timestamp_initiated - a.timestamp_initiated
+        })
+        values[1].sort((a, b) => {
+          return b.timestamp_initiated - a.timestamp_initiated
+        })
+        resolve({waiting: values[1], requests: values[0]})
+      }
+    }).catch(errors => {
+      reject(errors)
     })
 }
 
 function ConvertTimestampToDate(timestamp) {
-    let date = new Date(timestamp * 1000);
-    let hours = date.getHours()
-    let amPM = ''
-    if (hours > 12) {
-        hours -= 12
-        amPM = 'PM'
-    } else {
-        amPM = 'AM'
+  let date = new Date(timestamp * 1000);
+  let hours = date.getHours()
+  let amPM = ''
+  if (hours > 12) {
+    hours -= 12
+    amPM = 'PM'
+  } else {
+    amPM = 'AM'
+    if (hours == 0) {
+      hours = 12
     }
-    let minutes = date.getMinutes()
-    if (minutes < 10) {
-        minutes = "0" + minutes
-    }
-    return hours + ":" + minutes + amPM + " " + (1 + date.getMonth()) + '/' + date.getDate()
+  }
+  let minutes = date.getMinutes()
+  if (minutes < 10) {
+    minutes = "0" + minutes
+  }
+  return hours + ":" + minutes + amPM + " " + (1 + date.getMonth()) + '/' + date.getDate()
 }
 
 function LoadFriends(facebook_id, access_token) {

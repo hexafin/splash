@@ -98,7 +98,7 @@ export default class SetAmount extends Component {
                                       disabled={(this.state.amount <= 0 || this.state.selectedEmojiFirst == null)}
                                       onPress={() => this.props.CreateTransaction({
                                                                                   transactionType: this.props.transactionType,
-                                                                                  other_person: this.props.to, // TODO: get real person ref
+                                                                                  other_person: this.props.to,
                                                                                   emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
                                                                                   relative_amount: this.state.relativeAmount,
                                                                                   amount: this.state.amount,

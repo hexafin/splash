@@ -10,9 +10,8 @@ export function getTransactionsInit() {
 }
 
 export const GET_TRANSACTIONS_SUCCESS = "GET_TRANSACTIONS_SUCCESS";
-
-export function getTransactionsSuccess(transactions) {
-    return {type: GET_TRANSACTIONS_SUCCESS, transactions}
+export function getTransactionsSuccess(transactions, requests) {
+    return {type: GET_TRANSACTIONS_SUCCESS, transactions, requests}
 }
 
 export const GET_TRANSACTIONS_FAILURE = "GET_TRANSACTIONS_FAILURE";
@@ -103,7 +102,7 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
                         from_id: uid,
                         to_id: otherId,
                         amount: satoshi,
-                        fee: null,
+                        fee: {amount: 0}, // TODO: use real fee
                         relative_amount: relative_amount,
                         emoji: emoji
                     }
@@ -114,7 +113,7 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
                         from_id: otherId,
                         to_id: uid,
                         amount: satoshi,
-                        fee: null,
+                        fee: {amount: 0}, // TODO: use real fee
                         relative_amount: relative_amount,
                         emoji: emoji
                     }
@@ -145,13 +144,15 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 }
 
 export const LoadTransactions = (uid) => {
-    return (dispatch, getState) => {
-        const state = getState()
-        dispatch(getTransactionsInit())
-        api.LoadTransactions(state.general.uid).then(transactions => {
-            dispatch(getTransactionsSuccess(transactions))
-        }).catch(error => {
-            dispatch(getTransactionsFailure(error))
-        })
-    }
+  return (dispatch, getState) => {
+    const state = getState()
+    dispatch(getTransactionsInit())
+    const payments = api.LoadTransactions(state.general.uid, 'pay')
+    const requests = api.LoadTransactions(state.general.uid, 'request')
+    Promise.all([payments, requests]).then(values => {
+      dispatch(getTransactionsSuccess(values[0], values[1]))
+    }).catch(error => {
+      dispatch(getTransactionsFailure(error))
+    })
+  }
 }
