@@ -63,10 +63,6 @@ class Home extends Component {
         }
     }
 
-    componentWillMount() {
-
-    }
-
     // notification(title, content, actionOnPress=null, actionTitle=null, dismissTitle="Dismiss") {
     //     this.setState({
     //         modalVisible: true,
@@ -111,9 +107,9 @@ class Home extends Component {
 
     render() {
 
-        const {person, balanceBTC, balanceUSD} = this.props
+        const {person, balanceBTC, balanceUSD, transactions} = this.props
 
-        const transactions = transactions_dummy
+        // const transactions = transactions_dummy
 
         // render blank screen w/o transactions
         const renderBlank = (
@@ -138,8 +134,8 @@ class Home extends Component {
         // use transactions_dummy instead of transactions to load dummy data
         const buildSections = sections.map((section, sectionIndex) => {
             let data = [];
-            for (let i = 0; i < transactions.items.length; i++) {
-                const transaction = transactions.items[i];
+            for (let i = 0; i < transactions.length; i++) {
+                const transaction = transactions[i];
                 if (transaction.type == section.type) {
                     data.push({...transaction, key: (sectionIndex.toString() + i.toString())})
                 }
@@ -196,9 +192,9 @@ class Home extends Component {
                 </View>
 
                 {/* if there are no transactions render blank*/}
-                {transactions.items.length == 0 && renderBlank}
+                {transactions.length == 0 && renderBlank}
                 {/* if there are  transactions render them in sectionList*/}
-                {transactions.items.length !== 0 && renderSections}
+                {transactions.length !== 0 && renderSections}
                 <View style={styles.footer}>
                     <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
                         <Text style={styles.footerButtonText}>

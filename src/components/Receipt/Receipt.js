@@ -15,26 +15,26 @@ import {Actions} from "react-native-router-flux"
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
 
-const Receipt = ({transactionType, to, emoji, btcAmount, usdAmount}) => (
+const Receipt = ({transactionType, to, emoji, amount, relative_amount, LoadApp}) => (
     <View style={styles.container}>
         <View style={styles.page}>
             {transactionType == 'pay' && <Text style={styles.header}>Payment sent 🚀</Text>}
             {transactionType == 'request' && <Text style={styles.header}>Request sent 🚀</Text>}
             <View style={styles.balance}>
-                <Text style={styles.balanceUSD}>${usdAmount}</Text>
-                <Text style={styles.balanceBTC}>{btcAmount} BTC</Text>
+                <Text style={styles.balanceUSD}>${relative_amount}</Text>
+                <Text style={styles.balanceBTC}>{amount} BTC</Text>
             </View>
             <Friend {...to} emoji={emoji} type={'emoji'}/>
             {transactionType == 'request' &&
-            [<Text key={0} style={styles.descriptionText}>We’ll send {to.name} your request.</Text>,
+            [<Text key={0} style={styles.descriptionText}>We’ll send {to.first_name} {to.last_name} your request.</Text>,
                 <Text key={1} style={styles.descriptionText}>Once they accept, They will receive</Text>,
                 <Text key={2} style={styles.descriptionText}>the bitcoin in less than 1 hour.</Text>]}
             {transactionType == 'pay' &&
-            [<Text key={0} style={styles.descriptionText}>We’ll send {to.name} your payment.</Text>,
+            [<Text key={0} style={styles.descriptionText}>We’ll send {to.first_name} {to.last_name} your payment.</Text>,
                 <Text key={1} style={styles.descriptionText}>They’ll receive the bitcoin</Text>,
                 <Text key={2} style={styles.descriptionText}>in less than 1 hour.</Text>]}
         </View>
-        <TouchableOpacity style={styles.footer} onPress={() => Actions.home()}>
+        <TouchableOpacity style={styles.footer} onPress={() => LoadApp()}>
             <Text style={styles.footerButtonText}>
                 Back to home
             </Text>

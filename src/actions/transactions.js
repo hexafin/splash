@@ -14,13 +14,13 @@ export function getTransactionsSuccess(transactions) {
 }
 
 export const GET_TRANSACTIONS_FAILURE = "GET_TRANSACTIONS_FAILURE";
-export function getTransactionsFailure() {
-    return {type: GET_TRANSACTIONS_FAILURE}
+export function getTransactionsFailure(error) {
+    return {type: GET_TRANSACTIONS_FAILURE, error}
 }
 
 export const NEW_TRANSACTION_INIT = "NEW_TRANSACTION_INIT";
-export function newTransactionInit(transaction) {
-    return {type: NEW_TRANSACTION_INIT, transaction}
+export function newTransactionInit() {
+    return {type: NEW_TRANSACTION_INIT,}
 }
 
 export const NEW_TRANSACTION_SUCCESS = "NEW_TRANSACTION_SUCCESS";
@@ -64,28 +64,71 @@ export function declineTransactionFailure(transactionRef) {
     return {type: DECLINE_TRANSACTION_FAILURE, transactionRef}
 }
 
-export const CreateTransaction = ({type, other_person, emoji, amtUSD, amtBTC}) => {
+export const CreateTransaction = ({transactionType, other_person, emoji, relative_amount, amount}) => {
   return (dispatch, getState) => {
+    //TODO: fee handling and requests
+
     const state = getState();
-    const fromAddress = state.general.person.address_bitcoin;
     const uid = state.general.uid;
-    const exchangeRate = state.general.balance.exchangeRate;
-    const satoshi = Math.floor(amtBTC*SATOSHI_CONVERSION);
-    const toAddress = '12kZjgtaRftmbdieUeXnScbnbF9AqU6gTh' //using dummy, should pull from personRef
-    const key = state.general.privateKey; //pull from redux persist
+    const balance = state.general.crypto.BTC.balance
+    const satoshi = Math.floor(amount*SATOSHI_CONVERSION);
+    let transaction = {}
 
-    if (type == 'pay') {
-      const transaction = {
-                  transactionType: type,
-                  to: other_person, //need to get person ref here
-                  emoji: emoji,
-                  usdAmount: amtUSD,
-                  btcAmount: amtBTC,
-                }
+    dispatch(newTransactionInit());
 
-      dispatch(newTransactionInit(transaction));
-      Actions.receipt(transaction); // w/ tran info
-      dispatch(newTransactionSuccess());
+    if ((transactionType == 'pay' && satoshi < balance) || transactionType == 'request') {
+      api.GetUidFromFB(other_person.facebook_id).then(otherId => {
+
+        if (transactionType == 'pay') {
+
+          transaction = {
+            transactionType: transactionType,
+            from_id: uid,
+            to_id: otherId,
+            amount: satoshi,
+            fee: null,
+            relative_amount: relative_amount,
+            emoji: emoji
+          }
+        } else {
+
+          transaction = {
+            transactionType: transactionType,
+            from_id: otherId,
+            to_id: uid,
+            amount: satoshi,
+            fee: null,
+            relative_amount: relative_amount,
+            emoji: emoji
+          }
+        }
+
+
+          api.NewTransaction(transaction).then(receipt => {
+            const btcAmount = (receipt.amount/SATOSHI_CONVERSION).toFixed(4)
+            Actions.receipt({...receipt, type: undefined, transactionType: transactionType, to: other_person, amount: btcAmount}); // w/ tran info
+            dispatch(newTransactionSuccess());
+          }).catch(error => {
+            dispatch(newTransactionFailure(error))
+          })
+
+      }).catch(error => {
+        dispatch(newTransactionFailure(error))
+      })
+    } else {
+      dispatch(newTransactionFailure('Error: not enough BTC'))
     }
+  }
+}
+
+export const LoadTransactions = (uid) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    dispatch(getTransactionsInit())
+    api.LoadTransactions(state.general.uid).then(transactions => {
+      dispatch(getTransactionsSuccess(transactions))
+    }).catch(error => {
+      dispatch(getTransactionsFailure(error))
+    })
   }
 }

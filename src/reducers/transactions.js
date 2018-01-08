@@ -1,5 +1,8 @@
 
 import {
+    GET_TRANSACTIONS_INIT,
+    GET_TRANSACTIONS_SUCCESS,
+    GET_TRANSACTIONS_FAILURE,
     NEW_TRANSACTION_INIT,
     NEW_TRANSACTION_SUCCESS,
     NEW_TRANSACTION_FAILURE
@@ -10,12 +13,42 @@ import {
 } from "../actions/general"
 
 var initialState = {
+    transactions: [],
+    isLoadingTransactions: false,
+    errorLoadingTransactions: null,
     isCreatingTransaction: false,
-    transactionBeingCreated: null
+    errorCreatingTransaction: null
 };
 
 export default function transactionsReducer(state = initialState, action) {
     switch(action.type) {
+
+      case GET_TRANSACTIONS_INIT:
+
+          return {
+              ...state,
+              errorLoadingTransactions: null,
+              isLoadingTransactions: true,
+          }
+
+      case GET_TRANSACTIONS_SUCCESS:
+
+          return {
+              ...state,
+              errorLoadingTransactions: null,
+              transactions: action.transactions,
+              isLoadingTransactions: false,
+
+          }
+
+      case GET_TRANSACTIONS_FAILURE:
+
+          return {
+              ...state,
+              isLoadingTransactions: false,
+              errorLoadingTransactions: action.error,
+
+          }
 
         case NEW_TRANSACTION_INIT:
 
@@ -23,22 +56,21 @@ export default function transactionsReducer(state = initialState, action) {
                 ...state,
                 isCreatingTransaction: true,
                 errorCreatingTransaction: null,
-                transactionBeingCreated: action.transaction
             }
 
         case NEW_TRANSACTION_SUCCESS:
+
             return {
                 ...state,
                 errorCreatingTransaction: null,
                 isCreatingTransaction: false,
-                transactionBeingCreated: null
             }
 
         case NEW_TRANSACTION_FAILURE:
+
             return {
                 ...state,
                 isCreatingTransaction: false,
-                transactionBeingCreated: null,
                 errorCreatingTransaction: action.error
             }
 
