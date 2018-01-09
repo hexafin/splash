@@ -91,7 +91,19 @@ const UpdateAccount = (uid, updateDict) => {
         })
 
     })
+}
 
+const UpdateRequest = (requestId, updateDict) => {
+
+    return new Promise ((resolve, reject) => {
+
+        firestore.collection("requests").doc(requestId).update(updateDict).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+
+    })
 }
 
 const HandleCoinbase = (uid, coinbaseDict) => {
@@ -450,6 +462,7 @@ function Log(type, content) {
 export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
+    UpdateRequest: UpdateRequest,
     UsernameExists: UsernameExists,
     HandleCoinbase: HandleCoinbase,
     GetUidFromFB: GetUidFromFB,

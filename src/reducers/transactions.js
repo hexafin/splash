@@ -3,6 +3,9 @@ import {
     GET_TRANSACTIONS_INIT,
     GET_TRANSACTIONS_SUCCESS,
     GET_TRANSACTIONS_FAILURE,
+    DECLINE_TRANSACTION_INIT,
+    DECLINE_TRANSACTION_SUCCESS,
+    DECLINE_TRANSACTION_FAILURE,
     NEW_TRANSACTION_INIT,
     NEW_TRANSACTION_SUCCESS,
     NEW_TRANSACTION_FAILURE
@@ -18,7 +21,9 @@ var initialState = {
     isLoadingTransactions: false,
     errorLoadingTransactions: null,
     isCreatingTransaction: false,
-    errorCreatingTransaction: null
+    errorCreatingTransaction: null,
+    isDecliningRequest: false,
+    errorDecliningRequest: null,
 };
 
 export default function transactionsReducer(state = initialState, action) {
@@ -51,6 +56,32 @@ export default function transactionsReducer(state = initialState, action) {
               errorLoadingTransactions: action.error,
 
           }
+
+        case DECLINE_TRANSACTION_INIT:
+
+            return {
+                ...state,
+                errorDecliningRequest: null,
+                isDecliningRequest: true,
+            }
+
+        case DECLINE_TRANSACTION_SUCCESS:
+
+            return {
+                ...state,
+                errorDecliningRequest: null,
+                isDecliningRequest: false,
+
+            }
+
+        case DECLINE_TRANSACTION_FAILURE:
+
+            return {
+                ...state,
+                isDecliningRequest: false,
+                errorDecliningRequest: action.error,
+
+            }
 
         case NEW_TRANSACTION_INIT:
 

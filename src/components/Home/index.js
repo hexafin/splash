@@ -1,7 +1,7 @@
 // container for Home page
 import Home from "./Home"
 import {connect} from "react-redux"
-import {SignIn} from "../../actions/general";
+import {DeclineRequest} from "../../actions/transactions";
 import {bindActionCreators} from "redux";
 
 const mapStatetoProps = state => {
@@ -20,7 +20,7 @@ const mapStatetoProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        SignIn
+      DeclineRequest
     }, dispatch)
 }
 

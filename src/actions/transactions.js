@@ -51,9 +51,8 @@ export function acceptTransactionSuccess(transactionRef) {
 }
 
 export const ACCEPT_TRANSACTION_FAILURE = "ACCEPT_TRANSACTION_FAILURE";
-
-export function acceptTransactionFailure(transactionRef) {
-    return {type: ACCEPT_TRANSACTION_FAILURE, transactionRef}
+export function acceptTransactionFailure(error) {
+    return {type: ACCEPT_TRANSACTION_FAILURE, error}
 }
 
 
@@ -70,9 +69,8 @@ export function declineTransactionSuccess(transactionRef) {
 }
 
 export const DECLINE_TRANSACTION_FAILURE = "DECLINE_TRANSACTION_FAILURE";
-
-export function declineTransactionFailure(transactionRef) {
-    return {type: DECLINE_TRANSACTION_FAILURE, transactionRef}
+export function declineTransactionFailure(error) {
+    return {type: DECLINE_TRANSACTION_FAILURE, error}
 }
 
 
@@ -141,6 +139,31 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
             dispatch(newTransactionFailure('Error: not enough BTC'))
         }
     }
+}
+
+export const AcceptRequest = (requestId) => {
+  dispatch(acceptTransactionInit(transactionRef))
+  dispatch(acceptTransactionSuccess(transactionRef))
+  dispatch(acceptTransactionFailure(error))
+}
+
+export const DeclineRequest = (requestId) => {
+  return (dispatch, getState) => {
+    dispatch(declineTransactionInit(requestId))
+    const dateTime = Date.now();
+    const timestamp_declined = Math.floor(dateTime / 1000);
+    const updateDict = {
+      declined: true,
+      timestamp_declined: timestamp_declined,
+    }
+    console.log(updateDict);
+    api.UpdateRequest(requestId, updateDict).then(response => {
+      console.log(response);
+      dispatch(declineTransactionSuccess(requestId))
+    }).catch(error => {
+      dispatch(declineTransactionFailure(error))
+    })
+  }
 }
 
 export const LoadTransactions = (uid) => {
