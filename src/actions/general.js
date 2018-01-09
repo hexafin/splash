@@ -258,7 +258,10 @@ export const CreateNewAccount = () => {
 
             api.NewAccount(state.general.uid, inputPerson).then(response => {
                 dispatch(newAccountSuccess(response.person, response.privateKey))
-                CryptoLink()
+
+                const cryptoLink = CryptoLink()
+                cryptoLink(dispatch, getState)
+
                 Actions.coinbase()
             }).catch(error => {
                 // error
@@ -308,7 +311,8 @@ export const LoadApp = () => {
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
 
-            CryptoLink()
+            const cryptoLink = CryptoLink()
+            cryptoLink(dispatch, getState)
 
             // api.GetBalance(uid).then((balance) => {
             //
