@@ -1,6 +1,7 @@
 import {Actions} from "react-native-router-flux"
 import api from "../api"
 import { FBLoginManager } from 'react-native-facebook-login'
+import {Sentry} from 'react-native-sentry'
 import {NativeModules, NativeEventEmitter} from 'react-native'
 var axios = require('axios')
 import firebase from 'react-native-firebase'
@@ -285,6 +286,12 @@ export const LoadApp = () => {
             const uid = state.general.uid
             const facebook_id = state.general.person.facebook_id
             const access_token = state.general.facebookToken
+
+            Sentry.setUserContext({
+              email: state.general.person.email,
+              userID: uid,
+              username: state.general.person.username,
+            });
 
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
