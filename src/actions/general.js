@@ -3,13 +3,14 @@ import api from "../api"
 import { FBLoginManager } from 'react-native-facebook-login'
 import {NativeModules, NativeEventEmitter} from 'react-native'
 var axios = require('axios')
+let CoinbaseApi = require('NativeModules').CoinbaseApi;
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
 let analytics = firebase.analytics()
-let CoinbaseApi = require('NativeModules').CoinbaseApi;
 analytics.setAnalyticsCollectionEnabled(true)
 
 import {LoadTransactions} from "./transactions"
+import {CryptoLink} from "./crypto"
 
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
 export function linkFacebookInit() {
@@ -234,12 +235,30 @@ export const CreateNewAccount = () => {
                 gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
                 pictureURL: state.general.person.picture_url,
-                default_currency: "usd"
+                default_currency: "USD",
+                crypto: {
+                    BTC: {
+                        balance: 0,
+                        address: null
+                    },
+                    BCH: {
+                        balance: 0,
+                        address: null
+                    },
+                    ETH: {
+                        balance: 0,
+                        address: null
+                    },
+                    LTC: {
+                        balance: 0,
+                        address: null
+                    }
+                }
             }
 
             api.NewAccount(state.general.uid, inputPerson).then(response => {
                 dispatch(newAccountSuccess(response.person, response.privateKey))
-
+                CryptoLink()
                 Actions.coinbase()
             }).catch(error => {
                 // error
@@ -289,26 +308,30 @@ export const LoadApp = () => {
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
 
-            api.GetBalance(uid).then((balance) => {
+            CryptoLink()
 
-              api.GetExchangeRate().then(exchangeRate => {
-                dispatch(updateBalanceSuccess(balance, exchangeRate))
-              }).catch(error => {
-                dispatch(updateBalanceFailure(error))
-              })
+            // api.GetBalance(uid).then((balance) => {
+            //
+            //   api.GetExchangeRate().then(exchangeRate => {
+            //     dispatch(updateBalanceSuccess(balance, exchangeRate))
+            //   }).catch(error => {
+            //     dispatch(updateBalanceFailure(error))
+            //   })
+            //
+            //
+            //
+            // }).catch((error) => {
+            //   dispatch(updateBalanceFailure(error))
+            //   //TODO: do something if error
+            // })
 
-              dispatch(updateFriendsInit())
-              api.LoadFriends(facebook_id, access_token).then(friends => {
+            dispatch(updateFriendsInit())
+            api.LoadFriends(facebook_id, access_token).then(friends => {
                 dispatch(updateFriendsSuccess(friends))
                 Actions.home()
-              }).catch(error => {
+            }).catch(error => {
                 dispatch(updateFriendsFailure(error))
                 //TODO: do something if error
-              })
-
-            }).catch((error) => {
-              dispatch(updateBalanceFailure(error))
-              //TODO: do something if error
             })
         } else {
             Actions.splash()
