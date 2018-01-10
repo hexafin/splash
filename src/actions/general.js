@@ -72,19 +72,19 @@ export function updateAccountFailure(error) {
     return {type: UPDATE_ACCOUNT_FAILURE, error}
 }
 
-export const UPDATE_BALANCE_INIT = "UPDATE_BALANCE_INIT"
-export function updateBalanceInit() {
-    return {type: UPDATE_BALANCE_INIT}
+export const UPDATE_EXCHANGE_INIT = "UPDATE_EXCHANGE_INIT"
+export function updateExchangeInit() {
+    return {type: UPDATE_EXCHANGE_INIT}
 }
 
-export const UPDATE_BALANCE_SUCCESS = "UPDATE_BALANCE_SUCCESS"
-export function updateBalanceSuccess(balance, exchangeRate) {
-    return {type: UPDATE_BALANCE_SUCCESS, balance, exchangeRate}
+export const UPDATE_EXCHANGE_SUCCESS = "UPDATE_EXCHANGE_SUCCESS"
+export function updateExchangeSuccess(balance, exchangeRate) {
+    return {type: UPDATE_EXCHANGE_SUCCESS, exchangeRate}
 }
 
-export const UPDATE_BALANCE_FAILURE = "UPDATE_BALANCE_FAILURE"
-export function updateBalanceFailure(error) {
-    return {type: UPDATE_BALANCE_FAILURE, error}
+export const UPDATE_EXCHANGE_FAILURE = "UPDATE_EXCHANGE_FAILURE"
+export function updateExchangeFailure(error) {
+    return {type: UPDATE_EXCHANGE_FAILURE, error}
 }
 
 export const UPDATE_FRIENDS_INIT = "UPDATE_FRIENDS_INIT"
@@ -235,25 +235,7 @@ export const CreateNewAccount = () => {
                 gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
                 pictureURL: state.general.person.picture_url,
-                default_currency: "USD",
-                crypto: {
-                    BTC: {
-                        balance: 0,
-                        address: null
-                    },
-                    BCH: {
-                        balance: 0,
-                        address: null
-                    },
-                    ETH: {
-                        balance: 0,
-                        address: null
-                    },
-                    LTC: {
-                        balance: 0,
-                        address: null
-                    }
-                }
+                default_currency: "USD"
             }
 
             api.NewAccount(state.general.uid, inputPerson).then(response => {
@@ -300,46 +282,56 @@ export const UpdateAccount = (updateDict) => {
 export const LoadApp = () => {
     return (dispatch, getState) => {
         // TODO: loading screen
-        dispatch(updateBalanceInit())
         const state = getState()
 
         if (state.general.authenticated) {
-            const uid = state.general.uid
-            const facebook_id = state.general.person.facebook_id
-            const access_token = state.general.facebookToken
 
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
 
-            const cryptoLink = CryptoLink()
-            cryptoLink(dispatch, getState)
+            // load exchange rates
+            LoadExchangeRate()
 
-            // api.GetBalance(uid).then((balance) => {
-            //
-            //   api.GetExchangeRate().then(exchangeRate => {
-            //     dispatch(updateBalanceSuccess(balance, exchangeRate))
-            //   }).catch(error => {
-            //     dispatch(updateBalanceFailure(error))
-            //   })
-            //
-            //
-            //
-            // }).catch((error) => {
-            //   dispatch(updateBalanceFailure(error))
-            //   //TODO: do something if error
-            // })
+            // load friends
+            LoadFriends()
 
-            dispatch(updateFriendsInit())
-            api.LoadFriends(facebook_id, access_token).then(friends => {
-                dispatch(updateFriendsSuccess(friends))
-                Actions.home()
-            }).catch(error => {
-                dispatch(updateFriendsFailure(error))
-                //TODO: do something if error
-            })
+            // go to the home page
+            Actions.home()
         } else {
             Actions.splash()
         }
+    }
+}
+
+// load exchange rates
+export const LoadExchangeRate = () => {
+    return (dispatch, getState) => {
+        dispatch(updateExchangeInit())
+        api.GetExchangeRate().then(exchangeRate => {
+            dispatch(updateExchangeSuccess(exchangeRate))
+        }).catch(error => {
+            dispatch(updateExchangeFailure(error))
+            //TODO: do something if error
+        })
+    }
+}
+
+// load friends
+export const LoadFriends = () => {
+    return (dispatch, getState) => {
+
+        const state = getState()
+
+        const facebook_id = state.general.person.facebook_id
+        const access_token = state.general.facebookToken
+
+        dispatch(updateFriendsInit())
+        api.LoadFriends(facebook_id, access_token).then(friends => {
+            dispatch(updateFriendsSuccess(friends))
+        }).catch(error => {
+            dispatch(updateFriendsFailure(error))
+            //TODO: do something if error
+        })
     }
 }
 

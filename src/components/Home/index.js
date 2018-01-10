@@ -6,7 +6,7 @@ import {bindActionCreators} from "redux";
 import api from '../../api'
 
 const mapStatetoProps = state => {
-    const BTC = (state.general.crypto.BTC.balance*0.00000001)
+    const BTC = (state.crypto.BTC.balance*0.00000001)
     const USDExchangeRate = parseFloat(state.general.exchangeRate.BTC.USD)
 
     return {

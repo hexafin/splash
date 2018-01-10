@@ -19,9 +19,9 @@ import {
     UPDATE_ACCOUNT_INIT,
     UPDATE_ACCOUNT_SUCCESS,
     UPDATE_ACCOUNT_FAILURE,
-    UPDATE_BALANCE_INIT,
-    UPDATE_BALANCE_SUCCESS,
-    UPDATE_BALANCE_FAILURE,
+    UPDATE_EXCHANGE_INIT,
+    UPDATE_EXCHANGE_SUCCESS,
+    UPDATE_EXCHANGE_FAILURE,
     UPDATE_FRIENDS_INIT,
     UPDATE_FRIENDS_SUCCESS,
     UPDATE_FRIENDS_FAILURE,
@@ -42,13 +42,13 @@ const initialState = {
     person: {},
     friends: [],
     uid: null,
-    exchangeRate: {},
+    exchangeRates: {},
     isCreatingAccount: false,
     errorCreatingAccount: null,
     isUpdatingAccount: false,
     errorUpdatingAccount: null,
-    isUpdatingBalance: false,
-    errorUpdatingBalance: null,
+    isUpdatingExchangeRate: false,
+    errorUpdatingExchangeRate: null,
     isUpdatingFriends: false,
     friendsSearchQuery: '',
     errorUpdatingFriends: null
@@ -65,7 +65,7 @@ export default function generalReducer(state = initialState, action) {
 
         case FIREBASE_AUTH_SUCCESS:
 
-            analytics.setUserId(action.iud)
+            analytics.setUserId(action.uid)
 
             return {
                 ...state,
@@ -176,27 +176,24 @@ export default function generalReducer(state = initialState, action) {
                 errorUpdatingAccount: action.error
             }
 
-        case UPDATE_BALANCE_INIT:
+        case UPDATE_EXCHANGE_INIT:
             return {
                 ...state,
-                isUpdatingBalance: true
+                isUpdatingExchangeRate: true
             }
 
-        case UPDATE_BALANCE_SUCCESS:
+        case UPDATE_EXCHANGE_SUCCESS:
             return {
                 ...state,
-                isUpdatingBalance: false,
-                crypto: action.balance,
-                exchangeRate: {
-                  BTC: action.exchangeRate
-                }
+                isUpdatingExchangeRate: false,
+                exchangeRate: action.exchangeRate
             }
 
-        case UPDATE_BALANCE_FAILURE:
+        case UPDATE_EXCHANGE_FAILURE:
             return {
                 ...state,
-                isUpdatingBalance: false,
-                errorUpdatingBalance: action.error
+                isUpdatingExchangeRate: false,
+                errorUpdatingExchangeRate: action.error
             }
 
         case UPDATE_FRIENDS_INIT:
