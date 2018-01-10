@@ -11,7 +11,7 @@ let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
 import {LoadTransactions} from "./transactions"
-import {CryptoLink} from "./crypto"
+import {GetCrypto} from "./crypto"
 
 export const LINK_FACEBOOK_INIT = "LINK_FACEBOOK_INIT"
 export function linkFacebookInit() {
@@ -239,11 +239,8 @@ export const CreateNewAccount = () => {
                 default_currency: "USD"
             }
 
-            api.NewAccount(state.general.uid, inputPerson).then(response => {
-                dispatch(newAccountSuccess(response.person, response.privateKey))
-
-                const cryptoLink = CryptoLink()
-                cryptoLink(dispatch, getState)
+            api.NewAccount(state.general.uid, inputPerson).then(person => {
+                dispatch(newAccountSuccess(person))
 
                 Actions.coinbase()
             }).catch(error => {
@@ -298,6 +295,9 @@ export const LoadApp = () => {
 
             // load exchange rates
             LoadExchangeRate()
+
+            const getCrypto = GetCrypto()
+            getCrypto(dispatch, getState)
 
             // load friends
             LoadFriends()

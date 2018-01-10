@@ -44,8 +44,6 @@ const NewAccount = (uid, {
 
     return new Promise((resolve, reject) => {
 
-        const bitcoinWallet = NewBitcoinWallet()
-
         const dateTime = Date.now();
         const ts = Math.floor(dateTime * 1.0 / 1000);
 
@@ -55,7 +53,6 @@ const NewAccount = (uid, {
             first_name: firstName,
             last_name: lastName,
             email: email,
-            coinbase_id: null,
             facebook_id: facebookId,
             coinbase_id: coinbaseId,
             default_currency: defaultCurrency
@@ -69,10 +66,7 @@ const NewAccount = (uid, {
         }
 
         firestore.collection("people").doc(uid).set(newPerson).then(() => {
-            resolve({
-                person: newPerson,
-                privateKey: bitcoinWallet.wif,
-            })
+            resolve(newPerson)
         }).catch(error => {
             reject(error)
         })
@@ -122,8 +116,6 @@ const HandleCoinbase = (uid, coinbaseDict) => {
     })
 }
 
-// takes address and returns balance or error
-// calls internal api
 function GetBalance(uid, currency = null) {
     return new Promise((resolve, reject) => {
 
@@ -191,6 +183,39 @@ function GetAddress(uid, currency = null) {
                     })
 
                     resolve(returnable)
+                } else {
+                    reject("Error: person does not exist")
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        }
+
+    });
+}
+
+function GetCrypto(uid, currency = null) {
+    return new Promise((resolve, reject) => {
+
+        // if currency is defined, get crypto of that specific currency
+        if (currency) {
+            firestore.collection("people").doc(uid).get().then(person => {
+                if (person.exists) {
+                    resolve(person.data().crypto[currency])
+                } else {
+                    reject("Error: person does not exist")
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        }
+        else {
+            // get all cryptos
+            firestore.collection("people").doc(uid).get().then(person => {
+                if (person.exists) {
+                    const crypto = person.data().crypto
+
+                    resolve(crypto)
                 } else {
                     reject("Error: person does not exist")
                 }
@@ -407,6 +432,7 @@ export default api = {
     LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,
     GetAddress: GetAddress,
+    GetCrypto: GetCrypto,
     GetExchangeRate: GetExchangeRate,
     ConvertTimestampToDate: ConvertTimestampToDate,
     Log: Log

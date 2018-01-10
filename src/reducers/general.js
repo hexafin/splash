@@ -146,7 +146,6 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isCreatingAccount: false,
                 person: action.person,
-                privateKey: action.privateKey,
             }
 
         case NEW_ACCOUNT_FAILURE:

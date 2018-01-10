@@ -20,17 +20,17 @@ export function cryptoFailure(error) {
     return {type: CRYPTO_FAILURE, error}
 }
 
-export const CryptoLink = () => {
+export const GetCrypto = (currency=null) => {
     return (dispatch, getState) => {
 
         dispatch(cryptoInit())
 
         const state = getState()
+        const uid = state.general.uid
 
-        firestore.collection("people").doc(state.general.uid).onSnapshot(snapshot => {
-            const person = snapshot.data()
-            dispatch(cryptoSuccess(person.crypto))
-        }, error => {
+        api.GetCrypto(uid, currency).then(crypto => {
+            dispatch(cryptoSuccess(crypto))
+        }).catch(error => {
             dispatch(cryptoFailure(error))
         })
 
