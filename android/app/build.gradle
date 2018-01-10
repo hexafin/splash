@@ -78,6 +78,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-sentry/sentry.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -148,6 +149,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sentry')
     compile project(':react-native-facebook-login')
     compile project(':react-native-udp')
     compile project(':react-native-tcp')
