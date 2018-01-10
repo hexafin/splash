@@ -103,7 +103,7 @@ export default class SetAmount extends Component {
                                                                                   relative_amount: this.state.relativeAmount,
                                                                                   amount: this.state.amount,
                                                                                   })}>
-                        {this.props.transactionType == 'pay' && !this.props.isCreatingTransaction &&
+                        {this.props.transactionType == 'transaction' && !this.props.isCreatingTransaction &&
                           <Text style={styles.footerButtonText}>
                               Pay
                           </Text>}

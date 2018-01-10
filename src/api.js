@@ -95,7 +95,7 @@ const UpdateAccount = (uid, updateDict) => {
 }
 
 const HandleCoinbase = (uid, coinbaseDict) => {
-    //get coinbase user info and update firebase
+  // get coinbase user info and update firebase
 
     return new Promise((resolve, reject) => {
         const AuthStr = 'Bearer '.concat(coinbaseDict.coinbase_access_token);
@@ -237,20 +237,20 @@ function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, re
 
         const dateTime = Date.now();
         const timestamp_initiated = Math.floor(dateTime / 1000);
-        if (transactionType == 'pay') {
-            const newTransaction = {
-                from_id: from_id,
-                to_id: to_id,
-                amount: amount,
-                relative_amount: relative_amount,
-                fee: fee,
-                emoji: emoji,
-                type: type,
-                currency: currency,
-                relative_currency: relative_currency,
-                timestamp_initiated: timestamp_initiated,
-                timestamp_completed: timestamp_initiated
-            }
+        if (transactionType == 'transaction') {
+          const newTransaction = {
+            from_id: from_id,
+            to_id: to_id,
+            amount: amount,
+            relative_amount: relative_amount,
+            fee: fee,
+            emoji: emoji,
+            type: type,
+            currency: currency,
+            relative_currency: relative_currency,
+            timestamp_initiated: timestamp_initiated,
+            timestamp_completed: timestamp_initiated
+          }
 
             firestore.collection("transactions").add(newTransaction).then(() => {
                 resolve(newTransaction)
@@ -301,15 +301,8 @@ function LoadTransactions(uid, transactionType) {
     return new Promise ((resolve, reject) => {
       const transactions = []
       const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
-      let collection = ''
 
-      if(transactionType == 'pay') {
-        collection = 'transactions'
-      } else {
-        collection = 'requests'
-      }
-
-      firestore.collection(collection).where(direction, "==", uid).get().then(query => {
+      firestore.collection(transactionType + 's').where(direction, "==", uid).get().then(query => {
 
         if(query.empty) {
           resolve([])
@@ -351,15 +344,15 @@ function LoadTransactions(uid, transactionType) {
   return new Promise ((resolve, reject) => {
     // get transactions from me and to me
     Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
-      if (transactionType == 'pay') {
+      if (transactionType == 'transaction') {
         const result = values[0].concat(values[1])
-        //sort by timestamp_completed
+        // sort by timestamp_completed
         result.sort((a, b) => {
           return b.timestamp_completed - a.timestamp_completed
         })
         resolve(result)
       } else {
-        //sort by timestamp_initiated
+        // sort by timestamp_initiated
         values[0].sort((a, b) => {
           return b.timestamp_initiated - a.timestamp_initiated
         })

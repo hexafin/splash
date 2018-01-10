@@ -92,10 +92,10 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 
         dispatch(newTransactionInit());
 
-        if ((transactionType == 'pay' && satoshi < balance) || transactionType == 'request') {
+        if ((transactionType == 'transaction' && satoshi < balance) || transactionType == 'request') {
             api.GetUidFromFB(other_person.facebook_id).then(otherId => {
 
-                if (transactionType == 'pay') {
+                if (transactionType == 'transaction') {
 
                     transaction = {
                         transactionType: transactionType,
@@ -147,7 +147,7 @@ export const LoadTransactions = (uid) => {
   return (dispatch, getState) => {
     const state = getState()
     dispatch(getTransactionsInit())
-    const payments = api.LoadTransactions(state.general.uid, 'pay')
+    const payments = api.LoadTransactions(state.general.uid, 'transaction')
     const requests = api.LoadTransactions(state.general.uid, 'request')
     Promise.all([payments, requests]).then(values => {
       dispatch(getTransactionsSuccess(values[0], values[1]))

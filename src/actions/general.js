@@ -183,15 +183,15 @@ export const LinkCoinbase = () => {
     const state = getState()
     dispatch(linkCoinbaseInit())
 
-    const clientId = null //TODO: replace these values
-    const clientSecret = null //TODO: replace these values
+    const clientId = null // TODO: replace these values
+    const clientSecret = null // TODO: replace these values
 
-    //start oauth process
+    // start oauth process
     CoinbaseApi.startAuthentication(clientId, clientSecret)
     const { EventEmitter } = NativeModules;
     eventEmitter = new NativeEventEmitter(EventEmitter);
 
-    //receive coinbase oauth event from native
+    // receive coinbase oauth event from native
     eventEmitter.addListener("CoinbaseOAuthComplete", (data) => {
       EventEmitter.stopObserving();
       if(data.access_token && data.refresh_token && data.expires_in) {
@@ -199,7 +199,7 @@ export const LinkCoinbase = () => {
         t.setSeconds(t.getSeconds() + data.expires_in);
 
         const coinbase_data = {coinbase_access_token: data.access_token, coinbase_refresh_token: data.refresh_token, coinbase_expires_at: Math.floor(t / 1000)}
-        //get user data and update firebase
+        // get user data and update firebase
         api.HandleCoinbase(state.general.uid, coinbase_data).then(response => {
           dispatch(linkCoinbaseSuccess(response))
           const action = LoadApp()

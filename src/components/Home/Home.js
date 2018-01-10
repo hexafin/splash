@@ -119,7 +119,7 @@ const Home = ({uid, person, crypto, exchangeRate, transactions, requests, waitin
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.footerDivider}/>
-                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'pay'})} style={styles.footerButton}>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'transaction'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
                         Pay
                     </Text>
