@@ -281,6 +281,7 @@ export const LoadApp = () => {
     return (dispatch, getState) => {
         // TODO: loading screen
         const state = getState()
+        const uid = state.general.uid
 
         if (state.general.authenticated) {
 
