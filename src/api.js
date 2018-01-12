@@ -95,7 +95,7 @@ const UpdateAccount = (uid, updateDict) => {
 }
 
 const HandleCoinbase = (uid, coinbaseDict) => {
-    //get coinbase user info and update firebase
+  // get coinbase user info and update firebase
 
     return new Promise((resolve, reject) => {
         const AuthStr = 'Bearer '.concat(coinbaseDict.coinbase_access_token);
@@ -237,20 +237,20 @@ function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, re
 
         const dateTime = Date.now();
         const timestamp_initiated = Math.floor(dateTime / 1000);
-        if (transactionType == 'pay') {
-            const newTransaction = {
-                from_id: from_id,
-                to_id: to_id,
-                amount: amount,
-                relative_amount: relative_amount,
-                fee: fee,
-                emoji: emoji,
-                type: type,
-                currency: currency,
-                relative_currency: relative_currency,
-                timestamp_initiated: timestamp_initiated,
-                timestamp_completed: timestamp_initiated
-            }
+        if (transactionType == 'transaction') {
+          const newTransaction = {
+            from_id: from_id,
+            to_id: to_id,
+            amount: amount,
+            relative_amount: relative_amount,
+            fee: fee,
+            emoji: emoji,
+            type: type,
+            currency: currency,
+            relative_currency: relative_currency,
+            timestamp_initiated: timestamp_initiated,
+            timestamp_completed: timestamp_initiated
+          }
 
             firestore.collection("transactions").add(newTransaction).then(() => {
                 resolve(newTransaction)
@@ -261,7 +261,7 @@ function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, re
             const newRequest = {
                 from_id: from_id,
                 to_id: to_id,
-                amount: amount,
+                amount: null,
                 relative_amount: relative_amount,
                 fee: fee,
                 emoji: emoji,
@@ -296,69 +296,102 @@ function GetUidFromFB(facebook_id) {
     })
 }
 
-function LoadTransactions(uid) {
-    const getTransactions = (direction) => {
-        return new Promise((resolve, reject) => {
-            const transactions = []
-            let index = 0
-            firestore.collection("transactions").where(direction, "==", uid).get().then(query => {
-                if (query.empty) {
-                    resolve([])
-                }
-                for (let i = 0; i < query.size; i++) {
+function LoadTransactions(uid, transactionType) {
+  const getTransactions = (direction) => {
+    return new Promise ((resolve, reject) => {
+      const transactions = []
+      const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
+      let transactionQuery = firestore.collection(transactionType + 's').where(direction, "==", uid).get()
+      if (transactionType == 'request') {
+        transactionQuery = firestore.collection(transactionType + 's').where(direction, "==", uid)
+                                                                      .where('declined', '==', false)
+                                                                      .where('accepted', '==', false).get()
+      }
 
-                    const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
-                    firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
-                        const person = response.data()
-                        const transaction = query.docs[i].data()
-                        transactions.push({
-                            ...transaction,
-                            ...person,
-                            type: 'transaction',
-                        })
-                        if (query.size == transactions.length) {
-                            resolve(transactions)
-                        }
-                    }).catch(error => {
-                        reject(error)
-                    })
-                }
-            }).catch(error => {
-                reject(error)
-            })
-        })
-    }
+      transactionQuery.then(query => {
 
-    return new Promise((resolve, reject) => {
-        // get transactions from me and to me
-        Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
-            const result = values[0].concat(values[1])
-            //sort by timestamp_completed
-            result.sort((a, b) => {
-                return b.timestamp_completed - a.timestamp_completed
-            })
-            resolve(result)
-        }).catch(errors => {
-            reject(errors)
-        })
+        if(query.empty) {
+          resolve([])
+        }
+
+        for(let i = 0; i < query.size; i++) {
+          firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
+            const person = response.data()
+            const transaction = query.docs[i].data()
+
+            if (direction == 'to_id' && transactionType == 'request') {
+              transactions.push({
+                                 ...transaction,
+                                 ...person,
+                                 type: 'waiting',
+                                 key: query.docs[i].id
+                                })
+            } else {
+              transactions.push({
+                                 ...transaction,
+                                 ...person,
+                                 type: transactionType,
+                                 key: query.docs[i].id
+                                })
+            }
+
+          if(query.size == transactions.length) {
+            resolve(transactions)
+          }
+          }).catch(error => {
+            reject(error)
+          })
+        }
+      }).catch(error => {
+          reject(error)
+      })
     })
+  }
+
+  return new Promise ((resolve, reject) => {
+    // get transactions from me and to me
+    Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
+      if (transactionType == 'transaction') {
+        const result = values[0].concat(values[1])
+        // sort by timestamp_completed
+        result.sort((a, b) => {
+          return b.timestamp_completed - a.timestamp_completed
+        })
+        resolve(result)
+      } else {
+        // sort by timestamp_initiated
+        values[0].sort((a, b) => {
+          return b.timestamp_initiated - a.timestamp_initiated
+        })
+        values[1].sort((a, b) => {
+          return b.timestamp_initiated - a.timestamp_initiated
+        })
+        resolve({waiting: values[1], requests: values[0]})
+      }
+    }).catch(errors => {
+      reject(errors)
+    })
+  })
 }
 
 function ConvertTimestampToDate(timestamp) {
-    let date = new Date(timestamp * 1000);
-    let hours = date.getHours()
-    let amPM = ''
-    if (hours > 12) {
-        hours -= 12
-        amPM = 'PM'
-    } else {
-        amPM = 'AM'
+  let date = new Date(timestamp * 1000);
+  let hours = date.getHours()
+  let amPM = ''
+  if (hours > 12) {
+    hours -= 12
+    amPM = 'PM'
+  } else {
+    amPM = 'AM'
+    if (hours == 0) {
+      hours = 12
     }
-    let minutes = date.getMinutes()
-    if (minutes < 10) {
-        minutes = "0" + minutes
-    }
-    return hours + ":" + minutes + amPM + " " + (1 + date.getMonth()) + '/' + date.getDate()
+  }
+  let minutes = date.getMinutes()
+  if (minutes < 10) {
+    minutes = "0" + minutes
+  }
+  return hours + ":" + minutes + amPM + " " + (1 + date.getMonth()) + '/' + date.getDate()
 }
 
 function LoadFriends(facebook_id, access_token) {
@@ -377,13 +410,14 @@ function LoadFriends(facebook_id, access_token) {
             }
         ).then(response => {
             const friendsData = response.data.data
-            for (friend of friendsData) {
 
-                firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
+            for (let i = 0; i < friendsData.length; i++) {
+
+                firestore.collection("people").where("facebook_id", "=", friendsData[i].id).get().then(person => {
                     if (!person.empty) {
                         const newFriend = person.docs[0].data()
                         friends.push(newFriend)
-                        if (friends.length == friendsData.length) {
+                        if ((i + 1) == friendsData.length) {
                             resolve(friends)
                         }
                     }

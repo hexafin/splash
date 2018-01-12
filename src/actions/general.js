@@ -183,15 +183,15 @@ export const LinkCoinbase = () => {
     const state = getState()
     dispatch(linkCoinbaseInit())
 
-    const clientId = null //TODO: replace these values
-    const clientSecret = null //TODO: replace these values
+    const clientId = null // TODO: replace these values
+    const clientSecret = null // TODO: replace these values
 
-    //start oauth process
+    // start oauth process
     CoinbaseApi.startAuthentication(clientId, clientSecret)
     const { EventEmitter } = NativeModules;
     eventEmitter = new NativeEventEmitter(EventEmitter);
 
-    //receive coinbase oauth event from native
+    // receive coinbase oauth event from native
     eventEmitter.addListener("CoinbaseOAuthComplete", (data) => {
       EventEmitter.stopObserving();
       if(data.access_token && data.refresh_token && data.expires_in) {
@@ -199,7 +199,7 @@ export const LinkCoinbase = () => {
         t.setSeconds(t.getSeconds() + data.expires_in);
 
         const coinbase_data = {coinbase_access_token: data.access_token, coinbase_refresh_token: data.refresh_token, coinbase_expires_at: Math.floor(t / 1000)}
-        //get user data and update firebase
+        // get user data and update firebase
         api.HandleCoinbase(state.general.uid, coinbase_data).then(response => {
           dispatch(linkCoinbaseSuccess(response))
           const action = LoadApp()
@@ -294,52 +294,35 @@ export const LoadApp = () => {
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
 
-            // load exchange rates
-            LoadExchangeRate()
-
             const getCrypto = GetCrypto()
             getCrypto(dispatch, getState)
 
             // load friends
-            LoadFriends()
+            const facebook_id = state.general.person.facebook_id
+            const access_token = state.general.facebookToken
 
-            // go to the home page
-            Actions.home()
+            dispatch(updateFriendsInit())
+            api.LoadFriends(facebook_id, access_token).then(friends => {
+                dispatch(updateFriendsSuccess(friends))
+            }).catch(error => {
+                dispatch(updateFriendsFailure(error))
+                //TODO: do something if error
+            })
+
+            // load exchange rates
+            dispatch(updateExchangeInit())
+            api.GetExchangeRate().then(exchangeRate => {
+                dispatch(updateExchangeSuccess(exchangeRate))
+                // go to the home page
+                Actions.home()
+            }).catch(error => {
+                dispatch(updateExchangeFailure(error))
+                //TODO: do something if error
+            })
+
         } else {
             Actions.splash()
         }
-    }
-}
-
-// load exchange rates
-export const LoadExchangeRate = () => {
-    return (dispatch, getState) => {
-        dispatch(updateExchangeInit())
-        api.GetExchangeRate().then(exchangeRate => {
-            dispatch(updateExchangeSuccess(exchangeRate))
-        }).catch(error => {
-            dispatch(updateExchangeFailure(error))
-            //TODO: do something if error
-        })
-    }
-}
-
-// load friends
-export const LoadFriends = () => {
-    return (dispatch, getState) => {
-
-        const state = getState()
-
-        const facebook_id = state.general.person.facebook_id
-        const access_token = state.general.facebookToken
-
-        dispatch(updateFriendsInit())
-        api.LoadFriends(facebook_id, access_token).then(friends => {
-            dispatch(updateFriendsSuccess(friends))
-        }).catch(error => {
-            dispatch(updateFriendsFailure(error))
-            //TODO: do something if error
-        })
     }
 }
 

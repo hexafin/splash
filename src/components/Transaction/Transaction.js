@@ -33,7 +33,7 @@ const friend = {
 
 const recents = []
 
-const Transaction = ({transactionType = 'pay', friends, friendsSearchChange}) => {
+const Transaction = ({transactionType = 'transaction', friends, friendsSearchChange}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
@@ -44,7 +44,6 @@ const Transaction = ({transactionType = 'pay', friends, friendsSearchChange}) =>
     ];
 
     // build and order sections from friend data
-    // TODO: use real friend data structure to organize
     const buildSections = sections.map((section, sectionIndex) => {
         let data = [];
         if (section.title == 'Recents') {

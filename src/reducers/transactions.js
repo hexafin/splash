@@ -14,6 +14,7 @@ import {
 
 var initialState = {
     transactions: [],
+    requests: [],
     isLoadingTransactions: false,
     errorLoadingTransactions: null,
     isCreatingTransaction: false,
@@ -37,6 +38,7 @@ export default function transactionsReducer(state = initialState, action) {
               ...state,
               errorLoadingTransactions: null,
               transactions: action.transactions,
+              requests: action.requests,
               isLoadingTransactions: false,
 
           }

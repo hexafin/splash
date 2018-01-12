@@ -20,13 +20,13 @@ import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
-const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
+const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting}) => {
 
     const defaultCurrency = person.default_currency
 
     // v1 - only bitcoin
     const balance = crypto.BTC.balance/cryptoUnits.BTC
-    const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
+    const relativeBalance = (balance*exchangeRate[defaultCurrency]).toFixed(2)
 
     // render blank screen w/o transactions
     const renderBlank = (
@@ -49,10 +49,10 @@ const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
     // build and order sections from transaction data
     const buildSections = sections.map((section, sectionIndex) => {
         let data = [];
-        for (let i = 0; i < transactions.length; i++) {
-            const transaction = transactions[i];
-            if (transaction.type == section.type) {
-                data.push({...transaction, key: (sectionIndex.toString() + i.toString())})
+        const items = transactions.concat(requests, waiting)
+        for (let i = 0; i < items.length; i++) {
+            if (items[i] && items[i].type == section.type) {
+                data.push(items[i])
             }
         }
         if (data.length == 0) {
@@ -81,6 +81,7 @@ const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
     )
 
     const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
+    const emptyItems = (transactions.length == 0 && requests.length == 0 && waiting.length == 0)
 
     return (
         <View style={styles.container}>
@@ -101,17 +102,17 @@ const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
                 </View>
 
                 <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
-                    <Text style={styles.balanceUSD}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
-                    <Text style={styles.balanceBTC}>{balance} BTC</Text>
+                    <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
+                    <Text style={styles.balanceCurrency}>{balance} BTC</Text>
                     <Text style={styles.balanceDescription}>Your bitcoin</Text>
                 </TouchableOpacity>
 
             </View>
 
             {/* if there are no transactions render blank*/}
-            {transactions.length == 0 && renderBlank}
+            {(emptyItems || isLoadingTransactions) && renderBlank}
             {/* if there are  transactions render them in sectionList*/}
-            {transactions.length !== 0 && renderSections}
+            {!emptyItems && !isLoadingTransactions && renderSections}
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
@@ -119,7 +120,7 @@ const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.footerDivider}/>
-                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'pay'})} style={styles.footerButton}>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'transaction'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
                         Pay
                     </Text>
@@ -182,13 +183,13 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "transparent"
     },
-    balanceUSD: {
+    balanceRelativeCurrency: {
         textAlign: "center",
         fontSize: 30,
         fontWeight: "bold",
         color: colors.purple
     },
-    balanceBTC: {
+    balanceCurrency: {
         textAlign: "center",
         fontSize: 12,
         fontWeight: "400",
