@@ -20,7 +20,7 @@ const SATOSHI_CONVERSION = 100000000;
 
 // presentational component for friend or transaction entry
 //can have type waiting, request, transaction, friend, emoji, or none depending on usage
-const Friend = ({picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
+const Friend = ({id, picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
     const convertedAmount = (amount*1.0/SATOSHI_CONVERSION).toFixed(4)
     const name = first_name + ' ' + last_name
     const date = api.ConvertTimestampToDate(timestamp_completed)
@@ -52,20 +52,20 @@ const Friend = ({picture_url, first_name, last_name, username, type, emoji, time
           {type === 'friend' && [<Icon key={0} name={'chevron-right'} color={colors.lightGrey} size={15}/>]}
           {type === 'request' && [
             <View key={0} style={{flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.leftButton} onPress={leftCallback}>
+              <TouchableOpacity style={styles.leftButton} onPress={() => leftCallback(id)}>
                 <Icon name={'xshape'} color={colors.red} size={13}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rightButton} onPress={rightCallback}>
+              <TouchableOpacity style={styles.rightButton} onPress={() => rightCallback(id)}>
                 <Icon name={'checkmark'} color={colors.purple} size={15}/>
               </TouchableOpacity>
             </View>
             ]}
           {type === 'waiting' && [
             <View key={0} style={{flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.leftButton} onPress={leftCallback}>
+              <TouchableOpacity style={styles.leftButton} onPress={() => leftCallback(id)}>
                 <Feather name={'trash'} color={colors.lightGrey} size={17}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rightButton} onPress={rightCallback}>
+              <TouchableOpacity style={styles.rightButton} onPress={() => rightCallback(id)}>
                 <MaterialIcons name={'access-alarm'} color={colors.grey} size={20}/>
               </TouchableOpacity>
             </View>

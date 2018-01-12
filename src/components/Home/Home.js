@@ -20,7 +20,7 @@ import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
-const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting}) => {
+const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting, DeclineRequest, AcceptRequest}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -52,7 +52,14 @@ const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transac
         const items = transactions.concat(requests, waiting)
         for (let i = 0; i < items.length; i++) {
             if (items[i] && items[i].type == section.type) {
-                data.push(items[i])
+
+                let callbacks = {leftCallback: undefined, rightCallback: undefined}
+                if (section.type == 'request') {
+                  callbacks.leftCallback = DeclineRequest
+                  callbacks.rightCallback = AcceptRequest
+                }
+
+                data.push({...items[i], id: items[i].key, ...callbacks})
             }
         }
         if (data.length == 0) {

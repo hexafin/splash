@@ -10,8 +10,8 @@ export function getTransactionsInit() {
 }
 
 export const GET_TRANSACTIONS_SUCCESS = "GET_TRANSACTIONS_SUCCESS";
-export function getTransactionsSuccess(transactions, requests) {
-    return {type: GET_TRANSACTIONS_SUCCESS, transactions, requests}
+export function getTransactionsSuccess(transactions, requests, waiting) {
+    return {type: GET_TRANSACTIONS_SUCCESS, transactions, requests, waiting}
 }
 
 export const GET_TRANSACTIONS_FAILURE = "GET_TRANSACTIONS_FAILURE";
@@ -55,7 +55,6 @@ export function acceptTransactionFailure(error) {
     return {type: ACCEPT_TRANSACTION_FAILURE, error}
 }
 
-
 export const DECLINE_TRANSACTION_INIT = "DECLINE_TRANSACTION_INIT";
 
 export function declineTransactionInit(transactionRef) {
@@ -71,6 +70,16 @@ export function declineTransactionSuccess(transactionRef) {
 export const DECLINE_TRANSACTION_FAILURE = "DECLINE_TRANSACTION_FAILURE";
 export function declineTransactionFailure(error) {
     return {type: DECLINE_TRANSACTION_FAILURE, error}
+}
+
+export const REMOVE_REQUEST = "REMOVE_REQUEST";
+export function removeRequest(transactionRef) {
+    return {type: REMOVE_REQUEST, transactionRef}
+}
+
+export const REMOVE_WAITING = "REMOVE_WAITING";
+export function removeWaiting(transactionRef) {
+    return {type: REMOVE_WAITING, transactionRef}
 }
 
 
@@ -142,9 +151,25 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 }
 
 export const AcceptRequest = (requestId) => {
-  dispatch(acceptTransactionInit(transactionRef))
-  dispatch(acceptTransactionSuccess(transactionRef))
-  dispatch(acceptTransactionFailure(error))
+  return (dispatch, getState) => {
+    dispatch(acceptTransactionInit(requestId))
+    const dateTime = Date.now();
+    const timestamp_accepted = Math.floor(dateTime / 1000);
+    const updateDict = {
+      accepted: true,
+      timestamp_accepted: timestamp_accepted,
+    }
+
+    api.UpdateRequest(requestId, updateDict).then(response => {
+      dispatch(removeRequest(requestId))
+      dispatch(acceptTransactionSuccess(requestId))
+
+      // TODO: create new transaction from request
+
+    }).catch(error => {
+      dispatch(acceptTransactionFailure(error))
+    })
+  }
 }
 
 export const DeclineRequest = (requestId) => {
@@ -156,9 +181,9 @@ export const DeclineRequest = (requestId) => {
       declined: true,
       timestamp_declined: timestamp_declined,
     }
-    console.log(updateDict);
+
     api.UpdateRequest(requestId, updateDict).then(response => {
-      console.log(response);
+      dispatch(removeRequest(requestId))
       dispatch(declineTransactionSuccess(requestId))
     }).catch(error => {
       dispatch(declineTransactionFailure(error))
@@ -173,7 +198,7 @@ export const LoadTransactions = (uid) => {
     const payments = api.LoadTransactions(state.general.uid, 'transaction')
     const requests = api.LoadTransactions(state.general.uid, 'request')
     Promise.all([payments, requests]).then(values => {
-      dispatch(getTransactionsSuccess(values[0], values[1]))
+      dispatch(getTransactionsSuccess(values[0], values[1].requests, values[1].waiting))
     }).catch(error => {
       dispatch(getTransactionsFailure(error))
     })

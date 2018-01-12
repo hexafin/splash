@@ -8,7 +8,9 @@ import {
     DECLINE_TRANSACTION_FAILURE,
     NEW_TRANSACTION_INIT,
     NEW_TRANSACTION_SUCCESS,
-    NEW_TRANSACTION_FAILURE
+    NEW_TRANSACTION_FAILURE,
+    REMOVE_REQUEST,
+    REMOVE_WAITING
 } from "../actions/transactions";
 
 import {
@@ -18,6 +20,7 @@ import {
 var initialState = {
     transactions: [],
     requests: [],
+    waiting: [],
     isLoadingTransactions: false,
     errorLoadingTransactions: null,
     isCreatingTransaction: false,
@@ -44,6 +47,7 @@ export default function transactionsReducer(state = initialState, action) {
               errorLoadingTransactions: null,
               transactions: action.transactions,
               requests: action.requests,
+              waiting: action.waiting,
               isLoadingTransactions: false,
 
           }
@@ -105,6 +109,30 @@ export default function transactionsReducer(state = initialState, action) {
                 ...state,
                 isCreatingTransaction: false,
                 errorCreatingTransaction: action.error
+            }
+
+        case REMOVE_REQUEST:
+            let newRequests = []
+            for(var i = 0; i<state.requests; i++) {
+              if(state.requests[i].key !== action.transactionRef) {
+                newRequests.push(state.requests[i])
+              }
+            }
+            return {
+                ...state,
+                requests: newRequests
+            }
+
+        case REMOVE_WAITING:
+            let newWaiting = []
+            for(var i = 0; i<state.waiting; i++) {
+              if(state.waiting[i].key !== action.transactionRef) {
+                newWaiting.push(state.waiting[i])
+              }
+            }
+            return {
+                ...state,
+                waiting: newWaiting
             }
 
         case SIGN_OUT:
