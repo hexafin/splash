@@ -20,13 +20,13 @@ import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
-const Home = ({uid, person, crypto, exchangeRate, transactions, requests, waiting}) => {
+const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting}) => {
 
     const defaultCurrency = person.default_currency
 
     // v1 - only bitcoin
     const balance = crypto.BTC.balance/cryptoUnits.BTC
-    const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
+    const relativeBalance = (balance*exchangeRate[defaultCurrency]).toFixed(2)
 
     // render blank screen w/o transactions
     const renderBlank = (
@@ -51,8 +51,8 @@ const Home = ({uid, person, crypto, exchangeRate, transactions, requests, waitin
         let data = [];
         const items = transactions.concat(requests, waiting)
         for (let i = 0; i < items.length; i++) {
-            if (items[i].type == section.type) {
-                data.push({...items[i], key: (sectionIndex.toString() + i.toString())})
+            if (items[i] && items[i].type == section.type) {
+                data.push(items[i])
             }
         }
         if (data.length == 0) {
@@ -81,6 +81,7 @@ const Home = ({uid, person, crypto, exchangeRate, transactions, requests, waitin
     )
 
     const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
+    const emptyItems = (transactions.length == 0 && requests.length == 0 && waiting.length == 0)
 
     return (
         <View style={styles.container}>
@@ -109,9 +110,9 @@ const Home = ({uid, person, crypto, exchangeRate, transactions, requests, waitin
             </View>
 
             {/* if there are no transactions render blank*/}
-            {transactions.length == 0 && renderBlank}
+            {(emptyItems || isLoadingTransactions) && renderBlank}
             {/* if there are  transactions render them in sectionList*/}
-            {transactions.length !== 0 && renderSections}
+            {!emptyItems && !isLoadingTransactions && renderSections}
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>

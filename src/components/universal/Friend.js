@@ -38,7 +38,7 @@ const Friend = ({picture_url, first_name, last_name, username, type, emoji, time
           {(type == 'transaction' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
               <Text style={styles.relativeAmountText}>${relative_amount}</Text>
-              <Text style={styles.amountText}>{convertedAmount} {currency}</Text>
+              {amount !== null && <Text style={styles.amountText}>{convertedAmount} {currency}</Text>}
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
             <View key={2} style={{ flexDirection: 'row'}}>

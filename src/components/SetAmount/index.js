@@ -5,7 +5,7 @@ import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
     return {
-      ExchangeRate: parseFloat(state.general.exchangeRate.BTC.USD),
+      ExchangeRate: parseFloat(state.general.exchangeRate.USD),
       isCreatingTransaction: state.transactions.isCreatingTransaction
     }
 }

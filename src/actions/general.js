@@ -294,52 +294,35 @@ export const LoadApp = () => {
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
 
-            // load exchange rates
-            LoadExchangeRate()
-
             const getCrypto = GetCrypto()
             getCrypto(dispatch, getState)
 
             // load friends
-            LoadFriends()
+            const facebook_id = state.general.person.facebook_id
+            const access_token = state.general.facebookToken
 
-            // go to the home page
-            Actions.home()
+            dispatch(updateFriendsInit())
+            api.LoadFriends(facebook_id, access_token).then(friends => {
+                dispatch(updateFriendsSuccess(friends))
+            }).catch(error => {
+                dispatch(updateFriendsFailure(error))
+                //TODO: do something if error
+            })
+
+            // load exchange rates
+            dispatch(updateExchangeInit())
+            api.GetExchangeRate().then(exchangeRate => {
+                dispatch(updateExchangeSuccess(exchangeRate))
+                // go to the home page
+                Actions.home()
+            }).catch(error => {
+                dispatch(updateExchangeFailure(error))
+                //TODO: do something if error
+            })
+
         } else {
             Actions.splash()
         }
-    }
-}
-
-// load exchange rates
-export const LoadExchangeRate = () => {
-    return (dispatch, getState) => {
-        dispatch(updateExchangeInit())
-        api.GetExchangeRate().then(exchangeRate => {
-            dispatch(updateExchangeSuccess(exchangeRate))
-        }).catch(error => {
-            dispatch(updateExchangeFailure(error))
-            //TODO: do something if error
-        })
-    }
-}
-
-// load friends
-export const LoadFriends = () => {
-    return (dispatch, getState) => {
-
-        const state = getState()
-
-        const facebook_id = state.general.person.facebook_id
-        const access_token = state.general.facebookToken
-
-        dispatch(updateFriendsInit())
-        api.LoadFriends(facebook_id, access_token).then(friends => {
-            dispatch(updateFriendsSuccess(friends))
-        }).catch(error => {
-            dispatch(updateFriendsFailure(error))
-            //TODO: do something if error
-        })
     }
 }
 

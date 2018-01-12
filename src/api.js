@@ -261,7 +261,7 @@ function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, re
             const newRequest = {
                 from_id: from_id,
                 to_id: to_id,
-                amount: amount,
+                amount: null,
                 relative_amount: relative_amount,
                 fee: fee,
                 emoji: emoji,
@@ -301,8 +301,14 @@ function LoadTransactions(uid, transactionType) {
     return new Promise ((resolve, reject) => {
       const transactions = []
       const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
+      let transactionQuery = firestore.collection(transactionType + 's').where(direction, "==", uid).get()
+      if (transactionType == 'request') {
+        transactionQuery = firestore.collection(transactionType + 's').where(direction, "==", uid)
+                                                                      .where('declined', '==', false)
+                                                                      .where('accepted', '==', false).get()
+      }
 
-      firestore.collection(transactionType + 's').where(direction, "==", uid).get().then(query => {
+      transactionQuery.then(query => {
 
         if(query.empty) {
           resolve([])
@@ -313,21 +319,22 @@ function LoadTransactions(uid, transactionType) {
             const person = response.data()
             const transaction = query.docs[i].data()
 
-            if (transactionType != 'request' || (transaction.accepted == false && transaction.declined == false)) {
-              if (direction == 'to_id' && transactionType == 'request') {
-                transactions.push({
-                                   ...transaction,
-                                   ...person,
-                                   type: 'waiting',
-                                  })
-              } else {
-                transactions.push({
-                                   ...transaction,
-                                   ...person,
-                                   type: transactionType,
-                                  })
-              }
+            if (direction == 'to_id' && transactionType == 'request') {
+              transactions.push({
+                                 ...transaction,
+                                 ...person,
+                                 type: 'waiting',
+                                 key: query.docs[i].id
+                                })
+            } else {
+              transactions.push({
+                                 ...transaction,
+                                 ...person,
+                                 type: transactionType,
+                                 key: query.docs[i].id
+                                })
             }
+
           if(query.size == transactions.length) {
             resolve(transactions)
           }
@@ -364,6 +371,7 @@ function LoadTransactions(uid, transactionType) {
     }).catch(errors => {
       reject(errors)
     })
+  })
 }
 
 function ConvertTimestampToDate(timestamp) {
@@ -402,13 +410,14 @@ function LoadFriends(facebook_id, access_token) {
             }
         ).then(response => {
             const friendsData = response.data.data
-            for (friend of friendsData) {
 
-                firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
+            for (let i = 0; i < friendsData.length; i++) {
+
+                firestore.collection("people").where("facebook_id", "=", friendsData[i].id).get().then(person => {
                     if (!person.empty) {
                         const newFriend = person.docs[0].data()
                         friends.push(newFriend)
-                        if (friends.length == friendsData.length) {
+                        if ((i + 1) == friendsData.length) {
                             resolve(friends)
                         }
                     }
