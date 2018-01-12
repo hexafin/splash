@@ -23,11 +23,13 @@ import {reduxForm, Field} from "redux-form";
 
 const Profile = ({person}) => {
 
+    const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
+
     return (
         <KeyboardAvoidingView style={styles.container} behavior="height">
             <BackButton onPress={() => Actions.pop()} type="right"/>
             <View style={styles.header}>
-                <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
+                <Image style={styles.profileImage} source={{uri: pictureUrl}}/>
                 <Text style={styles.usernameTitle}>@{person.username}</Text>
             </View>
 
@@ -125,9 +127,9 @@ const styles = StyleSheet.create({
         fontSize: 19,
     },
     profileImage: {
-        width: 50,
-        height: 50,
-        borderRadius: 25
+        width: 80,
+        height: 80,
+        borderRadius: 40
     },
     usernameTitle: {
         fontWeight: "700",

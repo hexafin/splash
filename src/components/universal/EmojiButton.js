@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
 	},
 	titled: {
 		padding: 10,
+		paddingLeft: 12,
 		shadowOpacity: defaults.shadowOpacity
 	},
 	text: {

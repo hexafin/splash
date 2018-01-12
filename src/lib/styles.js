@@ -23,6 +23,13 @@ export const defaults = {
 		...ifIphoneX({
 			paddingTop: 20,
 			paddingBottom: 20
+		}, {
+			paddingTop: 0,
+			paddingBottom: 0
 		})
 	}
+}
+
+export const icons = {
+	BTC: require("./images/bitcoin-logo.png")
 }

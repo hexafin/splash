@@ -17,201 +17,118 @@ import Friend from '../universal/Friend'
 import Wallet from '../Wallet'
 import {Actions} from "react-native-router-flux"
 import {defaults} from "../../lib/styles"
+import api from '../../api'
+import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
+const Home = ({uid, person, crypto, exchangeRate, transactions}) => {
 
-//dummy data to be removed
-const request = {
-    type: 'request',
-    name: 'Maddy Kennedy',
-    username: 'mads',
-    picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    usdValue: 50,
-    btcValue: 0.045,
-    emoji: '😍',
-    date: '1:00 11/17'
-}
-const waiting = {
-    type: 'waiting',
-    name: 'Maddy Kennedy',
-    username: 'mads',
-    picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    usdValue: 50,
-    btcValue: 0.045,
-    emoji: '😍',
-    date: '1:00 11/17'
-}
-const transaction = {
-    type: 'transaction',
-    name: 'Maddy Kennedy',
-    username: 'mads',
-    picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    usdValue: 50,
-    btcValue: 0.045,
-    emoji: '😍',
-    date: '1:00 11/17'
-}
+    const defaultCurrency = person.default_currency
 
-const transactions_dummy = {items: [request, request, request, waiting, waiting, waiting, transaction, transaction, transaction]}
+    // v1 - only bitcoin
+    const balance = crypto.BTC.balance/cryptoUnits.BTC
+    const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
 
-class Home extends Component {
+    // render blank screen w/o transactions
+    const renderBlank = (
+        <View key={0} style={{flex: 1, padding: 30}}>
+            <Text style={styles.bodyTitle}>
+                Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
+            </Text>
+            <Button title="Deposit bitcoin 💸" onPress={() => Actions.manageFunds()}/>
+            <View style={styles.bodySpacer}/>
+            <Button title="Ask a friend for bitcoin 🎁" onPress={() => Actions.transaction({transactionType: 'request'})}/>
+        </View>
+    )
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            modalVisible: false,
-            notification: null
+    const sections = [
+        {data: [], title: 'Requests', type: 'request'},
+        {data: [], title: 'Waiting on', type: 'waiting'},
+        {data: [], title: 'History', type: 'transaction'},
+    ];
+
+    // build and order sections from transaction data
+    const buildSections = sections.map((section, sectionIndex) => {
+        let data = [];
+        for (let i = 0; i < transactions.length; i++) {
+            const transaction = transactions[i];
+            if (transaction.type == section.type) {
+                data.push({...transaction, key: (sectionIndex.toString() + i.toString())})
+            }
         }
-    }
+        if (data.length == 0) {
+            return {...section, title: ''}
+        }
+        return {...section, data: data}
+    });
 
-    // notification(title, content, actionOnPress=null, actionTitle=null, dismissTitle="Dismiss") {
-    //     this.setState({
-    //         modalVisible: true,
-    //         notification: {
-    //             title: title,
-    //             content: content,
-    //             actionOnPress: actionOnPress,
-    //             actionTitle: actionTitle,
-    //             dismissTitle: dismissTitle
-    //         }
-    //     })
-    // }
-    //
-    // closeNotification() {
-    //     this.setState({
-    //         modalVisible: false,
-    //         notification: null
-    //     })
-    // }
-    //
-    // renderNotification() {
-    //     const notificationFooterAction = (
-    //         <TouchableOpacity style={styles.notificationFooterButton} onPress={() => {this.closeNotification()}}>
-    //             <Text style={styles.notificationFooterButtonTitle}>{this.state.notification.dismissTitle}</Text>
-    //         </TouchableOpacity>
-    //     )
-    //     return (
-    //         <Modal style={{flex:1}} animationType={"slide"} transparent={true} visible={this.state.modalVisible}>
-    //             <View style={styles.notificationContainer}>
-    //                 <View style={styles.notification}>
-    //                     <BackButton onPress={() => {this.closeNotification()}} type="right"/>
-    //                     <Text style={styles.notificationTitle}>{this.state.notification.title}</Text>
-    //                     <Text style={styles.notificationContent}>{this.state.notification.title}</Text>
-    //                     <View style={styles.notificationFooter}>
-    //                         {this.state.notification.actionOnPress != null && notificationFooterAction}
-    //                     </View>
-    //                 </View>
-    //             </View>
-    //         </Modal>
-    //     )
-    // }
+    //create sectionList with built data
+    const renderSections = (
+        <ScrollView key={0} style={{flex: 1}}>
 
-    render() {
+            {/*<View style={styles.homeButtons}>*/}
+                {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
+                {/*<View style={styles.emojiSpacer}/>*/}
+                {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
+            {/*</View>*/}
 
-        const {person, balanceBTC, balanceUSD, transactions} = this.props
+            <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
+                         stickySectionHeadersEnabled={false}
+                         renderItem={({item}) => <Friend {...item}/>}
+                         renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                         sections={buildSections}
+            />
+        </ScrollView>
+    )
 
-        // const transactions = transactions_dummy
+    const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
 
-        // render blank screen w/o transactions
-        const renderBlank = (
-            <View key={0} style={{flex: 1, padding: 30}}>
-                <Text style={styles.bodyTitle}>
-                    Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
-                </Text>
-                <Button title="Deposit bitcoin 💸" onPress={() => Actions.manageFunds()}/>
-                <View style={styles.bodySpacer}/>
-                <Button title="Ask a friend for bitcoin 🎁" onPress={() => Actions.transaction({transactionType: 'request'})}/>
-            </View>
-        )
+    return (
+        <View style={styles.container}>
 
-        const sections = [
-            {data: [], title: 'Requests', type: 'request'},
-            {data: [], title: 'Waiting on', type: 'waiting'},
-            {data: [], title: 'History', type: 'transaction'},
-        ];
+            <View style={styles.header}>
 
-        // build and order sections from transaction data
-        // TODO: use real transaction data structure to organize
-        // use transactions_dummy instead of transactions to load dummy data
-        const buildSections = sections.map((section, sectionIndex) => {
-            let data = [];
-            for (let i = 0; i < transactions.length; i++) {
-                const transaction = transactions[i];
-                if (transaction.type == section.type) {
-                    data.push({...transaction, key: (sectionIndex.toString() + i.toString())})
-                }
-            }
-            if (data.length == 0) {
-                return {...section, title: ''}
-            }
-            return {...section, data: data}
-        });
-
-        //create sectionList with built data
-        const renderSections = (
-            <ScrollView key={0} style={{flex: 1}}>
-
-                {/*<View style={styles.homeButtons}>*/}
-                    {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
-                    {/*<View style={styles.emojiSpacer}/>*/}
-                    {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
-                {/*</View>*/}
-
-                <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
-                             stickySectionHeadersEnabled={false}
-                             renderItem={({item}) => <Friend {...item}/>}
-                             renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-                             sections={buildSections}
-                />
-            </ScrollView>
-        )
-
-        return (
-            <View style={styles.container}>
-
-                <View style={styles.header}>
-
-                    <View style={styles.topBar}>
-                        <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
-                            <Image style={styles.profileImage} source={{uri: person.picture_url}}/>
-                            <View style={styles.profileTextWrapper}>
-                                <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
-                                <Text style={styles.profileUsername}>@{person.username}</Text>
-                            </View>
-                        </TouchableOpacity>
-
-
-
-                    </View>
-
-                    <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet()}>
-                        <Text style={styles.balanceUSD}>${balanceUSD}</Text>
-                        <Text style={styles.balanceBTC}>{balanceBTC} BTC</Text>
-                        <Text style={styles.balanceDescription}>Your bitcoin</Text>
+                <View style={styles.topBar}>
+                    <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
+                        <Image style={styles.profileImage} source={{uri: pictureUrl}}/>
+                        <View style={styles.profileTextWrapper}>
+                            <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
+                            <Text style={styles.profileUsername}>@{person.username}</Text>
+                        </View>
                     </TouchableOpacity>
+
+
 
                 </View>
 
-                {/* if there are no transactions render blank*/}
-                {transactions.length == 0 && renderBlank}
-                {/* if there are  transactions render them in sectionList*/}
-                {transactions.length !== 0 && renderSections}
-                <View style={styles.footer}>
-                    <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
-                        <Text style={styles.footerButtonText}>
-                            Request
-                        </Text>
-                    </TouchableOpacity>
-                    <View style={styles.footerDivider}/>
-                    <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'pay'})} style={styles.footerButton}>
-                        <Text style={styles.footerButtonText}>
-                            Pay
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-        )
+                <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
+                    <Text style={styles.balanceUSD}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
+                    <Text style={styles.balanceBTC}>{balance} BTC</Text>
+                    <Text style={styles.balanceDescription}>Your bitcoin</Text>
+                </TouchableOpacity>
 
-    }
+            </View>
+
+            {/* if there are no transactions render blank*/}
+            {transactions.length == 0 && renderBlank}
+            {/* if there are  transactions render them in sectionList*/}
+            {transactions.length !== 0 && renderSections}
+            <View style={styles.footer}>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
+                    <Text style={styles.footerButtonText}>
+                        Request
+                    </Text>
+                </TouchableOpacity>
+                <View style={styles.footerDivider}/>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'pay'})} style={styles.footerButton}>
+                    <Text style={styles.footerButtonText}>
+                        Pay
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+
+
 
 }
 

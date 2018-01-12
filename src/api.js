@@ -5,6 +5,7 @@ let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
 let bitcoinTransaction = require('bitcoin-transaction')
 var axios = require('axios')
+import {cryptoNames} from "./lib/cryptos"
 const SATOSHI_CONVERSION = 100000000;
 
 function UsernameExists(username) {
@@ -198,31 +199,23 @@ function GetCrypto(uid, currency = null) {
     return new Promise((resolve, reject) => {
 
         // if currency is defined, get crypto of that specific currency
-        if (currency) {
-            firestore.collection("people").doc(uid).get().then(person => {
-                if (person.exists) {
-                    resolve(person.data().crypto[currency])
-                } else {
-                    reject("Error: person does not exist")
-                }
-            }).catch(error => {
-                reject(error)
-            })
-        }
-        else {
-            // get all cryptos
-            firestore.collection("people").doc(uid).get().then(person => {
-                if (person.exists) {
-                    const crypto = person.data().crypto
 
-                    resolve(crypto)
-                } else {
-                    reject("Error: person does not exist")
+        firestore.collection("people").doc(uid).get().then(person => {
+            if (person.exists) {
+                if (currency) {
+                    let specificCrypto = person.data().crypto[currency]
+                    resolve(specificCrypto)
                 }
-            }).catch(error => {
-                reject(error)
-            })
-        }
+                else {
+                    let crypto = person.data().crypto
+                    resolve(crypto)
+                }
+            } else {
+                reject("Error: person does not exist")
+            }
+        }).catch(error => {
+            reject(error)
+        })
 
     });
 }
@@ -238,7 +231,6 @@ function GetExchangeRate(currency = 'BTC') {
     })
 }
 
-// new transaction
 function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
 
     return new Promise((resolve, reject) => {

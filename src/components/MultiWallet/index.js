@@ -1,4 +1,4 @@
-import Wallet from "./Wallet"
+import MultiWallet from "./MultiWallet"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {GetCrypto} from "../../actions/crypto";
@@ -17,4 +17,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Wallet)
+export default connect(mapStateToProps, mapDispatchToProps)(MultiWallet)
