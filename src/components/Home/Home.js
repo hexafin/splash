@@ -26,7 +26,7 @@ const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transac
 
     // v1 - only bitcoin
     const balance = crypto.BTC.balance/cryptoUnits.BTC
-    const relativeBalance = (balance*exchangeRate[defaultCurrency]).toFixed(2)
+    const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
 
     // render blank screen w/o transactions
     const renderBlank = (

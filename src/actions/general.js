@@ -312,7 +312,9 @@ export const LoadApp = () => {
             // load exchange rates
             dispatch(updateExchangeInit())
             api.GetExchangeRate().then(exchangeRate => {
-                dispatch(updateExchangeSuccess(exchangeRate))
+                dispatch(updateExchangeSuccess({
+                  BTC: exchangeRate
+                }))
                 // go to the home page
                 Actions.home()
             }).catch(error => {
