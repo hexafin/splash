@@ -152,19 +152,51 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 
 export const AcceptRequest = (requestId) => {
   return (dispatch, getState) => {
+    const state = getState()
+    const exchangeRate = state.general.exchangeRate.BTC.USD
+
     dispatch(acceptTransactionInit(requestId))
+
     const dateTime = Date.now();
     const timestamp_accepted = Math.floor(dateTime / 1000);
+    let amount = null
+    let transaction = {}
+
+    for(request of state.transactions.requests) {
+      if(request.key == requestId) {
+
+        amount = (request.relative_amount/exchangeRate)
+        transaction = {
+          transactionType: 'transaction',
+          emoji: request.emoji,
+          relative_amount: request.relative_amount,
+          amount: amount,
+          other_person: {
+            facebook_id: request.facebook_id,
+            first_name: request.first_name,
+            last_name: request.last_name,
+            username: request.username,
+          }
+        }
+
+      }
+    }
+
     const updateDict = {
       accepted: true,
+      amount: amount,
       timestamp_accepted: timestamp_accepted,
     }
 
     api.UpdateRequest(requestId, updateDict).then(response => {
       dispatch(removeRequest(requestId))
+
+      const createTransaction = CreateTransaction(transaction)
+      createTransaction(dispatch, getState)
+
       dispatch(acceptTransactionSuccess(requestId))
 
-      // TODO: create new transaction from request
+      // TODO: notifications
 
     }).catch(error => {
       dispatch(acceptTransactionFailure(error))
@@ -185,6 +217,8 @@ export const DeclineRequest = (requestId) => {
     api.UpdateRequest(requestId, updateDict).then(response => {
       dispatch(removeRequest(requestId))
       dispatch(declineTransactionSuccess(requestId))
+
+      // TODO: notifications
     }).catch(error => {
       dispatch(declineTransactionFailure(error))
     })
