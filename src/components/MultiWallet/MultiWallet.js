@@ -25,8 +25,7 @@ const MultiWallet = ({crypto, exchangeRate, defaultCurrency}) => {
         let balance = 0
         for (let i=0; i<cryptoNames.length; i++) {
             const currency = cryptoNames[i]
-            const relativeBalance =
-                crypto[currency].balance/cryptoUnits[currency]*exchangeRate[currency][defaultCurrency]
+            const relativeBalance = crypto[currency].balance/cryptoUnits[currency]*exchangeRate[currency][defaultCurrency]
             balance = balance + relativeBalance
         }
         return balance.toFixed(2)
