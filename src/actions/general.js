@@ -79,7 +79,7 @@ export function updateExchangeInit() {
 }
 
 export const UPDATE_EXCHANGE_SUCCESS = "UPDATE_EXCHANGE_SUCCESS"
-export function updateExchangeSuccess(balance, exchangeRate) {
+export function updateExchangeSuccess(exchangeRate) {
     return {type: UPDATE_EXCHANGE_SUCCESS, exchangeRate}
 }
 
