@@ -4,8 +4,8 @@ import {ifIphoneX} from "react-native-iphone-x-helper"
 
 export const defaults = {
 	shadowOffset: {
-			width: 0,
-			height: 10,
+		width: 0,
+		height: 10,
 	},
 	shadowOpacity: 0.1,
 	shadowRadius: 24,
@@ -23,6 +23,13 @@ export const defaults = {
 		...ifIphoneX({
 			paddingTop: 20,
 			paddingBottom: 20
+		}, {
+			paddingTop: 0,
+			paddingBottom: 0
 		})
 	}
+}
+
+export const icons = {
+	BTC: require("./images/bitcoin-logo.png")
 }

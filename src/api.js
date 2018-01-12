@@ -1,9 +1,11 @@
 import firebase from 'react-native-firebase'
+
 let firestore = firebase.firestore()
 let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
 let bitcoinTransaction = require('bitcoin-transaction')
 var axios = require('axios')
+import {cryptoNames} from "./lib/cryptos"
 const SATOSHI_CONVERSION = 100000000;
 
 function UsernameExists(username) {
@@ -35,15 +37,16 @@ function NewBitcoinWallet() {
     }
 }
 
-const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pictureURL, address=null, city=null,
-                    state=null, zipCode=null, country=null, phoneNumber=null, coinbaseId=null}) => {
+const NewAccount = (uid, {
+    username, firstName, lastName, email, facebookId, pictureURL, defaultCurrency = "USD",
+    address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null,
+    coinbaseId = null
+}) => {
 
-    return new Promise ((resolve, reject) => {
-
-        const bitcoinWallet = NewBitcoinWallet()
+    return new Promise((resolve, reject) => {
 
         const dateTime = Date.now();
-        const ts = Math.floor(dateTime*1.0 / 1000);
+        const ts = Math.floor(dateTime * 1.0 / 1000);
 
         const newPerson = {
             joined: ts,
@@ -51,24 +54,20 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
             first_name: firstName,
             last_name: lastName,
             email: email,
-            coinbase_id: null,
             facebook_id: facebookId,
-            picture_url: pictureURL,
-            address_bitcoin: bitcoinWallet.address,
+            coinbase_id: coinbaseId,
+            default_currency: defaultCurrency
+            // picture_url: pictureURL,
             // phone_number: phoneNumber,
             // address: address,
             // city: city,
             // state: state,
             // zip_code: zipCode,
             // country: country,
-            // coinbase_id: coinbaseId,
         }
 
         firestore.collection("people").doc(uid).set(newPerson).then(() => {
-            resolve({
-              person: newPerson,
-              privateKey: bitcoinWallet.wif,
-            })
+            resolve(newPerson)
         }).catch(error => {
             reject(error)
         })
@@ -79,7 +78,7 @@ const NewAccount = (uid, {username, firstName, lastName, email, facebookId, pict
 
 const UpdateAccount = (uid, updateDict) => {
 
-    return new Promise ((resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
         firestore.collection("people").doc(uid).update(updateDict).then(() => {
             firestore.collection("people").doc(uid).get().then(person => {
@@ -96,215 +95,306 @@ const UpdateAccount = (uid, updateDict) => {
 }
 
 const HandleCoinbase = (uid, coinbaseDict) => {
-  //get coinbase user info and update firebase
+    //get coinbase user info and update firebase
 
-  return new Promise ((resolve, reject) => {
-    const AuthStr = 'Bearer '.concat(coinbaseDict.coinbase_access_token);
-    axios.get('https://api.coinbase.com/v2/user', { headers: { Authorization: AuthStr } }).then(response => {
-      const coinbaseData = response.data
+    return new Promise((resolve, reject) => {
+        const AuthStr = 'Bearer '.concat(coinbaseDict.coinbase_access_token);
+        axios.get('https://api.coinbase.com/v2/user', {headers: {Authorization: AuthStr}}).then(response => {
+            const coinbaseData = response.data
 
-      const updateData = { coinbase_id: coinbaseData.data.id, coinbase_info: {...coinbaseDict, ...coinbaseData.data}}
-      UpdateAccount(uid, updateData).then(() => {
-        resolve(updateData)
-      }).catch((error) => {
-        reject(error)
-      })
-    }).catch(error => {
-      reject(error)
+            const updateData = {
+                coinbase_id: coinbaseData.data.id,
+                coinbase_info: {...coinbaseDict, ...coinbaseData.data}
+            }
+            UpdateAccount(uid, updateData).then(() => {
+                resolve(updateData)
+            }).catch((error) => {
+                reject(error)
+            })
+        }).catch(error => {
+            reject(error)
+        })
     })
-  })
 }
 
-// takes address and returns balance or error
-// calls internal api
-function GetBalance(uid) {
+function GetBalance(uid, currency = null) {
     return new Promise((resolve, reject) => {
-      firestore.collection("people").doc(uid).get().then(person => {
-          if(person.exists) {
-            resolve(person.data().crypto)
-          } else {
-            reject("Error: person does not exist")
-          }
-      }).catch(error => {
-          reject(error)
-      })
+
+        // if currency is defined, get balance of that specific currency
+        if (currency) {
+            firestore.collection("people").doc(uid).get().then(person => {
+                if (person.exists) {
+                    resolve(person.data().crypto[currency].balance)
+                } else {
+                    reject("Error: person does not exist")
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        }
+        else {
+            // get all balances
+            firestore.collection("people").doc(uid).get().then(person => {
+                if (person.exists) {
+
+                    const returnable = {}
+
+                    const crypto = person.data().crypto
+                    crypto.forEach(item => {
+                        returnable[currency].balance = item.balance
+                    })
+
+                    resolve(returnable)
+                } else {
+                    reject("Error: person does not exist")
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        }
+
     });
 }
 
-function GetExchangeRate(currency='BTC') {
-  return new Promise((resolve, reject) => {
-    const APIaddress = 'https://api.coinbase.com/v2/exchange-rates?currency=$'.replace('$', currency)
-    axios.get(APIaddress).then(response => {
-      resolve(response.data.data.rates)
-    }).catch(error => {
-      reject(error)
-    })
-  })
+function GetAddress(uid, currency = null) {
+    return new Promise((resolve, reject) => {
+
+        // if currency is defined, get address of that specific currency
+        if (currency) {
+            firestore.collection("people").doc(uid).get().then(person => {
+                if (person.exists) {
+                    resolve(person.data().crypto[currency].address)
+                } else {
+                    reject("Error: person does not exist")
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        }
+        else {
+            // get all addresses
+            firestore.collection("people").doc(uid).get().then(person => {
+                if (person.exists) {
+
+                    const returnable = {}
+
+                    const crypto = person.data().crypto
+                    crypto.forEach(item => {
+                        returnable[currency].address = item.address
+                    })
+
+                    resolve(returnable)
+                } else {
+                    reject("Error: person does not exist")
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        }
+
+    });
 }
 
-// new transaction
-function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type='friend', relative_currency='USD', currency='BTC'}) {
+function GetCrypto(uid, currency = null) {
+    return new Promise((resolve, reject) => {
 
-    return new Promise ((resolve, reject) => {
+        // if currency is defined, get crypto of that specific currency
+
+        firestore.collection("people").doc(uid).get().then(person => {
+            if (person.exists) {
+                if (currency) {
+                    let specificCrypto = person.data().crypto[currency]
+                    resolve(specificCrypto)
+                }
+                else {
+                    let crypto = person.data().crypto
+                    resolve(crypto)
+                }
+            } else {
+                reject("Error: person does not exist")
+            }
+        }).catch(error => {
+            reject(error)
+        })
+
+    });
+}
+
+function GetExchangeRate(currency = 'BTC') {
+    return new Promise((resolve, reject) => {
+        const APIaddress = 'https://api.coinbase.com/v2/exchange-rates?currency=$'.replace('$', currency)
+        axios.get(APIaddress).then(response => {
+            resolve(response.data.data.rates)
+        }).catch(error => {
+            reject(error)
+        })
+    })
+}
+
+function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
+
+    return new Promise((resolve, reject) => {
 
         const dateTime = Date.now();
         const timestamp_initiated = Math.floor(dateTime / 1000);
         if (transactionType == 'pay') {
-          const newTransaction = {
-            from_id: from_id,
-            to_id: to_id,
-            amount: amount,
-            relative_amount: relative_amount,
-            fee: fee,
-            emoji: emoji,
-            type: type,
-            currency: currency,
-            relative_currency: relative_currency,
-            timestamp_initiated: timestamp_initiated,
-            timestamp_completed: timestamp_initiated
-          }
+            const newTransaction = {
+                from_id: from_id,
+                to_id: to_id,
+                amount: amount,
+                relative_amount: relative_amount,
+                fee: fee,
+                emoji: emoji,
+                type: type,
+                currency: currency,
+                relative_currency: relative_currency,
+                timestamp_initiated: timestamp_initiated,
+                timestamp_completed: timestamp_initiated
+            }
 
-          firestore.collection("transactions").add(newTransaction).then(() => {
-              resolve(newTransaction)
-          }).catch(error => {
-              reject(error)
-          })
+            firestore.collection("transactions").add(newTransaction).then(() => {
+                resolve(newTransaction)
+            }).catch(error => {
+                reject(error)
+            })
         } else {
-          const newRequest = {
-            from_id: from_id,
-            to_id: to_id,
-            amount: amount,
-            relative_amount: relative_amount,
-            fee: fee,
-            emoji: emoji,
-            type: type,
-            accepted: false,
-            declined: false,
-            number_of_reminders: 0,
-            currency: currency,
-            relative_currency: relative_currency,
-            timestamp_initiated: timestamp_initiated,
-            timestamp_completed: null,
-            timestamp_declined: null,
-          }
+            const newRequest = {
+                from_id: from_id,
+                to_id: to_id,
+                amount: amount,
+                relative_amount: relative_amount,
+                fee: fee,
+                emoji: emoji,
+                type: type,
+                accepted: false,
+                declined: false,
+                number_of_reminders: 0,
+                currency: currency,
+                relative_currency: relative_currency,
+                timestamp_initiated: timestamp_initiated,
+                timestamp_completed: null,
+                timestamp_declined: null,
+            }
 
-          firestore.collection("requests").add(newRequest).then(() => {
-              resolve(newRequest)
-          }).catch(error => {
-              reject(error)
-          })
+            firestore.collection("requests").add(newRequest).then(() => {
+                resolve(newRequest)
+            }).catch(error => {
+                reject(error)
+            })
         }
     })
 }
 
 function GetUidFromFB(facebook_id) {
-  return new Promise ((resolve, reject) => {
-    firestore.collection("people").where("facebook_id", "==", facebook_id).get().then(query => {
-      const person = query.docs[0]
-      resolve(person.id)
-    }).catch(error => {
-      reject(error)
+    return new Promise((resolve, reject) => {
+        firestore.collection("people").where("facebook_id", "==", facebook_id).get().then(query => {
+            const person = query.docs[0]
+            resolve(person.id)
+        }).catch(error => {
+            reject(error)
+        })
     })
-  })
 }
 
 function LoadTransactions(uid) {
-  const getTransactions = (direction) => {
-    return new Promise ((resolve, reject) => {
-      const transactions = []
-      let index = 0
-      firestore.collection("transactions").where(direction, "==", uid).get().then(query => {
-        if(query.empty) {
-          resolve([])
-        }
-        for(let i = 0; i < query.size; i++) {
+    const getTransactions = (direction) => {
+        return new Promise((resolve, reject) => {
+            const transactions = []
+            let index = 0
+            firestore.collection("transactions").where(direction, "==", uid).get().then(query => {
+                if (query.empty) {
+                    resolve([])
+                }
+                for (let i = 0; i < query.size; i++) {
 
-          const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
-          firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
-            const person = response.data()
-            const transaction = query.docs[i].data()
-            transactions.push({
-                               ...transaction,
-                               ...person,
-                               type: 'transaction',
-                              })
-          if(query.size == transactions.length) {
-            resolve(transactions)
-          }
-          }).catch(error => {
-            reject(error)
-          })
-        }
-      }).catch(error => {
-          reject(error)
-      })
-    })
-  }
+                    const otherPersonId = (direction == 'from_id') ? 'to_id' : 'from_id'
+                    firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
+                        const person = response.data()
+                        const transaction = query.docs[i].data()
+                        transactions.push({
+                            ...transaction,
+                            ...person,
+                            type: 'transaction',
+                        })
+                        if (query.size == transactions.length) {
+                            resolve(transactions)
+                        }
+                    }).catch(error => {
+                        reject(error)
+                    })
+                }
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    }
 
-  return new Promise ((resolve, reject) => {
-    // get transactions from me and to me
-    Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
-      const result = values[0].concat(values[1])
-      //sort by timestamp_completed
-      result.sort((a, b) => {
-        return b.timestamp_completed - a.timestamp_completed
-      })
-      resolve(result)
-    }).catch(errors => {
-      reject(errors)
+    return new Promise((resolve, reject) => {
+        // get transactions from me and to me
+        Promise.all([getTransactions('from_id'), getTransactions('to_id')]).then(values => {
+            const result = values[0].concat(values[1])
+            //sort by timestamp_completed
+            result.sort((a, b) => {
+                return b.timestamp_completed - a.timestamp_completed
+            })
+            resolve(result)
+        }).catch(errors => {
+            reject(errors)
+        })
     })
-  })
 }
 
 function ConvertTimestampToDate(timestamp) {
-  let date = new Date(timestamp*1000);
-  let hours = date.getHours()
-  let amPM = ''
-  if (hours > 12) {
-    hours -= 12
-    amPM = 'PM'
-  } else {
-    amPM = 'AM'
-  }
-  let minutes = date.getMinutes()
-  if (minutes < 10) {
-    minutes = "0" + minutes
-  }
-  return hours + ":" + minutes + amPM + " " + (1+date.getMonth()) + '/' + date.getDate()
+    let date = new Date(timestamp * 1000);
+    let hours = date.getHours()
+    let amPM = ''
+    if (hours > 12) {
+        hours -= 12
+        amPM = 'PM'
+    } else {
+        amPM = 'AM'
+    }
+    let minutes = date.getMinutes()
+    if (minutes < 10) {
+        minutes = "0" + minutes
+    }
+    return hours + ":" + minutes + amPM + " " + (1 + date.getMonth()) + '/' + date.getDate()
 }
 
 function LoadFriends(facebook_id, access_token) {
-  // get facebook friends
-  return new Promise ((resolve, reject) => {
+    // get facebook friends
+    return new Promise((resolve, reject) => {
 
-    const APIaddress = "https://graph.facebook.com/v2.11/$/friends".replace('$', facebook_id)
-    const friends = []
+        const APIaddress = "https://graph.facebook.com/v2.11/$/friends".replace('$', facebook_id)
+        const friends = []
 
-    axios.get(
-        APIaddress,
-        {params: {
-                access_token: access_token
-            }}
-    ).then(response => {
-      const friendsData = response.data.data
-      for (friend of friendsData) {
-
-        firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
-          if (!person.empty) {
-            const newFriend = person.docs[0].data()
-            friends.push(newFriend)
-            if (friends.length == friendsData.length) {
-              resolve(friends)
+        axios.get(
+            APIaddress,
+            {
+                params: {
+                    access_token: access_token
+                }
             }
-          }
+        ).then(response => {
+            const friendsData = response.data.data
+            for (friend of friendsData) {
+
+                firestore.collection("people").where("facebook_id", "=", friend.id).get().then(person => {
+                    if (!person.empty) {
+                        const newFriend = person.docs[0].data()
+                        friends.push(newFriend)
+                        if (friends.length == friendsData.length) {
+                            resolve(friends)
+                        }
+                    }
+                }).catch(error => {
+                    reject(error)
+                });
+            }
         }).catch(error => {
             reject(error)
-        });
-      }
-    }).catch(error => {
-      reject(error)
+        })
     })
-  })
 }
 
 // log
@@ -333,6 +423,8 @@ export default api = {
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,
+    GetAddress: GetAddress,
+    GetCrypto: GetCrypto,
     GetExchangeRate: GetExchangeRate,
     ConvertTimestampToDate: ConvertTimestampToDate,
     Log: Log

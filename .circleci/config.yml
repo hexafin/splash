@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/splash
+    working_directory: ~/project
     docker:
       - image: circleci/node:8
     steps:
@@ -9,23 +9,23 @@ jobs:
       - run: yarn
       - run: yarn run test
       - persist_to_workspace:
-          root: ~/splash
+          root: ~/project
           paths:
             - node_modules
       - store_test_results:
-          path: ~/splash/junit.xml
+          path: ~/project/junit.xml
 
   staging:
     # TODO: testflight release
     macos:
       xcode: "9.0"
-    working_directory: /Users/distiller/splash/ios
+    working_directory: ~/project/ios
     environment:
-      FL_OUTPUT_DIR: /Users/distiller/splash/output
+      FL_OUTPUT_DIR: ~/project/output
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout:
-          path: /Users/distiller/splash
+          path: ~/project
       - run:
           name: Set Ruby Version
           command:  echo "ruby-2.4" > ~/.ruby-version
@@ -38,21 +38,21 @@ jobs:
           command: cp $FL_OUTPUT_DIR/scan/report.junit $FL_OUTPUT_DIR/scan/results.xml
           when: always
       - store_artifacts:
-          path: /Users/distiller/splash/output
+          path: ~/project/output
       - store_test_results:
-          path: /Users/distiller/splash/output/scan
+          path: ~/project/output/scan
 
   master:
     # TODO: codepush release
     macos:
       xcode: "9.0"
-    working_directory: /Users/distiller/splash/ios
+    working_directory: ~/project/ios
     environment:
-      FL_OUTPUT_DIR: /Users/distiller/splash/output
+      FL_OUTPUT_DIR: ~/project/output
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout:
-          path: /Users/distiller/splash
+          path: ~/project
       - run:
           name: Set Ruby Version
           command:  echo "ruby-2.4" > ~/.ruby-version
@@ -65,21 +65,21 @@ jobs:
           command: cp $FL_OUTPUT_DIR/scan/report.junit $FL_OUTPUT_DIR/scan/results.xml
           when: always
       - store_artifacts:
-          path: /Users/distiller/splash/output
+          path: ~/project/output
       - store_test_results:
-          path: /Users/distiller/splash/output/scan
+          path: ~/project/output/scan
 
   release:
     # TODO: full app store release
     macos:
       xcode: "9.0"
-    working_directory: /Users/distiller/splash/ios
+    working_directory: ~/project/ios
     environment:
-      FL_OUTPUT_DIR: /Users/distiller/splash/output
+      FL_OUTPUT_DIR: ~/project/output
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout:
-          path: /Users/distiller/splash
+          path: ~/project
       - run:
           name: Set Ruby Version
           command:  echo "ruby-2.4" > ~/.ruby-version
@@ -92,9 +92,9 @@ jobs:
           command: cp $FL_OUTPUT_DIR/scan/report.junit $FL_OUTPUT_DIR/scan/results.xml
           when: always
       - store_artifacts:
-          path: /Users/distiller/splash/output
+          path: ~/project/output
       - store_test_results:
-          path: /Users/distiller/splash/output/scan
+          path: ~/project/output/scan
 
 
 workflows:

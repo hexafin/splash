@@ -13,6 +13,7 @@ import ManageFunds from "./components/ManageFunds"
 import SetAmount from "./components/SetAmount"
 import Receipt from "./components/Receipt"
 import Transaction from "./components/Transaction"
+import MultiWallet from "./components/MultiWallet"
 import Wallet from "./components/Wallet"
 import Profile from "./components/Profile"
 import Feedback from "./components/Feedback"
@@ -37,6 +38,7 @@ const scenes = Actions.create(
                 <Scene key="setamount" component={SetAmount} hideNavBar={true} />
                 <Scene key="receipt" component={Receipt} hideNavBar={true} />
             </Scene>
+            <Scene key="multiWallet" component={MultiWallet} hideNavBar={true}/>
             <Scene key="wallet" component={Wallet} hideNavBar={true}/>
             <Scene key="profile" component={Profile} hideNavBar={true}/>
             <Scene key="feedback" component={Feedback} hideNavBar={true}/>
