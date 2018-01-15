@@ -72,6 +72,21 @@ export function declineTransactionFailure(error) {
     return {type: DECLINE_TRANSACTION_FAILURE, error}
 }
 
+export const DELETE_TRANSACTION_INIT = "DELETE_TRANSACTION_INIT";
+export function deleteTransactionInit(transactionRef) {
+    return {type: DELETE_TRANSACTION_INIT, transactionRef}
+}
+
+export const DELETE_TRANSACTION_SUCCESS = "DELETE_TRANSACTION_SUCCESS";
+export function deleteTransactionSuccess(transactionRef) {
+    return {type: DELETE_TRANSACTION_SUCCESS, transactionRef}
+}
+
+export const DELETE_TRANSACTION_FAILURE = "DELETE_TRANSACTION_FAILURE";
+export function deleteTransactionFailure(error) {
+    return {type: DELETE_TRANSACTION_FAILURE, error}
+}
+
 export const REMOVE_REQUEST = "REMOVE_REQUEST";
 export function removeRequest(transactionRef) {
     return {type: REMOVE_REQUEST, transactionRef}
@@ -164,7 +179,7 @@ export const AcceptRequest = (requestId) => {
 
     const updateDict = {
       accepted: true,
-      // amount: amount, 
+      // amount: amount,
       timestamp_accepted: timestamp,
     }
 
@@ -202,6 +217,18 @@ export const DeclineRequest = (requestId) => {
       // TODO: notifications
     }).catch(error => {
       dispatch(declineTransactionFailure(error))
+    })
+  }
+}
+
+export const DeleteRequest = (requestId) => {
+  return (dispatch, getState) => {
+    dispatch(deleteTransactionInit(requestId))
+    api.RemoveRequest(requestId).then(() => {
+      dispatch(removeWaiting(requestId))
+      dispatch(deleteTransactionSuccess(requestId))
+    }).catch(error => {
+      dispatch(deleteTransactionFailure(error))
     })
   }
 }

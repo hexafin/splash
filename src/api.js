@@ -106,6 +106,16 @@ const UpdateRequest = (requestId, updateDict) => {
     })
 }
 
+const RemoveRequest = (requestId) => {
+  return new Promise ((resolve, reject) => {
+    firestore.collection("requests").doc(requestId).delete().then(response => {
+      resolve(response)
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
 const HandleCoinbase = (uid, coinbaseDict) => {
   // get coinbase user info and update firebase
 
@@ -483,6 +493,7 @@ export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
     UpdateRequest: UpdateRequest,
+    RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,
     HandleCoinbase: HandleCoinbase,
     GetUidFromFB: GetUidFromFB,

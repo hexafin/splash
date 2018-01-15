@@ -9,6 +9,9 @@ import {
     ACCEPT_TRANSACTION_INIT,
     ACCEPT_TRANSACTION_SUCCESS,
     ACCEPT_TRANSACTION_FAILURE,
+    DELETE_TRANSACTION_INIT,
+    DELETE_TRANSACTION_SUCCESS,
+    DELETE_TRANSACTION_FAILURE,
     NEW_TRANSACTION_INIT,
     NEW_TRANSACTION_SUCCESS,
     NEW_TRANSACTION_FAILURE,
@@ -30,6 +33,8 @@ var initialState = {
     errorCreatingTransaction: null,
     isDecliningRequest: false,
     errorDecliningRequest: null,
+    isDeletingRequest: false,
+    errorDeletingRequest: null,
     isAcceptingRequest: false,
     errorAcceptingRequest: null
 };
@@ -89,6 +94,32 @@ export default function transactionsReducer(state = initialState, action) {
                 ...state,
                 isDecliningRequest: false,
                 errorDecliningRequest: action.error,
+
+            }
+
+        case DELETE_TRANSACTION_INIT:
+
+            return {
+                ...state,
+                errorDeletingRequest: null,
+                isDeletingRequest: true,
+            }
+
+        case DELETE_TRANSACTION_SUCCESS:
+
+            return {
+                ...state,
+                errorDeletingRequest: null,
+                isDeletingRequest: false,
+
+            }
+
+        case DELETE_TRANSACTION_FAILURE:
+
+            return {
+                ...state,
+                isDeletingRequest: false,
+                errorDeletingRequest: action.error,
 
             }
 

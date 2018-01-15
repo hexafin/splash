@@ -40,7 +40,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
 
     const sections = [
       //  {data: [], title: 'Recents'},
-        {data: [], title: 'GenericLines'},
+        {data: [], title: 'Friends'},
     ];
 
     // build and order sections from friend data
@@ -52,7 +52,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
                 data.push({...friend, type: 'friend', key: (sectionIndex.toString() + i.toString())})
             }
         }
-        if (section.title == 'GenericLines') {
+        if (section.title == 'Friends') {
             for (let i = 0; i < friends.length; i++) {
                 const friend = friends[i];
                 data.push({...friend, type: 'friend', key: (sectionIndex.toString() + i.toString())})

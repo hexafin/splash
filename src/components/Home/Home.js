@@ -20,7 +20,8 @@ import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
-const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting, DeclineRequest, AcceptRequest}) => {
+const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting,
+               DeclineRequest, AcceptRequest, DeleteRequest}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -57,6 +58,8 @@ const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transac
                 if (section.type == 'request') {
                   callbacks.leftCallback = DeclineRequest
                   callbacks.rightCallback = AcceptRequest
+                } else if (section.type == 'waiting') {
+                  callbacks.leftCallback = DeleteRequest
                 }
 
                 data.push({...items[i], id: items[i].key, ...callbacks})
