@@ -13,7 +13,7 @@ import {colors} from "../../lib/colors"
 import EmojiButton from "../universal/EmojiButton"
 import Button from "../universal/Button"
 import BackButton from "../universal/BackButton"
-import Friend from '../universal/Friend'
+import GenericLine from '../universal/GenericLine'
 import Wallet from '../Wallet'
 import {Actions} from "react-native-router-flux"
 import {defaults} from "../../lib/styles"
@@ -80,7 +80,7 @@ const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transac
 
             <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                          stickySectionHeadersEnabled={false}
-                         renderItem={({item}) => <Friend {...item}/>}
+                         renderItem={({item}) => <GenericLine {...item}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />

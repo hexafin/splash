@@ -243,6 +243,26 @@ function GetExchangeRate(currency = 'BTC') {
     })
 }
 
+function NewTransactionFromRequest(requestId, exchangeRate, timestamp) {
+  return new Promise((resolve, reject) => {
+
+    firestore.collection("requests").doc(requestId).get().then(request => {
+        let newTransaction = request.data()
+        newTransaction.timestamp_completed = timestamp
+        newTransaction.amount = (newTransaction.relative_amount/exchangeRate)*SATOSHI_CONVERSION
+
+        firestore.collection("transactions").add(newTransaction).then(() => {
+            resolve(newTransaction)
+        }).catch(error => {
+            reject(error)
+        })
+
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
 function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
 
     return new Promise((resolve, reject) => {
@@ -467,6 +487,7 @@ export default api = {
     HandleCoinbase: HandleCoinbase,
     GetUidFromFB: GetUidFromFB,
     NewTransaction: NewTransaction,
+    NewTransactionFromRequest: NewTransactionFromRequest,
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,

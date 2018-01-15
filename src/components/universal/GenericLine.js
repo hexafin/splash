@@ -20,7 +20,7 @@ const SATOSHI_CONVERSION = 100000000;
 
 // presentational component for friend or transaction entry
 //can have type waiting, request, transaction, friend, emoji, or none depending on usage
-const Friend = ({id, picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
+const GenericLine = ({id, picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
     const convertedAmount = (amount*1.0/SATOSHI_CONVERSION).toFixed(4)
     const name = first_name + ' ' + last_name
     const date = api.ConvertTimestampToDate(timestamp_completed)
@@ -157,4 +157,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Friend
+export default GenericLine

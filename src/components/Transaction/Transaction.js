@@ -8,7 +8,7 @@ import {
     SectionList,
 } from "react-native"
 import {colors} from "../../lib/colors"
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
 import EmojiButton from "../universal/EmojiButton";
@@ -40,7 +40,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
 
     const sections = [
       //  {data: [], title: 'Recents'},
-        {data: [], title: 'Friends'},
+        {data: [], title: 'GenericLines'},
     ];
 
     // build and order sections from friend data
@@ -52,7 +52,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
                 data.push({...friend, type: 'friend', key: (sectionIndex.toString() + i.toString())})
             }
         }
-        if (section.title == 'Friends') {
+        if (section.title == 'GenericLines') {
             for (let i = 0; i < friends.length; i++) {
                 const friend = friends[i];
                 data.push({...friend, type: 'friend', key: (sectionIndex.toString() + i.toString())})
@@ -74,7 +74,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
 
             <SectionList style={{padding: 15}}
                          stickySectionHeadersEnabled={false}
-                         renderItem={({item}) => <Friend {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
+                         renderItem={({item}) => <GenericLine {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />

@@ -14,7 +14,7 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import Button from "../universal/Button"
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import {Input, MultiInput, MultiInputBlock} from "../universal/Input"
 import BackButton from "../universal/BackButton"
 import EmojiButton from "../universal/EmojiButton"
