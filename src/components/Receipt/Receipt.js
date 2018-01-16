@@ -7,7 +7,7 @@ import {
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import BackButton from "../universal/BackButton"
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
@@ -24,7 +24,7 @@ const Receipt = ({transactionType, to, emoji, amount, relative_amount, LoadApp})
                 <Text style={styles.balanceUSD}>${relative_amount}</Text>
                 <Text style={styles.balanceBTC}>{amount} BTC</Text>
             </View>
-            <Friend {...to} emoji={emoji} type={'emoji'}/>
+            <GenericLine {...to} emoji={emoji} type={'emoji'}/>
             {transactionType == 'request' &&
             [<Text key={0} style={styles.descriptionText}>We’ll send {to.first_name} {to.last_name} your request.</Text>,
                 <Text key={1} style={styles.descriptionText}>Once they accept, They will receive</Text>,

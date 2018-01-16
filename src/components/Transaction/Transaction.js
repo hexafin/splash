@@ -8,7 +8,7 @@ import {
     SectionList,
 } from "react-native"
 import {colors} from "../../lib/colors"
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
 import EmojiButton from "../universal/EmojiButton";
@@ -74,7 +74,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
 
             <SectionList style={{padding: 15}}
                          stickySectionHeadersEnabled={false}
-                         renderItem={({item}) => <Friend {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
+                         renderItem={({item}) => <GenericLine {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />

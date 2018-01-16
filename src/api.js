@@ -91,7 +91,29 @@ const UpdateAccount = (uid, updateDict) => {
         })
 
     })
+}
 
+const UpdateRequest = (requestId, updateDict) => {
+
+    return new Promise ((resolve, reject) => {
+
+        firestore.collection("requests").doc(requestId).update(updateDict).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+
+    })
+}
+
+const RemoveRequest = (requestId) => {
+  return new Promise ((resolve, reject) => {
+    firestore.collection("requests").doc(requestId).delete().then(response => {
+      resolve(response)
+    }).catch(error => {
+      reject(error)
+    })
+  })
 }
 
 const HandleCoinbase = (uid, coinbaseDict) => {
@@ -229,6 +251,26 @@ function GetExchangeRate(currency = 'BTC') {
             reject(error)
         })
     })
+}
+
+function NewTransactionFromRequest(requestId, exchangeRate, timestamp) {
+  return new Promise((resolve, reject) => {
+
+    firestore.collection("requests").doc(requestId).get().then(request => {
+        let newTransaction = request.data()
+        newTransaction.timestamp_completed = timestamp
+        newTransaction.amount = (newTransaction.relative_amount/exchangeRate)*SATOSHI_CONVERSION
+
+        firestore.collection("transactions").add(newTransaction).then(() => {
+            resolve(newTransaction)
+        }).catch(error => {
+            reject(error)
+        })
+
+    }).catch(error => {
+      reject(error)
+    })
+  })
 }
 
 function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
@@ -450,10 +492,13 @@ function Log(type, content) {
 export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
+    UpdateRequest: UpdateRequest,
+    RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,
     HandleCoinbase: HandleCoinbase,
     GetUidFromFB: GetUidFromFB,
     NewTransaction: NewTransaction,
+    NewTransactionFromRequest: NewTransactionFromRequest,
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,

@@ -1,7 +1,7 @@
 // container for Home page
 import Home from "./Home"
 import {connect} from "react-redux"
-import {SignIn} from "../../actions/general";
+import {DeclineRequest, AcceptRequest, DeleteRequest} from "../../actions/transactions";
 import {bindActionCreators} from "redux";
 
 const mapStatetoProps = state => {
@@ -13,14 +13,14 @@ const mapStatetoProps = state => {
         crypto: state.crypto,
         exchangeRate: state.general.exchangeRate,
         transactions: state.transactions.transactions,
-        requests: state.transactions.requests.requests,
-        waiting: state.transactions.requests.waiting
+        requests: state.transactions.requests,
+        waiting: state.transactions.waiting
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        SignIn
+      DeclineRequest, AcceptRequest, DeleteRequest
     }, dispatch)
 }
 
