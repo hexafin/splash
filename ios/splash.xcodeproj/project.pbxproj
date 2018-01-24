@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -43,10 +44,10 @@
 		4CD38698E12E4BF38C90AE8C /* libTcpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E867B206F11B4083818FFEC7 /* libTcpSockets.a */; };
 		518231D0104A4545876D05CF /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 930BB444F74F4C1CB08DE29A /* libRNFirebase.a */; };
 		52E47C836C484B15B87E437A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4706AB8DB1A4918A7C8677D /* MaterialCommunityIcons.ttf */; };
-		57AE1AE51C443C6E9C8D2BDA /* libPods-hexa.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F094CE6EF587D193C7F41AC9 /* libPods-hexa.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		64DD0C3C08924E72905F1440 /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FDF894A3BED4A90AE8C75AE /* libRNRandomBytes.a */; };
 		670D4D08AD7B4686B9B5259C /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4832C4E25FF24595A8A582D3 /* MaterialIcons.ttf */; };
+		6F6F0CF0F4934F47A2FEB9EC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F51F37C0C294668BF95443E /* libz.tbd */; };
 		7554170F24854729801A72A8 /* AvenirNextLTPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2F704CF9B1A44B69DAB8EF4 /* AvenirNextLTPro-Regular.otf */; };
 		800485871FF7713300A72B72 /* CoinbaseApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 800485851FF7713100A72B72 /* CoinbaseApi.m */; };
 		8043B9F51FD37D0600AA4F4B /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8043B9F41FD37D0600AA4F4B /* fontello.ttf */; };
@@ -63,7 +64,6 @@
 		D6FD19E3C6964925921A467E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 679B00ED622C482DA3FA4D2E /* Entypo.ttf */; };
 		DAE7ED44D8BC45D9A8AFB712 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4FC22B6995954A179C54F5CA /* Ionicons.ttf */; };
 		DD005CB068934383B9C1990E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7139B65C4AAE4FCA8E649E27 /* Foundation.ttf */; };
-		6F6F0CF0F4934F47A2FEB9EC /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F51F37C0C294668BF95443E /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -399,6 +399,7 @@
 		19B37713312B49FBB9757A8B /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* splash-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "splash-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* splash-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "splash-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F51F37C0C294668BF95443E /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		3628AF5F645546B9900A3160 /* AvenirNextLTPro-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "AvenirNextLTPro-Bold.otf"; path = "../src/assets/fonts/AvenirNextLTPro-Bold.otf"; sourceTree = "<group>"; };
 		3AAD693A89DF44E7BFA6E82A /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		40A2DCCFEC484A5DAEB77C4B /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
@@ -437,7 +438,6 @@
 		EDF84E9E61964EF094C50B70 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		F094CE6EF587D193C7F41AC9 /* libPods-hexa.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hexa.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F74B4F4261FA174E19DA7196 /* libPods-splashTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-splashTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2F51F37C0C294668BF95443E /* libz.tbd */ = {isa = PBXFileReference; name = "libz.tbd"; path = "usr/lib/libz.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -477,7 +477,6 @@
 				B605876598E946248C5529C5 /* libRNOS.a in Frameworks */,
 				4CD38698E12E4BF38C90AE8C /* libTcpSockets.a in Frameworks */,
 				8CB243365D7B42B8866E97A0 /* libUdpSockets.a in Frameworks */,
-				57AE1AE51C443C6E9C8D2BDA /* libPods-hexa.a in Frameworks */,
 				271FC68895B6EB138F8D248B /* libPods-splash.a in Frameworks */,
 				6F6F0CF0F4934F47A2FEB9EC /* libz.tbd in Frameworks */,
 			);
@@ -821,14 +820,6 @@
 				8043B9F41FD37D0600AA4F4B /* fontello.ttf */,
 			);
 			name = Resources;
-			sourceTree = "<group>";
-		};
-		9307F1576314411FA025BF21 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
-			path = Application;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1458,6 +1449,20 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		9E7272670F4844C492CCB930 /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym";
+		};
 		B8E96A0DBD18A554D78F3E63 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1502,20 +1507,6 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-splashTests/Pods-splashTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		9E7272670F4844C492CCB930 /* Upload Debug Symbols to Sentry */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Upload Debug Symbols to Sentry";
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym";
 		};
 /* End PBXShellScriptBuildPhase section */
 
