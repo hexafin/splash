@@ -175,7 +175,7 @@ export default function transactionsReducer(state = initialState, action) {
 
         case REMOVE_REQUEST:
             let newRequests = []
-            for(var i = 0; i<state.requests; i++) {
+            for(var i = 0; i<state.requests.length; i++) {
               if(state.requests[i].key !== action.transactionRef) {
                 newRequests.push(state.requests[i])
               }
@@ -187,7 +187,7 @@ export default function transactionsReducer(state = initialState, action) {
 
         case REMOVE_WAITING:
             let newWaiting = []
-            for(var i = 0; i<state.waiting; i++) {
+            for(var i = 0; i<state.waiting.length; i++) {
               if(state.waiting[i].key !== action.transactionRef) {
                 newWaiting.push(state.waiting[i])
               }
