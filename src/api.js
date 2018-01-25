@@ -253,19 +253,22 @@ function GetExchangeRate(currency = 'BTC') {
     })
 }
 
-function NewTransactionFromRequest(requestId, exchangeRate, timestamp) {
+function NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp) {
   return new Promise((resolve, reject) => {
 
     firestore.collection("requests").doc(requestId).get().then(request => {
         let newTransaction = request.data()
         newTransaction.timestamp_completed = timestamp
         newTransaction.amount = (newTransaction.relative_amount/exchangeRate)*SATOSHI_CONVERSION
-
-        firestore.collection("transactions").add(newTransaction).then(() => {
-            resolve(newTransaction)
-        }).catch(error => {
-            reject(error)
-        })
+        if (newTransaction.amount < balance) {
+          firestore.collection("transactions").add(newTransaction).then(() => {
+              resolve(newTransaction)
+          }).catch(error => {
+              reject(error)
+          })
+        } else {
+          reject('Error: not enough BTC')
+        }
 
     }).catch(error => {
       reject(error)
@@ -372,6 +375,7 @@ function LoadTransactions(uid, transactionType) {
               transactions.push({
                                  ...transaction,
                                  ...person,
+                                 amount: (direction == 'from_id' && transaction.amount !== null) ? -1*transaction.amount: transaction.amount,
                                  type: transactionType,
                                  key: query.docs[i].id
                                 })

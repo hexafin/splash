@@ -21,7 +21,7 @@ const SATOSHI_CONVERSION = 100000000;
 // presentational component for friend or transaction entry
 //can have type waiting, request, transaction, friend, emoji, or none depending on usage
 const GenericLine = ({id, picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
-    const convertedAmount = (amount*1.0/SATOSHI_CONVERSION).toFixed(4)
+    const convertedAmount = Math.abs(amount*1.0/SATOSHI_CONVERSION).toFixed(4)
     const name = first_name + ' ' + last_name
     const date = api.ConvertTimestampToDate(timestamp_completed)
     return (
@@ -37,7 +37,8 @@ const GenericLine = ({id, picture_url, first_name, last_name, username, type, em
           ]}
           {(type == 'transaction' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-              <Text style={styles.relativeAmountText}>${relative_amount}</Text>
+              {amount !== null && amount >= 0 && <Text style={styles.positiveRelativeAmountText}>+${relative_amount}</Text>}
+              {amount !== null && amount < 0 && <Text style={styles.negativeRelativeAmountText}>-${relative_amount}</Text>}
               {amount !== null && <Text style={styles.amountText}>{convertedAmount} {currency}</Text>}
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
@@ -113,10 +114,15 @@ const styles = StyleSheet.create({
       color: '#333333',
       fontWeight: '600',
     },
-    relativeAmountText: {
+    positiveRelativeAmountText: {
       fontWeight: '600',
       fontSize: 16,
-      color: colors.purple,
+      color: colors.green,
+    },
+    negativeRelativeAmountText: {
+      fontWeight: '600',
+      fontSize: 16,
+      color: colors.red,
     },
     amountText: {
       paddingLeft: 5,

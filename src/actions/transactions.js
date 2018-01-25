@@ -171,7 +171,7 @@ export const AcceptRequest = (requestId) => {
 
     const state = getState()
     const exchangeRate = state.general.exchangeRate.BTC.USD
-
+    const balance = state.crypto.BTC.balance
     dispatch(acceptTransactionInit(requestId))
 
     const dateTime = Date.now();
@@ -185,7 +185,7 @@ export const AcceptRequest = (requestId) => {
 
     api.UpdateRequest(requestId, updateDict).then(response => {
 
-      api.NewTransactionFromRequest(requestId, exchangeRate, timestamp).then(() => {
+      api.NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp).then(() => {
 
         dispatch(removeRequest(requestId))
         dispatch(acceptTransactionSuccess(requestId))
