@@ -7,6 +7,7 @@ import {
     Image,
     TouchableOpacity,
     SectionList,
+    ActivityIndicator,
     Modal
 } from "react-native"
 import {colors} from "../../lib/colors"
@@ -20,14 +21,21 @@ import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
-const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transactions, requests, waiting,
+const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
                DeclineRequest, AcceptRequest, DeleteRequest}) => {
 
     const defaultCurrency = person.default_currency
 
     // v1 - only bitcoin
-    const balance = crypto.BTC.balance/cryptoUnits.BTC
+    const balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
     const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
+
+    // render loading screen
+    const renderLoading = (
+      <View style={styles.loading}>
+        <ActivityIndicator size='large' color={colors.purple}/>
+      </View>
+    )
 
     // render blank screen w/o transactions
     const renderBlank = (
@@ -109,23 +117,23 @@ const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transac
                             <Text style={styles.profileUsername}>@{person.username}</Text>
                         </View>
                     </TouchableOpacity>
-
-
-
                 </View>
-
+                {!loading &&
                 <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
                     <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
                     <Text style={styles.balanceCurrency}>{balance} BTC</Text>
                     <Text style={styles.balanceDescription}>Your bitcoin</Text>
                 </TouchableOpacity>
-
+                }
             </View>
 
+            {/* if loading render loading*/}
+            {loading && renderLoading}
             {/* if there are no transactions render blank*/}
-            {(emptyItems || isLoadingTransactions) && renderBlank}
+            {emptyItems && !loading && renderBlank}
             {/* if there are  transactions render them in sectionList*/}
-            {!emptyItems && !isLoadingTransactions && renderSections}
+            {!emptyItems && !loading && renderSections}
+
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
                     <Text style={styles.footerButtonText}>
@@ -152,6 +160,12 @@ const styles = StyleSheet.create({
         paddingBottom: 0,
         flexDirection: "column",
         justifyContent: "space-around"
+    },
+    loading: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.white
     },
     header: {
         flexDirection: "column",

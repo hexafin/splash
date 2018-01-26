@@ -235,7 +235,6 @@ export const CreateNewAccount = () => {
                 email: state.general.person.email,
                 gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
-                pictureURL: state.general.person.picture_url,
                 default_currency: "USD"
             }
 

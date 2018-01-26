@@ -18,7 +18,8 @@ const friendSearch = (friends, query) => {
 
 const mapStateToProps = (state) => {
   return {
-      friends: friendSearch(state.general.friends, state.general.friendsSearchQuery)
+      friends: friendSearch(state.general.friends, state.general.friendsSearchQuery),
+      loading: state.crypto.loading || state.general.isUpdatingFriends || state.general.isUpdatingExchangeRate,
   }
 }
 

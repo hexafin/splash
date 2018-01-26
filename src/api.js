@@ -38,7 +38,7 @@ function NewBitcoinWallet() {
 }
 
 const NewAccount = (uid, {
-    username, firstName, lastName, email, facebookId, pictureURL, defaultCurrency = "USD",
+    username, firstName, lastName, email, facebookId, defaultCurrency = "USD",
     address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null,
     coinbaseId = null
 }) => {
@@ -57,7 +57,6 @@ const NewAccount = (uid, {
             facebook_id: facebookId,
             coinbase_id: coinbaseId,
             default_currency: defaultCurrency
-            // picture_url: pictureURL,
             // phone_number: phoneNumber,
             // address: address,
             // city: city,

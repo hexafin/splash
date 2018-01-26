@@ -20,10 +20,11 @@ const SATOSHI_CONVERSION = 100000000;
 
 // presentational component for friend or transaction entry
 //can have type waiting, request, transaction, friend, emoji, or none depending on usage
-const GenericLine = ({id, picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
+const GenericLine = ({id, facebook_id, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
     const convertedAmount = Math.abs(amount*1.0/SATOSHI_CONVERSION).toFixed(4)
     const name = first_name + ' ' + last_name
     const date = api.ConvertTimestampToDate(timestamp_completed)
+    const picture_url = "https://graph.facebook.com/"+facebook_id+"/picture?type=large"
     return (
         <TouchableOpacity activeOpacity={(type !== 'friend') ? 1 : 0.5} style={styles.container} onPress={friendCallback}>
           <Image
