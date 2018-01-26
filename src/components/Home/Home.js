@@ -62,7 +62,10 @@ const Home = ({uid, person, crypto, exchangeRate, isLoadingTransactions, transac
                   callbacks.leftCallback = DeleteRequest
                 }
 
-                data.push({...items[i], id: items[i].key, ...callbacks})
+                // calculate updated relativeAmount if transaction is completed
+                const relative_amount = (items[i].amount == null) ? items[i].relative_amount : Math.round((Math.abs(items[i].amount)/cryptoUnits.BTC)*exchangeRate.BTC[defaultCurrency])
+                data.push({...items[i], relative_amount, id: items[i].key, ...callbacks})
+
             }
         }
         if (data.length == 0) {
