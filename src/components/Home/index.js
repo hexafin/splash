@@ -9,6 +9,12 @@ const mapStatetoProps = state => {
     return {
         uid: state.general.uid,
         loading: state.transactions.isLoadingTransactions || state.crypto.loading || state.general.isUpdatingFriends || state.general.isUpdatingExchangeRate,
+        loadingInfo: {
+          transactionsLoading: state.transactions.isLoadingTransactions,
+          cryptoLoading: state.crypto.loading,
+          friendsLoading: state.general.isUpdatingFriends,
+          exchangeRateLoading: state.general.isUpdatingExchangeRate,
+        },
         person: state.general.person,
         crypto: state.crypto,
         exchangeRate: state.general.exchangeRate,
