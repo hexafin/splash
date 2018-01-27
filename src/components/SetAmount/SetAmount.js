@@ -105,13 +105,13 @@ export default class SetAmount extends Component {
                                                                                   relative_amount: this.state.relativeAmount,
                                                                                   amount: this.state.amount,
                                                                                   })}>
-                        {this.props.transactionType == 'transaction' && !this.props.isCreatingTransaction &&
+                        {this.props.transactionType == 'send' && !this.props.isCreatingTransaction &&
                           <Text style={styles.footerButtonText}>
-                              Pay
+                              Send bitcoin
                           </Text>}
                         {this.props.transactionType == 'request' && !this.props.isCreatingTransaction &&
                           <Text style={styles.footerButtonText}>
-                              Request payment
+                              Request bitcoin
                           </Text>}
                         {this.props.isCreatingTransaction &&
                           <ActivityIndicator size="large" color="white" />}
