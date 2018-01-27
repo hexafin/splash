@@ -6,9 +6,10 @@ import {
     Text,
     StyleSheet,
     SectionList,
+    ActivityIndicator
 } from "react-native"
 import {colors} from "../../lib/colors"
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
 import EmojiButton from "../universal/EmojiButton";
@@ -33,7 +34,7 @@ const friend = {
 
 const recents = []
 
-const Transaction = ({transactionType = 'transaction', friends, friendsSearchChange}) => {
+const Transaction = ({transactionType = 'transaction', friends, friendsSearchChange, loading}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
@@ -74,23 +75,34 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
 
             <SectionList style={{padding: 15}}
                          stickySectionHeadersEnabled={false}
-                         renderItem={({item}) => <Friend {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
+                         renderItem={({item}) => <GenericLine {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />
         </ScrollView>
     )
 
+    const renderLoading = (
+      <View style={styles.loading}>
+        <ActivityIndicator size='large' color={colors.purple}/>
+      </View>
+    )
+
     return (
         <View style={styles.container}>
             <BackButton onPress={() => Actions.pop()} type="right"/>
-            <View style={styles.header}>
-                <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
-            </View>
-            <View style={styles.search}>
-                <Input input={{onChange: friendsSearchChange}} placeholder={'Search for name, email, etc.'}/>
-            </View>
-            {renderSections}
+            {!loading &&
+              <View>
+                <View style={styles.header}>
+                    <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
+                </View>
+                <View style={styles.search}>
+                    <Input input={{onChange: friendsSearchChange}} placeholder={'Search for name, email, etc.'}/>
+                </View>
+                {renderSections}
+              </View>
+            }
+            {loading && renderLoading}
         </View>
     )
 };
@@ -128,5 +140,11 @@ const styles = StyleSheet.create({
         color: colors.nearBlack,
         fontWeight: '900',
         fontSize: 19,
+    },
+    loading: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.white
     },
 });

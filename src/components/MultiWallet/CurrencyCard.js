@@ -28,7 +28,7 @@ const CurrencyCard = ({icon, currency, amount, exchangeRate, defaultCurrency}) =
                     <Text style={styles.title}>{cryptoTitle}</Text>
                 </View>
                 <View style={styles.balanceWrapper}>
-                    <Text style={styles.balanceAmount}>{trueAmount}</Text>
+                    <Text style={styles.balanceAmount}>{trueAmount.toFixed(4)}</Text>
                     <Text style={styles.balanceLabel}>{currency}</Text>
                 </View>
             </View>

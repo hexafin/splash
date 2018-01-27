@@ -12,7 +12,7 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import Button from "../universal/Button"
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton"
 import {Actions} from "react-native-router-flux"

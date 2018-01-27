@@ -14,7 +14,7 @@ import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import BackButton from "../universal/BackButton";
 import {Actions} from "react-native-router-flux"
-import Friend from "../universal/Friend"
+import GenericLine from "../universal/GenericLine"
 import EmojiCircle from "../universal/EmojiCircle"
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
@@ -87,7 +87,7 @@ export default class SetAmount extends Component {
                         <Text style={styles.balanceCurrency}>{this.state.amount} BTC</Text>
                     </View>
                     <Text style={styles.sectionHeader}>Recipient</Text>
-                    <Friend {...this.props.to} type={'none'}/>
+                    <GenericLine {...this.props.to} type={'none'}/>
                     <Text style={styles.sectionHeader}>Select category</Text>
                 </View>
                 <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={'never'}>

@@ -235,7 +235,6 @@ export const CreateNewAccount = () => {
                 email: state.general.person.email,
                 gender: state.general.person.gender,
                 facebookId: state.general.person.facebook_id,
-                pictureURL: state.general.person.picture_url,
                 default_currency: "USD"
             }
 
@@ -312,7 +311,9 @@ export const LoadApp = () => {
             // load exchange rates
             dispatch(updateExchangeInit())
             api.GetExchangeRate().then(exchangeRate => {
-                dispatch(updateExchangeSuccess(exchangeRate))
+                dispatch(updateExchangeSuccess({
+                  BTC: exchangeRate
+                }))
                 // go to the home page
                 Actions.home()
             }).catch(error => {

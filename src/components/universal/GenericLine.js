@@ -20,10 +20,11 @@ const SATOSHI_CONVERSION = 100000000;
 
 // presentational component for friend or transaction entry
 //can have type waiting, request, transaction, friend, emoji, or none depending on usage
-const Friend = ({picture_url, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
-    const convertedAmount = (amount*1.0/SATOSHI_CONVERSION).toFixed(4)
+const GenericLine = ({id, facebook_id, first_name, last_name, username, type, emoji, timestamp_completed, relative_amount, amount, currency, friendCallback, leftCallback, rightCallback}) => {
+    const convertedAmount = Math.abs(amount*1.0/SATOSHI_CONVERSION).toFixed(4)
     const name = first_name + ' ' + last_name
     const date = api.ConvertTimestampToDate(timestamp_completed)
+    const picture_url = "https://graph.facebook.com/"+facebook_id+"/picture?type=large"
     return (
         <TouchableOpacity activeOpacity={(type !== 'friend') ? 1 : 0.5} style={styles.container} onPress={friendCallback}>
           <Image
@@ -37,7 +38,8 @@ const Friend = ({picture_url, first_name, last_name, username, type, emoji, time
           ]}
           {(type == 'transaction' || type == 'request' || type == 'waiting') && [
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-              <Text style={styles.relativeAmountText}>${relative_amount}</Text>
+              {amount !== null && amount >= 0 && <Text style={styles.positiveRelativeAmountText}>+${relative_amount}</Text>}
+              {amount !== null && amount < 0 && <Text style={styles.negativeRelativeAmountText}>-${relative_amount}</Text>}
               {amount !== null && <Text style={styles.amountText}>{convertedAmount} {currency}</Text>}
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
@@ -52,20 +54,20 @@ const Friend = ({picture_url, first_name, last_name, username, type, emoji, time
           {type === 'friend' && [<Icon key={0} name={'chevron-right'} color={colors.lightGrey} size={15}/>]}
           {type === 'request' && [
             <View key={0} style={{flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.leftButton} onPress={leftCallback}>
+              <TouchableOpacity style={styles.leftButton} onPress={() => leftCallback(id)}>
                 <Icon name={'xshape'} color={colors.red} size={13}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rightButton} onPress={rightCallback}>
+              <TouchableOpacity style={styles.rightButton} onPress={() => rightCallback(id)}>
                 <Icon name={'checkmark'} color={colors.purple} size={15}/>
               </TouchableOpacity>
             </View>
             ]}
           {type === 'waiting' && [
             <View key={0} style={{flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.leftButton} onPress={leftCallback}>
+              <TouchableOpacity style={styles.leftButton} onPress={() => leftCallback(id)}>
                 <Feather name={'trash'} color={colors.lightGrey} size={17}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.rightButton} onPress={rightCallback}>
+              <TouchableOpacity style={styles.rightButton} onPress={() => rightCallback(id)}>
                 <MaterialIcons name={'access-alarm'} color={colors.grey} size={20}/>
               </TouchableOpacity>
             </View>
@@ -113,10 +115,15 @@ const styles = StyleSheet.create({
       color: '#333333',
       fontWeight: '600',
     },
-    relativeAmountText: {
+    positiveRelativeAmountText: {
       fontWeight: '600',
       fontSize: 16,
-      color: colors.purple,
+      color: colors.green,
+    },
+    negativeRelativeAmountText: {
+      fontWeight: '600',
+      fontSize: 16,
+      color: colors.red,
     },
     amountText: {
       paddingLeft: 5,
@@ -157,4 +164,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Friend
+export default GenericLine

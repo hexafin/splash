@@ -38,7 +38,7 @@ function NewBitcoinWallet() {
 }
 
 const NewAccount = (uid, {
-    username, firstName, lastName, email, facebookId, pictureURL, defaultCurrency = "USD",
+    username, firstName, lastName, email, facebookId, defaultCurrency = "USD",
     address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null,
     coinbaseId = null
 }) => {
@@ -57,7 +57,6 @@ const NewAccount = (uid, {
             facebook_id: facebookId,
             coinbase_id: coinbaseId,
             default_currency: defaultCurrency
-            // picture_url: pictureURL,
             // phone_number: phoneNumber,
             // address: address,
             // city: city,
@@ -91,7 +90,29 @@ const UpdateAccount = (uid, updateDict) => {
         })
 
     })
+}
 
+const UpdateRequest = (requestId, updateDict) => {
+
+    return new Promise ((resolve, reject) => {
+
+        firestore.collection("requests").doc(requestId).update(updateDict).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+
+    })
+}
+
+const RemoveRequest = (requestId) => {
+  return new Promise ((resolve, reject) => {
+    firestore.collection("requests").doc(requestId).delete().then(response => {
+      resolve(response)
+    }).catch(error => {
+      reject(error)
+    })
+  })
 }
 
 const HandleCoinbase = (uid, coinbaseDict) => {
@@ -231,6 +252,29 @@ function GetExchangeRate(currency = 'BTC') {
     })
 }
 
+function NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp) {
+  return new Promise((resolve, reject) => {
+
+    firestore.collection("requests").doc(requestId).get().then(request => {
+        let newTransaction = request.data()
+        newTransaction.timestamp_completed = timestamp
+        newTransaction.amount = (newTransaction.relative_amount/exchangeRate)*SATOSHI_CONVERSION
+        if (newTransaction.amount < balance) {
+          firestore.collection("transactions").add(newTransaction).then(() => {
+              resolve(newTransaction)
+          }).catch(error => {
+              reject(error)
+          })
+        } else {
+          reject('Error: not enough BTC')
+        }
+
+    }).catch(error => {
+      reject(error)
+    })
+  })
+}
+
 function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
 
     return new Promise((resolve, reject) => {
@@ -330,6 +374,7 @@ function LoadTransactions(uid, transactionType) {
               transactions.push({
                                  ...transaction,
                                  ...person,
+                                 amount: (direction == 'from_id' && transaction.amount !== null) ? -1*transaction.amount: transaction.amount,
                                  type: transactionType,
                                  key: query.docs[i].id
                                 })
@@ -450,10 +495,13 @@ function Log(type, content) {
 export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
+    UpdateRequest: UpdateRequest,
+    RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,
     HandleCoinbase: HandleCoinbase,
     GetUidFromFB: GetUidFromFB,
     NewTransaction: NewTransaction,
+    NewTransactionFromRequest: NewTransactionFromRequest,
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
     GetBalance: GetBalance,
