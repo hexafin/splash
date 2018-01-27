@@ -40,6 +40,7 @@ const GenericLine = ({id, facebook_id, first_name, last_name, username, type, em
             <View key={0} style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
               {amount !== null && amount >= 0 && <Text style={styles.positiveRelativeAmountText}>+${relative_amount}</Text>}
               {amount !== null && amount < 0 && <Text style={styles.negativeRelativeAmountText}>-${relative_amount}</Text>}
+              {amount == null && <Text style={styles.relativeAmountText}>${relative_amount}</Text>}
               {amount !== null && <Text style={styles.amountText}>{convertedAmount} {currency}</Text>}
             </View>,
             <Text key={1} style={styles.nameText}>{name}</Text>,
@@ -114,6 +115,11 @@ const styles = StyleSheet.create({
       fontSize: 13,
       color: '#333333',
       fontWeight: '600',
+    },
+    relativeAmountText: {
+      fontWeight: '600',
+      fontSize: 16,
+      color: colors.purple,
     },
     positiveRelativeAmountText: {
       fontWeight: '600',

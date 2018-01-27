@@ -8,6 +8,8 @@ import {
     TextInput,
     ActivityIndicator,
     TouchableOpacity,
+    TouchableWithoutFeedback,
+    Keyboard
 } from 'react-native';
 import {connect} from "react-redux";
 import {colors} from "../../lib/colors"
@@ -19,13 +21,12 @@ import EmojiCircle from "../universal/EmojiCircle"
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
 // list of emojis to be rendered. 3 per row
-let emojis = [
+const emojis = [
     ['🍔', '⚽️', '🚗'],
     ['💩', '😀', '🍹'],
     ['🍕', '🚀', '😍'],
     ['😎', '🎉', '🛏'],
-]
-
+  ]
 export default class SetAmount extends Component {
     constructor(props) {
         super(props)
@@ -71,6 +72,7 @@ export default class SetAmount extends Component {
 
     render() {
         return (
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <View style={styles.page}>
                     <BackButton onPress={() => Actions.pop()} type="right"/>
@@ -87,7 +89,7 @@ export default class SetAmount extends Component {
                         <Text style={styles.balanceCurrency}>{this.state.amount} BTC</Text>
                     </View>
                     <Text style={styles.sectionHeader}>Recipient</Text>
-                    <GenericLine {...this.props.to} type={'none'}/>
+                    <GenericLine {...this.props.to} type={'none'} friendCallback={Keyboard.dismiss}/>
                     <Text style={styles.sectionHeader}>Select category</Text>
                 </View>
                 <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={'never'}>
@@ -116,6 +118,7 @@ export default class SetAmount extends Component {
                     </TouchableOpacity>
                 </View>
             </View>
+          </TouchableWithoutFeedback>
         )
     }
 }
