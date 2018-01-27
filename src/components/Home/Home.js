@@ -119,7 +119,7 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                     </TouchableOpacity>
                 </View>
                 {!loading &&
-                <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
+                <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet({currency: "BTC"})}>
                     <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
                     <Text style={styles.balanceCurrency}>{balance} BTC</Text>
                     <Text style={styles.balanceDescription}>Your bitcoin</Text>
