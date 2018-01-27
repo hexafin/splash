@@ -114,10 +114,10 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 
         dispatch(newTransactionInit());
 
-        if ((transactionType == 'transaction' && satoshi < balance) || transactionType == 'request') {
+        if ((transactionType == 'send' && satoshi < balance) || transactionType == 'request') {
             api.GetUidFromFB(other_person.facebook_id).then(otherId => {
 
-                if (transactionType == 'transaction') {
+                if (transactionType == 'send') {
 
                     transaction = {
                         transactionType: transactionType,

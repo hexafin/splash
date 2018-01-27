@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
     container: {
         ...defaults.container,
         padding: 20,
-        flexDirection: "column"
+        flexDirection: "column",
+        justifyContent: "space-around",
+        paddingBottom: 60
     },
     header: {
         flexDirection: "row",

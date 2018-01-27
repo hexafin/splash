@@ -1,6 +1,6 @@
 import {colors} from "./colors"
 
-import {ifIphoneX} from "react-native-iphone-x-helper"
+import {isIphoneX} from "react-native-iphone-x-helper"
 
 export const defaults = {
 	shadowOffset: {
@@ -19,15 +19,17 @@ export const defaults = {
 	},
 	container: {
         backgroundColor: colors.white,
-		flex: 1,
-		...ifIphoneX({
-			paddingTop: 20,
-			paddingBottom: 20
-		}, {
-			paddingTop: 0,
-			paddingBottom: 0
-		})
+		flex: 1
+	},
+	footer: {
+
 	}
+}
+
+if (isIphoneX()) {
+	defaults.container.paddingBottom = 20;
+    defaults.container.paddingTop = 20;
+    defaults.footer.paddingBottom = 20;
 }
 
 export const icons = {
