@@ -34,7 +34,7 @@ const friend = {
 
 const recents = []
 
-const Transaction = ({transactionType = 'transaction', friends, friendsSearchChange, loading}) => {
+const Transaction = ({transactionType = 'send', friends, friendsSearchChange, loading}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
