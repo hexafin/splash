@@ -34,13 +34,13 @@ const friend = {
 
 const recents = []
 
-const Transaction = ({transactionType = 'transaction', friends, friendsSearchChange, loading}) => {
+const Transaction = ({transactionType = 'send', friends, friendsSearchChange, loading}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
 
     const sections = [
-      //  {data: [], title: 'Recents'},
+        //  {data: [], title: 'Recents'},
         {data: [], title: 'Friends'},
     ];
 
@@ -70,7 +70,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
         <ScrollView key={0} style={styles.body}>
 
             {/*<View style={styles.searchButtons}>*/}
-                {/*<EmojiButton title="Send to bitcoin address" emoji="🤷‍♀️" />*/}
+            {/*<EmojiButton title="Send to bitcoin address" emoji="🤷‍♀️" />*/}
             {/*</View>*/}
 
             <SectionList style={{padding: 15}}
@@ -83,16 +83,16 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
     )
 
     const renderLoading = (
-      <View style={styles.loading}>
-        <ActivityIndicator size='large' color={colors.purple}/>
-      </View>
+        <View style={styles.loading}>
+            <ActivityIndicator size='large' color={colors.purple}/>
+        </View>
     )
 
     return (
         <View style={styles.container}>
             <BackButton onPress={() => Actions.pop()} type="right"/>
             {!loading &&
-              <View>
+            <View>
                 <View style={styles.header}>
                     <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
                 </View>
@@ -100,7 +100,7 @@ const Transaction = ({transactionType = 'transaction', friends, friendsSearchCha
                     <Input input={{onChange: friendsSearchChange}} placeholder={'Search for name, email, etc.'}/>
                 </View>
                 {renderSections}
-              </View>
+            </View>
             }
             {loading && renderLoading}
         </View>
@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
         fontSize: 19,
     },
     loading: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: colors.white
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.white
     },
 });

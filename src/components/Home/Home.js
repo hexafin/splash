@@ -19,10 +19,10 @@ import Wallet from '../Wallet'
 import {Actions} from "react-native-router-flux"
 import {defaults} from "../../lib/styles"
 import api from '../../api'
-import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
+import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
-               DeclineRequest, AcceptRequest, DeleteRequest}) => {
+                  DeclineRequest, AcceptRequest, DeleteRequest}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -32,9 +32,9 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
 
     // render loading screen
     const renderLoading = (
-      <View style={styles.loading}>
-        <ActivityIndicator size='large' color={colors.purple}/>
-      </View>
+        <View style={styles.loading}>
+            <ActivityIndicator size='large' color={colors.purple}/>
+        </View>
     )
 
     // render blank screen w/o transactions
@@ -64,10 +64,10 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
 
                 let callbacks = {leftCallback: undefined, rightCallback: undefined}
                 if (section.type == 'request') {
-                  callbacks.leftCallback = DeclineRequest
-                  callbacks.rightCallback = AcceptRequest
+                    callbacks.leftCallback = DeclineRequest
+                    callbacks.rightCallback = AcceptRequest
                 } else if (section.type == 'waiting') {
-                  callbacks.leftCallback = DeleteRequest
+                    callbacks.leftCallback = DeleteRequest
                 }
 
                 // calculate updated relativeAmount if transaction is completed
@@ -87,9 +87,9 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
         <ScrollView key={0} style={{flex: 1}}>
 
             {/*<View style={styles.homeButtons}>*/}
-                {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
-                {/*<View style={styles.emojiSpacer}/>*/}
-                {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
+            {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
+            {/*<View style={styles.emojiSpacer}/>*/}
+            {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
             {/*</View>*/}
 
             <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
@@ -113,13 +113,13 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                     <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
                         <Image style={styles.profileImage} source={{uri: pictureUrl}}/>
                         <View style={styles.profileTextWrapper}>
-                            <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
                             <Text style={styles.profileUsername}>@{person.username}</Text>
+                            <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
                 {!loading &&
-                <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
+                <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet({currency: "BTC"})}>
                     <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
                     <Text style={styles.balanceCurrency}>{balance} BTC</Text>
                     <Text style={styles.balanceDescription}>Your bitcoin</Text>
@@ -136,14 +136,28 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
 
             <View style={styles.footer}>
                 <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
+                    <Image
+                        style={styles.footerButtonIcon}
+                        resizeMethod={"scale"}
+                        height={15}
+                        width={20}
+                        source={require("../../assets/icons/request.png")}
+                    />
                     <Text style={styles.footerButtonText}>
                         Request
                     </Text>
                 </TouchableOpacity>
                 <View style={styles.footerDivider}/>
-                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'transaction'})} style={styles.footerButton}>
+                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'send'})} style={styles.footerButton}>
+                    <Image
+                        style={styles.footerButtonIcon}
+                        resizeMethod={"scale"}
+                        height={15}
+                        width={18}
+                        source={require("../../assets/icons/send.png")}
+                    />
                     <Text style={styles.footerButtonText}>
-                        Pay
+                        Send
                     </Text>
                 </TouchableOpacity>
             </View>
@@ -162,10 +176,10 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     loading: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: colors.white
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.white
     },
     header: {
         flexDirection: "column",
@@ -255,6 +269,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     footer: {
+        ...defaults.footer,
         flex: 0,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -265,17 +280,18 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 24,
-        paddingBottom: 20,
         backgroundColor: colors.purple
     },
     footerDivider: {
         width: 1,
-        backgroundColor: colors.nearWhite
+        backgroundColor: '#763DFB'
     },
     footerButton: {
-        width: "50%",
         padding: 20,
+        width: "50%",
+        flexDirection: "row",
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: colors.purple
     },
     footerButtonText: {
@@ -283,6 +299,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '600',
         color: colors.white
+    },
+    footerButtonIcon: {
+        height: 30,
+        width: 30,
+        paddingTop: 10,
+        paddingBottom: 10,
+        marginRight: 10
     }
 })
 

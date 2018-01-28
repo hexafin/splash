@@ -47,7 +47,7 @@ const Wallet = ({currency, crypto, exchangeRate, defaultCurrency, GetCrypto}) =>
                 </View>
                 <View style={styles.balanceBottom}>
                     <View style={styles.balanceAmountWrapper}>
-                        <Text style={styles.balanceAmountValue}>{trueAmount.toFixed(4)}</Text>
+                        <Text style={styles.balanceAmountValue}>{trueAmount}</Text>
                         <Text style={styles.balanceAmountLabel}>{currency}</Text>
                     </View>
                     <View style={styles.balanceRelativeAmountWrapper}>
@@ -94,7 +94,9 @@ const styles = StyleSheet.create({
     container: {
         ...defaults.container,
         padding: 20,
-        flexDirection: "column"
+        flexDirection: "column",
+        justifyContent: "space-around",
+        paddingBottom: 60
     },
     header: {
         flexDirection: "row",

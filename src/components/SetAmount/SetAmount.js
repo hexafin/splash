@@ -8,8 +8,6 @@ import {
     TextInput,
     ActivityIndicator,
     TouchableOpacity,
-    TouchableWithoutFeedback,
-    Keyboard
 } from 'react-native';
 import {connect} from "react-redux";
 import {colors} from "../../lib/colors"
@@ -21,12 +19,13 @@ import EmojiCircle from "../universal/EmojiCircle"
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
 // list of emojis to be rendered. 3 per row
-const emojis = [
+let emojis = [
     ['🍔', '⚽️', '🚗'],
     ['💩', '😀', '🍹'],
     ['🍕', '🚀', '😍'],
     ['😎', '🎉', '🛏'],
-  ]
+]
+
 export default class SetAmount extends Component {
     constructor(props) {
         super(props)
@@ -72,7 +71,6 @@ export default class SetAmount extends Component {
 
     render() {
         return (
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <View style={styles.page}>
                     <BackButton onPress={() => Actions.pop()} type="right"/>
@@ -89,7 +87,7 @@ export default class SetAmount extends Component {
                         <Text style={styles.balanceCurrency}>{this.state.amount} BTC</Text>
                     </View>
                     <Text style={styles.sectionHeader}>Recipient</Text>
-                    <GenericLine {...this.props.to} type={'none'} friendCallback={Keyboard.dismiss}/>
+                    <GenericLine {...this.props.to} type={'none'}/>
                     <Text style={styles.sectionHeader}>Select category</Text>
                 </View>
                 <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={'never'}>
@@ -99,26 +97,25 @@ export default class SetAmount extends Component {
                     <TouchableOpacity style={styles.footer}
                                       disabled={(this.state.amount <= 0 || this.state.selectedEmojiFirst == null)}
                                       onPress={() => this.props.CreateTransaction({
-                                                                                  transactionType: this.props.transactionType,
-                                                                                  other_person: this.props.to,
-                                                                                  emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
-                                                                                  relative_amount: this.state.relativeAmount,
-                                                                                  amount: this.state.amount,
-                                                                                  })}>
-                        {this.props.transactionType == 'transaction' && !this.props.isCreatingTransaction &&
-                          <Text style={styles.footerButtonText}>
-                              Pay
-                          </Text>}
+                                          transactionType: this.props.transactionType,
+                                          other_person: this.props.to,
+                                          emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
+                                          relative_amount: this.state.relativeAmount,
+                                          amount: this.state.amount,
+                                      })}>
+                        {this.props.transactionType == 'send' && !this.props.isCreatingTransaction &&
+                        <Text style={styles.footerButtonText}>
+                            Send bitcoin
+                        </Text>}
                         {this.props.transactionType == 'request' && !this.props.isCreatingTransaction &&
-                          <Text style={styles.footerButtonText}>
-                              Request payment
-                          </Text>}
+                        <Text style={styles.footerButtonText}>
+                            Request bitcoin
+                        </Text>}
                         {this.props.isCreatingTransaction &&
-                          <ActivityIndicator size="large" color="white" />}
+                        <ActivityIndicator size="large" color="white" />}
                     </TouchableOpacity>
                 </View>
             </View>
-          </TouchableWithoutFeedback>
         )
     }
 }
