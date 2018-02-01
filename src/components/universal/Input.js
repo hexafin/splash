@@ -8,7 +8,7 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
 export const Input = ({onChange, secureTextEntry, value, placeholder, name,...inputProps, input}) => {
 
 	return (
@@ -88,12 +88,12 @@ export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 		)
 }
 
-MultiInputBlock.propTypes = {
-   inputs: PropTypes.arrayOf(PropTypes.shape({
-     name: PropTypes.string.isRequired,
-     placeholder: PropTypes.string.isRequired,
-   })).isRequired,
-}
+// MultiInputBlock.propTypes = {
+//    inputs: PropTypes.arrayOf(PropTypes.shape({
+//      name: PropTypes.string.isRequired,
+//      placeholder: PropTypes.string.isRequired,
+//    })).isRequired,
+// }
 
 
 
