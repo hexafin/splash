@@ -22,7 +22,7 @@ import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos";
 
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
-               DeclineRequest, AcceptRequest, DeleteRequest}) => {
+               DeclineRequest, AcceptRequest, DeleteRequest, Refresh}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -117,6 +117,12 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                             <Text style={styles.profileUsername}>@{person.username}</Text>
                         </View>
                     </TouchableOpacity>
+                    <View style={styles.balanceRefreshButton}>
+                      <EmojiButton
+                          title={"Refresh"} emoji={"⚡️"}
+                          onPress={() => {Refresh()}}
+                      />
+                    </View>
                 </View>
                 {!loading &&
                 <TouchableOpacity style={styles.balance} onPress={() => Actions.multiWallet()}>
@@ -165,7 +171,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: colors.white
+      backgroundColor: 'rgba(0, 0, 0, 0)'
     },
     header: {
         flexDirection: "column",
@@ -173,6 +179,7 @@ const styles = StyleSheet.create({
     topBar: {
         paddingTop: 10,
         flexDirection: "row",
+        alignItems: 'center',
         justifyContent: "space-between",
         backgroundColor: colors.white,
     },
@@ -199,6 +206,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         color: colors.gray
+    },
+    balanceRefreshButton: {
+      alignSelf: 'center',
+      paddingRight: 15,
     },
     emojiSpacer: {
         width: 10
