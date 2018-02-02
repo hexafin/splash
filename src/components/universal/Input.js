@@ -88,12 +88,12 @@ export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 		)
 }
 
-// MultiInputBlock.propTypes = {
-//    inputs: PropTypes.arrayOf(PropTypes.shape({
-//      name: PropTypes.string.isRequired,
-//      placeholder: PropTypes.string.isRequired,
-//    })).isRequired,
-// }
+MultiInputBlock.propTypes = {
+   inputs: PropTypes.arrayOf(PropTypes.shape({
+     name: PropTypes.string.isRequired,
+     placeholder: PropTypes.string.isRequired,
+   })).isRequired,
+}
 
 
 
