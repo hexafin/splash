@@ -7,6 +7,7 @@ import {
     SectionList,
     TouchableOpacity,
     Image,
+    ActivityIndicator,
     Modal
 } from "react-native"
 import {colors} from "../../lib/colors"
@@ -38,7 +39,10 @@ const Wallet = ({currency, crypto, exchangeRate, defaultCurrency, GetCrypto}) =>
 
             <View style={styles.balance}>
                 <View style={styles.balanceTop}>
-                    <Text style={styles.balanceTitle}>Balance</Text>
+                    <View style={{flexDirection: 'row'}}>
+                      <Text style={styles.balanceTitle}>Balance</Text>
+                      {crypto.loading && <ActivityIndicator size='small' color={colors.purple}/>}
+                    </View>
                     <EmojiButton
                         style={styles.balanceRefreshButton}
                         title={"Refresh"} emoji={"⚡️"}
@@ -138,7 +142,8 @@ const styles = StyleSheet.create({
     balanceTitle: {
         fontWeight: "800",
         color: colors.nearBlack,
-        fontSize: 22
+        fontSize: 22,
+        paddingRight: 5,
     },
     balanceRefreshButton: {},
     balanceAmountWrapper: {

@@ -2,10 +2,15 @@
 #
 .DS_Store
 
+# Environment Variables
+.env
+
 # Xcode
 #
 build/
 *.pbxuser
+*.jsbundle
+ios/Pods/
 !default.pbxuser
 *.mode1v3
 !default.mode1v3
