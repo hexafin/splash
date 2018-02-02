@@ -1,5 +1,6 @@
 import {Actions} from "react-native-router-flux"
 import api from "../api"
+import {coinbaseClientId, coinbaseClientSecret} from "../../env/keys.json"
 import { FBLoginManager } from 'react-native-facebook-login'
 import {Sentry} from 'react-native-sentry'
 import {NativeModules, NativeEventEmitter} from 'react-native'
@@ -183,11 +184,8 @@ export const LinkCoinbase = () => {
     const state = getState()
     dispatch(linkCoinbaseInit())
 
-    const clientId = "UPDATE" // TODO: replace these values
-    const clientSecret = "UPDATE" // TODO: replace these values
-
     // start oauth process
-    CoinbaseApi.startAuthentication(clientId, clientSecret)
+    CoinbaseApi.startAuthentication(coinbaseClientId, coinbaseClientSecret)
     const { EventEmitter } = NativeModules;
     eventEmitter = new NativeEventEmitter(EventEmitter);
 
