@@ -19,7 +19,7 @@ const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__
 export default function configureStore () {
 
     //TODO: get sentry DSN from ENV variables
-    Sentry.config('sentry-dsn').install();
+    Sentry.config('UPDATE').install();
 
     const middleware = [createRavenMiddleware(Sentry), loggerMiddleware, thunkMiddleware]
 

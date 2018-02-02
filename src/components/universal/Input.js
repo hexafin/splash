@@ -52,7 +52,6 @@ export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, pla
 		)
 }
 
-
 /**
 * MultiInputBlock
 * @param inputs = array of objects with the following properties
@@ -94,10 +93,6 @@ MultiInputBlock.propTypes = {
      placeholder: PropTypes.string.isRequired,
    })).isRequired,
 }
-
-
-
-
 
 const styles = StyleSheet.create({
 	input: {

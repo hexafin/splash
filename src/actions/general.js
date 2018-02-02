@@ -183,8 +183,8 @@ export const LinkCoinbase = () => {
     const state = getState()
     dispatch(linkCoinbaseInit())
 
-    const clientId = null // TODO: replace these values
-    const clientSecret = null // TODO: replace these values
+    const clientId = "UPDATE" // TODO: replace these values
+    const clientSecret = "UPDATE" // TODO: replace these values
 
     // start oauth process
     CoinbaseApi.startAuthentication(clientId, clientSecret)

@@ -281,7 +281,7 @@ function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, re
 
         const dateTime = Date.now();
         const timestamp_initiated = Math.floor(dateTime / 1000);
-        if (transactionType == 'transaction') {
+        if (transactionType == 'send') {
           const newTransaction = {
             from_id: from_id,
             to_id: to_id,
