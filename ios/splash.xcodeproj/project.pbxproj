@@ -14,19 +14,18 @@
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* hexaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hexaTests.m */; };
 		080CFF092022D41A007AA6C8 /* ios_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 080CFF082022D41A007AA6C8 /* ios_splash.png */; };
-		080CFF0B2022E1DC007AA6C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 080CFF0A2022E1DC007AA6C8 /* Images.xcassets */; };
 		081742C01FBBFF91007AE047 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */; };
 		08202C181FD38E89003EEEB3 /* libRCTFBLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202BF71FD38DDE003EEEB3 /* libRCTFBLogin.a */; };
 		08202C1D1FD38F26003EEEB3 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */; };
 		08202C1E1FD38F26003EEEB3 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */; };
 		08202C1F1FD38F26003EEEB3 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */; };
+		087DB66D2023CAE2003E76D2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */; };
 		08861E3D20228FAA00DD4DFF /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 08861E3C20228FAA00DD4DFF /* main.jsbundle */; };
 		08890FA8202293AC00F154AD /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 08890FA7202293AC00F154AD /* assets */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
@@ -383,12 +382,13 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hexaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hexaTests.m; sourceTree = "<group>"; };
 		080CFF082022D41A007AA6C8 /* ios_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ios_splash.png; sourceTree = "<group>"; };
-		080CFF0A2022E1DC007AA6C8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = splash/Images.xcassets; sourceTree = "<group>"; };
+		080CFF0C2022ECD8007AA6C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "hexa/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08202BED1FD38DDE003EEEB3 /* RCTFBLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBLogin.xcodeproj; path = "../node_modules/react-native-facebook-login/RCTFBLogin.xcodeproj"; sourceTree = "<group>"; };
 		08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		087DB66C2023CAE2003E76D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = hexa/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		08861E3C20228FAA00DD4DFF /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		08890FA7202293AC00F154AD /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		08890FA92022990F00F154AD /* splash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = splash.entitlements; path = splash/splash.entitlements; sourceTree = "<group>"; };
@@ -398,7 +398,6 @@
 		13B07F961A680F5B00A75B9A /* splash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = splash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hexa/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hexa/AppDelegate.m; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hexa/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hexa/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = hexa/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
@@ -646,13 +645,13 @@
 		13B07FAE1A68108700A75B9A /* hexa */ = {
 			isa = PBXGroup;
 			children = (
+				087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */,
 				08890FA7202293AC00F154AD /* assets */,
 				08861E3C20228FAA00DD4DFF /* main.jsbundle */,
 				0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				080CFF082022D41A007AA6C8 /* ios_splash.png */,
-				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -812,7 +811,7 @@
 		FC0F4068D7FA4CB4A3E97A98 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				080CFF0A2022E1DC007AA6C8 /* Images.xcassets */,
+				080CFF0C2022ECD8007AA6C8 /* Assets.xcassets */,
 				679B00ED622C482DA3FA4D2E /* Entypo.ttf */,
 				E47F50A7095C4C26B52D21D6 /* EvilIcons.ttf */,
 				EDF84E9E61964EF094C50B70 /* Feather.ttf */,
@@ -1344,8 +1343,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				08861E3D20228FAA00DD4DFF /* main.jsbundle in Resources */,
-				080CFF0B2022E1DC007AA6C8 /* Images.xcassets in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				081742C01FBBFF91007AE047 /* GoogleService-Info.plist in Resources */,
 				D6FD19E3C6964925921A467E /* Entypo.ttf in Resources */,
 				1FB0AA4B14064786849F1BEB /* EvilIcons.ttf in Resources */,
@@ -1358,6 +1355,7 @@
 				52E47C836C484B15B87E437A /* MaterialCommunityIcons.ttf in Resources */,
 				670D4D08AD7B4686B9B5259C /* MaterialIcons.ttf in Resources */,
 				080CFF092022D41A007AA6C8 /* ios_splash.png in Resources */,
+				087DB66D2023CAE2003E76D2 /* LaunchScreen.xib in Resources */,
 				3D9B063A65F443A6AAA77496 /* Octicons.ttf in Resources */,
 				2B1A87801DA546B085939E3A /* SimpleLineIcons.ttf in Resources */,
 				85BBFAFEEF22476FBE95A6E4 /* Zocial.ttf in Resources */,
@@ -1577,6 +1575,17 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				087DB66C2023CAE2003E76D2 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1654,7 +1663,6 @@
 			baseConfigurationReference = 75C59AB0E89ED01CF0594B4F /* Pods-splash.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = splash/splash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bryce Bjork (29C64V5GZB)";
 				"CODE_SIGN_IDENTITY[sdk=*]" = "iPhone Developer: Bryce Bjork (29C64V5GZB)";
@@ -1699,7 +1707,6 @@
 			baseConfigurationReference = 54E6CACA09A9D88C9E071CFA /* Pods-splash.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = splash/splash.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Bryce Bjork (29C64V5GZB)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
