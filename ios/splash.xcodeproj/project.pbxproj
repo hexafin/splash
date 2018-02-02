@@ -19,6 +19,7 @@
 		08202C1D1FD38F26003EEEB3 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */; };
 		08202C1E1FD38F26003EEEB3 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */; };
 		08202C1F1FD38F26003EEEB3 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */; };
+		0822225F20244688002D9633 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0822225E20244688002D9633 /* Assets.xcassets */; };
 		087DB66D2023CAE2003E76D2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */; };
 		08861E3D20228FAA00DD4DFF /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 08861E3C20228FAA00DD4DFF /* main.jsbundle */; };
 		08890FA8202293AC00F154AD /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 08890FA7202293AC00F154AD /* assets */; };
@@ -382,12 +383,12 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hexaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hexaTests.m; sourceTree = "<group>"; };
 		080CFF082022D41A007AA6C8 /* ios_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ios_splash.png; sourceTree = "<group>"; };
-		080CFF0C2022ECD8007AA6C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "hexa/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08202BED1FD38DDE003EEEB3 /* RCTFBLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBLogin.xcodeproj; path = "../node_modules/react-native-facebook-login/RCTFBLogin.xcodeproj"; sourceTree = "<group>"; };
 		08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		0822225E20244688002D9633 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		087DB66C2023CAE2003E76D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = hexa/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		08861E3C20228FAA00DD4DFF /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		08890FA7202293AC00F154AD /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -645,6 +646,7 @@
 		13B07FAE1A68108700A75B9A /* hexa */ = {
 			isa = PBXGroup;
 			children = (
+				0822225E20244688002D9633 /* Assets.xcassets */,
 				087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */,
 				08890FA7202293AC00F154AD /* assets */,
 				08861E3C20228FAA00DD4DFF /* main.jsbundle */,
@@ -811,7 +813,6 @@
 		FC0F4068D7FA4CB4A3E97A98 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				080CFF0C2022ECD8007AA6C8 /* Assets.xcassets */,
 				679B00ED622C482DA3FA4D2E /* Entypo.ttf */,
 				E47F50A7095C4C26B52D21D6 /* EvilIcons.ttf */,
 				EDF84E9E61964EF094C50B70 /* Feather.ttf */,
@@ -1356,6 +1357,7 @@
 				670D4D08AD7B4686B9B5259C /* MaterialIcons.ttf in Resources */,
 				080CFF092022D41A007AA6C8 /* ios_splash.png in Resources */,
 				087DB66D2023CAE2003E76D2 /* LaunchScreen.xib in Resources */,
+				0822225F20244688002D9633 /* Assets.xcassets in Resources */,
 				3D9B063A65F443A6AAA77496 /* Octicons.ttf in Resources */,
 				2B1A87801DA546B085939E3A /* SimpleLineIcons.ttf in Resources */,
 				85BBFAFEEF22476FBE95A6E4 /* Zocial.ttf in Resources */,
