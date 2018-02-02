@@ -8,7 +8,7 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
-//import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 export const Input = ({onChange, secureTextEntry, value, placeholder, name,...inputProps, input}) => {
 
 	return (
