@@ -3,6 +3,20 @@ import Home from "./Home"
 import {connect} from "react-redux"
 import {DeclineRequest, AcceptRequest, DeleteRequest} from "../../actions/transactions";
 import {bindActionCreators} from "redux";
+import {LoadTransactions} from "../../actions/transactions"
+import {GetCrypto} from "../../actions/crypto"
+
+
+const Refresh = () => {
+  return (dispatch, getState) => {
+    const loadTransactions = LoadTransactions()
+    loadTransactions(dispatch, getState)
+
+    const getCrypto = GetCrypto()
+    getCrypto(dispatch, getState)
+  }
+}
+
 
 const mapStatetoProps = state => {
 
@@ -26,7 +40,7 @@ const mapStatetoProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-      DeclineRequest, AcceptRequest, DeleteRequest
+      DeclineRequest, AcceptRequest, DeleteRequest, Refresh
     }, dispatch)
 }
 
