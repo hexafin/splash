@@ -6,6 +6,7 @@ import reducers from '../reducers'
 import thunkMiddleware from "redux-thunk"
 import {createLogger} from 'redux-logger'
 import createRavenMiddleware from "raven-for-redux";
+import { sentryDSN } from '../../env/keys.json'
 
 const config = {
     key: 'root',
@@ -19,7 +20,7 @@ const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__
 export default function configureStore () {
 
     //TODO: get sentry DSN from ENV variables
-    Sentry.config('UPDATE').install();
+    Sentry.config(sentryDSN).install();
 
     const middleware = [createRavenMiddleware(Sentry), loggerMiddleware, thunkMiddleware]
 
