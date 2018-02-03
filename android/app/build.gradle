@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-fcm')
     compile project(':react-native-sentry')
     compile project(':react-native-facebook-login')
     compile project(':react-native-udp')
