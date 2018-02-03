@@ -8,6 +8,7 @@ var axios = require('axios')
 let CoinbaseApi = require('NativeModules').CoinbaseApi;
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
+let FCM = firebase.messaging()
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
@@ -286,6 +287,19 @@ export const LoadApp = () => {
               email: state.general.person.email,
               userID: uid,
               username: state.general.person.username,
+            });
+
+            FCM.requestPermissions();
+            
+            // gets the device's push token
+            FCM.getToken().then(token => {
+
+             api.UpdateAccount(uid, {push_token: token}).then(() => {
+               console.log('Push Token Generated');
+             }).catch(() => {
+               console.log('Failed to Generate Push Token');
+             })
+
             });
 
             const loadTransactions = LoadTransactions()
