@@ -68,6 +68,12 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                   callbacks.rightCallback = AcceptRequest
                 } else if (section.type == 'waiting') {
                   callbacks.leftCallback = DeleteRequest
+                  // TODO: reminder on waiting requests
+                  callbacks.rightCallback = () => {Actions.notify({
+                    emoji: "🤭",
+                    title: "Something went wrong",
+                    text: "We are still working on making Splash great, but we must have missed something. Check back later!"
+                  })}
                 }
 
                 // calculate updated relativeAmount if transaction is completed
