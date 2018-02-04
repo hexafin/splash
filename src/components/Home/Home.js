@@ -120,12 +120,7 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                     <View style={styles.balanceRefreshButton}>
                       <EmojiButton
                           title={"Refresh"} emoji={"⚡️"}
-                          //onPress={() => {Refresh()}}
-                          onPress={() => {Actions.notify({
-                            emoji: "🙏",
-                            title: "Thank you for your feedback!",
-                            text: "We use your suggestions to keep making splash better."
-                          })}}
+                          onPress={() => {Refresh()}}
                       />
                     </View>
                 </View>
