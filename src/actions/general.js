@@ -3,12 +3,13 @@ import api from "../api"
 import {coinbaseClientId, coinbaseClientSecret} from "../../env/keys.json"
 import { FBLoginManager } from 'react-native-facebook-login'
 import {Sentry} from 'react-native-sentry'
+import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
+
 import {NativeModules, NativeEventEmitter} from 'react-native'
 var axios = require('axios')
 let CoinbaseApi = require('NativeModules').CoinbaseApi;
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
-let FCM = firebase.messaging()
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
@@ -289,17 +290,22 @@ export const LoadApp = () => {
               username: state.general.person.username,
             });
 
-            FCM.requestPermissions();
-            
-            // gets the device's push token
-            FCM.getToken().then(token => {
+            FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
 
-             api.UpdateAccount(uid, {push_token: token}).then(() => {
-               console.log('Push Token Generated');
-             }).catch(() => {
-               console.log('Failed to Generate Push Token');
-             })
+            FCM.getFCMToken().then(token => {
+              // update account with push notification token
+               api.UpdateAccount(uid, {push_token: token}).then(() => {
+                 console.log('Push Token Generated');
+               }).catch(() => {
+                 console.log('Failed to Generate Push Token');
+               })
 
+            });
+
+            FCM.on(FCMEvent.Notification, async (notif) => {
+              // reload on notifications
+              const loadTransactions = LoadTransactions()
+              loadTransactions(dispatch, getState)
             });
 
             const loadTransactions = LoadTransactions()
