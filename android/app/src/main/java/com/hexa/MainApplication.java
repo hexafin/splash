@@ -3,6 +3,7 @@ package com.hexa;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import io.sentry.RNSentryPackage;
 import com.magus.fblogin.FacebookLoginPackage;
 import com.tradle.react.UdpSocketsModule;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new FIRMessagingPackage(),
             new RNSentryPackage(MainApplication.this),
             new FacebookLoginPackage(),
             new UdpSocketsModule(),

@@ -4519,6 +4519,10 @@ react-native-fbsdk@^0.6.3:
     pump "^1.0.2"
     xcode "^0.9.3"
 
+react-native-fcm@^11.3.1:
+  version "11.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-fcm/-/react-native-fcm-11.3.1.tgz#eae59deb3972d19fdd8d8b52da18984377276e84"
+
 react-native-firebase@^3.1.0:
   version "3.2.3"
   resolved "https://registry.yarnpkg.com/react-native-firebase/-/react-native-firebase-3.2.3.tgz#e81fce5a595f5a1b58e91ec48b13984810e9de63"

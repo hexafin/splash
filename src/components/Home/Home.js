@@ -22,7 +22,7 @@ import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
-               DeclineRequest, AcceptRequest, DeleteRequest, Refresh}) => {
+               DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest, Refresh}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -68,6 +68,7 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                   callbacks.rightCallback = AcceptRequest
                 } else if (section.type == 'waiting') {
                   callbacks.leftCallback = DeleteRequest
+                  callbacks.rightCallback = RemindRequest
                 }
 
                 // calculate updated relativeAmount if transaction is completed

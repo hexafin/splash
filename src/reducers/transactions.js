@@ -12,6 +12,9 @@ import {
     DELETE_TRANSACTION_INIT,
     DELETE_TRANSACTION_SUCCESS,
     DELETE_TRANSACTION_FAILURE,
+    REMIND_TRANSACTION_INIT,
+    REMIND_TRANSACTION_SUCCESS,
+    REMIND_TRANSACTION_FAILURE,
     NEW_TRANSACTION_INIT,
     NEW_TRANSACTION_SUCCESS,
     NEW_TRANSACTION_FAILURE,
@@ -36,7 +39,9 @@ var initialState = {
     isDeletingRequest: false,
     errorDeletingRequest: null,
     isAcceptingRequest: false,
-    errorAcceptingRequest: null
+    errorAcceptingRequest: null,
+    isRemindingRequest: false,
+    errorRemindingRequest: null
 };
 
 export default function transactionsReducer(state = initialState, action) {
@@ -120,6 +125,32 @@ export default function transactionsReducer(state = initialState, action) {
                 ...state,
                 isDeletingRequest: false,
                 errorDeletingRequest: action.error,
+
+            }
+
+        case REMIND_TRANSACTION_INIT:
+
+            return {
+                ...state,
+                errorRemindingRequest: null,
+                isRemindingRequest: true,
+            }
+
+        case REMIND_TRANSACTION_SUCCESS:
+
+            return {
+                ...state,
+                errorRemindingRequest: null,
+                isRemindingRequest: false,
+
+            }
+
+        case REMIND_TRANSACTION_FAILURE:
+
+            return {
+                ...state,
+                isRemindingRequest: false,
+                errorRemindingRequest: action.error,
 
             }
 
