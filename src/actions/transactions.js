@@ -87,6 +87,21 @@ export function deleteTransactionFailure(error) {
     return {type: DELETE_TRANSACTION_FAILURE, error}
 }
 
+export const REMIND_TRANSACTION_INIT = "REMIND_TRANSACTION_INIT";
+export function remindTransactionInit(transactionRef) {
+    return {type: REMIND_TRANSACTION_INIT, transactionRef}
+}
+
+export const REMIND_TRANSACTION_SUCCESS = "REMIND_TRANSACTION_SUCCESS";
+export function remindTransactionSuccess(transactionRef) {
+    return {type: REMIND_TRANSACTION_SUCCESS, transactionRef}
+}
+
+export const REMIND_TRANSACTION_FAILURE = "REMIND_TRANSACTION_FAILURE";
+export function remindTransactionFailure(error) {
+    return {type: REMIND_TRANSACTION_FAILURE, error}
+}
+
 export const REMOVE_REQUEST = "REMOVE_REQUEST";
 export function removeRequest(transactionRef) {
     return {type: REMOVE_REQUEST, transactionRef}
@@ -167,36 +182,46 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 
 export const AcceptRequest = (requestId) => {
   return (dispatch, getState) => {
-    // TODO: notifications
 
     const state = getState()
     const exchangeRate = state.general.exchangeRate.BTC.USD
     const balance = state.crypto.BTC.balance
     dispatch(acceptTransactionInit(requestId))
-
-    const dateTime = Date.now();
-    const timestamp = Math.floor(dateTime / 1000);
-
-    const updateDict = {
-      accepted: true,
-      // amount: amount,
-      timestamp_accepted: timestamp,
+    let relativeAmount = Infinity
+    for (request of state.transactions.requests) {
+      if (request.key == requestId) {
+        relativeAmount = request.relative_amount
+      }
     }
 
-    api.UpdateRequest(requestId, updateDict).then(response => {
+    // check balance before letting accept
+    if (balance > (relativeAmount/exchangeRate)*SATOSHI_CONVERSION) {
+      const dateTime = Date.now();
+      const timestamp = Math.floor(dateTime / 1000);
 
-      api.NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp).then(() => {
+      const updateDict = {
+        accepted: true,
+        // amount: amount,
+        timestamp_accepted: timestamp,
+      }
 
-        dispatch(removeRequest(requestId))
-        dispatch(acceptTransactionSuccess(requestId))
+      api.UpdateRequest(requestId, updateDict).then(response => {
+
+        api.NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp).then(() => {
+
+          dispatch(removeRequest(requestId))
+          dispatch(acceptTransactionSuccess(requestId))
+
+        }).catch(error => {
+          dispatch(acceptTransactionFailure(error))
+        })
 
       }).catch(error => {
         dispatch(acceptTransactionFailure(error))
       })
-
-    }).catch(error => {
-      dispatch(acceptTransactionFailure(error))
-    })
+    } else {
+      dispatch(acceptTransactionFailure("Error: insufficient balance"))
+    }
   }
 }
 
@@ -214,7 +239,6 @@ export const DeclineRequest = (requestId) => {
       dispatch(removeRequest(requestId))
       dispatch(declineTransactionSuccess(requestId))
 
-      // TODO: notifications
     }).catch(error => {
       dispatch(declineTransactionFailure(error))
     })
@@ -229,6 +253,25 @@ export const DeleteRequest = (requestId) => {
       dispatch(deleteTransactionSuccess(requestId))
     }).catch(error => {
       dispatch(deleteTransactionFailure(error))
+    })
+  }
+}
+
+export const RemindRequest = (requestId) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    dispatch(remindTransactionInit(requestId))
+    let number_of_reminders = 0
+    for (request of state.transactions.waiting) {
+      if (request.key == requestId) {
+        number_of_reminders = request.number_of_reminders
+      }
+    }
+
+    api.UpdateRequest(requestId, {number_of_reminders: number_of_reminders+1}).then(response => {
+      dispatch(remindTransactionSuccess(requestId))
+    }).catch(error => {
+      dispatch(remindTransactionFailure(error))
     })
   }
 }
