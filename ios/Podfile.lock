@@ -5,6 +5,20 @@ PODS:
   - BoringSSL/Implementation (9.1):
     - BoringSSL/Interface (= 9.1)
   - BoringSSL/Interface (9.1)
+  - CodePush (5.2.1):
+    - CodePush/Base64 (= 5.2.1)
+    - CodePush/Core (= 5.2.1)
+    - CodePush/JWT (= 5.2.1)
+    - CodePush/SSZipArchive (= 5.2.1)
+    - React
+  - CodePush/Base64 (5.2.1):
+    - React
+  - CodePush/Core (5.2.1):
+    - React
+  - CodePush/JWT (5.2.1):
+    - React
+  - CodePush/SSZipArchive (5.2.1):
+    - React
   - coinbase-official (3.3.0):
     - coinbase-official/client (= 3.3.0)
     - coinbase-official/core (= 3.3.0)
@@ -117,6 +131,7 @@ PODS:
   - yoga (0.50.3.React)
 
 DEPENDENCIES:
+  - CodePush (from `../node_modules/react-native-code-push`)
   - coinbase-official
   - Firebase/Auth
   - Firebase/Core
@@ -127,6 +142,8 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
+  CodePush:
+    :path: ../node_modules/react-native-code-push
   React:
     :path: ../node_modules/react-native
   SentryReactNative:
@@ -136,6 +153,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BoringSSL: 84318770d120503ab1a6aaf1df777c5ca053697e
+  CodePush: 9400969397b340ee26772b79fcadd1a48a0449dc
   coinbase-official: 57de4952bdb85e16a8f99930c57e16505ff571ed
   Firebase: dbfb98ccec2dcfcd21ab9cc1b4981a3f3c8c5e26
   FirebaseAnalytics: 5b02a63ead2c3f0259cfc7f15e053e440587ecf8
@@ -159,6 +177,6 @@ SPEC CHECKSUMS:
   SentryReactNative: 2ef9eb2ef558cf6b52a3f6b6eae0cd7d7fff9e5f
   yoga: faecc6be81ca7823ccbb470b93a1b228499fa1c0
 
-PODFILE CHECKSUM: f0392a81c897ead8f941d4471dc062f443b9c538
+PODFILE CHECKSUM: bf4f74ff2e0d251629171e3ae846ace3815fc9b8
 
 COCOAPODS: 1.3.1

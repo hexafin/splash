@@ -15,6 +15,7 @@
 #import "CoinbaseOAuth.h"
 #import "CoinbaseApi.h"
 #import "EventEmitter.h"
+#import <CodePush/CodePush.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
 @import Firebase;
@@ -38,6 +39,8 @@
   [FIRApp configure];
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   NSURL *jsCodeLocation;
+  // CODEPUSH
+  // jsCodeLocation = [CodePush bundleURL];
   // BUNDLE
   // jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   // DEVELOP WITH NODE
