@@ -24,6 +24,13 @@ import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
                DeclineRequest, AcceptRequest, DeleteRequest, Refresh}) => {
 
+    console.log(uid)
+
+    if (!uid) {
+      // user not logged in -> send to Splash
+      Actions.splash()
+    }
+
     const defaultCurrency = person.default_currency
 
     // v1 - only bitcoin

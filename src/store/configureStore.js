@@ -24,11 +24,11 @@ export default function configureStore () {
 
     const middleware = [createRavenMiddleware(Sentry), loggerMiddleware, thunkMiddleware]
 
-    const store = compose(
+    let store = compose(
         applyMiddleware(...middleware)
     )(createStore)(persistReducers);
 
-    persistStore(store)
+    let persistor = persistStore(store)
 
-    return store
+    return { store, persistor }
 }

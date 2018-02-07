@@ -21,7 +21,7 @@ import EmojiButton from "../universal/EmojiButton"
 import {Actions} from "react-native-router-flux"
 import {reduxForm, Field} from "redux-form";
 
-const Profile = ({person}) => {
+const Profile = ({person, LogOut}) => {
 
     const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
 
@@ -79,7 +79,7 @@ const Profile = ({person}) => {
 
                 </View>
 
-                <Button title="Logout" onPress={() => Actions.splash()}/>
+                <Button title="Logout" onPress={() => LogOut()}/>
 
                 <Text style={styles.footerLegal}>
                     Hexa Financial Group Inc.

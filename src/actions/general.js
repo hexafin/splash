@@ -276,53 +276,74 @@ export const UpdateAccount = (updateDict) => {
 // load App
 export const LoadApp = () => {
     return (dispatch, getState) => {
-        // TODO: loading screen
-        const state = getState()
-        const uid = state.general.uid
 
-        if (state.general.authenticated) {
+        return new Promise((resolve, reject) => {
 
-            Sentry.setUserContext({
-              email: state.general.person.email,
-              userID: uid,
-              username: state.general.person.username,
-            });
+          // TODO: loading screen
+          const state = getState()
+          const uid = state.general.uid
 
-            const loadTransactions = LoadTransactions()
-            loadTransactions(dispatch, getState)
+          if (state.general.authenticated) {
 
-            const getCrypto = GetCrypto()
-            getCrypto(dispatch, getState)
+              Sentry.setUserContext({
+                email: state.general.person.email,
+                userID: uid,
+                username: state.general.person.username,
+              });
 
-            // load friends
-            const facebook_id = state.general.person.facebook_id
-            const access_token = state.general.facebookToken
+              const loadTransactions = LoadTransactions()
+              loadTransactions(dispatch, getState)
 
-            dispatch(updateFriendsInit())
-            api.LoadFriends(facebook_id, access_token).then(friends => {
-                dispatch(updateFriendsSuccess(friends))
-            }).catch(error => {
-                dispatch(updateFriendsFailure(error))
-                //TODO: do something if error
-            })
+              const getCrypto = GetCrypto()
+              getCrypto(dispatch, getState)
 
-            // load exchange rates
-            dispatch(updateExchangeInit())
-            api.GetExchangeRate().then(exchangeRate => {
-                dispatch(updateExchangeSuccess({
-                  BTC: exchangeRate
-                }))
-                // go to the home page
-                Actions.home()
-            }).catch(error => {
-                dispatch(updateExchangeFailure(error))
-                //TODO: do something if error
-            })
+              // load friends
+              const facebook_id = state.general.person.facebook_id
+              const access_token = state.general.facebookToken
 
-        } else {
-            Actions.splash()
-        }
+              dispatch(updateFriendsInit())
+              api.LoadFriends(facebook_id, access_token).then(friends => {
+                  dispatch(updateFriendsSuccess(friends))
+              }).catch(error => {
+                  dispatch(updateFriendsFailure(error))
+                  //TODO: do something if error
+              })
+
+              // load exchange rates
+              dispatch(updateExchangeInit())
+              api.GetExchangeRate().then(exchangeRate => {
+                  dispatch(updateExchangeSuccess({
+                    BTC: exchangeRate
+                  }))
+                  // go to the home page
+                  Actions.home()
+                  resolve(true)
+              }).catch(error => {
+                  dispatch(updateExchangeFailure(error))
+                  reject(false)
+                  //TODO: do something if error
+              })
+
+          } else {
+              Actions.splash()
+          }
+
+        })
+
     }
+}
+
+// log out
+export const LogOut = () => {
+  return (dispatch, getState) => {
+
+    // dispatch actions
+    dispatch(signOut())
+
+    // redirect back to landing
+    Actions.splash()
+
+  }
 }
 
 // submit feedback
@@ -336,11 +357,19 @@ export const SubmitFeedback = (type) => {
 
         if (type == "positive") {
             api.Log("feedback", "👍 - "+feedback)
-            Actions.thanks({thanksType: "positiveFeedback"})
+            Actions.notify({
+              emoji: "🙏",
+              title: "Thanks you for the feedback!",
+              text: "We use your suggestions to keep making Splash better."
+            })
         }
         else {
             api.Log("feedback", "👎 - "+feedback)
-            Actions.thanks({thanksType: "negativeFeedback"})
+            Actions.notify({
+              emoji: "🙏",
+              title: "Thanks you for the feedback!",
+              text: "We use your suggestions to keep making Splash better."
+            })
         }
 
     }
