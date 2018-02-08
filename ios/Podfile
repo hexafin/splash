@@ -13,9 +13,11 @@ target 'splash' do
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
+  pod 'Firebase/Messaging'
   pod "coinbase-official"
 
   pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
+  pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
   target 'splashTests' do
     inherit! :search_paths

@@ -22,7 +22,7 @@ import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
-               DeclineRequest, AcceptRequest, DeleteRequest, Refresh}) => {
+               DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest, Refresh}) => {
 
     console.log(uid)
 

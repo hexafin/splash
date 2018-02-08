@@ -54,6 +54,8 @@
 		7554170F24854729801A72A8 /* AvenirNextLTPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2F704CF9B1A44B69DAB8EF4 /* AvenirNextLTPro-Regular.otf */; };
 		800485871FF7713300A72B72 /* CoinbaseApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 800485851FF7713100A72B72 /* CoinbaseApi.m */; };
 		8043B9F51FD37D0600AA4F4B /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8043B9F41FD37D0600AA4F4B /* fontello.ttf */; };
+		8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8063032E202AD32B00EEF03C /* libCodePush.a */; };
+		80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80703ED9202673BF00A59434 /* libRNFIRMessaging.a */; };
 		80EE3DD21FFD4F6D00EC73E0 /* EventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 80EE3DD11FFD4F6D00EC73E0 /* EventEmitter.m */; };
 		81978025C5DFB5EC8439A4D9 /* libPods-hexaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CA5C96C13325D85175D379 /* libPods-hexaTests.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -357,6 +359,27 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = UdpSockets;
 		};
+		8063DEA8202A54FF0044C0C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8063DEA3202A54FF0044C0C6 /* CodePush.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = CodePush;
+		};
+		8063DEAA202A54FF0044C0C6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8063DEA3202A54FF0044C0C6 /* CodePush.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F886647B1F4ADB500036D01B;
+			remoteInfo = "CodePush-tvOS";
+		};
+		80703ED8202673BF00A59434 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80703ED4202673BF00A59434 /* RNFIRMessaging.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNFIRMessaging;
+		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
@@ -425,6 +448,9 @@
 		800485861FF7713200A72B72 /* CoinbaseApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinbaseApi.h; sourceTree = "<group>"; };
 		8043B9F41FD37D0600AA4F4B /* fontello.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fontello.ttf; sourceTree = "<group>"; };
 		8043ED9336E5474986803186 /* libUdpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUdpSockets.a; sourceTree = "<group>"; };
+		8063032E202AD32B00EEF03C /* libCodePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCodePush.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8063DEA3202A54FF0044C0C6 /* CodePush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
+		80703ED4202673BF00A59434 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
 		80EE3DD01FFD4F6D00EC73E0 /* EventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventEmitter.h; sourceTree = "<group>"; };
 		80EE3DD11FFD4F6D00EC73E0 /* EventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventEmitter.m; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -461,6 +487,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */,
+				80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */,
 				08202C1D1FD38F26003EEEB3 /* FBSDKLoginKit.framework in Frameworks */,
 				08202C181FD38E89003EEEB3 /* libRCTFBLogin.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
@@ -583,6 +611,7 @@
 		08202C191FD38EB5003EEEB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8063032E202AD32B00EEF03C /* libCodePush.a */,
 				08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */,
 				08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */,
 				08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */,
@@ -734,11 +763,30 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8063DEA4202A54FF0044C0C6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8063DEA9202A54FF0044C0C6 /* libCodePush.a */,
+				8063DEAB202A54FF0044C0C6 /* libCodePush.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80703ED5202673BF00A59434 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				80703ED9202673BF00A59434 /* libRNFIRMessaging.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
 				800485861FF7713200A72B72 /* CoinbaseApi.h */,
 				800485851FF7713100A72B72 /* CoinbaseApi.m */,
+				80703ED4202673BF00A59434 /* RNFIRMessaging.xcodeproj */,
+				8063DEA3202A54FF0044C0C6 /* CodePush.xcodeproj */,
 				08202BED1FD38DDE003EEEB3 /* RCTFBLogin.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
@@ -930,6 +978,9 @@
 						DevelopmentTeam = N4L736JEYW;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -958,6 +1009,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 8063DEA4202A54FF0044C0C6 /* Products */;
+					ProjectRef = 8063DEA3202A54FF0044C0C6 /* CodePush.xcodeproj */;
+				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
@@ -1013,6 +1068,10 @@
 				{
 					ProductGroup = 089B810F1FBB82EF007BDF08 /* Products */;
 					ProjectRef = 19B37713312B49FBB9757A8B /* RNFirebase.xcodeproj */;
+				},
+				{
+					ProductGroup = 80703ED5202673BF00A59434 /* Products */;
+					ProjectRef = 80703ED4202673BF00A59434 /* RNFIRMessaging.xcodeproj */;
 				},
 				{
 					ProductGroup = 8043B91B1FD378C000AA4F4B /* Products */;
@@ -1313,6 +1372,27 @@
 			fileType = archive.ar;
 			path = libUdpSockets.a;
 			remoteRef = 8043B94B1FD378C000AA4F4B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8063DEA9202A54FF0044C0C6 /* libCodePush.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCodePush.a;
+			remoteRef = 8063DEA8202A54FF0044C0C6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8063DEAB202A54FF0044C0C6 /* libCodePush.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCodePush.a;
+			remoteRef = 8063DEAA202A54FF0044C0C6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		80703ED9202673BF00A59434 /* libRNFIRMessaging.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNFIRMessaging.a;
+			remoteRef = 80703ED8202673BF00A59434 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
@@ -1688,6 +1768,7 @@
 					"$(SRCROOT)/../node_modules/react-native-randombytes",
 					"$(SRCROOT)/../node_modules/react-native-os/ios",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
 				);
 				INFOPLIST_FILE = hexa/Info.plist;
@@ -1731,6 +1812,7 @@
 					"$(SRCROOT)/../node_modules/react-native-os/ios",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-udp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fcm/ios/**",
 				);
 				INFOPLIST_FILE = hexa/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

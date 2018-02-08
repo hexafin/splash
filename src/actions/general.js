@@ -3,6 +3,8 @@ import api from "../api"
 import {coinbaseClientId, coinbaseClientSecret} from "../../env/keys.json"
 import { FBLoginManager } from 'react-native-facebook-login'
 import {Sentry} from 'react-native-sentry'
+import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
+
 import {NativeModules, NativeEventEmitter} from 'react-native'
 var axios = require('axios')
 let CoinbaseApi = require('NativeModules').CoinbaseApi;
@@ -283,7 +285,44 @@ export const LoadApp = () => {
           const state = getState()
           const uid = state.general.uid
 
-          if (state.general.authenticated) {
+            FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
+
+            FCM.getFCMToken().then( async (token) => {
+              // update account with push notification token
+               api.UpdateAccount(uid, {push_token: token}).then(() => {
+                 console.log('Push Token Generated');
+               }).catch(() => {
+                 console.log('Failed to Generate Push Token');
+               })
+
+            });
+
+            FCM.on(FCMEvent.Notification, async (notif) => {
+              console.log('Notification', notif);
+              // reload on notifications
+              if (!notif.local_notification || notif.opened_from_tray) {
+
+              // on new notification reload
+              const loadTransactions = LoadTransactions()
+              loadTransactions(dispatch, getState)
+              const getCrypto = GetCrypto()
+              getCrypto(dispatch, getState)
+
+              FCM.presentLocalNotification({
+                  title: notif.title,
+                  body: notif.body,
+                  data: notif.data,
+                  priority: "high",
+                  sound: 'default',
+                  vibrate: 300,
+                  show_in_foreground: true,
+              });
+            }
+
+            });
+
+            const loadTransactions = LoadTransactions()
+            loadTransactions(dispatch, getState)
 
               Sentry.setUserContext({
                 email: state.general.person.email,

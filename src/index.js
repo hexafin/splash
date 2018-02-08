@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Provider, connect } from 'react-redux'
+
 import { PersistGate } from 'redux-persist/es/integration/react'
+import codePush from "react-native-code-push";
+import { Sentry } from 'react-native-sentry';
 import Routes from './routes'
 import configureStore from "./store/configureStore"
 import { LoadApp } from "./actions/general"
@@ -8,7 +11,13 @@ import Loading from "./components/universal/Loading"
 
 const { persistor, store } = configureStore()
 
-export default class App extends Component {
+codePush.getUpdateMetadata().then((update) => {
+  if (update) {
+    Sentry.setVersion(update.appVersion + '-codepush:' + update.label);
+  }
+});
+
+class App extends Component {
     render() {
         return (
             <Provider store={store}>
@@ -22,3 +31,5 @@ export default class App extends Component {
         )
     }
 }
+
+export default codePush(App)

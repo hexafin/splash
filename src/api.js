@@ -56,7 +56,8 @@ const NewAccount = (uid, {
             email: email,
             facebook_id: facebookId,
             coinbase_id: coinbaseId,
-            default_currency: defaultCurrency
+            default_currency: defaultCurrency,
+            push_token: null
             // phone_number: phoneNumber,
             // address: address,
             // city: city,
