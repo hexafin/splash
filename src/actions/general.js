@@ -3,6 +3,7 @@ import api from "../api"
 import {coinbaseClientId, coinbaseClientSecret} from "../../env/keys.json"
 import { FBLoginManager } from 'react-native-facebook-login'
 import {Sentry} from 'react-native-sentry'
+import {reset} from 'redux-form';
 import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
 
 import {NativeModules, NativeEventEmitter} from 'react-native'
@@ -126,9 +127,49 @@ export function firebaseAuthError(error) {
     return {type: FIREBASE_AUTH_FAILURE, error}
 }
 
+export const CHECK_USERNAME = "CHECK_USERNAME"
+export function checkUsername(usernameError) {
+    return {type: CHECK_USERNAME, usernameError}
+}
+
 export const SIGN_OUT = "SIGN_OUT"
 export function signOut() {
     return {type: SIGN_OUT}
+}
+
+export const CheckUsername = (username, text) => {
+  return (dispatch, getState) => {
+    // validate username
+    const state = getState()
+    let username = state.form.username.values
+    let illegalChars = /\W/
+    if (!username) {
+      dispatch(checkUsername("Please enter username"))
+    } else {
+      username = state.form.username.values.username
+      if (username.length < 3 || username.length > 15) {
+        dispatch(checkUsername("Usernames must have 3-15 characters"))
+        dispatch(reset('username'))
+      } else if (illegalChars.test(username)) {
+        dispatch(checkUsername("Please enter a valid username. Use only numbers and letters"))
+        dispatch(reset('username'))
+      } else {
+        api.UsernameExists(username).then(exists => {
+          if (exists) {
+            dispatch(checkUsername("Username already exists, please choose another"))
+            dispatch(reset('username'))
+          } else {
+            dispatch(checkUsername(null))
+            Actions.welcome()
+          }
+        }).catch((error) => {
+            dispatch(checkUsername("Username already exists, please choose another"))
+            dispatch(reset('username'))
+          })
+      }
+
+    }
+  }
 }
 
 // Facebook Auth
@@ -145,35 +186,56 @@ export const LinkFacebook = () => {
                 dispatch(firebaseAuthInit())
                 firebase.auth().signInWithCredential(firebaseCredential).then(user => {
                     dispatch(firebaseAuthSuccess(user.uid))
+
+                    // get facebook data
+                    const fields = 'id,name,email,first_name,last_name,gender,picture,link'
+                    const token = data.credentials.token.toString()
+                    axios.get(
+                        "https://graph.facebook.com/me",
+                        {params: {
+                                fields: fields,
+                                access_token: token
+                            }}
+                    ).then(response => {
+                        const facebookData = {
+                            id: response.data.id,
+                            first_name: response.data.first_name,
+                            last_name: response.data.last_name,
+                            picture_url: response.data.picture.data.url,
+                            gender: response.data.gender,
+                            username: null,
+                            default_currency: 'USD',
+                            email: response.data.email,
+                            token: token
+                        }
+
+                        // create an account only if one does not currently exist
+                        api.GetAccount(user.uid).then(person => {
+
+                          if (person.exists) {
+                            facebookData.username = person.data().username
+
+                            // if an account exists route the user to the home page
+                            dispatch(linkFacebookSuccess(facebookData))
+                            const action = LoadApp()
+                            action(dispatch, getState)
+                          } else {
+                            dispatch(linkFacebookSuccess(facebookData))
+                            Actions.confirmDetails()
+                          }
+                        }).catch(error => {
+                          dispatch(linkFacebookFailure(error))
+                        })
+
+                    }).catch(error => {
+                        dispatch(linkFacebookFailure(error))
+                    })
+
+
                 }).catch(error => {
                     dispatch(firebaseAuthError(error))
                 })
 
-                // get facebook data
-                const fields = 'id,name,email,first_name,last_name,gender,picture,link'
-                const token = data.credentials.token.toString()
-                axios.get(
-                    "https://graph.facebook.com/me",
-                    {params: {
-                            fields: fields,
-                            access_token: token
-                        }}
-                ).then(response => {
-                    const facebookData = {
-                        id: response.data.id,
-                        first_name: response.data.first_name,
-                        last_name: response.data.last_name,
-                        picture_url: response.data.picture.data.url,
-                        gender: response.data.gender,
-                        email: response.data.email,
-                        token: token
-                    }
-                    dispatch(linkFacebookSuccess(facebookData))
-
-                    Actions.confirmDetails()
-                }).catch(error => {
-                    dispatch(linkFacebookFailure(error))
-                })
             } else {
                 dispatch(linkFacebookFailure(error))
             }
@@ -237,14 +299,23 @@ export const CreateNewAccount = () => {
                 facebookId: state.general.person.facebook_id,
                 default_currency: "USD"
             }
+            // only let an account be created if the username does not exist
+            api.UsernameExists(inputPerson.username).then(exists => {
+              if(!exists) {
 
-            api.NewAccount(state.general.uid, inputPerson).then(person => {
-                dispatch(newAccountSuccess(person))
+                api.NewAccount(state.general.uid, inputPerson).then(person => {
+                    dispatch(newAccountSuccess(person))
 
-                Actions.coinbase()
-            }).catch(error => {
-                // error
-                dispatch(newAccountFailure(error))
+                    Actions.coinbase()
+                }).catch(error => {
+                    // error
+                    dispatch(newAccountFailure(error))
+                })
+
+
+              } else {
+                dispatch(newAccountFailure("username already exists"))
+              }
             })
 
         }

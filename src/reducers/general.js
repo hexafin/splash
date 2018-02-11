@@ -26,6 +26,7 @@ import {
     UPDATE_FRIENDS_SUCCESS,
     UPDATE_FRIENDS_FAILURE,
     FRIENDS_SEARCH_CHANGE,
+    CHECK_USERNAME,
     SIGN_OUT
 } from "../actions/general";
 
@@ -51,7 +52,8 @@ const initialState = {
     errorUpdatingExchangeRate: null,
     isUpdatingFriends: false,
     friendsSearchQuery: '',
-    errorUpdatingFriends: null
+    errorUpdatingFriends: null,
+    usernameError: false
 };
 
 export default function generalReducer(state = initialState, action) {
@@ -98,6 +100,8 @@ export default function generalReducer(state = initialState, action) {
                     picture_url: action.data.picture_url,
                     first_name: action.data.first_name,
                     last_name: action.data.last_name,
+                    username: action.data.username,
+                    default_currency: action.data.default_currency,
                     gender: action.data.gender,
                     facebook_id: action.data.id,
                     email: action.data.email
@@ -219,6 +223,12 @@ export default function generalReducer(state = initialState, action) {
           return {
             ...state,
             friendsSearchQuery: action.query
+          }
+
+        case CHECK_USERNAME:
+          return {
+            ...state,
+            usernameError: action.usernameError,
           }
 
         case SIGN_OUT:
