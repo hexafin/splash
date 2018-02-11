@@ -26,7 +26,7 @@ const Profile = ({person, LogOut}) => {
     const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="height">
+        <View style={styles.container} behavior="height">
             <BackButton onPress={() => Actions.pop()} type="right"/>
             <View style={styles.header}>
                 <Image style={styles.profileImage} source={{uri: pictureUrl}}/>
@@ -87,7 +87,7 @@ const Profile = ({person, LogOut}) => {
 
             </ScrollView>
 
-        </KeyboardAvoidingView>
+        </View>
     )
 
 }
@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
     footer: {
         flexDirection: "column",
         justifyContent: "space-around",
-        alignItems: "center"
+        alignItems: "center",
+        marginBottom: "40%"
     },
     footerLegal: {
         color: colors.gray,

@@ -122,14 +122,31 @@ export function firebaseAuthSuccess(uid) {
 }
 
 export const FIREBASE_AUTH_FAILURE = "FIREBASE_AUTH_FAILURE"
-export function firebaseAuthError(error) {
+export function firebaseAuthFailure(error) {
     return {type: FIREBASE_AUTH_FAILURE, error}
+}
+
+export const FACEBOOK_LOGIN_INIT = "FACEBOOK_LOGIN_INIT"
+export function facebookLoginInit() {
+    return {type: FACEBOOK_LOGIN_INIT}
+}
+
+export const FACEBOOK_LOGIN_SUCCESS = "FACEBOOK_LOGIN_SUCCESS"
+export function facebookLoginSuccess(person) {
+    return {type: FACEBOOK_LOGIN_SUCCESS, person}
+}
+
+export const FACEBOOK_LOGIN_FAILURE = "FACEBOOK_LOGIN_FAILURE"
+export function facebookLoginFailure(error) {
+    return {type: FACEBOOK_LOGIN_FAILURE, error}
 }
 
 export const SIGN_OUT = "SIGN_OUT"
 export function signOut() {
     return {type: SIGN_OUT}
 }
+
+
 
 // Facebook Auth
 export const LinkFacebook = () => {
@@ -146,7 +163,7 @@ export const LinkFacebook = () => {
                 firebase.auth().signInWithCredential(firebaseCredential).then(user => {
                     dispatch(firebaseAuthSuccess(user.uid))
                 }).catch(error => {
-                    dispatch(firebaseAuthError(error))
+                    dispatch(firebaseAuthFailure(error))
                 })
 
                 // get facebook data
@@ -170,7 +187,9 @@ export const LinkFacebook = () => {
                     }
                     dispatch(linkFacebookSuccess(facebookData))
 
+                    // continue with signup
                     Actions.confirmDetails()
+
                 }).catch(error => {
                     dispatch(linkFacebookFailure(error))
                 })
@@ -281,9 +300,11 @@ export const LoadApp = () => {
 
         return new Promise((resolve, reject) => {
 
-          // TODO: loading screen
           const state = getState()
           const uid = state.general.uid
+          const authenticated = state.general.authenticated
+
+          if (uid != null && authenticated == true) {
 
             FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
 
@@ -321,47 +342,44 @@ export const LoadApp = () => {
 
             });
 
+            Sentry.setUserContext({
+              email: state.general.person.email,
+              userID: uid,
+              username: state.general.person.username,
+            });
+
             const loadTransactions = LoadTransactions()
             loadTransactions(dispatch, getState)
 
-              Sentry.setUserContext({
-                email: state.general.person.email,
-                userID: uid,
-                username: state.general.person.username,
-              });
+            const getCrypto = GetCrypto()
+            getCrypto(dispatch, getState)
 
-              const loadTransactions = LoadTransactions()
-              loadTransactions(dispatch, getState)
+            // load friends
+            const facebook_id = state.general.person.facebook_id
+            const access_token = state.general.facebookToken
 
-              const getCrypto = GetCrypto()
-              getCrypto(dispatch, getState)
+            dispatch(updateFriendsInit())
+            api.LoadFriends(facebook_id, access_token).then(friends => {
+                dispatch(updateFriendsSuccess(friends))
+            }).catch(error => {
+                dispatch(updateFriendsFailure(error))
+                //TODO: do something if error
+            })
 
-              // load friends
-              const facebook_id = state.general.person.facebook_id
-              const access_token = state.general.facebookToken
-
-              dispatch(updateFriendsInit())
-              api.LoadFriends(facebook_id, access_token).then(friends => {
-                  dispatch(updateFriendsSuccess(friends))
-              }).catch(error => {
-                  dispatch(updateFriendsFailure(error))
-                  //TODO: do something if error
-              })
-
-              // load exchange rates
-              dispatch(updateExchangeInit())
-              api.GetExchangeRate().then(exchangeRate => {
-                  dispatch(updateExchangeSuccess({
-                    BTC: exchangeRate
-                  }))
-                  // go to the home page
-                  Actions.home()
-                  resolve(true)
-              }).catch(error => {
-                  dispatch(updateExchangeFailure(error))
-                  reject(false)
-                  //TODO: do something if error
-              })
+            // load exchange rates
+            dispatch(updateExchangeInit())
+            api.GetExchangeRate().then(exchangeRate => {
+                dispatch(updateExchangeSuccess({
+                  BTC: exchangeRate
+                }))
+                // go to the home page
+                Actions.home()
+                resolve(true)
+            }).catch(error => {
+                dispatch(updateExchangeFailure(error))
+                reject(false)
+                //TODO: do something if error
+            })
 
           } else {
               Actions.splash()
@@ -374,15 +392,27 @@ export const LoadApp = () => {
 
 // log out
 export const LogOut = () => {
-  return (dispatch, getState) => {
+    return (dispatch, getState) => {
+        // redirect back to landing
+        Actions.splash()
+        // dispatch actions
+        dispatch(signOut())
+    }
+}
 
-    // dispatch actions
-    dispatch(signOut())
-
-    // redirect back to landing
-    Actions.splash()
-
-  }
+export const UpdateExchangeRate = () => {
+    return (dispatch, getState) => {
+        console.log("update exchange rate")
+        // load exchange rates
+        dispatch(updateExchangeInit())
+        api.GetExchangeRate().then(exchangeRate => {
+            dispatch(updateExchangeSuccess({
+              BTC: exchangeRate
+            }))
+        }).catch(error => {
+            dispatch(updateExchangeFailure(error))
+        })
+    }
 }
 
 // submit feedback
@@ -411,5 +441,67 @@ export const SubmitFeedback = (type) => {
             })
         }
 
+    }
+}
+
+export const LogInWithFacebook = () => {
+    return (dispatch, getState) => {
+
+        dispatch(facebookLoginInit())
+
+        FBLoginManager.loginWithPermissions(["public_profile", "email","user_friends"], function(error, data){
+            if (!error) {
+
+                // firebase auth
+                const firebaseCredential = firebase.auth.FacebookAuthProvider.credential(data.credentials.token)
+                dispatch(firebaseAuthInit())
+                firebase.auth().signInWithCredential(firebaseCredential).then(user => {
+                    dispatch(firebaseAuthSuccess(user.uid))
+
+                    // get person data from firestore
+                    firestore.collection("people").doc(user.uid).get().then(person => {
+
+                        dispatch(facebookLoginSuccess(person.data()))
+
+                        const loadTransactions = LoadTransactions()
+                        loadTransactions(dispatch, getState)
+
+                        const getCrypto = GetCrypto()
+                        getCrypto(dispatch, getState)
+
+                        // load friends
+                        const facebook_id = state.general.person.facebook_id
+                        const access_token = state.general.facebookToken
+
+                        dispatch(updateFriendsInit())
+                        api.LoadFriends(facebook_id, access_token).then(friends => {
+                            dispatch(updateFriendsSuccess(friends))
+                        }).catch(error => {
+                            dispatch(updateFriendsFailure(error))
+                            //TODO: do something if error
+                        })
+
+                        // load exchange rates
+                        dispatch(updateExchangeInit())
+                        api.GetExchangeRate().then(exchangeRate => {
+                            dispatch(updateExchangeSuccess({
+                              BTC: exchangeRate
+                            }))
+                            // go to the home page
+                            Actions.home()
+                            resolve(true)
+                        }).catch(error => {
+                            dispatch(updateExchangeFailure(error))
+                            reject(false)
+                            //TODO: do something if error
+                        })
+                    })
+
+                }).catch(error => {
+                    dispatch(firebaseAuthFailure(error))
+                    dispatch(facebookLoginFailure())
+                })
+            }
+        })
     }
 }

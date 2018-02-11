@@ -20,12 +20,16 @@ class Splash extends Component {
   constructor(props) {
     super(props)
     this.authenticated = this.props.authenticated
+    this.LogInWithFacebook = this.props.LogInWithFacebook
+    this.LoadApp = this.props.LoadApp
   }
 
   componentWillMount() {
     // if logged in -> redirect to home page
+
     if (this.authenticated) {
-      Actions.home()
+
+        Actions.home()
     }
   }
 
@@ -40,19 +44,18 @@ class Splash extends Component {
             />
             <View style={styles.content}>
                 <Text style={styles.logo}>splash</Text>
-                <Text style={styles.tagline}> An easy way to send
-                and get bitcoin from
-                your friends✌️
+                <Text style={styles.tagline}>
+                    An easy way to send
+                    and get bitcoin from
+                    your friends ✌️
                 </Text>
             </View>
-            <Button title="Get started" onPress={() => Actions.chooseUsername()}/>
-            <Button title="Login with Facebook" onPress={
-              () => Actions.notify({
-                emoji: "🤭",
-                title: "TODO",
-                text: "login with Facebook (slightly different than signup)"
-              })
-            }/>
+
+            <View style={styles.content}>
+                <Button title="Get started" onPress={() => Actions.chooseUsername()}/>
+                <View style={styles.buttonSpacer}/>
+                <Button title="Login with Facebook" onPress={() => this.LogInWithFacebook()}/>
+            </View>
 
         </View>
     )
@@ -70,6 +73,9 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         padding: 30,
         position: 'relative'
+    },
+    buttonSpacer: {
+        height: 20
     },
     splashImage: {
         position: 'absolute',

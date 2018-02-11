@@ -5,6 +5,7 @@ import {DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest} from "../..
 import {bindActionCreators} from "redux";
 import {LoadTransactions} from "../../actions/transactions"
 import {GetCrypto} from "../../actions/crypto"
+import {UpdateExchangeRate} from "../../actions/general"
 
 
 const Refresh = () => {
@@ -14,6 +15,9 @@ const Refresh = () => {
 
     const getCrypto = GetCrypto()
     getCrypto(dispatch, getState)
+
+    const updateExchangeRate = UpdateExchangeRate()
+    updateExchangeRate(dispatch, getState)
   }
 }
 

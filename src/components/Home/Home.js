@@ -24,7 +24,10 @@ import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
                DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest, Refresh}) => {
 
-    console.log(uid)
+    console.log(exchangeRate)
+    if (!exchangeRate) {
+        Refresh()
+    }
 
     if (!uid) {
       // user not logged in -> send to Splash
@@ -36,6 +39,7 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
     // v1 - only bitcoin
     const balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
     const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
+    console.log(balance, exchangeRate, relativeBalance)
 
     // render loading screen
     const renderLoading = (
