@@ -26,6 +26,19 @@ function UsernameExists(username) {
     })
 }
 
+function GetAccount(uid) {
+    return new Promise((resolve, reject) => {
+        // get account from uid
+        firestore.collection("people").doc(uid).get().then(person => {
+
+            resolve(person)
+
+        }).catch(error => {
+            reject(error)
+        });
+    })
+}
+
 function NewBitcoinWallet() {
     var keyPair = bitcoin.ECPair.makeRandom({
         rng: random
@@ -499,6 +512,7 @@ export default api = {
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,
+    GetAccount: GetAccount,
     HandleCoinbase: HandleCoinbase,
     GetUidFromFB: GetUidFromFB,
     NewTransaction: NewTransaction,

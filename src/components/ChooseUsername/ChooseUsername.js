@@ -16,7 +16,7 @@ import { Input } from '../universal/Input'
 import { Field, reduxForm } from 'redux-form'
 
 
-const ChooseUsername = () => {
+const ChooseUsername = ({usernameError, CheckUsername}) => {
     return (
         <KeyboardAvoidingView behavior="height" style={styles.container}>
             <BackButton onPress={() => Actions.pop()} />
@@ -27,15 +27,18 @@ const ChooseUsername = () => {
             </View>
             <View style={styles.body}>
                 <View style={styles.usernameWrapper}>
-                    <Text style={styles.atSign}>@</Text>
+                    <Text style={[styles.atSign, usernameError && {color: colors.red}]}>@</Text>
                     <Field style={styles.usernameField} name='username' placeholder='Choose username' component={Input}
                            autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>
                 </View>
-                <Text style={styles.bodyText}>
+                {!usernameError && <Text style={styles.bodyText}>
                     Your username will be the way people can find you in the app and send money to you.
-                </Text>
+                </Text>}
+                {usernameError && <Text style={styles.errorText}>
+                    {usernameError}
+                </Text>}
             </View>
-            <Button style={{flex: 0}} title="Set username" onPress={() => Actions.welcome()}/>
+            <Button tyle={{flex: 0}} title="Set username" onPress={CheckUsername} />
         </KeyboardAvoidingView>
     )
 }
@@ -97,6 +100,17 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         fontWeight: "500",
         backgroundColor: 'rgba(0,0,0,0)'
+    },
+    errorText: {
+      flex: 1,
+      marginTop: 15,
+      color: colors.red,
+      textAlign: "center",
+      fontSize: 20,
+      paddingLeft: 20,
+      paddingRight: 20,
+      fontWeight: "500",
+      backgroundColor: 'rgba(0,0,0,0)'
     }
 })
 

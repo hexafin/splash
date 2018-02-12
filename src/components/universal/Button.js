@@ -7,12 +7,12 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 
-const Button = ({primary, onPress, title}) => {
+const Button = ({primary, onPress, title, disabled}) => {
 
 	return (
-			<TouchableOpacity onPress={ onPress } style={[styles.base, primary ? styles.buttonPrimary : styles.buttonSecondary]}>
-			 	<Text style={[styles.text, primary ? styles.textPrimary : styles.textSecondary]}> 
-			 		{title} 
+			<TouchableOpacity disabled={ disabled } onPress={ onPress } style={[styles.base, primary ? styles.buttonPrimary : styles.buttonSecondary]}>
+			 	<Text style={[styles.text, primary ? styles.textPrimary : styles.textSecondary]}>
+			 		{title}
 			 	</Text>
 			</TouchableOpacity>
 		)
