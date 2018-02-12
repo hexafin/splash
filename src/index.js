@@ -18,6 +18,14 @@ codePush.getUpdateMetadata().then((update) => {
 });
 
 class App extends Component {
+
+    componentDidMount() {
+      codePush.sync({
+            updateDialog: false,
+            installMode: codePush.InstallMode.IMMEDIATE
+        });
+    }
+
     render() {
         return (
             <Provider store={store}>
