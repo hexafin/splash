@@ -22,7 +22,7 @@ import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 
 const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
-               DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest, Refresh}) => {
+               DeclineRequest, AcceptConfirmation, DeleteRequest, RemindRequest, Refresh}) => {
 
     const defaultCurrency = person.default_currency
 
@@ -65,7 +65,7 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                 let callbacks = {leftCallback: undefined, rightCallback: undefined}
                 if (section.type == 'request') {
                   callbacks.leftCallback = DeclineRequest
-                  callbacks.rightCallback = AcceptRequest
+                  callbacks.rightCallback = AcceptConfirmation
                 } else if (section.type == 'waiting') {
                   callbacks.leftCallback = DeleteRequest
                   callbacks.rightCallback = RemindRequest

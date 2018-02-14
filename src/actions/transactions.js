@@ -124,6 +124,7 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
         const state = getState();
         const uid = state.general.uid;
         const balance = state.crypto.BTC.balance
+        const exchangeRate = state.general.exchangeRate.BTC.USD
         const satoshi = Math.floor(amount * SATOSHI_CONVERSION);
         let transaction = {}
 
@@ -158,7 +159,7 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 
 
                 api.NewTransaction(transaction).then(receipt => {
-                    const btcAmount = (receipt.amount / SATOSHI_CONVERSION).toFixed(4)
+                    const btcAmount = transactionType == 'send' ? (receipt.amount / SATOSHI_CONVERSION).toFixed(4) : (relative_amount/exchangeRate).toFixed(4)
                     Actions.receipt({
                         ...receipt,
                         type: undefined,
@@ -180,20 +181,53 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
     }
 }
 
-export const AcceptRequest = (requestId) => {
+export const AcceptConfirmation = (requestId) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    const exchangeRate = state.general.exchangeRate.BTC.USD
+    const balance = state.crypto.BTC.balance
+
+    let request = {}
+    for (r of state.transactions.requests) {
+      if (r.key == requestId) {
+        request = r
+      }
+    }
+    if (balance > (request.relative_amount/exchangeRate)*SATOSHI_CONVERSION) {
+
+      const action = AcceptRequest(requestId, request)
+      const callback = () => action(dispatch, getState)
+
+      Actions.notify({
+                      emoji: "💵",
+                      title: 'Accept Request',
+                      text: 'You are sending @' + request.username + " $" + request.relative_amount,
+                      buttonText: "Confirm",
+                      callback: callback
+                    })
+
+    } else {
+      Actions.notify({
+                      emoji: "❌",
+                      title: 'insufficient Funds',
+                      text: 'You do not have enough balance to process that transaction',
+                      buttonText: "Dismiss",
+                    })
+    }
+
+  }
+}
+
+
+
+export const AcceptRequest = (requestId, request) => {
   return (dispatch, getState) => {
 
     const state = getState()
     const exchangeRate = state.general.exchangeRate.BTC.USD
     const balance = state.crypto.BTC.balance
     dispatch(acceptTransactionInit(requestId))
-    let relativeAmount = Infinity
-    for (request of state.transactions.requests) {
-      if (request.key == requestId) {
-        relativeAmount = request.relative_amount
-      }
-    }
-
+    const relativeAmount = request.relative_amount
     // check balance before letting accept
     if (balance > (relativeAmount/exchangeRate)*SATOSHI_CONVERSION) {
       const dateTime = Date.now();
