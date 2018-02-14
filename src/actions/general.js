@@ -140,11 +140,12 @@ export function facebookLoginSuccess(person) {
 export const FACEBOOK_LOGIN_FAILURE = "FACEBOOK_LOGIN_FAILURE"
 export function facebookLoginFailure(error) {
     return {type: FACEBOOK_LOGIN_FAILURE, error}
+}
 
 export const CHECK_USERNAME = "CHECK_USERNAME"
 export function checkUsername(usernameError) {
     return {type: CHECK_USERNAME, usernameError}
-
+}
 
 export const SIGN_OUT = "SIGN_OUT"
 export function signOut() {
