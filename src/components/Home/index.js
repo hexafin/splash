@@ -1,7 +1,7 @@
 // container for Home page
 import Home from "./Home"
 import {connect} from "react-redux"
-import {DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest} from "../../actions/transactions";
+import {DeclineRequest, AcceptConfirmation, DeleteRequest, RemindRequest} from "../../actions/transactions";
 import {bindActionCreators} from "redux";
 import {LoadTransactions} from "../../actions/transactions"
 import {GetCrypto} from "../../actions/crypto"
@@ -40,7 +40,7 @@ const mapStatetoProps = state => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-      DeclineRequest, AcceptRequest, DeleteRequest, RemindRequest, Refresh
+      DeclineRequest, AcceptConfirmation, DeleteRequest, RemindRequest, Refresh
     }, dispatch)
 }
 

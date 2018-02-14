@@ -10,6 +10,7 @@ import {
 
 const initialState = {
     loading: false,
+    error: null,
     BTC: {
         balance: 0,
         address: null
