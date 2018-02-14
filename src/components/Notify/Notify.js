@@ -39,12 +39,21 @@ class Notify extends Component {
     }).start(Actions.pop);
   }
 
+  buttonCallback = () => {
+    if (this.props.callback) {
+      this.closeModal()
+      this.props.callback()
+    } else {
+      this.closeModal()
+    }
+  }
+
 	render() {
 
 		const dismissButtonView = (
 			<View style={styles.footer}>
-				<TouchableOpacity style={styles.footerButton} onPress={() => {this.closeModal()}}>
-					<Text style={styles.footerButtonText}>Dismiss</Text>
+				<TouchableOpacity style={styles.footerButton} onPress={() => {this.buttonCallback()}}>
+					<Text style={styles.footerButtonText}>{this.props.buttonText}</Text>
 				</TouchableOpacity>
 			</View>
 		)

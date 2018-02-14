@@ -67,7 +67,7 @@ class Home extends Component {
         // v1 - only bitcoin
         const balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
         const relativeBalance = (balance*exchangeRates.BTC[defaultCurrency]).toFixed(2)
-        
+
         // render loading screen
         const renderLoading = (
           <View style={styles.loading}>
@@ -99,19 +99,13 @@ class Home extends Component {
             const items = transactions.concat(requests, waiting)
             for (let i = 0; i < items.length; i++) {
                 if (items[i] && items[i].type == section.type) {
-
                     let callbacks = {leftCallback: undefined, rightCallback: undefined}
                     if (section.type == 'request') {
-                      callbacks.leftCallback = DeclineRequest
-                      callbacks.rightCallback = AcceptRequest
+                        callbacks.leftCallback = DeclineRequest
+                        callbacks.rightCallback = AcceptConfirmation
                     } else if (section.type == 'waiting') {
-                      callbacks.leftCallback = DeleteRequest
-                      // TODO: reminder on waiting requests
-                      callbacks.rightCallback = () => {Actions.notify({
-                        emoji: "🤭",
-                        title: "Something went wrong",
-                        text: "We are still working on making Splash great, but we must have missed something. Check back later!"
-                      })}
+                        callbacks.leftCallback = DeleteRequest
+                        callbacks.rightCallback = RemindRequest
                     }
 
                     // calculate updated relativeAmount if transaction is completed

@@ -70,6 +70,36 @@ export default class SetAmount extends Component {
         this.setState({relativeAmount: relativeAmount, amount: amount})
     }
 
+    confirmAmount = () => {
+      if (this.props.relativeBalance > parseFloat(this.state.relativeAmount) || this.props.transactionType == 'request') {
+        const callback = () => this.props.CreateTransaction({
+                                                              transactionType: this.props.transactionType,
+                                                              other_person: this.props.to,
+                                                              emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
+                                                              relative_amount: this.state.relativeAmount,
+                                                              amount: this.state.amount,
+                                                              })
+        const title = this.props.transactionType == 'send' ? "Confirm Payment" : "Confirm Request"
+        const text = this.props.transactionType == 'send' ? "You are sending $" + this.state.relativeAmount + " to @" + this.props.to.username :
+                                                            "You are requesting $" + this.state.relativeAmount + " from @" + this.props.to.username
+        Actions.notify({
+                        emoji: "💵",
+                        title: title,
+                        text: text,
+                        buttonText: "Confirm",
+                        callback: callback
+                      })
+      } else {
+        Actions.notify({
+                        emoji: "❌",
+                        title: 'insufficient Funds',
+                        text: 'You do not have enough balance to process that transaction',
+                        buttonText: "Dismiss",
+                        callback: null
+                      })
+      }
+    }
+
     render() {
         return (
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -98,13 +128,7 @@ export default class SetAmount extends Component {
                 <View style={styles.footerWrapper}>
                     <TouchableOpacity style={styles.footer}
                                       disabled={(this.state.amount <= 0 || this.state.selectedEmojiFirst == null)}
-                                      onPress={() => this.props.CreateTransaction({
-                                                                                  transactionType: this.props.transactionType,
-                                                                                  other_person: this.props.to,
-                                                                                  emoji: emojis[this.state.selectedEmojiFirst][this.state.selectedEmojiSecond],
-                                                                                  relative_amount: this.state.relativeAmount,
-                                                                                  amount: this.state.amount,
-                                                                                  })}>
+                                      onPress={() => this.confirmAmount()}>
                         {this.props.transactionType == 'send' && !this.props.isCreatingTransaction &&
                           <Text style={styles.footerButtonText}>
                               Send bitcoin
