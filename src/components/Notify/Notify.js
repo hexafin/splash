@@ -65,19 +65,19 @@ class Notify extends Component {
 
         return (
             <Animated.View style={[styles.transparent, { opacity: this.state.opacity }]}>
-    					<BackButton onPress={() => {this.closeModal()}} type="right"/>
-    					<View style={styles.card}>
-    						<View style={styles.emoji}>
-    							<Text style={styles.emojiText}>{this.props.emoji}</Text>
-    						</View>
-    						<View style={styles.title}>
-    							<Text style={styles.titleText}>{this.props.title}</Text>
-    						</View>
-    						<View style={styles.body}>
-    							<Text style={styles.bodyText}>{this.props.text}</Text>
-    						</View>
-    						{buttonView}
-    					</View>
+				<BackButton onPress={() => {this.closeModal()}} type="right"/>
+				<View style={styles.card}>
+					<View style={styles.emoji}>
+						<Text style={styles.emojiText}>{this.props.emoji}</Text>
+					</View>
+					<View style={styles.title}>
+						<Text style={styles.titleText}>{this.props.title}</Text>
+					</View>
+					<View style={styles.body}>
+						<Text style={styles.bodyText}>{this.props.text}</Text>
+					</View>
+					{buttonView}
+				</View>
             </Animated.View>
         )
 	}
