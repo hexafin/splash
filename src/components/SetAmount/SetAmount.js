@@ -87,15 +87,14 @@ export default class SetAmount extends Component {
                         title: title,
                         text: text,
                         buttonText: "Confirm",
-                        callback: callback
+                        callback: callback,
+                        custom: true
                       })
       } else {
         Actions.notify({
                         emoji: "❌",
                         title: 'Insufficient Funds',
-                        text: 'You do not have enough balance to process that transaction',
-                        buttonText: "Dismiss",
-                        callback: null
+                        text: 'You do not have enough balance to process that transaction'
                       })
       }
     }
