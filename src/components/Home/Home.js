@@ -50,19 +50,21 @@ class Home extends Component {
 
     render() {
 
-        const uid = this.props.uid
-        const person = this.props.person
-        const crypto = this.props.crypto
-        const exchangeRates = this.props.exchangeRates
-        const loading = this.props.loading
-        const transactions = this.props.transactions
-        const requests = this.props.requests
-        const waiting = this.props.waiting
-        const DeclineRequest = this.props.DeclineRequest
-        const AcceptRequest = this.props.AcceptRequest
-        const DeleteRequest = this.props.DeleteRequest
-        const RemindRequest = this.props.RemindRequest
-        const Refresh = this.props.Refresh
+        const {
+            uid,
+            person,
+            crypto,
+            exchangeRates,
+            loading,
+            transactions,
+            requests,
+            waiting,
+            DeclineRequest,
+            AcceptRequest,
+            DeleteRequest,
+            RemindRequest,
+            Refresh
+        } = this.props
 
         const defaultCurrency = person.default_currency
 
