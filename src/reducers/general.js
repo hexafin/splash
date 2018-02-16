@@ -131,6 +131,7 @@ export default function generalReducer(state = initialState, action) {
                 ...state,
                 isFacebookLoggingIn: false,
                 person: action.person,
+                facebookToken: action.token
             }
 
         case FACEBOOK_LOGIN_FAILURE:

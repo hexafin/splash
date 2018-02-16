@@ -133,8 +133,8 @@ export function facebookLoginInit() {
 }
 
 export const FACEBOOK_LOGIN_SUCCESS = "FACEBOOK_LOGIN_SUCCESS"
-export function facebookLoginSuccess(person) {
-    return {type: FACEBOOK_LOGIN_SUCCESS, person}
+export function facebookLoginSuccess(person, token) {
+    return {type: FACEBOOK_LOGIN_SUCCESS, person, token}
 }
 
 export const FACEBOOK_LOGIN_FAILURE = "FACEBOOK_LOGIN_FAILURE"
@@ -530,13 +530,13 @@ export const LogInWithFacebook = () => {
                     // get person data from firestore
                     firestore.collection("people").doc(user.uid).get().then(person => {
 
-                        dispatch(facebookLoginSuccess(person.data()))
+                        const token = data.credentials.token.toString()
+                        dispatch(facebookLoginSuccess(person.data(), token))
 
                         // load friends
                         const facebook_id = person.data().facebook_id
-                        const access_token = person.data().facebookToken
                         dispatch(updateFriendsInit())
-                        api.LoadFriends(facebook_id, access_token).then(friends => {
+                        api.LoadFriends(facebook_id, token).then(friends => {
                             dispatch(updateFriendsSuccess(friends))
                         }).catch(error => {
                             dispatch(updateFriendsFailure(error))
