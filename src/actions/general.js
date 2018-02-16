@@ -83,8 +83,8 @@ export function updateExchangeInit() {
 }
 
 export const UPDATE_EXCHANGE_SUCCESS = "UPDATE_EXCHANGE_SUCCESS"
-export function updateExchangeSuccess(exchangeRate) {
-    return {type: UPDATE_EXCHANGE_SUCCESS, exchangeRate}
+export function updateExchangeSuccess(exchangeRates) {
+    return {type: UPDATE_EXCHANGE_SUCCESS, exchangeRates}
 }
 
 export const UPDATE_EXCHANGE_FAILURE = "UPDATE_EXCHANGE_FAILURE"
@@ -428,8 +428,6 @@ export const LoadApp = () => {
 export const LogOut = () => {
     return (dispatch, getState) => {
         // redirect back to landing
-        Actions.splash()
-        // dispatch actions
         dispatch(signOut())
     }
 }
@@ -460,6 +458,7 @@ export const SubmitFeedback = (type) => {
 
         if (type == "positive") {
             api.Log("feedback", "👍 - "+feedback)
+            Actions.home()
             Actions.notify({
               emoji: "🙏",
               title: "Thanks you for the feedback!",
@@ -468,6 +467,7 @@ export const SubmitFeedback = (type) => {
         }
         else {
             api.Log("feedback", "👎 - "+feedback)
+            Actions.home()
             Actions.notify({
               emoji: "🙏",
               title: "Thanks you for the feedback!",
@@ -497,16 +497,9 @@ export const LogInWithFacebook = () => {
 
                         dispatch(facebookLoginSuccess(person.data()))
 
-                        const loadTransactions = LoadTransactions()
-                        loadTransactions(dispatch, getState)
-
-                        const getCrypto = GetCrypto()
-                        getCrypto(dispatch, getState)
-
                         // load friends
-                        const facebook_id = state.general.person.facebook_id
-                        const access_token = state.general.facebookToken
-
+                        const facebook_id = person.data().facebook_id
+                        const access_token = person.data().facebookToken
                         dispatch(updateFriendsInit())
                         api.LoadFriends(facebook_id, access_token).then(friends => {
                             dispatch(updateFriendsSuccess(friends))
@@ -521,7 +514,6 @@ export const LogInWithFacebook = () => {
                             dispatch(updateExchangeSuccess({
                               BTC: exchangeRate
                             }))
-                            // go to the home page
                             Actions.home()
                             resolve(true)
                         }).catch(error => {
@@ -529,6 +521,12 @@ export const LogInWithFacebook = () => {
                             reject(false)
                             //TODO: do something if error
                         })
+
+                        const loadTransactions = LoadTransactions()
+                        loadTransactions(dispatch, getState)
+
+                        const getCrypto = GetCrypto()
+                        getCrypto(dispatch, getState)
                     })
 
                 }).catch(error => {

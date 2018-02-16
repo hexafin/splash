@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux"
 import {SubmitFeedback} from "../../actions/general";
 
 const mapStateToProps = (state) => {
-    return state
+    return {}
 }
 
 const mapDispatchToProps = (dispatch) => {

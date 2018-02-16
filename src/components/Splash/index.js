@@ -2,7 +2,7 @@
 import Splash from "./Splash"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {LogInWithFacebook, LoadApp} from "../../actions/general"
+import {LogInWithFacebook, LoadApp, LogOut} from "../../actions/general"
 
 const mapStateToProps = (state) => {
     return {
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        LogInWithFacebook, LoadApp
+        LogInWithFacebook, LoadApp, LogOut
     }, dispatch)
 }
 

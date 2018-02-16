@@ -79,7 +79,7 @@ const Profile = ({person, LogOut}) => {
 
                 </View>
 
-                <Button title="Logout" onPress={() => LogOut()}/>
+                <Button title="Logout" onPress={() => Actions.splash({shouldLogout: true})}/>
 
                 <Text style={styles.footerLegal}>
                     Hexa Financial Group Inc.

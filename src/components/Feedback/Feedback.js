@@ -15,9 +15,14 @@ import Button from "../universal/Button"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton"
 import {Actions} from "react-native-router-flux"
-import {reduxForm, Field} from "redux-form";
+import {reduxForm, Field} from "redux-form"
 
 const Feedback = ({feedbackType = "negative", SubmitFeedback}) => {
+
+    let placeholder = "Your favorite part"
+    if (feedbackType == "negative") {
+        placeholder = "Describe the problem"
+    }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="height">
@@ -30,12 +35,10 @@ const Feedback = ({feedbackType = "negative", SubmitFeedback}) => {
                 {feedbackType == "negative" && <Text style={styles.headerText}>Ugh! What happened?</Text>}
             </View>
             <View style={styles.body}>
-                {feedbackType == "positive" &&<Field style={styles.feedbackField} name='feedback'
-                                       placeholder='Your favorite part' component={Input}
-                                       autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>}
-                {feedbackType == "negative" &&<Field style={styles.feedbackField} name='feedback'
-                                             placeholder='Describe the problem' component={Input}
-                                             autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>}
+            <Field style={styles.feedbackField} name='feedback'
+                placeholder={placeholder}
+                component={Input} autoCapitalize="none"
+                autoCorrect={false} spellCheck={false} autoFocus={true}/>
             </View>
             <View style={styles.footer}>
                 <Button title="Leave feedback" onPress={() => SubmitFeedback(feedbackType)}/>
@@ -86,5 +89,5 @@ const styles = StyleSheet.create({
 
 export default reduxForm({
     form: 'feedback',
-    destroyOnUnmount: false,
+    destroyOnUnmount: true
 })(Feedback)

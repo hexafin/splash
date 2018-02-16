@@ -22,13 +22,12 @@ class Splash extends Component {
     this.authenticated = this.props.authenticated
     this.LogInWithFacebook = this.props.LogInWithFacebook
     this.LoadApp = this.props.LoadApp
+    this.LogOut = this.props.LogOut
   }
 
-  componentWillMount() {
-    // if logged in -> redirect to home page
-
-    if (this.authenticated) {
-
+  componentDidMount() {
+    // if logged in and not supposed to log out -> redirect to home page
+    if (this.authenticated && !this.props.shouldLogout) {
         Actions.home()
     }
   }
@@ -52,9 +51,18 @@ class Splash extends Component {
             </View>
 
             <View style={styles.content}>
-                <Button title="Get started" onPress={() => Actions.chooseUsername()}/>
+                <Button title="Get started" onPress={() => {
+                    // logging the user out as they click get started / login
+                    // because logging out on Splash component mounting
+                    // causes an error with the mounted Home component
+                    this.LogOut()
+                    Actions.chooseUsername()
+                }}/>
                 <View style={styles.buttonSpacer}/>
-                <Button title="Login with Facebook" onPress={() => this.LogInWithFacebook()}/>
+                <Button title="Login with Facebook" onPress={() => {
+                    this.LogOut()
+                    this.LogInWithFacebook()
+                }}/>
             </View>
 
         </View>

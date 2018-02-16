@@ -35,7 +35,7 @@ const mapStatetoProps = state => {
         },
         person: state.general.person,
         crypto: state.crypto,
-        exchangeRate: state.general.exchangeRate,
+        exchangeRates: state.general.exchangeRates,
         transactions: state.transactions.transactions,
         requests: state.transactions.requests,
         waiting: state.transactions.waiting
