@@ -38,7 +38,8 @@ const mapStatetoProps = state => {
         exchangeRates: state.general.exchangeRates,
         transactions: state.transactions.transactions,
         requests: state.transactions.requests,
-        waiting: state.transactions.waiting
+        waiting: state.transactions.waiting,
+        scene: state.routes.scene
     }
 }
 

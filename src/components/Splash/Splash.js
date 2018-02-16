@@ -55,7 +55,7 @@ class Splash extends Component {
                     // logging the user out as they click get started / login
                     // because logging out on Splash component mounting
                     // causes an error with the mounted Home component
-                    this.LogOut()
+                    //this.LogOut()
                     Actions.chooseUsername()
                 }}/>
                 <View style={styles.buttonSpacer}/>

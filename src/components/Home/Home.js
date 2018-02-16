@@ -37,12 +37,14 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        if (isEmpty(this.props.exchangeRates)) {
-            this.props.Refresh()
-        }
-        if (!this.props.uid) {
-          // user not logged in -> send to Splash
-          Actions.splash({shouldLogout: true})
+        if (this.props.scene == "home") {
+            if (isEmpty(this.props.exchangeRates)) {
+                this.props.Refresh()
+            }
+            if (!this.props.uid) {
+              // user not logged in -> send to Splash
+              Actions.splash({shouldLogout: true})
+            }
         }
     }
 
@@ -65,8 +67,12 @@ class Home extends Component {
         const defaultCurrency = person.default_currency
 
         // v1 - only bitcoin
-        const balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
-        const relativeBalance = (balance*exchangeRates.BTC[defaultCurrency]).toFixed(2)
+        let balance = crypto.BTC.balance
+        let relativeBalance = balance
+        if (!isEmpty(exchangeRates)) {
+            balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
+            relativeBalance = (balance*exchangeRates.BTC[defaultCurrency]).toFixed(2)
+        }
 
         // render loading screen
         const renderLoading = (
