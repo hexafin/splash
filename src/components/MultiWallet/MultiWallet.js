@@ -19,13 +19,13 @@ import {Actions} from "react-native-router-flux"
 import CurrencyCard from "./CurrencyCard"
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
 
-const MultiWallet = ({crypto, exchangeRate, defaultCurrency}) => {
+const MultiWallet = ({crypto, exchangeRates, defaultCurrency}) => {
 
     const calculateTotalBalance = (cryptoNames) => {
         let balance = 0
         for (let i=0; i<cryptoNames.length; i++) {
             const currency = cryptoNames[i]
-            const relativeBalance = crypto[currency].balance/cryptoUnits[currency]*exchangeRate[currency][defaultCurrency]
+            const relativeBalance = crypto[currency].balance/cryptoUnits[currency]*exchangeRates[currency][defaultCurrency]
             balance = balance + relativeBalance
         }
         return balance.toFixed(2)
@@ -41,7 +41,7 @@ const MultiWallet = ({crypto, exchangeRate, defaultCurrency}) => {
                     icon={icons[currency]}
                     currency={currency}
                     amount={crypto[currency].balance}
-                    exchangeRate={exchangeRate[currency][defaultCurrency]}
+                    exchangeRate={exchangeRates[currency][defaultCurrency]}
                     defaultCurrency={defaultCurrency}
                 />
             )

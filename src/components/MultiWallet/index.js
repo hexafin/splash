@@ -5,7 +5,7 @@ import {GetCrypto} from "../../actions/crypto";
 
 const mapStateToProps = (state) => {
     const crypto = state.crypto
-    const exchangeRate = state.general.exchangeRate
+    const exchangeRates = state.general.exchangeRates
     const defaultCurrency = state.general.person.default_currency
     return {crypto, exchangeRate, defaultCurrency}
 }
