@@ -17,20 +17,20 @@ import {Actions} from "react-native-router-flux"
 import {defaults} from "../../lib/styles";
 
 //dummy data
-const recent = {
-    type: 'friend',
-    name: 'Maddy Kennedy',
-    username: 'mads',
-    picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    emoji: '😍'
-}
-const friend = {
-    type: 'friend',
-    name: 'Maddy Kennedy',
-    username: 'mads',
-    picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
-    emoji: '😍'
-}
+// const recent = {
+//     type: 'friend',
+//     name: 'Maddy Kennedy',
+//     username: 'mads',
+//     picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+//     emoji: '😍'
+// }
+// const friend = {
+//     type: 'friend',
+//     name: 'Maddy Kennedy',
+//     username: 'mads',
+//     picture_url: 'https://graph.facebook.com/100001753341179/picture?type=large',
+//     emoji: '😍'
+// }
 
 const recents = []
 
@@ -90,7 +90,7 @@ const Transaction = ({transactionType = 'send', friends, friendsSearchChange, lo
 
     return (
         <View style={styles.container}>
-            <BackButton onPress={() => Actions.pop()} type="right"/>
+            <BackButton onPress={() => Actions.home()} type="right"/>
             {!loading &&
               <View>
                 <View style={styles.header}>

@@ -104,7 +104,7 @@ export default class SetAmount extends Component {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <View style={styles.page}>
-                    <BackButton onPress={() => Actions.pop()} type="right"/>
+                    <BackButton onPress={() => Actions.home()} type="right"/>
                     <Text style={styles.pageTitle}>Choose amount</Text>
                     <View style={styles.balance}>
                         <TextInput
