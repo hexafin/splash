@@ -50,22 +50,15 @@ class Notify extends Component {
 
 	render() {
 
-		const dismissButtonView = (
-			<View style={styles.footer}>
-				<TouchableOpacity style={styles.footerButton} onPress={() => {this.closeModal()}}>
-					<Text style={styles.footerButtonText}>Dismiss</Text>
-				</TouchableOpacity>
-			</View>
-		)
+        let buttonText = "Dismiss"
+        if (this.props.buttonText) {
+            buttonText = this.props.buttonText
+        }
 
-        // <TouchableOpacity style={styles.footerButton} onPress={()=>{this.props.leftButtonAction}}>*/}
-        //     <Text style={styles.footerButtonText}>{this.props.leftButtonText}</Text>
-        // </TouchableOpacity>
-
-		const customButtonsView = (
+		const buttonView = (
 			<View style={styles.footer}>
-				<TouchableOpacity style={styles.footerButton} onPress={()=>{this.buttonCallback()}}>
-					<Text style={styles.footerButtonText}>{this.props.buttonText}</Text>
+				<TouchableOpacity style={styles.footerButton} onPress={() => this.buttonCallback()}>
+					<Text style={styles.footerButtonText}>{buttonText}</Text>
 				</TouchableOpacity>
 			</View>
 		)
@@ -83,8 +76,7 @@ class Notify extends Component {
     						<View style={styles.body}>
     							<Text style={styles.bodyText}>{this.props.text}</Text>
     						</View>
-    						{!this.props.custom && dismissButtonView}
-                            {this.props.custom && customButtonsView}
+    						{buttonView}
     					</View>
             </Animated.View>
         )
