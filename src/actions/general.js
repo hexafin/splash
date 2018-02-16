@@ -153,6 +153,41 @@ export function signOut() {
 }
 
 
+export const CheckUsername = (username, text) => {
+    return (dispatch, getState) => {
+        // validate username
+        const state = getState()
+        let username = state.form.username.values
+        let illegalChars = /\W/
+        if (!username) {
+            dispatch(checkUsername("Please enter username"))
+        } else {
+            username = state.form.username.values.username
+            if (username.length < 3 || username.length > 15) {
+                dispatch(checkUsername("Usernames must have 3-15 characters"))
+                dispatch(reset('username'))
+            } else if (illegalChars.test(username)) {
+                dispatch(checkUsername("Please enter a valid username. Use only numbers and letters"))
+                dispatch(reset('username'))
+            } else {
+                api.UsernameExists(username).then(exists => {
+                    if (exists) {
+                        dispatch(checkUsername("Username already exists, please choose another"))
+                        dispatch(reset('username'))
+                    } else {
+                        dispatch(checkUsername(null))
+                        Actions.welcome()
+                    }
+                }).catch((error) => {
+                    dispatch(checkUsername("Username already exists, please choose another"))
+                    dispatch(reset('username'))
+                })
+            }
+
+        }
+    }
+}
+
 
 // Facebook Auth
 export const LinkFacebook = () => {
