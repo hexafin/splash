@@ -19,13 +19,13 @@ import {cryptoNames, cryptoNameDict, cryptoUnits, currencySymbolDict} from "../.
 import EmojiButton from "../universal/EmojiButton"
 import api from "../../api"
 
-const Wallet = ({currency, crypto, exchangeRate, defaultCurrency, GetCrypto}) => {
+const Wallet = ({currency, crypto, exchangeRates, defaultCurrency, GetCrypto}) => {
 
     const amount = crypto[currency].balance
     const address = crypto[currency].address
     const cryptoName = cryptoNameDict[currency]
     const trueAmount = amount/cryptoUnits[currency]
-    const relativeAmount = (exchangeRate[currency][defaultCurrency]*trueAmount).toFixed(2)
+    const relativeAmount = (exchangeRates[currency][defaultCurrency]*trueAmount).toFixed(2)
     const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+address
 
     return (
