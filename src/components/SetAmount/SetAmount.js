@@ -87,8 +87,7 @@ export default class SetAmount extends Component {
                         title: title,
                         text: text,
                         buttonText: "Confirm",
-                        callback: callback,
-                        custom: true
+                        callback: callback
                       })
       } else {
         Actions.notify({
