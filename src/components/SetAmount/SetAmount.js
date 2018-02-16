@@ -66,7 +66,7 @@ export default class SetAmount extends Component {
     // real time convert USD to bitcoin and save to state
     inputChange = (e) => {
         const relativeAmount = e.replace(/[^\d.-]/g, '')
-        const amount = (relativeAmount/this.props.ExchangeRate).toFixed(4)
+        const amount = (relativeAmount/this.props.exchangeRateBTC).toFixed(4)
         this.setState({relativeAmount: relativeAmount, amount: amount})
     }
 

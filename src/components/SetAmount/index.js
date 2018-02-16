@@ -7,10 +7,10 @@ import {cryptoUnits} from "../../lib/cryptos"
 
 const mapStateToProps = (state) => {
     const balance = (state.crypto.BTC.balance/cryptoUnits.BTC)
-    const exchangeRate = parseFloat(state.general.exchangeRate.BTC['USD'])
+    const exchangeRateBTC = parseFloat(state.general.exchangeRates.BTC['USD'])
     return {
-      relativeBalance: (balance*exchangeRate).toFixed(2),
-      ExchangeRate: exchangeRate,
+      relativeBalance: (balance*exchangeRates).toFixed(2),
+      exchangeRateBTC: exchangeRateBTC,
       isCreatingTransaction: state.transactions.isCreatingTransaction
     }
 }
