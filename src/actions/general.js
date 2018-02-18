@@ -367,96 +367,91 @@ export const UpdateAccount = (updateDict) => {
 export const LoadApp = () => {
     return (dispatch, getState) => {
 
-        return new Promise((resolve, reject) => {
+      const state = getState()
+      const uid = state.general.uid
+      const authenticated = state.general.authenticated
 
-          const state = getState()
-          const uid = state.general.uid
-          const authenticated = state.general.authenticated
+      if (uid != null && authenticated == true) {
 
-          if (uid != null && authenticated == true) {
+        FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
 
-            FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
+        FCM.getFCMToken().then( async (token) => {
+          // update account with push notification token
+           api.UpdateAccount(uid, {push_token: token}).then(() => {
+             console.log('Push Token Generated');
+           }).catch(() => {
+             console.log('Failed to Generate Push Token');
+           })
 
-            FCM.getFCMToken().then( async (token) => {
-              // update account with push notification token
-               api.UpdateAccount(uid, {push_token: token}).then(() => {
-                 console.log('Push Token Generated');
-               }).catch(() => {
-                 console.log('Failed to Generate Push Token');
-               })
+        });
 
-            });
+        FCM.on(FCMEvent.Notification, async (notif) => {
+          console.log('Notification', notif);
+          // reload on notifications
+          if (!notif.local_notification || notif.opened_from_tray) {
 
-            FCM.on(FCMEvent.Notification, async (notif) => {
-              console.log('Notification', notif);
-              // reload on notifications
-              if (!notif.local_notification || notif.opened_from_tray) {
+          // on new notification reload
+          const loadTransactions = LoadTransactions()
+          loadTransactions(dispatch, getState)
+          const getCrypto = GetCrypto()
+          getCrypto(dispatch, getState)
 
-              // on new notification reload
-              const loadTransactions = LoadTransactions()
-              loadTransactions(dispatch, getState)
-              const getCrypto = GetCrypto()
-              getCrypto(dispatch, getState)
+          FCM.presentLocalNotification({
+              title: notif.title,
+              body: notif.body,
+              data: notif.data,
+              priority: "high",
+              sound: 'default',
+              vibrate: 300,
+              show_in_foreground: true,
+          });
+        }
 
-              FCM.presentLocalNotification({
-                  title: notif.title,
-                  body: notif.body,
-                  data: notif.data,
-                  priority: "high",
-                  sound: 'default',
-                  vibrate: 300,
-                  show_in_foreground: true,
-              });
-            }
+        });
 
-            });
+        Sentry.setUserContext({
+          email: state.general.person.email,
+          userID: uid,
+          username: state.general.person.username,
+        });
 
-            Sentry.setUserContext({
-              email: state.general.person.email,
-              userID: uid,
-              username: state.general.person.username,
-            });
+        const loadTransactions = LoadTransactions()
+        loadTransactions(dispatch, getState)
 
-            const loadTransactions = LoadTransactions()
-            loadTransactions(dispatch, getState)
+        const getCrypto = GetCrypto()
+        getCrypto(dispatch, getState)
 
-            const getCrypto = GetCrypto()
-            getCrypto(dispatch, getState)
+        // load friends
+        const facebook_id = state.general.person.facebook_id
+        const access_token = state.general.facebookToken
 
-            // load friends
-            const facebook_id = state.general.person.facebook_id
-            const access_token = state.general.facebookToken
-
-            dispatch(updateFriendsInit())
-            api.LoadFriends(facebook_id, access_token).then(friends => {
-                dispatch(updateFriendsSuccess(friends))
-            }).catch(error => {
-                dispatch(updateFriendsFailure(error))
-                //TODO: do something if error
-            })
-
-            // load exchange rates
-            dispatch(updateExchangeInit())
-            api.GetExchangeRate().then(exchangeRate => {
-                dispatch(updateExchangeSuccess({
-                  BTC: exchangeRate
-                }))
-                // go to the home page
-                Actions.home()
-                resolve(true)
-            }).catch(error => {
-                dispatch(updateExchangeFailure(error))
-                reject(false)
-                //TODO: do something if error
-            })
-
-          } else {
-              Actions.splash()
-          }
-
+        dispatch(updateFriendsInit())
+        api.LoadFriends(facebook_id, access_token).then(friends => {
+            dispatch(updateFriendsSuccess(friends))
+        }).catch(error => {
+            dispatch(updateFriendsFailure(error))
+            //TODO: do something if error
         })
 
-    }
+        // load exchange rates
+        dispatch(updateExchangeInit())
+        api.GetExchangeRate().then(exchangeRate => {
+            dispatch(updateExchangeSuccess({
+              BTC: exchangeRate
+            }))
+            // go to the home page
+            Actions.home()
+        }).catch(error => {
+            dispatch(updateExchangeFailure(error))
+            //TODO: do something if error
+        })
+
+      } else {
+          Actions.splash()
+      }
+
+    })
+
 }
 
 // log out
@@ -550,10 +545,8 @@ export const LogInWithFacebook = () => {
                               BTC: exchangeRate
                             }))
                             Actions.home()
-                            resolve(true)
                         }).catch(error => {
                             dispatch(updateExchangeFailure(error))
-                            reject(false)
                             //TODO: do something if error
                         })
 
