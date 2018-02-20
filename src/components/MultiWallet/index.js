@@ -7,7 +7,7 @@ const mapStateToProps = (state) => {
     const crypto = state.crypto
     const exchangeRates = state.general.exchangeRates
     const defaultCurrency = state.general.person.default_currency
-    return {crypto, exchangeRate, defaultCurrency}
+    return {crypto, exchangeRates, defaultCurrency}
 }
 
 const mapDispatchToProps = (dispatch) => {
