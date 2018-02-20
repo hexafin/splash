@@ -130,51 +130,81 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 
         dispatch(newTransactionInit());
 
-        if ((transactionType == 'send' && satoshi < balance) || transactionType == 'request') {
-            api.GetUidFromFB(other_person.facebook_id).then(otherId => {
+        if (((transactionType == 'send' || transactionType == 'external') && satoshi < balance) || transactionType == 'request') {
 
-                if (transactionType == 'send') {
+          // external transaction
+          if (transactionType == 'external') {
+            transaction = {
+                transactionType: transactionType,
+                from_id: uid,
+                to_id: null,
+                to_address: other_person.to_address,
+                currency: other_person.currency,
+                amount: satoshi,
+                fee: {amount: 0}, // TODO: use real fee
+                relative_amount: relative_amount,
+                emoji: emoji
+            }
 
-                    transaction = {
-                        transactionType: transactionType,
-                        from_id: uid,
-                        to_id: otherId,
-                        amount: satoshi,
-                        fee: {amount: 0}, // TODO: use real fee
-                        relative_amount: relative_amount,
-                        emoji: emoji
-                    }
-                } else {
-
-                    transaction = {
-                        transactionType: transactionType,
-                        from_id: otherId,
-                        to_id: uid,
-                        amount: satoshi,
-                        fee: {amount: 0}, // TODO: use real fee
-                        relative_amount: relative_amount,
-                        emoji: emoji
-                    }
-                }
-
-
-                api.NewTransaction(transaction).then(receipt => {
-                    const btcAmount = transactionType == 'send' ? (receipt.amount / SATOSHI_CONVERSION).toFixed(4) : (relative_amount/exchangeRate).toFixed(4)
-                    Actions.receipt({
-                        ...receipt,
-                        type: undefined,
-                        transactionType: transactionType,
-                        to: other_person,
-                        amount: btcAmount
-                    }); // w/ tran info
-                    dispatch(newTransactionSuccess());
-                }).catch(error => {
-                    dispatch(newTransactionFailure(error))
-                })
-
+            api.NewTransaction(transaction).then(receipt => {
+                Actions.receipt({
+                    ...receipt,
+                    type: undefined,
+                    transactionType: transactionType,
+                    to: other_person,
+                    amount: (receipt.amount / SATOSHI_CONVERSION).toFixed(4),
+                }); // w/ tran info
+                dispatch(newTransactionSuccess());
             }).catch(error => {
                 dispatch(newTransactionFailure(error))
             })
+
+          } else {
+                api.GetUidFromFB(other_person.facebook_id).then(otherId => {
+
+                  if (transactionType == 'send') {
+
+                      transaction = {
+                          transactionType: transactionType,
+                          from_id: uid,
+                          to_id: otherId,
+                          amount: satoshi,
+                          fee: {amount: 0}, // TODO: use real fee
+                          relative_amount: relative_amount,
+                          emoji: emoji
+                      }
+                  } else {
+
+                      transaction = {
+                          transactionType: transactionType,
+                          from_id: otherId,
+                          to_id: uid,
+                          amount: satoshi,
+                          fee: {amount: 0}, // TODO: use real fee
+                          relative_amount: relative_amount,
+                          emoji: emoji
+                      }
+                  }
+
+
+                  api.NewTransaction(transaction).then(receipt => {
+                      const btcAmount = transactionType == 'send' ? (receipt.amount / SATOSHI_CONVERSION).toFixed(4) : (relative_amount/exchangeRate).toFixed(4)
+                      Actions.receipt({
+                          ...receipt,
+                          type: undefined,
+                          transactionType: transactionType,
+                          to: other_person,
+                          amount: btcAmount
+                      }); // w/ tran info
+                      dispatch(newTransactionSuccess());
+                  }).catch(error => {
+                      dispatch(newTransactionFailure(error))
+                  })
+
+              }).catch(error => {
+                  dispatch(newTransactionFailure(error))
+              })
+            }
         } else {
             dispatch(newTransactionFailure('Error: not enough BTC'))
         }
