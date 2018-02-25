@@ -30,6 +30,9 @@ import Feedback from "./components/Feedback"
 import Notify from "./components/Notify"
 import Landing from "./components/Landing"
 import ChooseSplashtag from "./components/ChooseSplashtag"
+import EnterPhoneNumber from "./components/EnterPhoneNumber"
+import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
+import Waitlisted from "./components/Waitlisted"
 
 export default OnboardingRouter = TabNavigator(
     {
@@ -45,10 +48,28 @@ export default OnboardingRouter = TabNavigator(
                 tabBarVisible: false
             }
         },
+        EnterPhoneNumber: {
+            screen: EnterPhoneNumber,
+            navigationOptions: {
+                tabBarVisible: false
+            }
+        },
+        VerifyPhoneNumber: {
+            screen: VerifyPhoneNumber,
+            navigationOptions: {
+                tabBarVisible: false
+            }
+        },
+        Waitlisted: {
+            screen: Waitlisted,
+            navigationOptions: {
+                tabBarVisible: false
+            }
+        }
     },
     {
         animationEnabled: true,
-        swipeEnabled: true,
+        swipeEnabled: false,
         initialRouteName: "Landing"
     }
 )
