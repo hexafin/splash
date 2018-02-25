@@ -373,6 +373,12 @@ export const LoadApp = () => {
 
       if (uid != null && authenticated == true) {
 
+        Sentry.setUserContext({
+          email: state.general.person.email,
+          userID: uid,
+          username: state.general.person.username,
+        });
+
         FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
 
         FCM.getFCMToken().then( async (token) => {
@@ -405,15 +411,10 @@ export const LoadApp = () => {
               vibrate: 300,
               show_in_foreground: true,
           });
+
+          //  update app badge
+          FCM.getBadgeNumber().then(n=>FCM.setBadgeNumber(n+1));
         }
-
-        });
-
-        Sentry.setUserContext({
-          email: state.general.person.email,
-          userID: uid,
-          username: state.general.person.username,
-        });
 
         const loadTransactions = LoadTransactions()
         loadTransactions(dispatch, getState)

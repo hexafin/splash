@@ -15,6 +15,7 @@ import EmojiButton from "../universal/EmojiButton"
 import Button from "../universal/Button"
 import BackButton from "../universal/BackButton"
 import GenericLine from '../universal/GenericLine'
+import AddressLine from '../universal/AddressLine'
 import Wallet from '../Wallet'
 import {Actions} from "react-native-router-flux"
 import {defaults} from "../../lib/styles"
@@ -138,12 +139,13 @@ class Home extends Component {
                     {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
                 {/*</View>*/}
 
-                <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
-                             stickySectionHeadersEnabled={false}
-                             renderItem={({item}) => <GenericLine {...item}/>}
-                             renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-                             sections={buildSections}
-                />
+
+            <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
+                         stickySectionHeadersEnabled={false}
+                         renderItem={({item}) => (typeof item.to_address !== 'undefined' && item.to_address !== null) ? <AddressLine {...item}/> : <GenericLine {...item}/>}
+                         renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                         sections={buildSections}
+            />
             </ScrollView>
         )
 

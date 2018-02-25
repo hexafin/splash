@@ -17,6 +17,7 @@ import {defaults} from "../../lib/styles"
 import BackButton from "../universal/BackButton";
 import {Actions} from "react-native-router-flux"
 import GenericLine from "../universal/GenericLine"
+import AddressLine from "../universal/AddressLine"
 import EmojiCircle from "../universal/EmojiCircle"
 import {ifIphoneX} from "react-native-iphone-x-helper";
 
@@ -79,9 +80,11 @@ export default class SetAmount extends Component {
                                                               relative_amount: this.state.relativeAmount,
                                                               amount: this.state.amount,
                                                               })
+        const to_user = this.props.transactionType == 'external' ? "a " + this.props.to.currency + " address" : "@" + this.props.to.username
         const title = this.props.transactionType == 'send' ? "Confirm Payment" : "Confirm Request"
-        const text = this.props.transactionType == 'send' ? "You are sending $" + this.state.relativeAmount + " to @" + this.props.to.username :
-                                                            "You are requesting $" + this.state.relativeAmount + " from @" + this.props.to.username
+        const text = (this.props.transactionType == 'send' || this.props.transactionType == 'external') ? "You are sending $" + this.state.relativeAmount + " to " + to_user :
+                                                          "You are requesting $" + this.state.relativeAmount + " from " + to_user
+
         Actions.notify({
                         emoji: "💵",
                         title: title,
@@ -117,7 +120,8 @@ export default class SetAmount extends Component {
                         <Text style={styles.balanceCurrency}>{this.state.amount} BTC</Text>
                     </View>
                     <Text style={styles.sectionHeader}>Recipient</Text>
-                    <GenericLine {...this.props.to} type={'none'} friendCallback={Keyboard.dismiss}/>
+                    {typeof this.props.to.currency === 'undefined' && <GenericLine {...this.props.to} type={'none'} friendCallback={Keyboard.dismiss}/>}
+                    {typeof this.props.to.currency !== 'undefined' && <AddressLine {...this.props.to} type={'none'} friendCallback={Keyboard.dismiss}/>}
                     <Text style={styles.sectionHeader}>Select category</Text>
                 </View>
                 <ScrollView style={{flex: 1, backgroundColor: 'white'}} keyboardShouldPersistTaps={'never'}>
@@ -127,7 +131,7 @@ export default class SetAmount extends Component {
                     <TouchableOpacity style={styles.footer}
                                       disabled={(this.state.amount <= 0 || this.state.selectedEmojiFirst == null)}
                                       onPress={() => this.confirmAmount()}>
-                        {this.props.transactionType == 'send' && !this.props.isCreatingTransaction &&
+                        {(this.props.transactionType == 'send' || this.props.transactionType == 'external') && !this.props.isCreatingTransaction &&
                           <Text style={styles.footerButtonText}>
                               Send bitcoin
                           </Text>}
