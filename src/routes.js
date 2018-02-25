@@ -27,36 +27,40 @@ import Wallet from "./components/Wallet"
 import Profile from "./components/Profile"
 import Feedback from "./components/Feedback"
 import Notify from "./components/Notify"
+import Landing from "./components/Landing"
 
 
 
 const scenes = Actions.create(
     <Overlay key="overlay" hideNavBar={true} panHandlers={null}>
-          <Lightbox key="lightbox">
+        <Lightbox key="lightbox">
             <Modal key="modal" hideNavBar={true} modal>
-              <Scene key="splash" component={Splash} hideNavBar={true} initial/>
-              <Scene key="stack">
-                  <Scene key="home" component={Home} hideNavBar={true}/>
-                  <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true}/>
-                  <Scene key="welcome" component={Welcome} hideNavBar={true}/>
-                  <Scene key="coinbase" component={Coinbase} hideNavBar={true}/>
-                  <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
-                  <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
-                  <Scene key="manageFunds" component={ManageFunds} hideNavBar={true}/>
-              </Scene>
-              <Scene key="transactionStack">
-                <Scene key="transaction" component={Transaction} hideNavBar={true}/>
-                <Scene key="setamount" component={SetAmount} hideNavBar={true} />
-                <Scene key="receipt" component={Receipt} hideNavBar={true} />
-              </Scene>
-              <Scene key="multiWallet" component={MultiWallet} hideNavBar={true}/>
-              <Scene key="wallet" component={Wallet} hideNavBar={true}/>
-              <Scene key="profile" component={Profile} hideNavBar={true}/>
-              <Scene key="feedback" component={Feedback} hideNavBar={true}/>
-            </Modal>
-            <Scene key="notify" component={Notify} hideNavBar={true}/>
-          </Lightbox>
+                <Scene key="waitlistStack">
+                    <Scene key="landing" component={Landing} hideNavBar={true} initial/>
 
+                </Scene>
+                <Scene key="splash" component={Splash} hideNavBar={true}/>
+                <Scene key="mainStack">
+                    <Scene key="home" component={Home} hideNavBar={true}/>
+                    <Scene key="chooseUsername" component={ChooseUsername} hideNavBar={true}/>
+                    <Scene key="welcome" component={Welcome} hideNavBar={true}/>
+                    <Scene key="coinbase" component={Coinbase} hideNavBar={true}/>
+                    <Scene key="confirmDetails" component={ConfirmDetails} hideNavBar={true}/>
+                    <Scene key="choosePassword" component={ChoosePassword} hideNavBar={true}/>
+                    <Scene key="manageFunds" component={ManageFunds} hideNavBar={true}/>
+                </Scene>
+                <Scene key="transactionStack">
+                    <Scene key="transaction" component={Transaction} hideNavBar={true}/>
+                    <Scene key="setamount" component={SetAmount} hideNavBar={true} />
+                    <Scene key="receipt" component={Receipt} hideNavBar={true} />
+                </Scene>
+                <Scene key="multiWallet" component={MultiWallet} hideNavBar={true}/>
+                <Scene key="wallet" component={Wallet} hideNavBar={true}/>
+                <Scene key="profile" component={Profile} hideNavBar={true}/>
+                <Scene key="feedback" component={Feedback} hideNavBar={true}/>
+            </Modal>
+        <Scene key="notify" component={Notify} hideNavBar={true}/>
+        </Lightbox>
     </Overlay>
 )
 

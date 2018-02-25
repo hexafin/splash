@@ -33,5 +33,6 @@ if (isIphoneX()) {
 }
 
 export const icons = {
-	BTC: require("./images/bitcoin-logo.png")
+	BTC: require("./images/bitcoin-logo.png"),
+	splash: require("./images/splash-logo.png")
 }

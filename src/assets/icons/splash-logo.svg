@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="26px" viewBox="0 0 21 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M7.41176471,19.9314457 C11.5051693,19.9314457 14.8235294,16.6550638 14.8235294,12.613442 C14.8235294,8.57182015 8.80386266,0.105358705 7.41176471,0.105358705 C6.01966675,0.105358705 0,8.57182015 0,12.613442 C0,16.6550638 3.31836009,19.9314457 7.41176471,19.9314457 Z" id="path-1"></path>
+        <filter x="-33.7%" y="-20.2%" width="167.5%" height="150.4%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.24736926   0 0 0 0 0.24736926   0 0 0 0 0.24736926  0 0 0 0.0777287138 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="100%" y1="123.361573%" x2="17.8950295%" y2="-6.54551685%" id="linearGradient-4">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#202020" offset="100%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Mobile-Copy-7" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-112.000000, -65.000000)">
+        <g id="Group" transform="translate(115.000000, 63.000000)">
+            <g id="Group-Copy" transform="translate(0.000000, 4.000000)">
+                <g id="Group-3">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Oval-3">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                        <use fill="#4D00FF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <path d="M5.74952819,4.96609967 L7.41176471,0 C12.9408169,4.61437898 15.4459857,8.91361917 14.9272712,12.8977206 C14.1491994,18.8738727 12.2306803,20.2804773 7.31213003,19.8514073 C4.03309652,19.5653606 3.51222924,14.6035914 5.74952819,4.96609967 Z" id="Path-4" fill="url(#linearGradient-4)" opacity="0.0799932065" mask="url(#mask-2)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
