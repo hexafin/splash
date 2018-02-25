@@ -7,6 +7,9 @@ import {
     FIREBASE_AUTH_INIT,
     FIREBASE_AUTH_SUCCESS,
     FIREBASE_AUTH_FAILURE,
+    FACEBOOK_LOGIN_INIT,
+    FACEBOOK_LOGIN_SUCCESS,
+    FACEBOOK_LOGIN_FAILURE,
     LINK_FACEBOOK_INIT,
     LINK_FACEBOOK_SUCCESS,
     LINK_FACEBOOK_FAILURE,
@@ -36,8 +39,10 @@ const initialState = {
     errorAuthenticating: null,
     isLinkingFacebook: false,
     isLinkingCoinbase: false,
+    isFacebookLoggingIn: false,
     errorLinkingCoinbase: null,
     errorLinkingFacebook: null,
+    errorFacebookLogin: null,
     facebookToken: null,
     coinbase_info: {},
     person: {},
@@ -115,6 +120,27 @@ export default function generalReducer(state = initialState, action) {
                 errorLinkingFacebook: action.error
             }
 
+        case FACEBOOK_LOGIN_INIT:
+            return {
+                ...state,
+                isFacebookLoggingIn: true
+            }
+
+        case FACEBOOK_LOGIN_SUCCESS:
+            return {
+                ...state,
+                isFacebookLoggingIn: false,
+                person: action.person,
+                facebookToken: action.token
+            }
+
+        case FACEBOOK_LOGIN_FAILURE:
+            return {
+                ...state,
+                isFacebookLoggingIn: false,
+                errorFacebookLogin: action.error
+            }
+
         case LINK_COINBASE_INIT:
             return {
                 ...state,
@@ -189,7 +215,7 @@ export default function generalReducer(state = initialState, action) {
             return {
                 ...state,
                 isUpdatingExchangeRate: false,
-                exchangeRate: action.exchangeRate
+                exchangeRates: action.exchangeRates
             }
 
         case UPDATE_EXCHANGE_FAILURE:

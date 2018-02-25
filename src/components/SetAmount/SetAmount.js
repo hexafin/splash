@@ -67,7 +67,7 @@ export default class SetAmount extends Component {
     // real time convert USD to bitcoin and save to state
     inputChange = (e) => {
         const relativeAmount = e.replace(/[^\d.-]/g, '')
-        const amount = (relativeAmount/this.props.ExchangeRate).toFixed(4)
+        const amount = (relativeAmount/this.props.exchangeRateBTC).toFixed(4)
         this.setState({relativeAmount: relativeAmount, amount: amount})
     }
 
@@ -96,9 +96,7 @@ export default class SetAmount extends Component {
         Actions.notify({
                         emoji: "❌",
                         title: 'Insufficient Funds',
-                        text: 'You do not have enough balance to process that transaction',
-                        buttonText: "Dismiss",
-                        callback: null
+                        text: 'You do not have enough balance to process that transaction'
                       })
       }
     }
@@ -108,7 +106,7 @@ export default class SetAmount extends Component {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
                 <View style={styles.page}>
-                    <BackButton onPress={() => Actions.pop()} type="right"/>
+                    <BackButton onPress={() => Actions.home()} type="right"/>
                     <Text style={styles.pageTitle}>Choose amount</Text>
                     <View style={styles.balance}>
                         <TextInput

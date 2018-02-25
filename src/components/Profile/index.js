@@ -1,7 +1,7 @@
 import Profile from "./Profile"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {UpdateAccount} from "../../actions/general";
+import { UpdateAccount, LogOut } from "../../actions/general";
 
 const mapStateToProps = (state) => {
 

@@ -3,9 +3,9 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {SubmitFeedback} from "../../actions/general";
 
-// const mapStateToProps = (state) => {
-//     return state
-// }
+const mapStateToProps = (state) => {
+    return {}
+}
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
@@ -14,4 +14,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapDispatchToProps)(Feedback)
+export default connect(mapStateToProps, mapDispatchToProps)(Feedback)

@@ -21,78 +21,124 @@ import {Actions} from "react-native-router-flux"
 import {defaults} from "../../lib/styles"
 import api from '../../api'
 import {cryptoNames, cryptoUnits, currencySymbolDict} from "../../lib/cryptos"
+import Loading from '../universal/Loading'
 
-const Home = ({uid, person, crypto, exchangeRate, loading, transactions, requests, waiting,
-               DeclineRequest, AcceptConfirmation, DeleteRequest, RemindRequest, Refresh}) => {
+// utility function to check if javascript object is empty
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 
-    const defaultCurrency = person.default_currency
+class Home extends Component {
+    constructor(props) {
+        super(props)
+    }
 
-    // v1 - only bitcoin
-    const balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
-    const relativeBalance = (balance*exchangeRate.BTC[defaultCurrency]).toFixed(2)
-
-    // render loading screen
-    const renderLoading = (
-      <View style={styles.loading}>
-        <ActivityIndicator size='large' color={colors.purple}/>
-      </View>
-    )
-
-    // render blank screen w/o transactions
-    const renderBlank = (
-        <View key={0} style={{flex: 1, padding: 30}}>
-            <Text style={styles.bodyTitle}>
-                Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
-            </Text>
-            <Button title="Deposit bitcoin 💸" onPress={() => Actions.manageFunds()}/>
-            <View style={styles.bodySpacer}/>
-            <Button title="Ask a friend for bitcoin 🎁" onPress={() => Actions.transaction({transactionType: 'request'})}/>
-        </View>
-    )
-
-    const sections = [
-        {data: [], title: 'Requests', type: 'request'},
-        {data: [], title: 'Waiting on', type: 'waiting'},
-        {data: [], title: 'History', type: 'transaction'},
-    ];
-
-    // build and order sections from transaction data
-    const buildSections = sections.map((section, sectionIndex) => {
-        let data = [];
-        const items = transactions.concat(requests, waiting)
-        for (let i = 0; i < items.length; i++) {
-            if (items[i] && items[i].type == section.type) {
-
-                let callbacks = {leftCallback: undefined, rightCallback: undefined}
-                if (section.type == 'request') {
-                  callbacks.leftCallback = DeclineRequest
-                  callbacks.rightCallback = AcceptConfirmation
-                } else if (section.type == 'waiting') {
-                  callbacks.leftCallback = DeleteRequest
-                  callbacks.rightCallback = RemindRequest
-                }
-
-                // calculate updated relativeAmount if transaction is completed
-                const relative_amount = (items[i].amount == null) ? items[i].relative_amount : Math.round((Math.abs(items[i].amount)/cryptoUnits.BTC)*exchangeRate.BTC[defaultCurrency])
-                data.push({...items[i], relative_amount, id: items[i].key, ...callbacks})
-
+    componentWillMount() {
+        if (this.props.scene == "home") {
+            if (isEmpty(this.props.exchangeRates)) {
+                this.props.Refresh()
+            }
+            if (!this.props.uid) {
+              // user not logged in -> send to Splash
+              Actions.splash({shouldLogout: true})
             }
         }
-        if (data.length == 0) {
-            return {...section, title: ''}
+    }
+
+    render() {
+
+        const {
+            uid,
+            person,
+            crypto,
+            exchangeRates,
+            loading,
+            transactions,
+            requests,
+            waiting,
+            DeclineRequest,
+            AcceptRequest,
+            DeleteRequest,
+            RemindRequest,
+            Refresh
+        } = this.props
+
+        const defaultCurrency = person.default_currency
+
+        // v1 - only bitcoin
+        let balance = crypto.BTC.balance
+        let relativeBalance = balance
+        if (!isEmpty(exchangeRates)) {
+            balance = (crypto.BTC.balance/cryptoUnits.BTC).toFixed(4)
+            relativeBalance = (balance*exchangeRates.BTC[defaultCurrency]).toFixed(2)
         }
-        return {...section, data: data}
-    });
 
-    //create sectionList with built data
-    const renderSections = (
-        <ScrollView key={0} style={{flex: 1}}>
+        // render loading screen
+        const renderLoading = (
+          <View style={styles.loading}>
+            <ActivityIndicator size='large' color={colors.purple}/>
+          </View>
+        )
 
-            {/*<View style={styles.homeButtons}>*/}
-                {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
-                {/*<View style={styles.emojiSpacer}/>*/}
-                {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
-            {/*</View>*/}
+        // render blank screen w/o transactions
+        const renderBlank = (
+            <View key={0} style={{flex: 1, padding: 30}}>
+                <Text style={styles.bodyTitle}>
+                    Make your first transaction <Text style={styles.bodyTitleEmoji}>☝️</Text>
+                </Text>
+                <Button title="Deposit bitcoin 💸" onPress={() => Actions.manageFunds()}/>
+                <View style={styles.bodySpacer}/>
+                <Button title="Ask a friend for bitcoin 🎁" onPress={() => Actions.transaction({transactionType: 'request'})}/>
+            </View>
+        )
+
+        const sections = [
+            {data: [], title: 'Requests', type: 'request'},
+            {data: [], title: 'Waiting on', type: 'waiting'},
+            {data: [], title: 'History', type: 'transaction'},
+        ];
+
+        // build and order sections from transaction data
+        const buildSections = sections.map((section, sectionIndex) => {
+            let data = [];
+            const items = transactions.concat(requests, waiting)
+            for (let i = 0; i < items.length; i++) {
+                if (items[i] && items[i].type == section.type) {
+                    let callbacks = {leftCallback: undefined, rightCallback: undefined}
+                    if (section.type == 'request') {
+                        callbacks.leftCallback = DeclineRequest
+                        callbacks.rightCallback = AcceptConfirmation
+                    } else if (section.type == 'waiting') {
+                        callbacks.leftCallback = DeleteRequest
+                        callbacks.rightCallback = RemindRequest
+                    }
+
+                    // calculate updated relativeAmount if transaction is completed
+                    const relative_amount = (items[i].amount == null) ? items[i].relative_amount : Math.round((Math.abs(items[i].amount)/cryptoUnits.BTC)*exchangeRates.BTC[defaultCurrency])
+                    data.push({...items[i], relative_amount, id: items[i].key, ...callbacks})
+
+                }
+            }
+            if (data.length == 0) {
+                return {...section, title: ''}
+            }
+            return {...section, data: data}
+        });
+
+        //create sectionList with built data
+        const renderSections = (
+            <ScrollView key={0} style={{flex: 1}}>
+
+                {/*<View style={styles.homeButtons}>*/}
+                    {/*<EmojiButton emoji="💸" onPress={() => Actions.manageFunds()} title="Funds"/>*/}
+                    {/*<View style={styles.emojiSpacer}/>*/}
+                    {/*<EmojiButton title="Give bitcoin, get bitcoin" emoji="🎁"/>*/}
+                {/*</View>*/}
+
 
             <SectionList style={{paddingHorizontal: 15, marginTop: 15}}
                          stickySectionHeadersEnabled={false}
@@ -100,80 +146,78 @@ const Home = ({uid, person, crypto, exchangeRate, loading, transactions, request
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
             />
-        </ScrollView>
-    )
+            </ScrollView>
+        )
 
-    const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
-    const emptyItems = (transactions.length == 0 && requests.length == 0 && waiting.length == 0)
+        const pictureUrl = "https://graph.facebook.com/"+person.facebook_id+"/picture?type=large"
+        const emptyItems = (transactions.length == 0 && requests.length == 0 && waiting.length == 0)
 
-    return (
-        <View style={styles.container}>
+        return (
+            <View style={styles.container}>
 
-            <View style={styles.header}>
+                <View style={styles.header}>
 
-                <View style={styles.topBar}>
-                    <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
-                        <Image style={styles.profileImage} source={{uri: pictureUrl}}/>
-                        <View style={styles.profileTextWrapper}>
-                            <Text style={styles.profileUsername}>@{person.username}</Text>
-                            <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
+                    <View style={styles.topBar}>
+                        <TouchableOpacity style={styles.profile} onPress={() => Actions.profile()}>
+                            <Image style={styles.profileImage} source={{uri: pictureUrl}}/>
+                            <View style={styles.profileTextWrapper}>
+                                <Text style={styles.profileUsername}>@{person.username}</Text>
+                                <Text style={styles.profileFullName}>{person.first_name} {person.last_name}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <View style={styles.balanceRefreshButton}>
+                          <EmojiButton
+                              title={"Refresh"} emoji={"⚡️"}
+                              onPress={() => {Refresh()}}
+                          />
                         </View>
-                    </TouchableOpacity>
-                    <View style={styles.balanceRefreshButton}>
-                      <EmojiButton
-                          title={"Refresh"} emoji={"⚡️"}
-                          onPress={() => {Refresh()}}
-                      />
                     </View>
+                    {!loading &&
+                    <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet({currency: "BTC"})}>
+                        <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
+                        <Text style={styles.balanceCurrency}>{balance} BTC</Text>
+                        <Text style={styles.balanceDescription}>Your bitcoin</Text>
+                    </TouchableOpacity>
+                    }
                 </View>
-                {!loading &&
-                <TouchableOpacity style={styles.balance} onPress={() => Actions.wallet({currency: "BTC"})}>
-                    <Text style={styles.balanceRelativeCurrency}>{currencySymbolDict[defaultCurrency]}{relativeBalance}</Text>
-                    <Text style={styles.balanceCurrency}>{balance} BTC</Text>
-                    <Text style={styles.balanceDescription}>Your bitcoin</Text>
-                </TouchableOpacity>
-                }
+
+                {/* if loading render loading*/}
+                {loading && renderLoading}
+                {/* if there are no transactions render blank*/}
+                {emptyItems && !loading && renderBlank}
+                {/* if there are  transactions render them in sectionList*/}
+                {!emptyItems && !loading && renderSections}
+
+                <View style={styles.footer}>
+                    <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
+                        <Image
+                            style={styles.footerButtonIcon}
+                            resizeMethod={"scale"}
+                            height={15}
+                            width={20}
+                            source={require("../../assets/icons/request.png")}
+                        />
+                        <Text style={styles.footerButtonText}>
+                            Request
+                        </Text>
+                    </TouchableOpacity>
+                    <View style={styles.footerDivider}/>
+                    <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'send'})} style={styles.footerButton}>
+                        <Image
+                            style={styles.footerButtonIcon}
+                            resizeMethod={"scale"}
+                            height={15}
+                            width={18}
+                            source={require("../../assets/icons/send.png")}
+                        />
+                        <Text style={styles.footerButtonText}>
+                            Send
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-
-            {/* if loading render loading*/}
-            {loading && renderLoading}
-            {/* if there are no transactions render blank*/}
-            {emptyItems && !loading && renderBlank}
-            {/* if there are  transactions render them in sectionList*/}
-            {!emptyItems && !loading && renderSections}
-
-            <View style={styles.footer}>
-                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'request'})} style={styles.footerButton}>
-                    <Image
-                        style={styles.footerButtonIcon}
-                        resizeMethod={"scale"}
-                        height={15}
-                        width={20}
-                        source={require("../../assets/icons/request.png")}
-                    />
-                    <Text style={styles.footerButtonText}>
-                        Request
-                    </Text>
-                </TouchableOpacity>
-                <View style={styles.footerDivider}/>
-                <TouchableOpacity onPress={() => Actions.transaction({transactionType: 'send'})} style={styles.footerButton}>
-                    <Image
-                        style={styles.footerButtonIcon}
-                        resizeMethod={"scale"}
-                        height={15}
-                        width={18}
-                        source={require("../../assets/icons/send.png")}
-                    />
-                    <Text style={styles.footerButtonText}>
-                        Send
-                    </Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-
-
-
+        )
+    }
 }
 
 const styles = StyleSheet.create({

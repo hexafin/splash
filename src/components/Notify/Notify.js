@@ -50,42 +50,36 @@ class Notify extends Component {
 
 	render() {
 
-		const dismissButtonView = (
+        let buttonText = "Dismiss"
+        if (this.props.buttonText) {
+            buttonText = this.props.buttonText
+        }
+
+		const buttonView = (
 			<View style={styles.footer}>
-				<TouchableOpacity style={styles.footerButton} onPress={() => {this.buttonCallback()}}>
-					<Text style={styles.footerButtonText}>{this.props.buttonText}</Text>
+				<TouchableOpacity style={styles.footerButton} onPress={() => this.buttonCallback()}>
+					<Text style={styles.footerButtonText}>{buttonText}</Text>
 				</TouchableOpacity>
 			</View>
 		)
 
-		// const customButtonsView = (
-		// 	<View style={styles.footer}>
-		// 		<TouchableOpacity style={styles.footerButton} onPress={()=>{this.props.leftButtonAction}}>
-		// 			<Text style={styles.footerButtonText}>{this.props.leftButtonText}</Text>
-		// 		</TouchableOpacity>
-		// 		<TouchableOpacity style={styles.footerButton} onPress={()=>{this.props.rightButtonAction}}>
-		// 			<Text style={styles.footerButtonText}>{this.props.rightButtonText}</Text>
-		// 		</TouchableOpacity>
-		// 	</View>
-		// )
-
-    return (
-        <Animated.View style={[styles.transparent, { opacity: this.state.opacity }]}>
-					<BackButton onPress={() => {this.closeModal()}} type="right"/>
-					<View style={styles.card}>
-						<View style={styles.emoji}>
-							<Text style={styles.emojiText}>{this.props.emoji}</Text>
-						</View>
-						<View style={styles.title}>
-							<Text style={styles.titleText}>{this.props.title}</Text>
-						</View>
-						<View style={styles.body}>
-							<Text style={styles.bodyText}>{this.props.text}</Text>
-						</View>
-						{dismissButtonView}
+        return (
+            <Animated.View style={[styles.transparent, { opacity: this.state.opacity }]}>
+				<BackButton onPress={() => {this.closeModal()}} type="right"/>
+				<View style={styles.card}>
+					<View style={styles.emoji}>
+						<Text style={styles.emojiText}>{this.props.emoji}</Text>
 					</View>
-        </Animated.View>
-    )
+					<View style={styles.title}>
+						<Text style={styles.titleText}>{this.props.title}</Text>
+					</View>
+					<View style={styles.body}>
+						<Text style={styles.bodyText}>{this.props.text}</Text>
+					</View>
+					{buttonView}
+				</View>
+            </Animated.View>
+        )
 	}
 
 
@@ -144,7 +138,7 @@ const styles = StyleSheet.create({
 			padding: 10,
 			paddingRight: 20,
 			paddingLeft: 20,
-			paddingBottom: 20
+			paddingBottom: 30
 		},
 		bodyText: {
 			fontSize: 18,

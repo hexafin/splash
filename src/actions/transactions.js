@@ -124,7 +124,7 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
         const state = getState();
         const uid = state.general.uid;
         const balance = state.crypto.BTC.balance
-        const exchangeRate = state.general.exchangeRate.BTC.USD
+        const exchangeRate = state.general.exchangeRates.BTC.USD
         const satoshi = Math.floor(amount * SATOSHI_CONVERSION);
         let transaction = {}
 
@@ -214,7 +214,7 @@ export const CreateTransaction = ({transactionType, other_person, emoji, relativ
 export const AcceptConfirmation = (requestId) => {
   return (dispatch, getState) => {
     const state = getState()
-    const exchangeRate = state.general.exchangeRate.BTC.USD
+    const exchangeRate = state.general.exchangeRates.BTC.USD
     const balance = state.crypto.BTC.balance
 
     let request = {}
@@ -254,7 +254,7 @@ export const AcceptRequest = (requestId, request) => {
   return (dispatch, getState) => {
 
     const state = getState()
-    const exchangeRate = state.general.exchangeRate.BTC.USD
+    const exchangeRate = state.general.exchangeRates.BTC.USD
     const balance = state.crypto.BTC.balance
     dispatch(acceptTransactionInit(requestId))
     const relativeAmount = request.relative_amount

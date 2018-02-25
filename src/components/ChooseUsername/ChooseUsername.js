@@ -23,7 +23,7 @@ const ChooseUsername = ({usernameError, CheckUsername}) => {
             <View style={styles.header}>
                 <Text style={styles.headerEmoji}>🎅</Text>
                 <Text style={styles.headerText}>Choose your username</Text>
-                <Text style={styles.headerText}>- it's yours, forever.</Text>
+                <Text style={styles.headerText}>- it{"'"}s yours, forever.</Text>
             </View>
             <View style={styles.body}>
                 <View style={styles.usernameWrapper}>

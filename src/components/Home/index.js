@@ -5,6 +5,7 @@ import {DeclineRequest, AcceptConfirmation, DeleteRequest, RemindRequest} from "
 import {bindActionCreators} from "redux";
 import {LoadTransactions} from "../../actions/transactions"
 import {GetCrypto} from "../../actions/crypto"
+import {UpdateExchangeRate} from "../../actions/general"
 
 
 const Refresh = () => {
@@ -14,6 +15,9 @@ const Refresh = () => {
 
     const getCrypto = GetCrypto()
     getCrypto(dispatch, getState)
+
+    const updateExchangeRate = UpdateExchangeRate()
+    updateExchangeRate(dispatch, getState)
   }
 }
 
@@ -31,10 +35,11 @@ const mapStatetoProps = state => {
         },
         person: state.general.person,
         crypto: state.crypto,
-        exchangeRate: state.general.exchangeRate,
+        exchangeRates: state.general.exchangeRates,
         transactions: state.transactions.transactions,
         requests: state.transactions.requests,
-        waiting: state.transactions.waiting
+        waiting: state.transactions.waiting,
+        scene: state.routes.scene
     }
 }
 

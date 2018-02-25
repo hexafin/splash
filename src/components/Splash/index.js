@@ -2,15 +2,18 @@
 import Splash from "./Splash"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
+import {LogInWithFacebook, LoadApp, LogOut} from "../../actions/general"
 
 const mapStateToProps = (state) => {
-    return state
+    return {
+      authenticated: state.general.authenticated
+    }
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//     return bindActionCreators({
-//
-//     }, dispatch)
-// }
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+        LogInWithFacebook, LoadApp, LogOut
+    }, dispatch)
+}
 
-export default connect(mapStateToProps)(Splash)
+export default connect(mapStateToProps, mapDispatchToProps)(Splash)
