@@ -8,9 +8,27 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
+import { Linking, AppState } from 'react-native'
+
 
 class Landing extends Component {
+  componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
+    Linking.getInitialURL().then(url => console.log('initial', url));
+  }
 
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  handleAppStateChange = (currentAppState) => {
+    Linking.getInitialURL().then(url => this.handleDeepLink({ url }));
+  };
+
+  handleDeepLink = (event) => {
+	  const parts = (event.url).split('/')
+    console.log(parts);
+  };
     render() {
 
         return (

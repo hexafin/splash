@@ -157,7 +157,7 @@ export const CheckUsername = (username, text) => {
         // validate username
         const state = getState()
         let username = state.form.username.values
-        let illegalChars = /\W/
+        let illegalChars = /^[a-z0-9_-]{3,15}$/
         if (!username) {
             dispatch(checkUsername("Please enter username"))
         } else {
@@ -269,7 +269,7 @@ export const LinkCoinbase = () => {
         eventEmitter = new NativeEventEmitter(EventEmitter);
 
         // receive coinbase oauth event from native
-        eventEmitter.addListener("CoinbaseOAuthComplete", (data) => {
+        eventEmitter.addListener("NativeEvent", (data) => {
             EventEmitter.stopObserving();
             if (data.access_token && data.refresh_token && data.expires_in) {
                 let t = new Date();

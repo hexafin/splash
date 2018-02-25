@@ -11,6 +11,7 @@ target 'splash' do
   pod 'React', :path => '../node_modules/react-native'
 
   pod 'Firebase/Core'
+  pod 'Firebase/DynamicLinks'
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'Firebase/Messaging'

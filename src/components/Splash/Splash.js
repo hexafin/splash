@@ -12,6 +12,7 @@ import { Input, MultiInput, MultiInputBlock } from '../universal/Input'
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import {Actions} from "react-native-router-flux"
+import {NativeModules, NativeEventEmitter} from 'react-native'
 
 
 
@@ -23,6 +24,9 @@ class Splash extends Component {
     this.LogInWithFacebook = this.props.LogInWithFacebook
     this.LoadApp = this.props.LoadApp
     this.LogOut = this.props.LogOut
+    this.state = {
+        claimedSplashTag: ''
+    };
   }
 
   componentDidMount() {
@@ -30,6 +34,16 @@ class Splash extends Component {
     if (this.authenticated && !this.props.shouldLogout) {
         Actions.home()
     }
+    const {EventEmitter} = NativeModules;
+    eventEmitter = new NativeEventEmitter(EventEmitter);
+
+    // receive coinbase oauth event from native
+    eventEmitter.addListener("NativeEvent", (data) => {
+        EventEmitter.stopObserving();
+        const parts = data.url.split("/")
+        this.setState({claimedSplashTag: parts[parts.length - 1]})
+    });
+    EventEmitter.startObserving();
   }
 
   render() {
@@ -42,7 +56,7 @@ class Splash extends Component {
                 source={require('../../assets/images/people-splash.png')}
             />
             <View style={styles.content}>
-                <Text style={styles.logo}>splash</Text>
+                <Text style={styles.logo}>{this.state.claimedSplashTag}</Text>
                 <Text style={styles.tagline}>
                     An easy way to send
                     and get bitcoin from
