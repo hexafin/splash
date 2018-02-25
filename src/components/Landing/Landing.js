@@ -8,7 +8,6 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
-import {Actions} from "react-native-router-flux"
 
 class Landing extends Component {
 
@@ -39,7 +38,8 @@ class Landing extends Component {
                 <View style={styles.floating}></View>
 
                 <View style={styles.footer}>
-                    <TouchableOpacity style={styles.footerButton}>
+                    <TouchableOpacity style={styles.footerButton}
+                        onPress={() => {this.props.navigation.navigate("ChooseSplashtag")}}>
                         <Text style={styles.footerButtonText}>
                             Claim your splashtag
                         </Text>

@@ -4791,12 +4791,6 @@ react-native-emoji@^1.2.0:
   dependencies:
     itypeof "^1.1.2"
 
-react-native-facebook-login@yusukeshibata/react-native-facebook-login#feature/viewproptypes:
-  version "1.6.0"
-  resolved "https://codeload.github.com/yusukeshibata/react-native-facebook-login/tar.gz/f6807b966fcbc3200f2100673ab2fcd806bbe5f9"
-  dependencies:
-    itypeof "^1.1.2"
-
 react-native-fbsdk@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-0.6.3.tgz#ab115264756d4060b8ec2a881194d9775fa8ee11"
@@ -4887,6 +4881,12 @@ react-native-router-flux@^4.0.0-beta.28:
     path-to-regexp "^2.1.0"
     prop-types "^15.6.0"
     react-navigation "1.0.0-beta.22"
+
+react-native-safe-area-view@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-view/-/react-native-safe-area-view-0.7.0.tgz#38f5ab9368d6ef9e5d18ab64212938af3ec39421"
+  dependencies:
+    hoist-non-react-statics "^2.3.1"
 
 react-native-safe-module@^1.1.0:
   version "1.2.0"
@@ -5018,16 +5018,16 @@ react-navigation@1.0.0-beta.22:
     react-native-drawer-layout-polyfill "^1.3.2"
     react-native-tab-view "^0.0.70"
 
-react-navigation@^1.0.0-beta.19:
-  version "1.0.0-beta.27"
-  resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.0.0-beta.27.tgz#e6263b01975cd790e32b3711c2eb6cead96c102c"
+react-navigation@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.1.2.tgz#6e041b8a3cd0f5266072df0b52a55117892875f2"
   dependencies:
-    babel-plugin-transform-define "^1.3.0"
     clamp "^1.0.1"
     hoist-non-react-statics "^2.2.0"
     path-to-regexp "^1.7.0"
     prop-types "^15.5.10"
     react-native-drawer-layout-polyfill "^1.3.2"
+    react-native-safe-area-view "^0.7.0"
     react-native-tab-view "^0.0.74"
 
 react-proxy@^1.1.7:
