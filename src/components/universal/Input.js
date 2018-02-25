@@ -69,7 +69,7 @@ export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 		} else {
 			inputPosition = null
 		}
-		return <Field
+		return (<Field
 							name={field.name}
 							key={index}
 							placeholder={field.placeholder}
@@ -78,7 +78,7 @@ export const MultiInputBlock = ({inputs, secureTextEntry}) => {
 							secureTextEntry={secureTextEntry}
                             autoCorrect={false}
 							spellCheck={false}
-					 />
+					 />)
 	})
 	return (
 			<View style={styles.multiInputContainer}>

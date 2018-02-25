@@ -7,11 +7,21 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 
-const Button = ({primary, onPress, title, disabled}) => {
+const Button = ({primary, onPress=()=>{}, title, disabled=false}) => {
 
 	return (
-			<TouchableOpacity disabled={ disabled } onPress={ onPress } style={[styles.base, primary ? styles.buttonPrimary : styles.buttonSecondary]}>
-			 	<Text style={[styles.text, primary ? styles.textPrimary : styles.textSecondary]}>
+			<TouchableOpacity disabled={ disabled }
+                    onPress={ onPress }
+                    style={[
+                        styles.base,
+                        primary ? styles.buttonPrimary : styles.buttonSecondary,
+                        disabled ? styles.buttonDisabled : {}
+                    ]}>
+			 	<Text style={[
+                    styles.text,
+                    primary ? styles.textPrimary : styles.textSecondary,
+                    disabled ? styles.textDisabled : {}
+                ]}>
 			 		{title}
 			 	</Text>
 			</TouchableOpacity>
@@ -45,7 +55,13 @@ const styles = StyleSheet.create({
 	},
 	buttonSecondary: {
 		backgroundColor: colors.white
-	}
+	},
+    buttonDisabled: {
+        backgroundColor: colors.lighterGray,
+    },
+    textDisabled: {
+        color: colors.white
+    }
 })
 
 export default Button
