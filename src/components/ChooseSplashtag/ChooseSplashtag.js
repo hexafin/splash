@@ -4,31 +4,53 @@ import {
     Text,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    KeyboardAvoidingView,
+    Keyboard
 } from "react-native"
+import {Input} from "../universal/Input"
+import FlatBackButton from "../universal/FlatBackButton"
+import Button from "../universal/Button"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
+import { Field, reduxForm } from 'redux-form'
 
 class ChooseSplashtag extends Component {
 
     render() {
-
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView style={styles.container} behavior={"height"}>
 
-                <Image style={styles.wavesImage}
-                    source={require("../../assets/images/waves.png")}/>
+                <View style={styles.body}>
 
-                <View style={styles.header}>
-                    <View style={styles.logoWrapper}>
-                        <Image source={icons.splash}
-                            style={styles.logo}/>
-                        <Text style={styles.logoText}>Splash</Text>
-                    </View>
+                    <Text style={styles.title}>
+                        Let's get you setup
+                    </Text>
+
+                    <Text style={styles.description}>
+                        Your splashtag is your unique username, how others find you on Splash
+                    </Text>
+
+                    <Field style={styles.splashtag} name='splashtag' placeholder='Choose splashtag' component={Input}
+                           autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>
+
+                    <Button
+                        onPress={() => {
+                            Keyboard.dismiss()
+                            this.props.navigation.navigate("EnterPhoneNumber")
+                        }}
+                        style={styles.footerButton} title={"Claim splashtag"}
+                        primary={true}
+                        disabled={this.props.splashtag == ""}/>
+
                 </View>
 
 
-            </View>
+                <FlatBackButton onPress={() => {
+                    Keyboard.dismiss()
+                    this.props.navigation.navigate("Landing")
+                }}/>
+            </KeyboardAvoidingView>
         )
 
     }
@@ -39,7 +61,9 @@ const styles = StyleSheet.create({
     container: {
         ...defaults.container,
         justifyContent: "space-between",
-        position: "relative"
+        position: "relative",
+        paddingBottom: 0,
+        paddingTop: 60
     },
     wavesImage: {
         position: "absolute",
@@ -49,28 +73,33 @@ const styles = StyleSheet.create({
         width: 400,
         height: 400
     },
-    header: {
+    body: {
         flex: 1,
-        padding: 30,
+        padding: 20,
+        paddingBottom: 0,
         flexDirection: "column",
+        justifyContent: "space-around"
     },
-    logoWrapper: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 30
+    title: {
+        fontSize: 30,
+        fontWeight: '500',
+        color: colors.nearBlack,
+        marginBottom: 20,
+        textAlign: "center"
     },
-    logo: {
-        height: 36,
-        width: 28,
-        marginRight: 10
+    description: {
+        fontSize: 20,
+        textAlign: "center",
+        color: colors.lightGray,
+        marginBottom: 20
     },
-    logoText: {
-        fontSize: 28,
-        paddingBottom: 4,
-        fontWeight: '400',
-        color: colors.nearBlack
+    footerButton: {
+
     }
 })
 
-export default ChooseSplashtag
+
+export default reduxForm({
+   form: 'chooseSplashtag',
+   destroyOnUnmount: false,
+})(ChooseSplashtag)

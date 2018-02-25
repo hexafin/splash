@@ -4,9 +4,14 @@ import {bindActionCreators} from "redux"
 import {ClaimUsername, InviteFriends} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
+
+    let splashtag = ""
+    if (state.form.chooseSplashtag.values) {
+        splashtag = state.form.chooseSplashtag.values.splashtag
+    }
+
     return {
-      waitlisted: state.general.waitlisted,
-      username: state.general.person.username
+      splashtag: splashtag
     }
 }
 
