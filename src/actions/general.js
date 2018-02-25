@@ -1,7 +1,7 @@
 import {Actions} from "react-native-router-flux"
 import api from "../api"
 import {coinbaseClientId, coinbaseClientSecret} from "../../env/keys.json"
-import { FBLoginManager } from 'react-native-facebook-login'
+import {FBLoginManager} from 'react-native-facebook-login'
 import {Sentry} from 'react-native-sentry'
 import {reset} from 'redux-form';
 import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from 'react-native-fcm';
@@ -152,9 +152,8 @@ export function signOut() {
     return {type: SIGN_OUT}
 }
 
-
 export const CheckUsername = (username, text) => {
-    return (dispatch, getState) => {
+    return(dispatch, getState) => {
         // validate username
         const state = getState()
         let username = state.form.username.values
@@ -188,14 +187,15 @@ export const CheckUsername = (username, text) => {
     }
 }
 
-
 // Facebook Auth
 export const LinkFacebook = () => {
-    return (dispatch, getState) => {
+    return(dispatch, getState) => {
 
         dispatch(linkFacebookInit())
 
-        FBLoginManager.loginWithPermissions(["public_profile", "email","user_friends"], function(error, data){
+        FBLoginManager.loginWithPermissions([
+            "public_profile", "email", "user_friends"
+        ], function(error, data) {
             if (!error) {
 
                 // firebase auth
@@ -207,13 +207,12 @@ export const LinkFacebook = () => {
                     // get facebook data
                     const fields = 'id,name,email,first_name,last_name,gender,picture,link'
                     const token = data.credentials.token.toString()
-                    axios.get(
-                        "https://graph.facebook.com/me",
-                        {params: {
-                                fields: fields,
-                                access_token: token
-                            }}
-                    ).then(response => {
+                    axios.get("https://graph.facebook.com/me", {
+                        params: {
+                            fields: fields,
+                            access_token: token
+                        }
+                    }).then(response => {
                         const facebookData = {
                             id: response.data.id,
                             first_name: response.data.first_name,
@@ -229,25 +228,24 @@ export const LinkFacebook = () => {
                         // create an account only if one does not currently exist
                         api.GetAccount(user.uid).then(person => {
 
-                          if (person.exists) {
-                            facebookData.username = person.data().username
+                            if (person.exists) {
+                                facebookData.username = person.data().username
 
-                            // if an account exists route the user to the home page
-                            dispatch(linkFacebookSuccess(facebookData))
-                            const action = LoadApp()
-                            action(dispatch, getState)
-                          } else {
-                            dispatch(linkFacebookSuccess(facebookData))
-                            Actions.confirmDetails()
-                          }
+                                // if an account exists route the user to the home page
+                                dispatch(linkFacebookSuccess(facebookData))
+                                const action = LoadApp()
+                                action(dispatch, getState)
+                            } else {
+                                dispatch(linkFacebookSuccess(facebookData))
+                                Actions.confirmDetails()
+                            }
                         }).catch(error => {
-                          dispatch(linkFacebookFailure(error))
+                            dispatch(linkFacebookFailure(error))
                         })
 
                     }).catch(error => {
                         dispatch(linkFacebookFailure(error))
                     })
-
 
                 }).catch(error => {
                     dispatch(firebaseAuthFailure(error))
@@ -261,42 +259,46 @@ export const LinkFacebook = () => {
 }
 
 export const LinkCoinbase = () => {
-    return (dispatch, getState) => {
-    const state = getState()
-    dispatch(linkCoinbaseInit())
+    return(dispatch, getState) => {
+        const state = getState()
+        dispatch(linkCoinbaseInit())
 
-    // start oauth process
-    CoinbaseApi.startAuthentication(coinbaseClientId, coinbaseClientSecret)
-    const { EventEmitter } = NativeModules;
-    eventEmitter = new NativeEventEmitter(EventEmitter);
+        // start oauth process
+        CoinbaseApi.startAuthentication(coinbaseClientId, coinbaseClientSecret)
+        const {EventEmitter} = NativeModules;
+        eventEmitter = new NativeEventEmitter(EventEmitter);
 
-    // receive coinbase oauth event from native
-    eventEmitter.addListener("CoinbaseOAuthComplete", (data) => {
-      EventEmitter.stopObserving();
-      if(data.access_token && data.refresh_token && data.expires_in) {
-        let t = new Date();
-        t.setSeconds(t.getSeconds() + data.expires_in);
+        // receive coinbase oauth event from native
+        eventEmitter.addListener("CoinbaseOAuthComplete", (data) => {
+            EventEmitter.stopObserving();
+            if (data.access_token && data.refresh_token && data.expires_in) {
+                let t = new Date();
+                t.setSeconds(t.getSeconds() + data.expires_in);
 
-        const coinbase_data = {coinbase_access_token: data.access_token, coinbase_refresh_token: data.refresh_token, coinbase_expires_at: Math.floor(t / 1000)}
-        // get user data and update firebase
-        api.HandleCoinbase(state.general.uid, coinbase_data).then(response => {
-          dispatch(linkCoinbaseSuccess(response))
-          const action = LoadApp()
-          action(dispatch, getState)
-        }).catch(error => {
-          dispatch(linkCoinbaseFailure(error))
-        })
-      } else {
-        dispatch(linkCoinbaseFailure(data))
-      }
-    });
-    EventEmitter.startObserving();
-  }
+                const coinbase_data = {
+                    coinbase_access_token: data.access_token,
+                    coinbase_refresh_token: data.refresh_token,
+                    coinbase_expires_at: Math.floor(t / 1000)
+                }
+                // get user data and update firebase
+                api.HandleCoinbase(state.general.uid, coinbase_data).then(response => {
+                    dispatch(linkCoinbaseSuccess(response))
+                    const action = LoadApp()
+                    action(dispatch, getState)
+                }).catch(error => {
+                    dispatch(linkCoinbaseFailure(error))
+                })
+            } else {
+                dispatch(linkCoinbaseFailure(data))
+            }
+        });
+        EventEmitter.startObserving();
+    }
 }
 
 // create new account
 export const CreateNewAccount = () => {
-    return (dispatch, getState) => {
+    return(dispatch, getState) => {
 
         // initialize new account creation
         dispatch(newAccountInit())
@@ -318,25 +320,23 @@ export const CreateNewAccount = () => {
             }
             // only let an account be created if the username does not exist
             api.UsernameExists(inputPerson.username).then(exists => {
-              if(!exists) {
+                if (!exists) {
 
-                api.NewAccount(state.general.uid, inputPerson).then(person => {
-                    dispatch(newAccountSuccess(person))
+                    api.NewAccount(state.general.uid, inputPerson).then(person => {
+                        dispatch(newAccountSuccess(person))
 
-                    Actions.coinbase()
-                }).catch(error => {
-                    // error
-                    dispatch(newAccountFailure(error))
-                })
+                        Actions.coinbase()
+                    }).catch(error => {
+                        // error
+                        dispatch(newAccountFailure(error))
+                    })
 
-
-              } else {
-                dispatch(newAccountFailure("username already exists"))
-              }
+                } else {
+                    dispatch(newAccountFailure("username already exists"))
+                }
             })
 
-        }
-        else {
+        } else {
             dispatch(newAccountFailure("user not authenticated"))
         }
 
@@ -345,7 +345,7 @@ export const CreateNewAccount = () => {
 
 // update account
 export const UpdateAccount = (updateDict) => {
-    return (dispatch, getState) => {
+    return(dispatch, getState) => {
 
         // initialize account update
         dispatch(updateAccountInit())
@@ -365,204 +365,187 @@ export const UpdateAccount = (updateDict) => {
 
 // load App
 export const LoadApp = () => {
-    return (dispatch, getState) => {
+    return(dispatch, getState) => {
 
-      const state = getState()
-      const uid = state.general.uid
-      const authenticated = state.general.authenticated
-
-      if (uid != null && authenticated == true) {
-
-        Sentry.setUserContext({
-          email: state.general.person.email,
-          userID: uid,
-          username: state.general.person.username,
-        });
-
-        FCM.requestPermissions().then(()=>console.log('notification permission granted')).catch(()=>console.log('notification permission rejected'));
-
-        FCM.getFCMToken().then( async (token) => {
-          // update account with push notification token
-           api.UpdateAccount(uid, {push_token: token}).then(() => {
-             console.log('Push Token Generated');
-           }).catch(() => {
-             console.log('Failed to Generate Push Token');
-           })
-
-        });
-
-        FCM.on(FCMEvent.Notification, async (notif) => {
-          console.log('Notification', notif);
-          // reload on notifications
-          if (!notif.local_notification || notif.opened_from_tray) {
-
-          // on new notification reload
-          const loadTransactions = LoadTransactions()
-          loadTransactions(dispatch, getState)
-          const getCrypto = GetCrypto()
-          getCrypto(dispatch, getState)
-
-          FCM.presentLocalNotification({
-              title: notif.title,
-              body: notif.body,
-              data: notif.data,
-              priority: "high",
-              sound: 'default',
-              vibrate: 300,
-              show_in_foreground: true,
-          });
-
-          //  update app badge
-          FCM.getBadgeNumber().then(n=>FCM.setBadgeNumber(n+1));
-        }
-
-        const loadTransactions = LoadTransactions()
-        loadTransactions(dispatch, getState)
-
-        const getCrypto = GetCrypto()
-        getCrypto(dispatch, getState)
-
-        // load friends
-        const facebook_id = state.general.person.facebook_id
-        const access_token = state.general.facebookToken
-
-        dispatch(updateFriendsInit())
-        api.LoadFriends(facebook_id, access_token).then(friends => {
-            dispatch(updateFriendsSuccess(friends))
-        }).catch(error => {
-            dispatch(updateFriendsFailure(error))
-            //TODO: do something if error
-        })
-
-        // load exchange rates
-        dispatch(updateExchangeInit())
-        api.GetExchangeRate().then(exchangeRate => {
-            dispatch(updateExchangeSuccess({
-              BTC: exchangeRate
-            }))
-            // go to the home page
-            Actions.home()
-        }).catch(error => {
-            dispatch(updateExchangeFailure(error))
-            //TODO: do something if error
-        })
-
-      } else {
-          Actions.splash()
-      }
-
-    })
-
-}
-
-// log out
-export const LogOut = () => {
-    return (dispatch, getState) => {
-        // redirect back to landing
-        dispatch(signOut())
-    }
-}
-
-export const UpdateExchangeRate = () => {
-    return (dispatch, getState) => {
-        console.log("update exchange rate")
-        // load exchange rates
-        dispatch(updateExchangeInit())
-        api.GetExchangeRate().then(exchangeRate => {
-            dispatch(updateExchangeSuccess({
-              BTC: exchangeRate
-            }))
-        }).catch(error => {
-            dispatch(updateExchangeFailure(error))
-        })
-    }
-}
-
-// submit feedback
-export const SubmitFeedback = (type) => {
-    return (dispatch, getState) => {
-
-        // get state
         const state = getState()
+        const uid = state.general.uid
+        const authenticated = state.general.authenticated
 
-        const feedback = state.form.feedback.values.feedback
+        if (uid != null && authenticated == true) {
 
-        if (type == "positive") {
-            api.Log("feedback", "👍 - "+feedback)
-            Actions.home()
-            Actions.notify({
-              emoji: "🙏",
-              title: "Thanks you for the feedback!",
-              text: "We use your suggestions to keep making Splash better."
-            })
-        }
-        else {
-            api.Log("feedback", "👎 - "+feedback)
-            Actions.home()
-            Actions.notify({
-              emoji: "🙏",
-              title: "Thanks you for the feedback!",
-              text: "We use your suggestions to keep making Splash better."
-            })
-        }
+            Sentry.setUserContext({email: state.general.person.email, userID: uid, username: state.general.person.username});
 
-    }
-}
+            FCM.requestPermissions().then(() => console.log('notification permission granted')).catch(() => console.log('notification permission rejected'));
 
-export const LogInWithFacebook = () => {
-    return (dispatch, getState) => {
-
-        dispatch(facebookLoginInit())
-
-        FBLoginManager.loginWithPermissions(["public_profile", "email","user_friends"], function(error, data){
-            if (!error) {
-
-                // firebase auth
-                const firebaseCredential = firebase.auth.FacebookAuthProvider.credential(data.credentials.token)
-                dispatch(firebaseAuthInit())
-                firebase.auth().signInWithCredential(firebaseCredential).then(user => {
-                    dispatch(firebaseAuthSuccess(user.uid))
-
-                    // get person data from firestore
-                    firestore.collection("people").doc(user.uid).get().then(person => {
-
-                        const token = data.credentials.token.toString()
-                        dispatch(facebookLoginSuccess(person.data(), token))
-
-                        // load friends
-                        const facebook_id = person.data().facebook_id
-                        dispatch(updateFriendsInit())
-                        api.LoadFriends(facebook_id, token).then(friends => {
-                            dispatch(updateFriendsSuccess(friends))
-                        }).catch(error => {
-                            dispatch(updateFriendsFailure(error))
-                            //TODO: do something if error
-                        })
-
-                        // load exchange rates
-                        dispatch(updateExchangeInit())
-                        api.GetExchangeRate().then(exchangeRate => {
-                            dispatch(updateExchangeSuccess({
-                              BTC: exchangeRate
-                            }))
-                            Actions.home()
-                        }).catch(error => {
-                            dispatch(updateExchangeFailure(error))
-                            //TODO: do something if error
-                        })
-
-                        const loadTransactions = LoadTransactions()
-                        loadTransactions(dispatch, getState)
-
-                        const getCrypto = GetCrypto()
-                        getCrypto(dispatch, getState)
-                    })
-
-                }).catch(error => {
-                    dispatch(firebaseAuthFailure(error))
-                    dispatch(facebookLoginFailure())
+            FCM.getFCMToken().then(async (token) => {
+                // update account with push notification token
+                api.UpdateAccount(uid, {push_token: token}).then(() => {
+                    console.log('Push Token Generated');
+                }).catch(() => {
+                    console.log('Failed to Generate Push Token');
                 })
+
+            });
+
+            FCM.on(FCMEvent.Notification, async (notif) => {
+                console.log('Notification', notif);
+                // reload on notifications
+                if (!notif.local_notification || notif.opened_from_tray) {
+
+                    // on new notification reload
+                    const loadTransactions = LoadTransactions()
+                    loadTransactions(dispatch, getState)
+                    const getCrypto = GetCrypto()
+                    getCrypto(dispatch, getState)
+
+                    FCM.presentLocalNotification({
+                        title: notif.title,
+                        body: notif.body,
+                        data: notif.data,
+                        priority: "high",
+                        sound: 'default',
+                        vibrate: 300,
+                        show_in_foreground: true
+                    });
+
+                    //  update app badge
+                    FCM.getBadgeNumber().then(n => FCM.setBadgeNumber(n + 1));
+                }
+            })
+
+            const loadTransactions = LoadTransactions()
+            loadTransactions(dispatch, getState)
+
+            const getCrypto = GetCrypto()
+            getCrypto(dispatch, getState)
+
+            // load friends
+            const facebook_id = state.general.person.facebook_id
+            const access_token = state.general.facebookToken
+
+            dispatch(updateFriendsInit())
+            api.LoadFriends(facebook_id, access_token).then(friends => {
+                dispatch(updateFriendsSuccess(friends))
+            }).catch(error => {
+                dispatch(updateFriendsFailure(error))
+                //TODO: do something if error
+            })
+
+            // load exchange rates
+            dispatch(updateExchangeInit())
+            api.GetExchangeRate().then(exchangeRate => {
+                dispatch(updateExchangeSuccess({BTC: exchangeRate}))
+                // go to the home page
+                Actions.home()
+            }).catch(error => {
+                dispatch(updateExchangeFailure(error))
+                //TODO: do something if error
+            })
+
+            } else {
+                Actions.splash()
             }
-        })
+        }
+
     }
-}
+
+    // log out
+    export const LogOut = () => {
+        return(dispatch, getState) => {
+            // redirect back to landing
+            dispatch(signOut())
+        }
+    }
+
+    export const UpdateExchangeRate = () => {
+        return(dispatch, getState) => {
+            console.log("update exchange rate")
+            // load exchange rates
+            dispatch(updateExchangeInit())
+            api.GetExchangeRate().then(exchangeRate => {
+                dispatch(updateExchangeSuccess({BTC: exchangeRate}))
+            }).catch(error => {
+                dispatch(updateExchangeFailure(error))
+            })
+        }
+    }
+
+    // submit feedback
+    export const SubmitFeedback = (type) => {
+        return(dispatch, getState) => {
+
+            // get state
+            const state = getState()
+
+            const feedback = state.form.feedback.values.feedback
+
+            if (type == "positive") {
+                api.Log("feedback", "👍 - " + feedback)
+                Actions.home()
+                Actions.notify({emoji: "🙏", title: "Thanks you for the feedback!", text: "We use your suggestions to keep making Splash better."})
+            } else {
+                api.Log("feedback", "👎 - " + feedback)
+                Actions.home()
+                Actions.notify({emoji: "🙏", title: "Thanks you for the feedback!", text: "We use your suggestions to keep making Splash better."})
+            }
+
+        }
+    }
+
+    export const LogInWithFacebook = () => {
+        return(dispatch, getState) => {
+
+            dispatch(facebookLoginInit())
+
+            FBLoginManager.loginWithPermissions([
+                "public_profile", "email", "user_friends"
+            ], function(error, data) {
+                if (!error) {
+
+                    // firebase auth
+                    const firebaseCredential = firebase.auth.FacebookAuthProvider.credential(data.credentials.token)
+                    dispatch(firebaseAuthInit())
+                    firebase.auth().signInWithCredential(firebaseCredential).then(user => {
+                        dispatch(firebaseAuthSuccess(user.uid))
+
+                        // get person data from firestore
+                        firestore.collection("people").doc(user.uid).get().then(person => {
+
+                            const token = data.credentials.token.toString()
+                            dispatch(facebookLoginSuccess(person.data(), token))
+
+                            // load friends
+                            const facebook_id = person.data().facebook_id
+                            dispatch(updateFriendsInit())
+                            api.LoadFriends(facebook_id, token).then(friends => {
+                                dispatch(updateFriendsSuccess(friends))
+                            }).catch(error => {
+                                dispatch(updateFriendsFailure(error))
+                                //TODO: do something if error
+                            })
+
+                            // load exchange rates
+                            dispatch(updateExchangeInit())
+                            api.GetExchangeRate().then(exchangeRate => {
+                                dispatch(updateExchangeSuccess({BTC: exchangeRate}))
+                                Actions.home()
+                            }).catch(error => {
+                                dispatch(updateExchangeFailure(error))
+                                //TODO: do something if error
+                            })
+
+                            const loadTransactions = LoadTransactions()
+                            loadTransactions(dispatch, getState)
+
+                            const getCrypto = GetCrypto()
+                            getCrypto(dispatch, getState)
+                        })
+
+                    }).catch(error => {
+                        dispatch(firebaseAuthFailure(error))
+                        dispatch(facebookLoginFailure())
+                    })
+                }
+            })
+        }
+    }
