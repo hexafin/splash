@@ -289,21 +289,22 @@ function NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp) 
   })
 }
 
-function NewTransaction({transactionType, from_id, to_id, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
+function NewTransaction({transactionType, from_id, to_id, to_address = null, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
 
     return new Promise((resolve, reject) => {
 
         const dateTime = Date.now();
         const timestamp_initiated = Math.floor(dateTime / 1000);
-        if (transactionType == 'send') {
+        if (transactionType == 'send' || transactionType == 'external') {
           const newTransaction = {
             from_id: from_id,
             to_id: to_id,
+            to_address: to_address,
             amount: amount,
             relative_amount: relative_amount,
             fee: fee,
             emoji: emoji,
-            type: type,
+            type: transactionType == 'external' ? 'external' : type,
             currency: currency,
             relative_currency: relative_currency,
             timestamp_initiated: timestamp_initiated,

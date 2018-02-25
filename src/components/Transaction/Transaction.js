@@ -10,6 +10,7 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import GenericLine from "../universal/GenericLine"
+import AddressLine from "../universal/AddressLine"
 import {Input} from "../universal/Input"
 import BackButton from "../universal/BackButton";
 import EmojiButton from "../universal/EmojiButton";
@@ -34,7 +35,7 @@ const friend = {
 
 const recents = []
 
-const Transaction = ({transactionType = 'send', friends, friendsSearchChange, loading}) => {
+const Transaction = ({transactionType = 'send', friends, friendsSearchChange, loading, type = 'internal'}) => {
 
     //capitalize title
     const pageTitle = transactionType.charAt(0).toUpperCase() + transactionType.slice(1);
@@ -73,12 +74,19 @@ const Transaction = ({transactionType = 'send', friends, friendsSearchChange, lo
                 {/*<EmojiButton title="Send to bitcoin address" emoji="🤷‍♀️" />*/}
             {/*</View>*/}
 
-            <SectionList style={{padding: 15}}
+            {type == 'internal' && <SectionList style={{padding: 15}}
                          stickySectionHeadersEnabled={false}
                          renderItem={({item}) => <GenericLine {...item} friendCallback={() => Actions.setamount({transactionType: transactionType, to: item})}/>}
                          renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
                          sections={buildSections}
-            />
+            />}
+
+            {type == 'external' && transactionType == 'send' && <SectionList style={{padding: 15}}
+                         stickySectionHeadersEnabled={false}
+                         renderItem={({item}) => <AddressLine {...item} friendCallback={() => Actions.setamount({transactionType: 'external', to: item})}/>}
+                         renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                         sections={buildSections}
+            />}
         </ScrollView>
     )
 
@@ -97,7 +105,7 @@ const Transaction = ({transactionType = 'send', friends, friendsSearchChange, lo
                     <Text style={styles.pageTitle}>{pageTitle} bitcoin</Text>
                 </View>
                 <View style={styles.search}>
-                    <Input input={{onChange: friendsSearchChange}} placeholder={'Search for name, email, etc.'}/>
+                    <Input input={{onChange: friendsSearchChange}} placeholder={transactionType == 'send' ? 'Search for friend or enter address' : 'Search for name, email, etc.'}/>
                 </View>
                 {renderSections}
               </View>

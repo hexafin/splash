@@ -393,6 +393,9 @@ export const LoadApp = () => {
                   vibrate: 300,
                   show_in_foreground: true,
               });
+
+              //  update app badge
+              FCM.getBadgeNumber().then(n=>FCM.setBadgeNumber(n+1));
             }
 
             });
