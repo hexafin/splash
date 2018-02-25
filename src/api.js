@@ -10,11 +10,18 @@ const SATOSHI_CONVERSION = 100000000;
 
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
-        // check if hex already exists
+        // check if a person (signed up or waitlisted) already has the username
         firestore.collection("people").where("username", "=", username).get().then(checkUsername => {
-
             if (checkUsername.empty) {
-                resolve(false)
+                // now check waitlist
+                firestore.collection("waitlist").where("username", "=", username).get().then(checkUsername => {
+                    if (checkUsername.empty) {
+                        resolve(false)
+                    }
+                    else {
+                        resolve(true)
+                    }
+                })
             }
             else {
                 resolve(true)
