@@ -8,9 +8,33 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
+import { Linking, AppState } from 'react-native'
+
 
 class Landing extends Component {
 
+  componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
+    Linking.getInitialURL().then(url => this.handleDeepLink(url));
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  handleAppStateChange = (currentAppState) => {
+    Linking.getInitialURL().then(url => this.handleDeepLink(url));
+  };
+
+  handleDeepLink = (url) => {
+	  const parts = url.split('/')
+    const splashtag = parts[6]
+    const phoneNumber = (parts[7]).split('&')[0]
+
+    if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
+      this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+    }
+  };
     render() {
 
         return (

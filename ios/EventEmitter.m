@@ -13,7 +13,7 @@
 RCT_EXPORT_MODULE();
 
 - (NSArray<NSString *> *)supportedEvents {
-  return @[@"CoinbaseOAuthComplete"];
+  return @[@"NativeEvent"];
 }
 
 RCT_EXPORT_METHOD(startObserving)
@@ -31,12 +31,13 @@ RCT_EXPORT_METHOD(stopObserving)
 
 - (void)emitEventInternal:(NSNotification *)notification
 {
-  [self sendEventWithName:@"CoinbaseOAuthComplete"
+  [self sendEventWithName:@"NativeEvent"
                      body:notification.userInfo];
 }
 
 + (void)emitEventWithName:(NSString *)name andPayload:(NSDictionary *)payload
 {
+  NSLog(@"%@", payload);
   [[NSNotificationCenter defaultCenter] postNotificationName:@"event-emitted"
                                                       object:self
                                                     userInfo:payload];
