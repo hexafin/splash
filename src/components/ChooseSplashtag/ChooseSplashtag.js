@@ -14,10 +14,71 @@ import Button from "../universal/Button"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import { Field, reduxForm } from 'redux-form'
+import axios from "axios"
+import api from "../../api"
+
+const lower = value => value && value.toLowerCase()
 
 class ChooseSplashtag extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            splashtagAvailable: null,
+            errorCheckingSplashtag: null,
+            checkingSplashtag: false
+        }
+    }
+
+    checkSplashtag(splashtag) {
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                checkingSplashtag: true
+            }
+        })
+        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+splashtag).then(response => {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    splashtagAvailable: response.data,
+                    checkingSplashtag: false,
+                    errorCheckingSplashtag: false
+                }
+            })
+        }).catch(error => {
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    errorCheckingSplashtag: error,
+                    checkingSplashtag: false,
+                }
+            })
+        })
+    }
+
     render() {
+
+        const splashtagCorrectlyFormatted = this.props.splashtag.length >= 3
+            && this.props.splashtag.length <= 15
+            && !(this.props.splashtag.indexOf(' ') > -1)
+
+        const splashtagWorks = splashtagCorrectlyFormatted && this.state.splashtagAvailable
+
+        let buttonTitle = "Enter valid splashtag"
+        if (this.state.checkingSplashtag) {
+            buttonTitle = "Checking..."
+        }
+        else if (splashtagWorks) {
+            buttonTitle = "Claim splashtag"
+        }
+        else if (splashtagCorrectlyFormatted) {
+            buttonTitle = "Splashtag already taken"
+        }
+        else if(this.state.errorCheckingSplashtag) {
+            buttonTitle = "Ugh! There was an error 🤭"
+        }
+
         return (
             <KeyboardAvoidingView style={styles.container} behavior={"height"}>
 
@@ -31,17 +92,30 @@ class ChooseSplashtag extends Component {
                         Your splashtag is your unique username, how others find you on Splash
                     </Text>
 
-                    <Field style={styles.splashtag} name='splashtag' placeholder='Choose splashtag' component={Input}
-                           autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>
+                    <Field
+                        style={[
+                            styles.splashtag,
+                            this.state.splashtagAvailable ? styles.posField : styles.negField
+                        ]}
+                        name='splashtag' placeholder='Choose splashtag' component={Input}
+                        autoCapitalize="none" autoCorrect={false} spellCheck={false}
+                        autoFocus={true} normalize={lower}
+                        onChange={(e) => {
+                            this.checkSplashtag(e)
+                        }}/>
 
                     <Button
                         onPress={() => {
                             Keyboard.dismiss()
                             this.props.navigation.navigate("EnterPhoneNumber")
                         }}
-                        style={styles.footerButton} title={"Claim splashtag"}
+                        style={[
+                            styles.footerButton,
+                            this.state.splashtagAvailable ? styles.posButton : styles.negButton
+                        ]}
+                        title={buttonTitle}
                         primary={true}
-                        disabled={this.props.splashtag == ""}/>
+                        disabled={!this.state.splashtagAvailable || this.state.checkingSplashtag}/>
 
                 </View>
 
@@ -93,9 +167,14 @@ const styles = StyleSheet.create({
         color: colors.lightGray,
         marginBottom: 20
     },
-    footerButton: {
+    posButton: {
 
-    }
+    },
+    negButton: {
+        backgroundColor: colors.red
+    },
+    posField: {},
+    negField: {}
 })
 
 

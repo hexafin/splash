@@ -11,13 +11,13 @@ const mapStateToProps = (state) => {
     }
 
     return {
-      splashtag: splashtag
+        splashtag: splashtag
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        ClaimUsername, InviteFriends
+
     }, dispatch)
 }
 

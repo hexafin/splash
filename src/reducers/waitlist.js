@@ -13,9 +13,9 @@ import {
 
 const initialState = {
     isSmsAuthenticating: false,
-    errorSmsAuthenticating: false,
+    errorSmsAuthenticating: null,
     isClaimingUsername: false,
-    errorClaimingUsername: false,
+    errorClaimingUsername: null,
     username: null,
     smsAuthenticated: false
 }
