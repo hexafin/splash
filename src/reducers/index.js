@@ -1,5 +1,6 @@
 import general from "./general"
 import transactions from "./transactions"
+import waitlist from "./waitlist"
 import crypto from "./crypto"
 import routes from "./routes"
 import { reducer as formReducer } from 'redux-form';
@@ -10,6 +11,7 @@ const walletApp = {
     general,
     crypto,
     transactions,
+    waitlist,
    	form: formReducer
 }
 

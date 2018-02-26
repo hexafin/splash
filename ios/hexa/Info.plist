@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CodePushDeploymentKey</key>
-	<string>nqrtt2vykC-hrpl8Zl1nyXQkk-Axce58783f-382c-4fdf-ac63-34fafe94030d</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -44,9 +42,21 @@
 				<string>com.hexa-splash.coinbase-oauth</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Deep Link</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.hexa-splash</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0.0</string>
+	<key>CodePushDeploymentKey</key>
+	<string>nqrtt2vykC-hrpl8Zl1nyXQkk-Axce58783f-382c-4fdf-ac63-34fafe94030d</string>
 	<key>FacebookAppID</key>
 	<string>134812617147678</string>
 	<key>FacebookDisplayName</key>
