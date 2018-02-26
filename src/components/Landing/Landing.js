@@ -12,9 +12,10 @@ import { Linking, AppState } from 'react-native'
 
 
 class Landing extends Component {
+
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange);
-    Linking.getInitialURL().then(url => console.log('initial', url));
+    Linking.getInitialURL().then(url => this.handleDeepLink(url));
   }
 
   componentWillUnmount() {
@@ -22,12 +23,17 @@ class Landing extends Component {
   }
 
   handleAppStateChange = (currentAppState) => {
-    Linking.getInitialURL().then(url => this.handleDeepLink({ url }));
+    Linking.getInitialURL().then(url => this.handleDeepLink(url));
   };
 
-  handleDeepLink = (event) => {
-	  const parts = (event.url).split('/')
-    console.log(parts);
+  handleDeepLink = (url) => {
+	  const parts = url.split('/')
+    const splashtag = parts[6]
+    const phoneNumber = (parts[7]).split('&')[0]
+
+    if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
+      this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+    }
   };
     render() {
 

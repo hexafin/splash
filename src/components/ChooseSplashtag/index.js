@@ -6,7 +6,7 @@ import {ClaimUsername, InviteFriends} from "../../actions/waitlist"
 const mapStateToProps = (state) => {
 
     let splashtag = ""
-    if (state.form.chooseSplashtag.values) {
+    if (typeof state.form.chooseSplashtag !== 'undefined' && state.form.chooseSplashtag.values) {
         splashtag = state.form.chooseSplashtag.values.splashtag
     }
 

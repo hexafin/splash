@@ -35,6 +35,11 @@ export function smsAuthFailure(error) {
     return {type: SMS_AUTH_FAILURE, error}
 }
 
+export const SPLASHTAG_ON_HOLD = "SPLASHTAG_ON_HOLD"
+export function holdSplashtag(splashtag, phoneNumber) {
+    return {type: SPLASHTAG_ON_HOLD, splashtag, phoneNumber}
+}
+
 export const ClaimUsername = (username) => {
     return (dispatch, getState) => {
         dispatch(claimUsernameInit())
@@ -53,6 +58,15 @@ export const ClaimUsername = (username) => {
             dispatch(claimUsernameFailure(error))
         })
     }
+}
+
+export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
+  return (dispatch, getState) => {
+    const state = getState()
+    if (!(splashtag == state.waitlist.splashtagOnHold && phoneNumber == state.waitlist.phoneNumber)) {
+      dispatch(holdSplashtag(splashtag, phoneNumber))
+    }
+  }
 }
 
 export const InviteFriends = () => {}

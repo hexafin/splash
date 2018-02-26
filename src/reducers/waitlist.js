@@ -8,7 +8,8 @@ import {
     SMS_AUTH_FAILURE,
     CLAIM_USERNAME_INIT,
     CLAIM_USERNAME_SUCCESS,
-    CLAIM_USERNAME_FAILURE
+    CLAIM_USERNAME_FAILURE,
+    SPLASHTAG_ON_HOLD
 } from "../actions/waitlist.js"
 
 const initialState = {
@@ -17,6 +18,8 @@ const initialState = {
     isClaimingUsername: false,
     errorClaimingUsername: false,
     username: null,
+    splashtagOnHold: null,
+    phoneNumber: null,
     smsAuthenticated: false
 }
 
@@ -41,6 +44,13 @@ export default function waitlistReducer(state = initialState, action) {
                 ...state,
                 isClaimingUsername: false,
                 errorClaimingUsername: action.error
+            }
+
+        case SPLASHTAG_ON_HOLD:
+            return {
+                ...state,
+                splashtagOnHold: action.splashtag,
+                phoneNumber: action.phoneNumber
             }
 
         case SMS_AUTH_INIT:
