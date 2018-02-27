@@ -1,12 +1,19 @@
 import React, {Component} from "react"
 import {
-    Picker
+    Picker,
+    StyleSheet
 } from "react-native"
+import {colors} from "../../lib/colors"
 
-const CountryCodeInput = ({value, name, ...inputProps, input}) => {
+class CountryCodeInput extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            country: "US"
+        }
+    }
 
-    const genCountryPickers = () => {
-
+    render() {
         const countries = [
             ["🇺🇸", "+1", "US"],
             ["🇨🇦", "+1", "Canada"],
@@ -14,23 +21,20 @@ const CountryCodeInput = ({value, name, ...inputProps, input}) => {
             ["🇺🇸", "+1", "US"],
         ]
 
-        let countryPickers = []
-        for (let i = 0; i < countries.length; i++) {
-            const country = countries[i]
-            countryPickers.push(
-                <Picker.Item label={country[0] + " " + country[1]}
-                    value={country[2]} />
-            )
-        }
-        return countryPickers
+        return (
+            <Picker selectedValue={this.state.country} style={[styles.wrapper, this.props.style]}
+                    onValueChange={(itemValue, itemIndex) => this.setState({country: itemValue})}>
+                <Picker.Item label="US" value="US"/>
+                <Picker.Item label="CAN" value="CAN"/>
+            </Picker>
+        )
     }
-
-    return (
-        <Picker selectedValue={value}
-                onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-            {genCountryPickers}
-        </Picker>
-    )
 }
+
+const styles = StyleSheet.create({
+    wrapper: {
+        width: 80
+    }
+})
 
 export default CountryCodeInput

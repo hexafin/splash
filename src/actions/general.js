@@ -177,6 +177,9 @@ export const CheckUsername = (username, text) => {
                     dispatch(reset('username'))
                 })
             }
+        }
+    }
+}
 
 
 // Facebook Auth

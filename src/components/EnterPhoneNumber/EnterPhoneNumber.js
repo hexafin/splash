@@ -62,12 +62,14 @@ class EnterPhoneNumber extends Component {
                         Verify your number to claim your splashtag
                     </Text>
 
-                    <CountryCodeInput/>
-                    <Field style={styles.phoneNumber} name='phoneNumber'
-                            placeholder={"### ### ####"} component={Input}
-                            autoCapitalize="none" autoCorrect={false}
-                            spellCheck={false} autoFocus={true}
-                            normalize={normalizePhone}/>
+                    <View style={styles.fieldsWrapper}>
+                        <CountryCodeInput style={styles.countryCode}/>
+                        <Field style={styles.phoneNumber} name='phoneNumber'
+                                placeholder={"### ### ####"} component={Input}
+                                autoCapitalize="none" autoCorrect={false}
+                                spellCheck={false} autoFocus={true}
+                                normalize={normalizePhone}/>
+                    </View>
 
                    <Text style={styles.description}>
                        We'll text you a verification code to make sure it's you
@@ -117,6 +119,9 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-around"
     },
+    fieldsWrapper: {
+        flexDirection: "row"
+    },
     title: {
         fontSize: 30,
         fontWeight: '500',
@@ -139,7 +144,8 @@ const styles = StyleSheet.create({
         zIndex: 40
     },
     phoneNumber: {
-        zIndex: 50
+        zIndex: 50,
+        height: 50
     }
 })
 
