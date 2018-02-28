@@ -14,6 +14,31 @@ import Button from "../universal/Button"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import { Field, reduxForm } from 'redux-form'
+import CountryCodeInput from "../universal/CountryCodeInput"
+
+// function that formats and restricts phone number input - used with redux-form's normalize
+const normalizePhone = (value, previousValue) => {
+    if (!value) {
+        return value
+    }
+    const onlyNums = value.replace(/[^\d]/g, '')
+    if (!previousValue || value.length > previousValue.length) {
+        // typing forward
+        if (onlyNums.length === 3) {
+            return onlyNums + ' '
+        }
+        if (onlyNums.length === 6) {
+            return onlyNums.slice(0, 3) + ' ' + onlyNums.slice(3) + ' '
+        }
+    }
+    if (onlyNums.length <= 3) {
+        return onlyNums
+    }
+    if (onlyNums.length <= 6) {
+        return onlyNums.slice(0, 3) + ' ' + onlyNums.slice(3)
+    }
+    return onlyNums.slice(0, 3) + ' ' + onlyNums.slice(3, 6) + ' ' + onlyNums.slice(6, 10)
+}
 
 class EnterPhoneNumber extends Component {
 
@@ -37,8 +62,14 @@ class EnterPhoneNumber extends Component {
                         Verify your number to claim your splashtag
                     </Text>
 
-                    <Field style={styles.phoneNumber} name='phoneNumber' placeholder={"### ### ####"} component={Input}
-                           autoCapitalize="none" autoCorrect={false} spellCheck={false} autoFocus={true}/>
+                    <View style={styles.fieldsWrapper}>
+                        <CountryCodeInput style={styles.countryCode}/>
+                        <Field style={styles.phoneNumber} name='phoneNumber'
+                                placeholder={"### ### ####"} component={Input}
+                                autoCapitalize="none" autoCorrect={false}
+                                spellCheck={false} autoFocus={true}
+                                normalize={normalizePhone}/>
+                    </View>
 
                    <Text style={styles.description}>
                        We'll text you a verification code to make sure it's you
@@ -88,6 +119,9 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "space-around"
     },
+    fieldsWrapper: {
+        flexDirection: "row"
+    },
     title: {
         fontSize: 30,
         fontWeight: '500',
@@ -110,7 +144,8 @@ const styles = StyleSheet.create({
         zIndex: 40
     },
     phoneNumber: {
-        zIndex: 50
+        zIndex: 50,
+        height: 50
     }
 })
 

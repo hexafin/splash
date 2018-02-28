@@ -16,6 +16,7 @@ function UsernameExists(username) {
                 // now check waitlist
                 firestore.collection("waitlist").where("username", "=", username).get().then(checkUsername => {
                     if (checkUsername.empty) {
+                        console.log("check", checkUsername)
                         resolve(false)
                     }
                     else {

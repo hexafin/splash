@@ -1,13 +1,28 @@
 import React from 'react'
 import {
     Text,
+    Image,
     StyleSheet,
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 
-const Button = ({primary, onPress=()=>{}, title, disabled=false}) => {
+const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false}) => {
+
+    const loadingView = (
+        <Image/>
+    )
+
+    const normalView = (
+        <Text style={[
+            styles.text,
+            primary ? styles.textPrimary : styles.textSecondary,
+            disabled ? styles.textDisabled : {}
+        ]}>
+            {title}
+        </Text>
+    )
 
 	return (
 			<TouchableOpacity disabled={ disabled }
@@ -17,13 +32,9 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false}) => {
                         primary ? styles.buttonPrimary : styles.buttonSecondary,
                         disabled ? styles.buttonDisabled : {}
                     ]}>
-			 	<Text style={[
-                    styles.text,
-                    primary ? styles.textPrimary : styles.textSecondary,
-                    disabled ? styles.textDisabled : {}
-                ]}>
-			 		{title}
-			 	</Text>
+
+			 	{loading && loadingView}
+                {!loading && normalView}
 			</TouchableOpacity>
 		)
 }

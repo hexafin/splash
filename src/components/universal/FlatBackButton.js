@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         // backgroundColor: "blue",
         left: 0,
-        top: 40,
+        top: 30,
         padding: 10,
         flexDirection: "column",
         justifyContent: 'center',
