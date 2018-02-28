@@ -9,7 +9,7 @@ import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
 import PropTypes from 'prop-types'
-export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input}) => {
+export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input={}}) => {
 
 	return (
 			<TextInput
@@ -17,7 +17,7 @@ export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, 
 				onChangeText={ input.onChange }
 				name={name} value={value}
 				placeholder={placeholder}
-				style={[styles.input]}
+				style={[styles.input, input.style]}
 				onBlur={input.onBlur}
 				secureTextEntry={secureTextEntry}
         onFocus={input.onFocus}
