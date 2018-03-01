@@ -21,12 +21,12 @@ class EnterPhoneNumber extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            country: {
-                name: "US",
-                code: "+1",
-                flag: "🇺🇸"
-            },
-            phoneNumber: ""
+            phoneNumber: {
+                countryName: null,
+                countryFlag: null,
+                countryCode: null,
+                number: null
+            }
         }
     }
 
@@ -52,7 +52,14 @@ class EnterPhoneNumber extends Component {
                         your splashtag
                     </Text>
 
-                    <PhoneNumberInput autoFocus/>
+                    <PhoneNumberInput autoFocus callback={(phoneNumber) => {
+                        this.setState((prevState) => {
+                            return {
+                                ...prevState,
+                                phoneNumber
+                            }
+                        })
+                    }}/>
 
                    <Text style={styles.description}>
                        We'll text you a verification code{"\n"}
@@ -62,7 +69,8 @@ class EnterPhoneNumber extends Component {
                    <Button
                        onPress={() => {
                            // TODO: sms authentication function
-                           this.props.navigation.navigate("VerifyPhoneNumber")
+                           console.log(this.state)
+                           // this.props.navigation.navigate("VerifyPhoneNumber")
                        }}
                        style={styles.footerButton} title={"Text me the code"}
                        primary={true}

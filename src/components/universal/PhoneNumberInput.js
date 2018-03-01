@@ -38,29 +38,81 @@ const normalizePhone = (value, previousValue) => {
 }
 
 const countryList = [
-    "US",
-    "Canada"
+    "United States",
+    "Mexico",
+    "Canada",
+    "Germany",
+    "France",
+    "Italy",
+    "Spain",
+    "China",
+    "South Korea",
+    "Venezuela"
 ]
 
 const countryData = {
-    "US": {
+    "United States": {
         code: "+1",
         flag: "🇺🇸"
+    },
+    "Mexico": {
+        code: "+52",
+        flag: "🇲🇽"
     },
     "Canada": {
         code: "+1",
         flag: "🇨🇦"
+    },
+    "Germany": {
+        code: "+49",
+        flag: "🇩🇪"
+    },
+    "France": {
+        code: "+33",
+        flag: "🇫🇷"
+    },
+    "Italy": {
+        code: "+39",
+        flag: "🇮🇹"
+    },
+    "Spain": {
+        code: "+34",
+        flag: "🇪🇸"
+    },
+    "China": {
+        code: "+86",
+        flag: "🇨🇳"
+    },
+    "South Korea": {
+        code: "+82",
+        flag: "🇰🇷"
+    },
+    "Venezuela": {
+        code: "+58",
+        flag: "🇻🇪"
     }
 }
+
+/*
+
+Takes props:
+- autofocus boolean (defualts to false)
+- countryName string (defaults to "United States")
+- countryCode string (defaults to "+1")
+- countryFlag string (defualts to "🇺🇸")
+- number string (defualts to "")
+- callback function (state) => {}
+
+*/
 
 class PhoneNumberInput extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            countryName: "US",
-            countryCode: "+1",
-            countryFlag: "🇺🇸",
-            phoneNumber: ""
+            countryName: props.countryName || "US",
+            countryCode: props.countryCode || "+1",
+            countryFlag: props.countryFlag || "🇺🇸",
+            number: normalizePhone(props.number, "") || ""
         }
         this.handleCountryChange.bind(this)
         this.handlePhoneNumberChange.bind(this)
@@ -80,16 +132,24 @@ class PhoneNumberInput extends Component {
             }
         })
 
+        if (this.props.callback) {
+            this.props.callback(this.state)
+        }
+
     }
 
     handlePhoneNumberChange(number)  {
-        const normalizedNumber = normalizePhone(number, this.state.phoneNumber)
+        const normalizedNumber = normalizePhone(number, this.state.number)
         this.setState((prevState) => {
             return {
                 ...prevState,
-                phoneNumber: normalizedNumber
+                number: normalizedNumber
             }
         })
+
+        if (this.props.callback) {
+            this.props.callback(this.state)
+        }
     }
 
     handleCountryClick() {
@@ -110,29 +170,7 @@ class PhoneNumberInput extends Component {
 
     render() {
 
-        const genCountryOptions = () => {
-            const options = []
-            for (let i = 0; i < countryList.length; i++) {
-                const country = countryList[i]
-                options.push(<Picker.Item key={"countryPicker"+i}
-                    label={countryData[country].flag+" "+countryData[country].code}
-                    value={country}/>)
-            }
-            return options
-        }
-
-        const pickingView = (
-            <View style={styles.pickingWrapper}>
-                <Picker selectedValue={this.state.countryName}
-                        onValueChange={(itemValue, itemIndex) => {
-                            this.handleCountryChange(itemValue)
-                        }}>
-                    {genCountryOptions()}
-                </Picker>
-            </View>
-        )
-
-        const normalView = (
+        return (
             <View style={styles.normalWrapper}>
                 <TouchableWithoutFeedback style={styles.countryCode}
                         onPress={() => this.handleCountryClick()}>
@@ -146,17 +184,10 @@ class PhoneNumberInput extends Component {
                 <TextInput
                     style={styles.phoneNumber}
                     onChangeText={(text) => this.handlePhoneNumberChange(text)}
-                    value={this.state.phoneNumber}
+                    value={this.state.number}
                     keyboardType={"number-pad"}
                     placeholder={"### ### ####"}
-                    autoFocus={this.props.autoFocus}/>
-            </View>
-        )
-
-        return (
-            <View>
-                {this.state.isPickingCountry && pickingView}
-                {!this.state.isPickingCountry && normalView}
+                    autoFocus={this.props.autoFocus || false}/>
             </View>
         )
     }
