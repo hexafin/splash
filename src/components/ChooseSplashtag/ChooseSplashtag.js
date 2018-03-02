@@ -41,7 +41,7 @@ class ChooseSplashtag extends Component {
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    splashtagAvailable: response.data,
+                    splashtagAvailable: response.data.available,
                     checkingSplashtag: false,
                     errorCheckingSplashtag: false
                 }
@@ -115,7 +115,7 @@ class ChooseSplashtag extends Component {
                         ]}
                         title={buttonTitle}
                         primary={true}
-                        disabled={!this.state.splashtagAvailable || this.state.checkingSplashtag}/>
+                        />
 
                 </View>
 
