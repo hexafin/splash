@@ -12,6 +12,7 @@ import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import {Input} from "./Input"
 import {Field} from "redux-form"
+import PropTypes from "prop-types"
 
 // function that formats and restricts phone number input - used with redux-form's normalize
 const normalizePhone = (value, previousValue) => {
@@ -93,7 +94,6 @@ const countryData = {
     }
 }
 
-// TODO: PropTypes
 /*
 
 Takes props:
@@ -192,6 +192,15 @@ class PhoneNumberInput extends Component {
             </View>
         )
     }
+}
+
+PhoneNumberInput.PropTypes = {
+    autofocus: PropTypes.bool,
+    countryName: PropTypes.string,
+    countryCode: PropTypes.string,
+    countryFlag: PropTypes.string,
+    number: PropTypes.string,
+    callback: PropTypes.func
 }
 
 const styles = StyleSheet.create({
