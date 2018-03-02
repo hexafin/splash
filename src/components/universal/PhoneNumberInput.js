@@ -39,16 +39,17 @@ const normalizePhone = (value, previousValue) => {
 }
 
 const countryList = [
-    "United States",
     "Mexico",
-    "Canada",
     "Germany",
     "France",
     "Italy",
     "Spain",
     "China",
     "South Korea",
-    "Venezuela"
+    "Venezuela",
+    "United States",
+    "Canada",
+    "United Kingdom"
 ]
 
 const countryData = {
@@ -91,6 +92,10 @@ const countryData = {
     "Venezuela": {
         code: "+58",
         flag: "🇻🇪"
+    },
+    "United Kingdom": {
+        code: "+44",
+        flag: "🇬🇧"
     }
 }
 
