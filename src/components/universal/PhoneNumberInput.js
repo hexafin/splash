@@ -39,17 +39,17 @@ const normalizePhone = (value, previousValue) => {
 }
 
 const countryList = [
-    "Mexico",
-    "Germany",
-    "France",
-    "Italy",
-    "Spain",
     "China",
     "South Korea",
     "Venezuela",
+    "Mexico",
+    "Germany",
+    "France",
     "United States",
     "Canada",
-    "United Kingdom"
+    "United Kingdom",
+    "Italy",
+    "Spain",
 ]
 
 const countryData = {
@@ -231,7 +231,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        marginRight: 10,
+        paddingRight: 10,
+        height: 60,
         backgroundColor: colors.white
     },
     countryCodeText: {
