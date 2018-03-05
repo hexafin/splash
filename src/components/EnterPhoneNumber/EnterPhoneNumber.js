@@ -67,9 +67,12 @@ class EnterPhoneNumber extends Component {
 
                    <Button
                        onPress={() => {
+                           // remove spaces from phone number
                            var fullNumber = this.state.phoneNumber.countryCode + this.state.phoneNumber.number
                            fullNumber = fullNumber.replace(/\s/g, '')
+                           // intitiate authentication process
                            this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName)
+                           
                            Keyboard.dismiss()
                            this.props.navigation.navigate("VerifyPhoneNumber")
                        }}
@@ -82,7 +85,7 @@ class EnterPhoneNumber extends Component {
 
 
                 <FlatBackButton onPress={() => {
-                    Keyboard.dismiss()
+                    // Keyboard.dismiss()
                     this.props.navigation.navigate("ChooseSplashtag")
                 }}/>
             </KeyboardAvoidingView>
