@@ -13,7 +13,6 @@ import FlatBackButton from "../universal/FlatBackButton"
 import Button from "../universal/Button"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
-import { Field, reduxForm } from 'redux-form'
 import PhoneNumberInput from "../universal/PhoneNumberInput"
 
 class EnterPhoneNumber extends Component {
@@ -22,10 +21,10 @@ class EnterPhoneNumber extends Component {
         super(props)
         this.state = {
             phoneNumber: {
-                countryName: null,
-                countryFlag: null,
-                countryCode: null,
-                number: null
+                countryName: "",
+                countryFlag: "",
+                countryCode: "",
+                number: ""
             }
         }
     }
@@ -52,7 +51,7 @@ class EnterPhoneNumber extends Component {
                         your splashtag
                     </Text>
 
-                    <PhoneNumberInput autoFocus callback={(phoneNumber) => {
+                    <PhoneNumberInput autoFocus={true} callback={(phoneNumber) => {
                         this.setState((prevState) => {
                             return {
                                 ...prevState,
@@ -62,25 +61,28 @@ class EnterPhoneNumber extends Component {
                     }}/>
 
                    <Text style={styles.description}>
-                       We'll text you a verification code{"\n"}
+                       We{"'"}ll text you a verification code{"\n"}
                        to make sure it's you
                    </Text>
 
                    <Button
                        onPress={() => {
-                           // TODO: sms authentication function
-                           console.log(this.state)
-                           // this.props.navigation.navigate("VerifyPhoneNumber")
+                           var fullNumber = this.state.phoneNumber.countryCode + this.state.phoneNumber.number
+                           fullNumber = fullNumber.replace(/\s/g, '')
+                           this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName)
+                           Keyboard.dismiss()
+                           this.props.navigation.navigate("VerifyPhoneNumber")
                        }}
                        style={styles.footerButton} title={"Text me the code"}
                        primary={true}
-                       disabled={false}/>
+                       disabled={this.state.phoneNumber.number.length < 11}/>
 
                 </View>
 
 
 
                 <FlatBackButton onPress={() => {
+                    Keyboard.dismiss()
                     this.props.navigation.navigate("ChooseSplashtag")
                 }}/>
             </KeyboardAvoidingView>
@@ -96,13 +98,13 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         position: "relative",
         paddingBottom: 0,
-        paddingTop: 40
+        paddingTop: 80
     },
     body: {
         flex: 1,
         padding: 20,
         flexDirection: "column",
-        justifyContent: "space-around"
+        justifyContent: "space-between"
     },
     title: {
         fontSize: 30,
@@ -129,7 +131,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default reduxForm({
-   form: 'enterPhoneNumber',
-   destroyOnUnmount: false,
-})(EnterPhoneNumber)
+export default EnterPhoneNumber
