@@ -1,78 +1,67 @@
 import React, {Component} from "react"
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity
-} from "react-native"
+import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
-import { Linking, AppState } from 'react-native'
-
+import {Linking, AppState} from 'react-native'
 
 class Landing extends Component {
 
-  componentDidMount() {
-    AppState.addEventListener('change', this.handleAppStateChange);
-    Linking.getInitialURL().then(url => this.handleDeepLink(url));
-  }
-
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
-  }
-
-  handleAppStateChange = (currentAppState) => {
-    Linking.getInitialURL().then(url => this.handleDeepLink(url));
-  };
-
-  handleDeepLink = (url) => {
-	  const parts = url.split('/')
-    const splashtag = parts[6]
-    const phoneNumber = (parts[7]).split('&')[0]
-
-    if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
-      this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+    componentDidMount() {
+        AppState.addEventListener('change', this.handleAppStateChange);
+        Linking.getInitialURL().then(url => this.handleDeepLink(url));
     }
-  };
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange);
+    }
+
+    handleAppStateChange = (currentAppState) => {
+        Linking.getInitialURL().then(url => this.handleDeepLink(url));
+    };
+
+    handleDeepLink = (url) => {
+        const parts = url.split('/')
+        const splashtag = parts[6]
+        const phoneNumber = (parts[7]).split('&')[0]
+
+        if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
+            this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+        }
+    };
     render() {
 
-        return (
-            <View style={styles.container}>
+        return (<View style={styles.container}>
 
-                <Image style={styles.wavesImage}
-                    source={require("../../assets/images/waves.png")}/>
+            <Image style={styles.wavesImage} source={require("../../assets/images/waves.png")}/>
 
-                <View style={styles.header}>
-                    <View style={styles.logoWrapper}>
-                        <Image source={icons.splash}
-                            style={styles.logo}/>
-                        <Text style={styles.logoText}>Splash</Text>
-                    </View>
-                    <View style={styles.slogan}>
-                        <Text style={styles.sloganText}>
-                            Splash is your wallet
-                        </Text>
-                        <Text style={styles.sloganSubText}>
-                            Make it personal with a splashtag
-                        </Text>
-                    </View>
+            <View style={styles.header}>
+                <View style={styles.logoWrapper}>
+                    <Image source={require("../../assets/images/splash-logo.png")} style={styles.logo}/>
+                    <Text style={styles.logoText}>Splash</Text>
                 </View>
-
-                <View style={styles.floating}></View>
-
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.footerButton}
-                        onPress={() => {this.props.navigation.navigate("ChooseSplashtag")}}>
-                        <Text style={styles.footerButtonText}>
-                            Claim your splashtag
-                        </Text>
-                    </TouchableOpacity>
+                <View style={styles.slogan}>
+                    <Text style={styles.sloganText}>
+                        Splash is your wallet
+                    </Text>
+                    <Text style={styles.sloganSubText}>
+                        Make it personal with a splashtag
+                    </Text>
                 </View>
-
-
             </View>
-        )
+
+            <View style={styles.floating}></View>
+
+            <View style={styles.footer}>
+                <TouchableOpacity style={styles.footerButton} onPress={() => {
+                        this.props.navigation.navigate("ChooseSplashtag")
+                    }}>
+                    <Text style={styles.footerButtonText}>
+                        Claim your splashtag
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+        </View>)
 
     }
 
@@ -95,7 +84,7 @@ const styles = StyleSheet.create({
     header: {
         flex: 1,
         padding: 30,
-        flexDirection: "column",
+        flexDirection: "column"
     },
     logoWrapper: {
         flexDirection: "row",
