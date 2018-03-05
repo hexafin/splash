@@ -86,11 +86,23 @@ const styles = StyleSheet.create({
         padding: 30,
         flexDirection: "column"
     },
-    logoWrapper: {
+    claimedHeader: {
+        flex: 1,
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+        flexDirection: "column",
+    },
+    centerLogoWrapper: {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         padding: 30
+    },
+    leftLogoWrapper: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingVertical: 30,
     },
     logo: {
         height: 36,
@@ -113,10 +125,10 @@ const styles = StyleSheet.create({
         fontSize: 34,
         fontWeight: '500',
         color: colors.nearBlack,
-        marginBottom: 20,
         textAlign: "center"
     },
     sloganSubText: {
+        marginTop: 20,
         fontSize: 24,
         textAlign: "center",
         color: colors.lightGray
@@ -137,7 +149,11 @@ const styles = StyleSheet.create({
     footerButtonText: {
         fontSize: 24,
         color: colors.purple
+    },
+    splashField: {
+      marginTop: 85,
     }
+
 })
 
 export default Landing
