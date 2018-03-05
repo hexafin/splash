@@ -5,14 +5,14 @@ import {ClaimUsername, InviteFriends} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
     return {
-      waitlisted: state.general.waitlisted,
-      username: state.general.person.username
+      waitlisted: state.waitlist.waitlisted,
+      splashtag: state.waitlist.username || "yourname"
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        ClaimUsername, InviteFriends
+
     }, dispatch)
 }
 
