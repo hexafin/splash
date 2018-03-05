@@ -18,6 +18,7 @@
 #import <CodePush/CodePush.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
+#import <React/RCTLinkingManager.h>
 @import Firebase;
 @import UIKit;
 
@@ -67,61 +68,42 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     [FBSDKAppEvents activateApp];
 }
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-  BOOL success = NO;
-  if ([[url scheme] isEqualToString:@"com.hexa-splash.coinbase-oauth"]) {
-    [CoinbaseOAuth finishOAuthAuthenticationForUrl:url
-                                          clientId:[CoinbaseApi getClientId]
-                                      clientSecret:[CoinbaseApi getClientSecret]
-                                        completion:^(id result, NSError *error) {
-                                          if (error) {
-                                            [[[UIAlertView alloc] initWithTitle:@"OAuth Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-                                          } else {
-                                            /* Send an app event with the API key */
-                                            /* { */
-                                            /*     "access_token" = xxxxxxxxxxxxxxxxxxxxxxxxxx; */
-                                            /*     "expires_in" = 7200; */
-                                            /*     "refresh_token" = yyyyyyyyyyyyyyyyyyyyyyyyyy; */
-                                            /*     "scope" = "user balance transfer"; */
-                                            /*     "token_type" = bearer; */
-                                            /* } */
-                                            [EventEmitter emitEventWithName:@"NativeEvent" andPayload:result];
-                                          }
-                                        }];
-        success = YES;
-      }
-
-  FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:url];
-
-  if(!success) {
-    if (dynamicLink) {
-      if (dynamicLink.url) {
-        // Handle the deep link. For example, show the deep-linked content,
-        // apply a promotional offer to the user's account or show customized onboarding view.
-        // ...
-      } else {
-        // Dynamic link has empty deep link. This situation will happens if
-        // Firebase Dynamic Links iOS SDK tried to retrieve pending dynamic link,
-        // but pending link is not available for this device/App combination.
-        // At this point you may display default onboarding view.
-      }
-      success = YES;
-    }
-  }
-
-
-  if (!success) {
-    success = [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                             openURL:url
-                                                   sourceApplication:sourceApplication
-                                                          annotation:annotation];
-  }
-  return success;
-}
+//
+// - (BOOL)application:(UIApplication *)application
+//             openURL:(NSURL *)url
+//   sourceApplication:(NSString *)sourceApplication
+//          annotation:(id)annotation {
+//   BOOL success = NO;
+//   if ([[url scheme] isEqualToString:@"com.hexa-splash.coinbase-oauth"]) {
+//     [CoinbaseOAuth finishOAuthAuthenticationForUrl:url
+//                                           clientId:[CoinbaseApi getClientId]
+//                                       clientSecret:[CoinbaseApi getClientSecret]
+//                                         completion:^(id result, NSError *error) {
+//                                           if (error) {
+//                                             [[[UIAlertView alloc] initWithTitle:@"OAuth Error" message:[error localizedDescription] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+//                                           } else {
+//                                             /* Send an app event with the API key */
+//                                             /* { */
+//                                             /*     "access_token" = xxxxxxxxxxxxxxxxxxxxxxxxxx; */
+//                                             /*     "expires_in" = 7200; */
+//                                             /*     "refresh_token" = yyyyyyyyyyyyyyyyyyyyyyyyyy; */
+//                                             /*     "scope" = "user balance transfer"; */
+//                                             /*     "token_type" = bearer; */
+//                                             /* } */
+//                                             [EventEmitter emitEventWithName:@"NativeEvent" andPayload:result];
+//                                           }
+//                                         }];
+//         success = YES;
+//       }
+//
+//   if (!success) {
+//     success = [[FBSDKApplicationDelegate sharedInstance] application:application
+//                                                              openURL:url
+//                                                    sourceApplication:sourceApplication
+//                                                           annotation:annotation];
+//   }
+//   return success;
+// }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 {
@@ -149,24 +131,20 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
  [RNFIRMessaging didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
-- (BOOL)application:(UIApplication *)application
-continueUserActivity:(NSUserActivity *)userActivity
- restorationHandler:(void (^)(NSArray *))restorationHandler {
-  BOOL handled = [[FIRDynamicLinks dynamicLinks] handleUniversalLink:userActivity.webpageURL
-                                                          completion:^(FIRDynamicLink * _Nullable dynamicLink,
-                                                                       NSError * _Nullable error) {
-                                                                         // ...
-                                                          }];
-  return handled;
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+  return [RCTLinkingManager application:application openURL:url
+                      sourceApplication:sourceApplication annotation:annotation];
 }
 
-- (BOOL)application:(UIApplication *)app
-            openURL:(NSURL *)url
-            options:(NSDictionary<NSString *, id> *)options {
-  return [self application:app
-                   openURL:url
-         sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+// Only if your app is using [Universal Links](https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/AppSearch/UniversalLinks.html).
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity
+ restorationHandler:(void (^)(NSArray * _Nullable))restorationHandler
+{
+ return [RCTLinkingManager application:application
+                  continueUserActivity:userActivity
+                    restorationHandler:restorationHandler];
 }
 
 @end

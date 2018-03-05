@@ -8,31 +8,31 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
-import { Linking, AppState } from 'react-native'
+import { Linking } from 'react-native'
+import { Field } from 'redux-form'
+import {Input} from "../universal/Input"
 
 
 class Landing extends Component {
 
   componentDidMount() {
-    AppState.addEventListener('change', this.handleAppStateChange);
-    Linking.getInitialURL().then(url => this.handleDeepLink(url));
+    Linking.addEventListener('url', this.handleDeepLink);
+    Linking.getInitialURL().then(url => this.handleDeepLink({url}));
   }
 
   componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
+    Linking.removeEventListener('url', this.handleDeepLink);
   }
 
-  handleAppStateChange = (currentAppState) => {
-    Linking.getInitialURL().then(url => this.handleDeepLink(url));
-  };
-
-  handleDeepLink = (url) => {
-	  const parts = url.split('/')
-    const splashtag = parts[6]
-    const phoneNumber = (parts[7]).split('&')[0]
-
-    if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
-      this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+  handleDeepLink = (event) => {
+    if (event.url) {
+      const parts = (event.url).split('/')
+      const splashtag = parts[6]
+      const phoneNumber = (parts[7]).split('&')[0]
+      console.log(event.url);
+      if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
+        this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+      }
     }
   };
     render() {
@@ -43,8 +43,8 @@ class Landing extends Component {
                 <Image style={styles.wavesImage}
                     source={require("../../assets/images/waves.png")}/>
 
-                <View style={styles.header}>
-                    <View style={styles.logoWrapper}>
+                {!this.props.splashtagOnHold && <View style={styles.header}>
+                    <View style={styles.centerLogoWrapper}>
                         <Image source={icons.splash}
                             style={styles.logo}/>
                         <Text style={styles.logoText}>Splash</Text>
@@ -57,7 +57,30 @@ class Landing extends Component {
                             Make it personal with a splashtag
                         </Text>
                     </View>
-                </View>
+                </View>}
+
+                {this.props.splashtagOnHold && <View style={styles.claimedHeader}>
+                    <View style={styles.leftLogoWrapper}>
+                        <Image source={icons.splash}
+                            style={styles.logo}/>
+                        <Text style={styles.logoText}>Splash</Text>
+                    </View>
+                    <View style={styles.slogan}>
+                        <Text style={styles.sloganText}>
+                            Welcome,
+                        </Text>
+                        <Text style={styles.sloganText}>
+                            @{this.props.splashtagOnHold}
+                        </Text>
+                    </View>
+                    <Input
+                        input={{style: styles.splashField}}
+                        name='splashtag' placeholder={this.props.splashtagOnHold}
+                        autoCapitalize="none" spellCheck={false}
+                        autoFocus={false}
+                        />
+                </View>}
+
 
                 <View style={styles.floating}></View>
 
@@ -97,11 +120,23 @@ const styles = StyleSheet.create({
         padding: 30,
         flexDirection: "column",
     },
-    logoWrapper: {
+    claimedHeader: {
+        flex: 1,
+        paddingVertical: 30,
+        paddingHorizontal: 20,
+        flexDirection: "column",
+    },
+    centerLogoWrapper: {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
         padding: 30
+    },
+    leftLogoWrapper: {
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        alignItems: "center",
+        paddingVertical: 30,
     },
     logo: {
         height: 36,
@@ -124,10 +159,10 @@ const styles = StyleSheet.create({
         fontSize: 34,
         fontWeight: '500',
         color: colors.nearBlack,
-        marginBottom: 20,
         textAlign: "center"
     },
     sloganSubText: {
+        marginTop: 20,
         fontSize: 24,
         textAlign: "center",
         color: colors.lightGray
@@ -148,7 +183,11 @@ const styles = StyleSheet.create({
     footerButtonText: {
         fontSize: 24,
         color: colors.purple
+    },
+    splashField: {
+      marginTop: 85,
     }
+
 })
 
 export default Landing
