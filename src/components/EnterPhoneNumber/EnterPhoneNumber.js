@@ -75,7 +75,7 @@ class EnterPhoneNumber extends Component {
                        }}
                        style={styles.footerButton} title={"Text me the code"}
                        primary={true}
-                       disabled={this.state.phoneNumber.number.length < 11}/>
+                       disabled={this.state.phoneNumber.number.length < 12}/>
 
                 </View>
 
