@@ -6,14 +6,13 @@ import {
     StyleSheet,
     Image
 } from "react-native"
-import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 
 
 const Loading = () => {
     return (
         <View style={styles.container}>
-            <Image style={styles.loadingLogo} source={require("../../lib/images/splash-logo-xlarge.png")}/>
+            {/*<Image style={styles.wavesImage} source={require("../../assets/images/waves.png")}/>*/}
         </View>
     )
 }
@@ -22,17 +21,17 @@ const Loading = () => {
 const styles = StyleSheet.create({
     container: {
         ...defaults.container,
-        flexDirection: "column",
-        justifyContent: "space-around",
-        alignItems: "center"
+        justifyContent: "space-between",
+        position: "relative"
     },
-    loadingLogo: {
+    wavesImage: {
+        position: "absolute",
+        bottom: -50,
+        left: 0,
+        right: 0,
         width: 400,
         height: 400
     },
-    landingButton: {
-        flex: 1
-    }
 })
 
 export default Loading
