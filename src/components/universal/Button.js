@@ -8,7 +8,7 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 
-const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false}) => {
+const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, small=false, style={}}) => {
 
     const loadingView = (
         <Image/>
@@ -17,6 +17,7 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false})
     const normalView = (
         <Text style={[
             styles.text,
+            small ? styles.textSmall : {},
             primary ? styles.textPrimary : styles.textSecondary,
             disabled ? styles.textDisabled : {}
         ]}>
@@ -29,8 +30,10 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false})
                     onPress={ onPress }
                     style={[
                         styles.base,
+                        small ? styles.baseSmall : {},
                         primary ? styles.buttonPrimary : styles.buttonSecondary,
-                        disabled ? styles.buttonDisabled : {}
+                        disabled ? styles.buttonDisabled : {},
+                        style
                     ]}>
 
 			 	{loading && loadingView}
@@ -50,11 +53,17 @@ const styles = StyleSheet.create({
 		padding: 20,
 		justifyContent: 'center',
 	},
+    baseSmall: {
+        padding: 10
+    },
 	text: {
 		fontSize: 20,
 		textAlign: 'center',
 		fontWeight: '600',
 	},
+    textSmall: {
+        fontSize: 18
+    },
 	textSecondary: {
 		color: colors.purple,
 	},
