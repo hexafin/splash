@@ -63,7 +63,7 @@ class EnterPhoneNumber extends Component {
 
                 <Text style={styles.description}>
                     We{"'"}ll text you a verification code{"\n"}
-                    to make sure it's you
+                    to make sure it{"'"}s you
                 </Text>
 
                 <Button onPress={() => {
