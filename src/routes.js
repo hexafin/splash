@@ -68,7 +68,7 @@ export default OnboardingRouter = TabNavigator(
     {
         animationEnabled: true,
         swipeEnabled: false,
-        initialRouteName: "Landing"
+        initialRouteName: "ChooseSplashtag"
     }
 )
 
