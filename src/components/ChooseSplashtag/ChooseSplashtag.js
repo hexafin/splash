@@ -76,7 +76,7 @@ class ChooseSplashtag extends Component {
                 <View style={styles.body}>
 
                     <Text style={styles.title}>
-                        Let's get you setup
+                        Let{"'"}s get you setup
                     </Text>
 
                     <Text style={styles.description}>
