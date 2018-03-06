@@ -9,6 +9,7 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 import LoadingCircle from "./LoadingCircle"
+import PropTypes from "prop-types"
 
 const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, small=false, style={}}) => {
 
@@ -44,6 +45,16 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
                 </View>
 			</TouchableOpacity>
 		)
+}
+
+Button.propTypes = {
+    primary: PropTypes.bool,
+    onPress: PropTypes.func,
+    title: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
+    loading: PropTypes.bool,
+    small: PropTypes.bool,
+    style: PropTypes.any
 }
 
 

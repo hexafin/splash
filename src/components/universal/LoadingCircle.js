@@ -3,6 +3,7 @@ import {
     View
 } from "react-native"
 import LottieView from 'lottie-react-native'
+import PropTypes from "prop-types"
 
 export default class LoadingCircle extends Component {
     componentDidMount() {
@@ -45,4 +46,8 @@ export default class LoadingCircle extends Component {
             </View>
         )
     }
+}
+
+LoadingCircle.propTypes = {
+    size: PropTypes.number
 }
