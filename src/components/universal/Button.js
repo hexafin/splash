@@ -1,17 +1,20 @@
 import React from 'react'
 import {
     Text,
+    View,
     Image,
     StyleSheet,
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
+import LoadingCircle from "./LoadingCircle"
+import PropTypes from "prop-types"
 
 const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, small=false, style={}}) => {
 
     const loadingView = (
-        <Image/>
+        <LoadingCircle size={34}/>
     )
 
     const normalView = (
@@ -33,13 +36,25 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
                         small ? styles.baseSmall : {},
                         primary ? styles.buttonPrimary : styles.buttonSecondary,
                         disabled ? styles.buttonDisabled : {},
+                        loading ? styles.buttonLoading : {},
                         style
                     ]}>
-
-			 	{loading && loadingView}
-                {!loading && normalView}
+                <View style={styles.wrapper}>
+                    {!small && loading && loadingView}
+                    {(small || !loading) && normalView}
+                </View>
 			</TouchableOpacity>
 		)
+}
+
+Button.propTypes = {
+    primary: PropTypes.bool,
+    onPress: PropTypes.func,
+    title: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
+    loading: PropTypes.bool,
+    small: PropTypes.bool,
+    style: PropTypes.any
 }
 
 
@@ -55,6 +70,9 @@ const styles = StyleSheet.create({
 	},
     baseSmall: {
         padding: 10
+    },
+    buttonLoading: {
+        padding: 15
     },
 	text: {
 		fontSize: 20,
@@ -81,6 +99,12 @@ const styles = StyleSheet.create({
     },
     textDisabled: {
         color: colors.white
+    },
+    wrapper: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative'
     }
 })
 
