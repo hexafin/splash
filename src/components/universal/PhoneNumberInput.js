@@ -1,7 +1,6 @@
 import React, {Component} from "react"
 import {
     View,
-    Picker,
     StyleSheet,
     Text,
     TextInput,
@@ -10,8 +9,6 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
-import {Input} from "./Input"
-import {Field} from "redux-form"
 import PropTypes from "prop-types"
 
 // function that formats and restricts phone number input - used with redux-form's normalize
@@ -147,15 +144,17 @@ class PhoneNumberInput extends Component {
     handlePhoneNumberChange(number)  {
         const normalizedNumber = normalizePhone(number, this.state.number)
         this.setState((prevState) => {
+            if (this.props.callback) {
+                this.props.callback({
+                    ...prevState,
+                    number: normalizedNumber
+                })
+            }
             return {
                 ...prevState,
                 number: normalizedNumber
             }
         })
-
-        if (this.props.callback) {
-            this.props.callback(this.state)
-        }
     }
 
     handleCountryClick() {
@@ -177,7 +176,7 @@ class PhoneNumberInput extends Component {
     render() {
 
         return (
-            <View style={styles.normalWrapper}>
+            <View style={styles.wrapper}>
                 <TouchableWithoutFeedback style={styles.countryCode}
                         onPress={() => this.handleCountryClick()}>
                     <View>
@@ -199,7 +198,7 @@ class PhoneNumberInput extends Component {
     }
 }
 
-PhoneNumberInput.PropTypes = {
+PhoneNumberInput.propTypes = {
     autofocus: PropTypes.bool,
     countryName: PropTypes.string,
     countryCode: PropTypes.string,
@@ -209,7 +208,7 @@ PhoneNumberInput.PropTypes = {
 }
 
 const styles = StyleSheet.create({
-    normalWrapper: {
+    wrapper: {
         flexDirection: "row",
         alignItems: "center",
         height: 60,

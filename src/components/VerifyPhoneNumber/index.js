@@ -1,18 +1,20 @@
 import VerifyPhoneNumber from "./VerifyPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {ClaimUsername, InviteFriends} from "../../actions/waitlist"
+import {SmsAuthenticate} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
     return {
       waitlisted: state.general.waitlisted,
-      username: state.general.person.username
+      username: state.waitlist.username,
+      phoneNumber: state.waitlist.phoneNumber,
+      countryName: state.waitlist.countryName
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        ClaimUsername, InviteFriends
+        SmsAuthenticate
     }, dispatch)
 }
 

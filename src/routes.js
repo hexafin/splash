@@ -13,10 +13,8 @@ import {connect} from 'react-redux';
 import {TabNavigator} from "react-navigation"
 
 import Home from "./components/Home"
-import Splash from "./components/Splash"
 import ChooseUsername from "./components/ChooseUsername"
 import Welcome from "./components/Welcome"
-import Coinbase from "./components/Coinbase"
 import ConfirmDetails from "./components/ConfirmDetails"
 import ChoosePassword from "./components/ChoosePassword"
 import ManageFunds from "./components/ManageFunds"
@@ -70,7 +68,7 @@ export default OnboardingRouter = TabNavigator(
     {
         animationEnabled: true,
         swipeEnabled: false,
-        initialRouteName: "EnterPhoneNumber"
+        initialRouteName: "Landing"
     }
 )
 

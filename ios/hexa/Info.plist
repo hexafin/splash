@@ -13,7 +13,7 @@
 	<key>CFBundleIcons~ipad</key>
 	<dict/>
 	<key>CFBundleIdentifier</key>
-	<string>com.hexa-splash</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -36,10 +36,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.hexa-splash.coinbase-oauth</string>
+			<string>com.splash-wallet.coinbase-oauth</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.hexa-splash.coinbase-oauth</string>
+				<string>com.splash-wallet.coinbase-oauth</string>
 			</array>
 		</dict>
 		<dict>
@@ -49,7 +49,7 @@
 			<string>Deep Link</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.hexa-splash</string>
+				<string>com.splash-wallet</string>
 			</array>
 		</dict>
 	</array>

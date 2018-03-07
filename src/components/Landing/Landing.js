@@ -1,17 +1,9 @@
 import React, {Component} from "react"
-import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity
-} from "react-native"
+import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
-import { Linking } from 'react-native'
-import { Field } from 'redux-form'
 import {Input} from "../universal/Input"
-
+import {Linking} from 'react-native'
 
 class Landing extends Component {
 
@@ -37,65 +29,57 @@ class Landing extends Component {
   };
     render() {
 
-        return (
-            <View style={styles.container}>
+        return (<View style={styles.container}>
 
-                <Image style={styles.wavesImage}
-                    source={require("../../assets/images/waves.png")}/>
+            <Image style={styles.wavesImage} source={require("../../assets/images/waves.png")}/>
 
-                {!this.props.splashtagOnHold && <View style={styles.header}>
-                    <View style={styles.centerLogoWrapper}>
-                        <Image source={icons.splash}
-                            style={styles.logo}/>
-                        <Text style={styles.logoText}>Splash</Text>
-                    </View>
-                    <View style={styles.slogan}>
-                        <Text style={styles.sloganText}>
-                            Splash is your wallet
-                        </Text>
-                        <Text style={styles.sloganSubText}>
-                            Make it personal with a splashtag
-                        </Text>
-                    </View>
-                </View>}
-
-                {this.props.splashtagOnHold && <View style={styles.claimedHeader}>
-                    <View style={styles.leftLogoWrapper}>
-                        <Image source={icons.splash}
-                            style={styles.logo}/>
-                        <Text style={styles.logoText}>Splash</Text>
-                    </View>
-                    <View style={styles.slogan}>
-                        <Text style={styles.sloganText}>
-                            Welcome,
-                        </Text>
-                        <Text style={styles.sloganText}>
-                            @{this.props.splashtagOnHold}
-                        </Text>
-                    </View>
-                    <Input
-                        input={{style: styles.splashField}}
-                        name='splashtag' placeholder={this.props.splashtagOnHold}
-                        autoCapitalize="none" spellCheck={false}
-                        autoFocus={false}
-                        />
-                </View>}
-
-
-                <View style={styles.floating}></View>
-
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.footerButton}
-                        onPress={() => {this.props.navigation.navigate("ChooseSplashtag")}}>
-                        <Text style={styles.footerButtonText}>
-                            Claim your splashtag
-                        </Text>
-                    </TouchableOpacity>
+            {!this.props.splashtagOnHold && <View style={styles.header}>
+                <View style={styles.logoWrapper}>
+                    <Image source={require("../../assets/images/splash-logo.png")} style={styles.logo}/>
+                    <Text style={styles.logoText}>Splash</Text>
                 </View>
+                <View style={styles.slogan}>
+                    <Text style={styles.sloganText}>
+                        Splash is your wallet
+                    </Text>
+                    <Text style={styles.sloganSubText}>
+                        Make it personal with a splashtag
+                    </Text>
+                </View>
+            </View>}
 
+            {this.props.splashtagOnHold && <View style={styles.claimedHeader}>
+                <View style={styles.leftLogoWrapper}>
+                    <Image source={require("../../assets/images/splash-logo.png")}
+                        style={styles.logo}/>
+                    <Text style={styles.logoText}>Splash</Text>
+                </View>
+                <View style={styles.slogan}>
+                    <Text style={styles.sloganText}>
+                        Welcome,
+                    </Text>
+                    <Text style={styles.sloganText}>
+                        @{this.props.splashtagOnHold}
+                    </Text>
+                    <Text style={styles.sloganSubText}>
+                        Nice to see you again!
+                    </Text>
+                </View>
+            </View>}
 
+            <View style={styles.floating}></View>
+
+            <View style={styles.footer}>
+                <TouchableOpacity style={styles.footerButton} onPress={() => {
+                        this.props.navigation.navigate("ChooseSplashtag")
+                    }}>
+                    <Text style={styles.footerButtonText}>
+                        Claim your splashtag
+                    </Text>
+                </TouchableOpacity>
             </View>
-        )
+
+        </View>)
 
     }
 
@@ -118,7 +102,7 @@ const styles = StyleSheet.create({
     header: {
         flex: 1,
         padding: 30,
-        flexDirection: "column",
+        flexDirection: "column"
     },
     claimedHeader: {
         flex: 1,

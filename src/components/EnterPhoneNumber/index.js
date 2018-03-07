@@ -1,7 +1,7 @@
 import EnterPhoneNumber from "./EnterPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {ClaimUsername, InviteFriends} from "../../actions/waitlist"
+import {SmsAuthenticate} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
 
@@ -23,7 +23,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        ClaimUsername, InviteFriends
+        SmsAuthenticate
     }, dispatch)
 }
 

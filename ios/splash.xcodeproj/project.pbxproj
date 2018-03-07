@@ -14,7 +14,6 @@
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		00E356F31AD99517003FC87E /* hexaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hexaTests.m */; };
 		080CFF092022D41A007AA6C8 /* ios_splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 080CFF082022D41A007AA6C8 /* ios_splash.png */; };
-		081742C01FBBFF91007AE047 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */; };
 		08202C181FD38E89003EEEB3 /* libRCTFBLogin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202BF71FD38DDE003EEEB3 /* libRCTFBLogin.a */; };
 		08202C1D1FD38F26003EEEB3 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */; };
 		08202C1E1FD38F26003EEEB3 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */; };
@@ -54,6 +53,7 @@
 		7554170F24854729801A72A8 /* AvenirNextLTPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2F704CF9B1A44B69DAB8EF4 /* AvenirNextLTPro-Regular.otf */; };
 		800485871FF7713300A72B72 /* CoinbaseApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 800485851FF7713100A72B72 /* CoinbaseApi.m */; };
 		8037186220424187001C8843 /* FirebaseDynamicLinks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8037183520424186001C8843 /* FirebaseDynamicLinks.framework */; };
+		80378976204F925500D9FA0F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 80378975204F925500D9FA0F /* GoogleService-Info.plist */; };
 		8043B9F51FD37D0600AA4F4B /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8043B9F41FD37D0600AA4F4B /* fontello.ttf */; };
 		8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8063032E202AD32B00EEF03C /* libCodePush.a */; };
 		80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80703ED9202673BF00A59434 /* libRNFIRMessaging.a */; };
@@ -407,7 +407,6 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hexaTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hexaTests.m; sourceTree = "<group>"; };
 		080CFF082022D41A007AA6C8 /* ios_splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ios_splash.png; sourceTree = "<group>"; };
-		0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "hexa/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		08202BED1FD38DDE003EEEB3 /* RCTFBLogin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTFBLogin.xcodeproj; path = "../node_modules/react-native-facebook-login/RCTFBLogin.xcodeproj"; sourceTree = "<group>"; };
 		08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKShareKit.framework"; sourceTree = "<group>"; };
@@ -448,6 +447,7 @@
 		800485851FF7713100A72B72 /* CoinbaseApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinbaseApi.m; sourceTree = "<group>"; };
 		800485861FF7713200A72B72 /* CoinbaseApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinbaseApi.h; sourceTree = "<group>"; };
 		8037183520424186001C8843 /* FirebaseDynamicLinks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseDynamicLinks.framework; path = Pods/FirebaseDynamicLinks/Frameworks/FirebaseDynamicLinks.framework; sourceTree = SOURCE_ROOT; };
+		80378975204F925500D9FA0F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8043B9F41FD37D0600AA4F4B /* fontello.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fontello.ttf; sourceTree = "<group>"; };
 		8043ED9336E5474986803186 /* libUdpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUdpSockets.a; sourceTree = "<group>"; };
 		8063032E202AD32B00EEF03C /* libCodePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCodePush.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -683,9 +683,9 @@
 				087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */,
 				08890FA7202293AC00F154AD /* assets */,
 				08861E3C20228FAA00DD4DFF /* main.jsbundle */,
-				0817429B1FBBFF91007AE047 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				80378975204F925500D9FA0F /* GoogleService-Info.plist */,
 				080CFF082022D41A007AA6C8 /* ios_splash.png */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -979,7 +979,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = N4L736JEYW;
+						DevelopmentTeam = V47Y6U6RZY;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1431,7 +1431,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				08861E3D20228FAA00DD4DFF /* main.jsbundle in Resources */,
-				081742C01FBBFF91007AE047 /* GoogleService-Info.plist in Resources */,
 				D6FD19E3C6964925921A467E /* Entypo.ttf in Resources */,
 				1FB0AA4B14064786849F1BEB /* EvilIcons.ttf in Resources */,
 				315D36E289384DB689635150 /* Feather.ttf in Resources */,
@@ -1448,6 +1447,7 @@
 				3D9B063A65F443A6AAA77496 /* Octicons.ttf in Resources */,
 				2B1A87801DA546B085939E3A /* SimpleLineIcons.ttf in Resources */,
 				85BBFAFEEF22476FBE95A6E4 /* Zocial.ttf in Resources */,
+				80378976204F925500D9FA0F /* GoogleService-Info.plist in Resources */,
 				D2BCCAB4F84449CE9474DA77 /* AvenirNextLTPro-Bold.otf in Resources */,
 				7554170F24854729801A72A8 /* AvenirNextLTPro-Regular.otf in Resources */,
 			);
@@ -1759,7 +1759,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = N4L736JEYW;
+				DEVELOPMENT_TEAM = V47Y6U6RZY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
@@ -1786,7 +1786,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hexa-splash";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.splash-wallet";
 				PRODUCT_NAME = splash;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1803,7 +1803,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = N4L736JEYW;
+				DEVELOPMENT_TEAM = V47Y6U6RZY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
@@ -1830,7 +1830,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hexa-splash";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.splash-wallet";
 				PRODUCT_NAME = splash;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";

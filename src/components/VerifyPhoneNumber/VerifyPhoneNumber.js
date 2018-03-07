@@ -4,32 +4,72 @@ import {
     Text,
     StyleSheet,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Keyboard,
+    KeyboardAvoidingView,
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
+import FlatBackButton from "../universal/FlatBackButton"
+import Button from "../universal/Button"
+import NumericCodeInput from "../universal/NumericCodeInput"
 
 class VerifyPhoneNumber extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            code: ""
+        }
+    }
+
     render() {
 
-        return (
-            <View style={styles.container}>
+        return (<KeyboardAvoidingView style={styles.container} behavior={"height"}>
 
-                <Image style={styles.wavesImage}
-                    source={require("../../assets/images/waves.png")}/>
+            <View style={styles.body}>
 
-                <View style={styles.header}>
-                    <View style={styles.logoWrapper}>
-                        <Image source={icons.splash}
-                            style={styles.logo}/>
-                        <Text style={styles.logoText}>Splash</Text>
+                <Text style={styles.title}>
+                    Enter the 6-digit code{"\n"}
+                    we just texted you
+                </Text>
+
+                <View>
+                    <NumericCodeInput autoFocus={true} callback={(code) => {
+                        this.setState((prevState) => {
+                            return {
+                                ...prevState,
+                                code: code
+                            }
+                        })
+                    }}/>
+
+                    <View style={styles.resendWrapper}>
+                        <Text style={styles.resendText}>Didn{"'"}t get your code?</Text>
+                        <Button
+                            onPress={() => {
+                                this.props.SmsAuthenticate(this.props.phoneNumber, this.props.countryName)
+                            }} style={styles.resendButton} title={"Resend"}
+                            primary={false} small/>
                     </View>
                 </View>
 
+                <Button onPress={() => {
+                        // TODO: sms authentication function
+                        console.log(this.state)
+                        Keyboard.dismiss()
+                        this.props.navigation.navigate("Waitlisted")
+                    }} style={styles.footerButton} title={"Claim splashtag"}
+                    primary={true}
+                    disabled={this.state.code.length < 6}/>
 
             </View>
-        )
+
+            <FlatBackButton onPress={() => {
+                Keyboard.dismiss()
+                this.props.navigation.navigate("EnterPhoneNumber")
+            }}/>
+        </KeyboardAvoidingView>)
 
     }
 
@@ -39,37 +79,35 @@ const styles = StyleSheet.create({
     container: {
         ...defaults.container,
         justifyContent: "space-between",
-        position: "relative"
+        position: "relative",
+        paddingBottom: 0,
+        paddingTop: 80
     },
-    wavesImage: {
-        position: "absolute",
-        bottom: -50,
-        left: 0,
-        right: 0,
-        width: 400,
-        height: 400
-    },
-    header: {
+    body: {
         flex: 1,
-        padding: 30,
+        padding: 20,
         flexDirection: "column",
+        justifyContent: "space-between"
     },
-    logoWrapper: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 30
+    title: {
+        fontSize: 30,
+        fontWeight: '500',
+        color: colors.nearBlack,
+        marginBottom: 20,
+        textAlign: "center"
     },
-    logo: {
-        height: 36,
-        width: 28,
-        marginRight: 10
+    resendWrapper: {
+        flexDirection: 'row',
+        marginTop: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    logoText: {
-        fontSize: 28,
-        paddingBottom: 4,
-        fontWeight: '400',
-        color: colors.nearBlack
+    resendText: {
+        fontSize: 18,
+        color: colors.lightGray
+    },
+    resendButton: {
+        marginLeft: 10,
     }
 })
 

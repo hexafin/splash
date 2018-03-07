@@ -21,8 +21,8 @@ export function claimUsernameFailure(error) {
 }
 
 export const SMS_AUTH_INIT = "SMS_AUTH_INIT"
-export function smsAuthInit() {
-    return {type: SMS_AUTH_INIT}
+export function smsAuthInit(phoneNumber, countryName) {
+    return {type: SMS_AUTH_INIT, phoneNumber, countryName}
 }
 
 export const SMS_AUTH_SUCCESS = "SMS_AUTH_SUCCESS"
@@ -35,21 +35,20 @@ export function smsAuthFailure(error) {
     return {type: SMS_AUTH_FAILURE, error}
 }
 
-export const SPLASHTAG_ON_HOLD = "SPLASHTAG_ON_HOLD"
+export const HOLD_SPLASHTAG = "SPLASHTAG_ON_HOLD"
 export function holdSplashtag(splashtag, phoneNumber) {
-    return {type: SPLASHTAG_ON_HOLD, splashtag, phoneNumber}
+    return {type: HOLD_SPLASHTAG, splashtag, phoneNumber}
 }
 
 export const ClaimUsername = (username) => {
-    return (dispatch, getState) => {
+    return(dispatch, getState) => {
         dispatch(claimUsernameInit())
 
         // check to see if username is available
         api.CheckUsername(username).then(exists => {
             if (exists) {
                 dispatch(claimUsernameFailure("taken"))
-            }
-            else {
+            } else {
                 // TODO: create waitlist entry with username
                 // firestore.collection("waitlist")
                 dispatch(claimUsernameSuccess(username))
@@ -61,12 +60,21 @@ export const ClaimUsername = (username) => {
 }
 
 export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
-  return (dispatch, getState) => {
-    const state = getState()
-    if (!(splashtag == state.waitlist.splashtagOnHold && phoneNumber == state.waitlist.phoneNumber)) {
-      dispatch(holdSplashtag(splashtag, phoneNumber))
+    return(dispatch, getState) => {
+        const state = getState()
+        if (!(splashtag == state.waitlist.splashtagOnHold && phoneNumber == state.waitlist.phoneNumber)) {
+            dispatch(holdSplashtag(splashtag, phoneNumber))
+        }
     }
-  }
+}
+
+export const SmsAuthenticate = (phoneNumber, countryName) => {
+    return(dispatch, getState) => {
+        const state = getState()
+        dispatch(smsAuthInit(phoneNumber, countryName))
+        // TODO:
+
+    }
 }
 
 export const InviteFriends = () => {}
