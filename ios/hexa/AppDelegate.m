@@ -74,7 +74,7 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
 //   sourceApplication:(NSString *)sourceApplication
 //          annotation:(id)annotation {
 //   BOOL success = NO;
-//   if ([[url scheme] isEqualToString:@"com.hexa-splash.coinbase-oauth"]) {
+//   if ([[url scheme] isEqualToString:@"com.splash-wallet.coinbase-oauth"]) {
 //     [CoinbaseOAuth finishOAuthAuthenticationForUrl:url
 //                                           clientId:[CoinbaseApi getClientId]
 //                                       clientSecret:[CoinbaseApi getClientSecret]

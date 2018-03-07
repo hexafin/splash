@@ -2,39 +2,38 @@ import React, {Component} from "react"
 import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
-import {Linking, AppState} from 'react-native'
+import {Input} from "../universal/Input"
+import {Linking} from 'react-native'
 
 class Landing extends Component {
 
-    componentDidMount() {
-        AppState.addEventListener('change', this.handleAppStateChange);
-        Linking.getInitialURL().then(url => this.handleDeepLink(url));
+  componentDidMount() {
+    Linking.addEventListener('url', this.handleDeepLink);
+    Linking.getInitialURL().then(url => this.handleDeepLink({url}));
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this.handleDeepLink);
+  }
+
+  handleDeepLink = (event) => {
+    if (event.url) {
+      const parts = (event.url).split('/')
+      const splashtag = parts[6]
+      const phoneNumber = (parts[7]).split('&')[0]
+      console.log(event.url);
+      if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
+        this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
+      }
     }
-
-    componentWillUnmount() {
-        AppState.removeEventListener('change', this.handleAppStateChange);
-    }
-
-    handleAppStateChange = (currentAppState) => {
-        Linking.getInitialURL().then(url => this.handleDeepLink(url));
-    };
-
-    handleDeepLink = (url) => {
-        const parts = url.split('/')
-        const splashtag = parts[6]
-        const phoneNumber = (parts[7]).split('&')[0]
-
-        if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
-            this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
-        }
-    };
+  };
     render() {
 
         return (<View style={styles.container}>
 
             <Image style={styles.wavesImage} source={require("../../assets/images/waves.png")}/>
 
-            <View style={styles.header}>
+            {!this.props.splashtagOnHold && <View style={styles.header}>
                 <View style={styles.logoWrapper}>
                     <Image source={require("../../assets/images/splash-logo.png")} style={styles.logo}/>
                     <Text style={styles.logoText}>Splash</Text>
@@ -47,7 +46,26 @@ class Landing extends Component {
                         Make it personal with a splashtag
                     </Text>
                 </View>
-            </View>
+            </View>}
+
+            {this.props.splashtagOnHold && <View style={styles.claimedHeader}>
+                <View style={styles.leftLogoWrapper}>
+                    <Image source={require("../../assets/images/splash-logo.png")}
+                        style={styles.logo}/>
+                    <Text style={styles.logoText}>Splash</Text>
+                </View>
+                <View style={styles.slogan}>
+                    <Text style={styles.sloganText}>
+                        Welcome,
+                    </Text>
+                    <Text style={styles.sloganText}>
+                        @{this.props.splashtagOnHold}
+                    </Text>
+                    <Text style={styles.sloganSubText}>
+                        Nice to see you again!
+                    </Text>
+                </View>
+            </View>}
 
             <View style={styles.floating}></View>
 
