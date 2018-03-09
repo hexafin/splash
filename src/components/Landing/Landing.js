@@ -3,30 +3,46 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import {Input} from "../universal/Input"
-import {Linking} from 'react-native'
+import firebase from 'react-native-firebase'
 
 class Landing extends Component {
 
   componentDidMount() {
-    Linking.addEventListener('url', this.handleDeepLink);
-    Linking.getInitialURL().then(url => this.handleDeepLink({url}));
-  }
 
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this.handleDeepLink);
+    // if (this.props.smsAuthenticated) {
+    //   this.props.navigation.navigate("Waitlisted")
+    // }
+
+    firebase.links().getInitialLink().then((url) => {
+        if(url) {
+          this.handleDeepLink({'url': url})
+        }
+    });
   }
 
   handleDeepLink = (event) => {
     if (event.url) {
       const parts = (event.url).split('/')
-      const splashtag = parts[6]
-      const phoneNumber = (parts[7]).split('&')[0]
-      console.log(event.url);
+      const splashtag = parts[3]
+      const phoneNumber = parts[4]
+
       if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
         this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
       }
     }
   };
+
+  handleClaim = () => {
+    if (this.props.splashtagOnHold && this.props.phoneNumber) {
+      this.props.SmsAuthenticate(this.props.phoneNumber, null)
+    } else if (this.props.splashtagOnHold) {
+      this.props.navigation.navigate("EnterPhoneNumber")
+    } else {
+      this.props.navigation.navigate("ChooseSplashtag")
+    }
+  }
+
+
     render() {
 
         return (<View style={styles.container}>
@@ -70,9 +86,7 @@ class Landing extends Component {
             <View style={styles.floating}></View>
 
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.footerButton} onPress={() => {
-                        this.props.navigation.navigate("ChooseSplashtag")
-                    }}>
+                <TouchableOpacity style={styles.footerButton} onPress={this.handleClaim}>
                     <Text style={styles.footerButtonText}>
                         Claim your splashtag
                     </Text>

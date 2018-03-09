@@ -1,7 +1,7 @@
 import VerifyPhoneNumber from "./VerifyPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {SmsAuthenticate} from "../../actions/waitlist"
+import {SmsConfirm, SmsAuthenticate} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
     return {
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        SmsAuthenticate
+        SmsConfirm, SmsAuthenticate
     }, dispatch)
 }
 

@@ -93,7 +93,6 @@ class EnterPhoneNumber extends Component {
 
                             // navigate to next page
                             Keyboard.dismiss()
-                            this.props.navigation.navigate("VerifyPhoneNumber")
 
 
                         }).catch(error => {

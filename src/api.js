@@ -11,26 +11,11 @@ const SATOSHI_CONVERSION = 100000000;
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
         // check if a person (signed up or waitlisted) already has the username
-        firestore.collection("people").where("username", "=", username).get().then(checkUsername => {
-            if (checkUsername.empty) {
-                // now check waitlist
-                firestore.collection("waitlist").where("username", "=", username).get().then(checkUsername => {
-                    if (checkUsername.empty) {
-                        console.log("check", checkUsername)
-                        resolve(false)
-                    }
-                    else {
-                        resolve(true)
-                    }
-                })
-            }
-            else {
-                resolve(true)
-            }
-
+        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+username).then(response => {
+          resolve(response.data)
         }).catch(error => {
-            reject(error)
-        });
+          reject(error)
+        })
     })
 }
 
@@ -59,8 +44,8 @@ function NewBitcoinWallet() {
 }
 
 const NewAccount = (uid, {
-    username, firstName, lastName, email, facebookId, defaultCurrency = "USD",
-    address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null,
+    username, firstName = null, lastName = null, email = null, facebookId = null, defaultCurrency = "USD",
+    address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null, push_token = null,
     coinbaseId = null
 }) => {
 
@@ -78,8 +63,8 @@ const NewAccount = (uid, {
             facebook_id: facebookId,
             coinbase_id: coinbaseId,
             default_currency: defaultCurrency,
-            push_token: null
-            // phone_number: phoneNumber,
+            push_token: push_token,
+            phone_number: phoneNumber,
             // address: address,
             // city: city,
             // state: state,
