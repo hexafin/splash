@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     Image,
+    Alert,
     TouchableOpacity,
     KeyboardAvoidingView,
     Keyboard
@@ -25,7 +26,8 @@ class EnterPhoneNumber extends Component {
                 countryFlag: "",
                 countryCode: "",
                 number: ""
-            }
+            },
+            isLoading: false
         }
     }
 
@@ -36,22 +38,21 @@ class EnterPhoneNumber extends Component {
     }
 
     render() {
-        return (
-            <KeyboardAvoidingView style={styles.container} behavior={"height"}>
+        return (<KeyboardAvoidingView style={styles.container} behavior={"height"}>
 
-                <View style={styles.body}>
+            <View style={styles.body}>
 
-                    <Text style={styles.title}>
-                        Welcome,{"\n"}
-                        @{this.props.splashtag}
-                    </Text>
+                <Text style={styles.title}>
+                    Welcome,{"\n"}
+                    @{this.props.splashtag}
+                </Text>
 
-                    <Text style={styles.subtitle}>
-                        Verify your number to claim{"\n"}
-                        your splashtag
-                    </Text>
+                <Text style={styles.subtitle}>
+                    Verify your number to claim{"\n"}
+                    your splashtag
+                </Text>
 
-                    <PhoneNumberInput autoFocus={true} callback={(phoneNumber) => {
+                <PhoneNumberInput autoFocus={true} callback={(phoneNumber) => {
                         this.setState((prevState) => {
                             return {
                                 ...prevState,
@@ -60,36 +61,77 @@ class EnterPhoneNumber extends Component {
                         })
                     }}/>
 
-                   <Text style={styles.description}>
-                       We{"'"}ll text you a verification code{"\n"}
-                       to make sure it's you
-                   </Text>
+                <Text style={styles.description}>
+                    We{"'"}ll text you a verification code{"\n"}
+                    to make sure it{"'"}s you
+                </Text>
 
-                   <Button
-                       onPress={() => {
-                           // remove spaces from phone number
-                           var fullNumber = this.state.phoneNumber.countryCode + this.state.phoneNumber.number
-                           fullNumber = fullNumber.replace(/\s/g, '')
-                           // intitiate authentication process
-                           this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName)
-                           
-                           Keyboard.dismiss()
-                           this.props.navigation.navigate("VerifyPhoneNumber")
-                       }}
-                       style={styles.footerButton} title={"Text me the code"}
-                       primary={true}
-                       disabled={this.state.phoneNumber.number.length < 12}/>
+                <Button onPress={() => {
 
-                </View>
+                        // remove spaces from phone number
+                        var fullNumber = this.state.phoneNumber.countryCode + this.state.phoneNumber.number
+                        fullNumber = fullNumber.replace(/\s/g, '')
+
+                        // initiate animation
+                        this.setState((prevState) => {
+                            return {
+                                ...prevState,
+                                isLoading: true
+                            }
+                        })
+
+                        // intitiate authentication process
+                        this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName).then(result => {
+                            console.log("SmsAuthenticate: ", result)
+                            // stop animation
+                            this.setState((prevState) => {
+                                return {
+                                    ...prevState,
+                                    isLoading: false
+                                }
+                            })
+
+                            // navigate to next page
+                            Keyboard.dismiss()
+                            this.props.navigation.navigate("VerifyPhoneNumber")
 
 
+                        }).catch(error => {
+                            // stop animation
+                            this.setState((prevState) => {
+                                return {
+                                    ...prevState,
+                                    isLoading: false
+                                }
+                            })
 
-                <FlatBackButton onPress={() => {
+                            // alert error
+                            Alert.alert('An error occurred!', 'Ugh! Sorry about this. Our team has been notified and we should fix this shortly!', [
+                                {
+                                    text: 'Cancel',
+                                    onPress: () => console.log('Cancel Pressed'),
+                                    style: 'cancel'
+                                }, {
+                                    text: 'Ok',
+                                    onPress: () => console.log('OK Pressed')
+                                }
+                            ])
+                            console.error("SmsAuthenticateError: ", error)
+                        })
+
+                    }} style={styles.footerButton}
+                    title={"Text me the code"}
+                    primary={true} loading={true}
+                    loading={this.state.isLoading}
+                    disabled={this.state.phoneNumber.number.length < 12}/>
+
+            </View>
+
+            <FlatBackButton onPress={() => {
                     // Keyboard.dismiss()
                     this.props.navigation.navigate("ChooseSplashtag")
                 }}/>
-            </KeyboardAvoidingView>
-        )
+        </KeyboardAvoidingView>)
 
     }
 
@@ -132,6 +174,5 @@ const styles = StyleSheet.create({
         zIndex: 40
     }
 })
-
 
 export default EnterPhoneNumber
