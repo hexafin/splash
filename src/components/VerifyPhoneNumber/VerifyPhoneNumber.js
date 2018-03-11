@@ -56,9 +56,8 @@ class VerifyPhoneNumber extends Component {
 
                 <Button onPress={() => {
                         // TODO: sms authentication function
-                        console.log(this.state)
                         Keyboard.dismiss()
-                        this.props.navigation.navigate("Waitlisted")
+                        this.props.SmsConfirm(this.state.code)
                     }} style={styles.footerButton} title={"Claim splashtag"}
                     primary={true}
                     disabled={this.state.code.length < 6}/>

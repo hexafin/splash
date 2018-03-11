@@ -9,7 +9,10 @@ import {
     CLAIM_USERNAME_INIT,
     CLAIM_USERNAME_SUCCESS,
     CLAIM_USERNAME_FAILURE,
-    HOLD_SPLASHTAG
+    HOLD_SPLASHTAG,
+    SMS_CONFIRM_INIT,
+    SMS_CONFIRM_SUCCESS,
+    SMS_CONFIRM_FAILURE
 } from "../actions/waitlist.js"
 
 const initialState = {
@@ -22,6 +25,8 @@ const initialState = {
     phoneNumber: null,
     countryName: null,
     smsAuthenticated: false,
+    isSmsConfirming: false,
+    errorSmsConfirming: null,
     waitlisted: true
 }
 
@@ -59,6 +64,7 @@ export default function waitlistReducer(state = initialState, action) {
             return {
                 ...state,
                 isSmsAuthenticating: true,
+                smsAuthenticated: false,
                 phoneNumber: action.phoneNumber,
                 countryName: action.countryName
             }
@@ -67,7 +73,6 @@ export default function waitlistReducer(state = initialState, action) {
             return {
                 ...state,
                 isSmsAuthenticating: false,
-                smsAuthenticated: true,
                 smsAuthenticationToken: action.token
             }
 
@@ -77,6 +82,27 @@ export default function waitlistReducer(state = initialState, action) {
                 isSmsAuthenticating: false,
                 errorSmsAuthenticating: action.error
             }
+
+        case SMS_CONFIRM_INIT:
+            return {
+                ...state,
+                isSmsConfirming: true,
+            }
+
+        case SMS_CONFIRM_SUCCESS:
+            return {
+                ...state,
+                isSmsConfirming: false,
+                smsAuthenticated: true,
+            }
+
+        case SMS_CONFIRM_FAILURE:
+            return {
+                ...state,
+                isSmsConfirming: false,
+                errorSmsConfirming: action.error
+            }
+
 
         default:
             return state

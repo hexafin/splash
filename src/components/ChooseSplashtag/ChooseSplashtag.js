@@ -17,6 +17,7 @@ import { Field, reduxForm } from 'redux-form'
 import axios from "axios"
 import api from "../../api"
 import LoadingCircle from "../universal/LoadingCircle"
+import debounce from 'lodash/debounce';
 
 const lower = value => value && value.toLowerCase()
 
@@ -25,13 +26,16 @@ class ChooseSplashtag extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            splashtagAvailable: null,
+            splashtagAvailable: {available: null, availableWaitlist: null, availableUser: null, validSplashtag: null},
             errorCheckingSplashtag: null,
             checkingSplashtag: false
         }
+        this.checkSplashtag = this.checkSplashtag.bind(this);
+        this.debouncedOnChange = debounce(this.checkSplashtag, 100);
     }
 
     checkSplashtag(splashtag) {
+        console.log('here',splashtag);
         this.setState((prevState) => {
             return {
                 ...prevState,
@@ -42,7 +46,7 @@ class ChooseSplashtag extends Component {
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    splashtagAvailable: response.data.available,
+                    splashtagAvailable: response.data,
                     checkingSplashtag: false,
                     errorCheckingSplashtag: false
                 }
@@ -64,11 +68,33 @@ class ChooseSplashtag extends Component {
 
     render() {
 
-        const splashtagCorrectlyFormatted = this.props.splashtag.length >= 3
-            && this.props.splashtag.length <= 15
-            && !(this.props.splashtag.indexOf(' ') > -1)
+        const splashtagCorrectlyFormatted = /^[a-z0-9_-]{3,15}$/.test(this.props.splashtag)
 
-        const splashtagWorks = splashtagCorrectlyFormatted && this.state.splashtagAvailable
+        const splashtagWorks = splashtagCorrectlyFormatted && this.state.splashtagAvailable.available
+
+        let buttonTitle = "Choose your splashtag"
+        if (this.props.splashtag.length < 3 && this.props.splashtag.length != 0) {
+          buttonTitle = "Too short"
+        }
+        else if (this.props.splashtag.length > 15) {
+          buttonTitle = "Too Long"
+        } else if (this.props.splashtag.length != 0){
+          if (this.state.checkingSplashtag) {
+              buttonTitle = "Checking..."
+          }
+          else if (splashtagWorks) {
+              buttonTitle = "Claim splashtag"
+          }
+          else if (!this.state.splashtagAvailable.validSplashtag) {
+            buttonTitle = "Please only use letters and numbers"
+          }
+          else if (!this.state.splashtagAvailable.availableWaitlist || !this.state.splashtagAvailable.availableUser) {
+              buttonTitle = "Splashtag already taken"
+          }
+          else if(this.state.errorCheckingSplashtag) {
+              buttonTitle = "Ugh! There was an error 🤭"
+          }
+        }
 
         return (
             <KeyboardAvoidingView style={styles.container} behavior={"height"}>
@@ -86,22 +112,27 @@ class ChooseSplashtag extends Component {
                     <Field
                         style={[
                             styles.splashtag,
-                            this.state.splashtagAvailable ? styles.posField : styles.negField
+                            this.state.splashtagAvailable.available ? styles.posField : styles.negField
                         ]}
                         name='splashtag' placeholder='Choose splashtag' component={Input}
                         autoCapitalize="none" autoCorrect={false} spellCheck={false}
                         autoFocus={this.props.splashtag == ""} normalize={lower}
-                        onChange={(e) => {
-                            this.checkSplashtag(e)
-                        }}/>
+                        onChange={this.debouncedOnChange}
+                        />
 
                     <Button
                         onPress={() => {
                             Keyboard.dismiss()
-                            this.props.navigation.navigate("EnterPhoneNumber")
+                            if (splashtagWorks) {
+                              this.props.navigation.navigate("EnterPhoneNumber")
+                            }
                         }}
-                        style={styles.footerButton}
-                        title={"Claim splashtag"}
+                        style={[
+                            styles.footerButton,
+                            this.state.splashtagAvailable.available ? styles.posButton : styles.negButton
+                        ]}
+                        title={buttonTitle}
+                        disabled={!splashtagWorks}
                         primary={true}
                         loading={this.state.checkingSplashtag}
                         disabled={!this.state.splashtagAvailable && this.props.splashtag.length > 0 && !this.state.checkingSplashtag}

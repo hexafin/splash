@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     ringWrapper: {
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 20 
+        padding: 20
     },
     smileSplash: {
         width: 44,

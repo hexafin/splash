@@ -8,6 +8,7 @@ import Routes from './routes'
 import configureStore from "./store/configureStore"
 import { LoadApp } from "./actions/general"
 import Loading from "./components/universal/Loading"
+import NavigatorService from "./actions/navigator"
 
 const { persistor, store } = configureStore()
 
@@ -33,7 +34,9 @@ class App extends Component {
                   loading={<Loading/>}
                   onBeforeLift={() => {LoadApp()}}
                   persistor={persistor}>
-                  <Routes/>
+                  <Routes ref={navigatorRef => {
+                    NavigatorService.setContainer(navigatorRef);
+                  }}/>
                 </PersistGate>
             </Provider>
         )
