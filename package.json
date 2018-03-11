@@ -27,7 +27,6 @@
     "events": "^1.1.1",
     "expo": "^23.0.6",
     "https-browserify": "0.0.1",
-    "lottie-react-native": "^2.3.2",
     "path-browserify": "0.0.0",
     "process": "^0.11.10",
     "prop-types": "^15.6.0",

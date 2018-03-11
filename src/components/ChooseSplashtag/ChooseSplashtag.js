@@ -16,7 +16,6 @@ import {defaults, icons} from "../../lib/styles"
 import { Field, reduxForm } from 'redux-form'
 import axios from "axios"
 import api from "../../api"
-import LoadingCircle from "../universal/LoadingCircle"
 
 const lower = value => value && value.toLowerCase()
 
@@ -58,10 +57,6 @@ class ChooseSplashtag extends Component {
         })
     }
 
-    componentWillMount() {
-        this.checkSplashtag(this.props.splashtag)
-    }
-
     render() {
 
         const splashtagCorrectlyFormatted = this.props.splashtag.length >= 3
@@ -70,13 +65,27 @@ class ChooseSplashtag extends Component {
 
         const splashtagWorks = splashtagCorrectlyFormatted && this.state.splashtagAvailable
 
+        let buttonTitle = "Enter valid splashtag"
+        if (this.state.checkingSplashtag) {
+            buttonTitle = "Checking..."
+        }
+        else if (splashtagWorks) {
+            buttonTitle = "Claim splashtag"
+        }
+        else if (splashtagCorrectlyFormatted) {
+            buttonTitle = "Splashtag already taken"
+        }
+        else if(this.state.errorCheckingSplashtag) {
+            buttonTitle = "Ugh! There was an error 🤭"
+        }
+
         return (
             <KeyboardAvoidingView style={styles.container} behavior={"height"}>
 
                 <View style={styles.body}>
 
                     <Text style={styles.title}>
-                        Let{"'"}s get you setup
+                        Let's get you setup
                     </Text>
 
                     <Text style={styles.description}>
@@ -90,7 +99,7 @@ class ChooseSplashtag extends Component {
                         ]}
                         name='splashtag' placeholder='Choose splashtag' component={Input}
                         autoCapitalize="none" autoCorrect={false} spellCheck={false}
-                        autoFocus={this.props.splashtag == ""} normalize={lower}
+                        autoFocus={true} normalize={lower}
                         onChange={(e) => {
                             this.checkSplashtag(e)
                         }}/>
@@ -100,11 +109,12 @@ class ChooseSplashtag extends Component {
                             Keyboard.dismiss()
                             this.props.navigation.navigate("EnterPhoneNumber")
                         }}
-                        style={styles.footerButton}
-                        title={"Claim splashtag"}
+                        style={[
+                            styles.footerButton,
+                            this.state.splashtagAvailable ? styles.posButton : styles.negButton
+                        ]}
+                        title={buttonTitle}
                         primary={true}
-                        loading={this.state.checkingSplashtag}
-                        disabled={!this.state.splashtagAvailable && this.props.splashtag.length > 0 && !this.state.checkingSplashtag}
                         />
 
                 </View>

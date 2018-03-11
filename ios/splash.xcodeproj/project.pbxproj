@@ -412,8 +412,6 @@
 		08202C1B1FD38F26003EEEB3 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../node_modules/react-native-facebook-login/FacebookSDK/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		0822225E20244688002D9633 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		085650D6204E5F5400AB602D /* liblottie-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "liblottie-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		085650D7204E5F5400AB602D /* liblottie-react-native.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "liblottie-react-native.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		087DB66C2023CAE2003E76D2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = hexa/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		08861E3C20228FAA00DD4DFF /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		08890FA7202293AC00F154AD /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
@@ -616,8 +614,6 @@
 		08202C191FD38EB5003EEEB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				085650D6204E5F5400AB602D /* liblottie-ios.a */,
-				085650D7204E5F5400AB602D /* liblottie-react-native.a */,
 				8063032E202AD32B00EEF03C /* libCodePush.a */,
 				08202C1C1FD38F26003EEEB3 /* FBSDKCoreKit.framework */,
 				08202C1A1FD38F26003EEEB3 /* FBSDKLoginKit.framework */,

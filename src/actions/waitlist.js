@@ -70,12 +70,10 @@ export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
 
 export const SmsAuthenticate = (phoneNumber, countryName) => {
     return(dispatch, getState) => {
-        return new Promise(function(resolve, reject) {
-            const state = getState()
-            dispatch(smsAuthInit(phoneNumber, countryName))
-            // TODO:
-            resolve(true)
-        })
+        const state = getState()
+        dispatch(smsAuthInit(phoneNumber, countryName))
+        // TODO:
+
     }
 }
 
