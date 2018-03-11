@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import {View, Text, StyleSheet, Image, TouchableOpacity} from "react-native"
+import {View, Text, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback} from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import {Input} from "../universal/Input"
@@ -91,7 +91,11 @@ class Landing extends Component {
                         Claim your splashtag
                     </Text>
                 </TouchableOpacity>
+
             </View>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate("ChooseSplashtag")}>
+              <Text style={styles.newSplash}>Or choose a new one...</Text>
+            </TouchableOpacity>
 
         </View>)
 
@@ -184,6 +188,14 @@ const styles = StyleSheet.create({
     },
     splashField: {
       marginTop: 85,
+    },
+    newSplash: {
+      textAlign: 'center',
+      backgroundColor: 'rgba(0,0,0,0)',
+      color: colors.white,
+      textDecorationLine: 'underline',
+      fontSize: 17,
+      paddingBottom: 15
     }
 
 })
