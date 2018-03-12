@@ -35,6 +35,18 @@ class EnterPhoneNumber extends Component {
         if (this.props.splashtag == "") {
             this.props.navigation.navigate("ChooseSplashtag")
         }
+        if (this.props.smsError) {
+          Alert.alert('An error occurred!', 'Ugh! Sorry about this. Our team has been notified and we should fix this shortly!', [
+              {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel'
+              }, {
+                  text: 'Ok',
+                  onPress: () => console.log('OK Pressed')
+              }
+          ])
+        }
     }
 
     render() {
@@ -81,42 +93,8 @@ class EnterPhoneNumber extends Component {
                         })
 
                         // intitiate authentication process
-                        this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName).then(result => {
-                            console.log("SmsAuthenticate: ", result)
-                            // stop animation
-                            this.setState((prevState) => {
-                                return {
-                                    ...prevState,
-                                    isLoading: false
-                                }
-                            })
-
-                            // navigate to next page
-                            Keyboard.dismiss()
-
-
-                        }).catch(error => {
-                            // stop animation
-                            this.setState((prevState) => {
-                                return {
-                                    ...prevState,
-                                    isLoading: false
-                                }
-                            })
-
-                            // alert error
-                            Alert.alert('An error occurred!', 'Ugh! Sorry about this. Our team has been notified and we should fix this shortly!', [
-                                {
-                                    text: 'Cancel',
-                                    onPress: () => console.log('Cancel Pressed'),
-                                    style: 'cancel'
-                                }, {
-                                    text: 'Ok',
-                                    onPress: () => console.log('OK Pressed')
-                                }
-                            ])
-                            console.error("SmsAuthenticateError: ", error)
-                        })
+                        this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName)
+                        Keyboard.dismiss()
 
                     }} style={styles.footerButton}
                     title={"Text me the code"}

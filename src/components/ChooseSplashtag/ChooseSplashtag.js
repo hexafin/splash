@@ -82,7 +82,7 @@ class ChooseSplashtag extends Component {
           if (this.state.checkingSplashtag) {
               buttonTitle = "Checking..."
           }
-          else if (splashtagWorks) {
+          else if (splashtagWorks && this.state.splashtagAvailable.available) {
               buttonTitle = "Claim splashtag"
           }
           else if (!this.state.splashtagAvailable.validSplashtag) {

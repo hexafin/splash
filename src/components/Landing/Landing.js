@@ -9,9 +9,9 @@ class Landing extends Component {
 
   componentDidMount() {
 
-    // if (this.props.smsAuthenticated) {
-    //   this.props.navigation.navigate("Waitlisted")
-    // }
+    if (this.props.smsAuthenticated) {
+      this.props.navigation.navigate("Waitlisted")
+    }
 
     firebase.links().getInitialLink().then((url) => {
         if(url) {
@@ -93,9 +93,9 @@ class Landing extends Component {
                 </TouchableOpacity>
 
             </View>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate("ChooseSplashtag")}>
+            {this.props.splashtagOnHold && <TouchableOpacity onPress={() => this.props.navigation.navigate("ChooseSplashtag")}>
               <Text style={styles.newSplash}>Or choose a new one...</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
 
         </View>)
 

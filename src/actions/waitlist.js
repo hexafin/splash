@@ -65,7 +65,7 @@ export const ClaimUsername = (user) => {
     return(dispatch, getState) => {
         const state = getState()
         let splashtag = state.waitlist.splashtagOnHold
-        if (typeof state.form.chooseSplashtag.values !== 'undefined' && state.form.chooseSplashtag.values.splashtag) {
+        if (typeof state.form.chooseSplashtag !== 'undefined' && state.form.chooseSplashtag.values.splashtag) {
           splashtag = state.form.chooseSplashtag.values.splashtag
         }
 
