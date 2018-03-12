@@ -192,6 +192,7 @@ class PhoneNumberInput extends Component {
                     value={this.state.number}
                     keyboardType={"number-pad"}
                     placeholder={"### ### ####"}
+                    maxLength={12}
                     autoFocus={this.props.autoFocus || false}/>
             </View>
         )

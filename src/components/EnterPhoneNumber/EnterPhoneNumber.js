@@ -35,8 +35,11 @@ class EnterPhoneNumber extends Component {
         if (this.props.splashtag == "") {
             this.props.navigation.navigate("ChooseSplashtag")
         }
-        if (this.props.smsError) {
-          Alert.alert('An error occurred!', 'Ugh! Sorry about this. Our team has been notified and we should fix this shortly!', [
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.smsError != prevProps.smsError && this.props.smsError) {
+          Alert.alert('An error occurred!', 'Sorry about this. Our team has been notified and we should fix this shortly!', [
               {
                   text: 'Cancel',
                   onPress: () => console.log('Cancel Pressed'),

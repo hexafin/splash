@@ -17,7 +17,8 @@ const mapStateToProps = (state) => {
 
     return {
       phoneNumber: phoneNumber,
-      splashtag: splashtag
+      splashtag: splashtag,
+      smsError: state.waitlist.errorSmsAuthenticating,
     }
 }
 

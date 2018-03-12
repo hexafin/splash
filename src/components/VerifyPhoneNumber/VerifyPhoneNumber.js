@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
     Keyboard,
+    Alert,
     KeyboardAvoidingView,
 } from "react-native"
 import {colors} from "../../lib/colors"
@@ -23,6 +24,21 @@ class VerifyPhoneNumber extends Component {
         }
     }
 
+    componentDidUpdate(prevProps) {
+      if((this.props.confirmError != prevProps.confirmError && this.props.confirmError) || (this.props.claimError != prevProps.claimError && this.props.claimError)) {
+        Alert.alert('An error occurred!', 'Sorry about this. Our team has been notified and we should fix this shortly!', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel'
+            }, {
+                text: 'Ok',
+                onPress: () => console.log('OK Pressed')
+            }
+        ])
+      }
+    }
+
     render() {
 
         return (<KeyboardAvoidingView style={styles.container} behavior={"height"}>
@@ -35,7 +51,7 @@ class VerifyPhoneNumber extends Component {
                 </Text>
 
                 <View>
-                    <NumericCodeInput autoFocus={true} callback={(code) => {
+                    <NumericCodeInput size={6} autoFocus={true} callback={(code) => {
                         this.setState((prevState) => {
                             return {
                                 ...prevState,
