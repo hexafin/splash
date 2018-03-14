@@ -1,4 +1,5 @@
 import firebase from 'react-native-firebase'
+import {Sentry} from 'react-native-sentry'
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
@@ -36,7 +37,8 @@ export default function waitlistReducer(state = initialState, action) {
         case CLAIM_USERNAME_INIT:
             return {
                 ...state,
-                isClaimingUsername: true
+                isClaimingUsername: true,
+                errorClaimingUsername: null
             }
 
         case CLAIM_USERNAME_SUCCESS:
@@ -47,6 +49,7 @@ export default function waitlistReducer(state = initialState, action) {
             }
 
         case CLAIM_USERNAME_FAILURE:
+            Sentry.captureMessage(action.error)
             return {
                 ...state,
                 isClaimingUsername: false,
@@ -64,6 +67,8 @@ export default function waitlistReducer(state = initialState, action) {
             return {
                 ...state,
                 isSmsAuthenticating: true,
+                errorSmsAuthenticating: null,
+                errorSmsConfirming: null,
                 smsAuthenticated: false,
                 phoneNumber: action.phoneNumber,
                 countryName: action.countryName
@@ -77,6 +82,7 @@ export default function waitlistReducer(state = initialState, action) {
             }
 
         case SMS_AUTH_FAILURE:
+            Sentry.captureMessage(action.error)
             return {
                 ...state,
                 isSmsAuthenticating: false,
@@ -87,6 +93,7 @@ export default function waitlistReducer(state = initialState, action) {
             return {
                 ...state,
                 isSmsConfirming: true,
+                errorSmsConfirming: null,
             }
 
         case SMS_CONFIRM_SUCCESS:
@@ -97,6 +104,7 @@ export default function waitlistReducer(state = initialState, action) {
             }
 
         case SMS_CONFIRM_FAILURE:
+            Sentry.captureMessage(action.error)
             return {
                 ...state,
                 isSmsConfirming: false,

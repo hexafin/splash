@@ -8,7 +8,9 @@ const mapStateToProps = (state) => {
       waitlisted: state.general.waitlisted,
       username: state.waitlist.username,
       phoneNumber: state.waitlist.phoneNumber,
-      countryName: state.waitlist.countryName
+      countryName: state.waitlist.countryName,
+      confirmError: state.waitlist.errorSmsConfirming,
+      claimError: state.waitlist.errorClaimingUsername,
     }
 }
 

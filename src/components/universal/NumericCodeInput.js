@@ -71,6 +71,7 @@ class NumericCodeInput extends Component {
                     onChangeText={(text) => this.handleCodeChange(text)}
                     keyboardType={"number-pad"}
                     placeholder={placeholder}
+                    maxLength={this.props.size ? this.props.size : 6}
                     autoFocus={this.props.autoFocus || false}
                     value={this.state.code}/>
             </View>
