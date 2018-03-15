@@ -28,6 +28,7 @@
     "expo": "^23.0.6",
     "https-browserify": "0.0.1",
     "lottie-react-native": "^2.3.2",
+    "onchange": "^3.3.0",
     "path-browserify": "0.0.0",
     "process": "^0.11.10",
     "prop-types": "^15.6.0",
@@ -76,7 +77,10 @@
   "devDependencies": {
     "babel-jest": "21.2.0",
     "babel-preset-react-native": "4.0.0",
+    "husky": "^0.14.3",
     "jest": "21.2.1",
+    "prettier": "1.11.1",
+    "pretty-quick": "^1.4.1",
     "react-test-renderer": "16.0.0",
     "redux-devtools": "^3.4.1",
     "rn-nodeify": "github:mvayngrib/rn-nodeify"

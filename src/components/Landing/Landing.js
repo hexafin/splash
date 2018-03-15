@@ -1,106 +1,133 @@
-import React, {Component} from "react"
-import {View, Text, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback} from "react-native"
-import {colors} from "../../lib/colors"
-import {defaults, icons} from "../../lib/styles"
-import {Input} from "../universal/Input"
-import firebase from 'react-native-firebase'
+import React, { Component } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    TouchableWithoutFeedback
+} from "react-native";
+import { colors } from "../../lib/colors";
+import { defaults, icons } from "../../lib/styles";
+import { Input } from "../universal/Input";
+import firebase from "react-native-firebase";
+import AnimatedWaves from "../universal/AnimatedWaves";
 
 class Landing extends Component {
-
-  componentDidMount() {
-
-    if (this.props.smsAuthenticated) {
-      this.props.navigation.navigate("Waitlisted")
-    }
-
-    firebase.links().getInitialLink().then((url) => {
-        if(url) {
-          this.handleDeepLink({'url': url})
+    componentDidMount() {
+        if (this.props.smsAuthenticated) {
+            this.props.navigation.navigate("Waitlisted");
         }
-    });
-  }
 
-  handleDeepLink = (event) => {
-    if (event.url) {
-      const parts = (event.url).split('/')
-      const splashtag = parts[3]
-      const phoneNumber = parts[4]
-
-      if (!(splashtag == this.props.splashtagOnHold && phoneNumber == this.props.phoneNumber)) {
-        this.props.getDeepLinkedSplashtag(splashtag, phoneNumber)
-      }
+        firebase
+            .links()
+            .getInitialLink()
+            .then(url => {
+                if (url) {
+                    this.handleDeepLink({ url: url });
+                }
+            });
     }
-  };
 
-  handleClaim = () => {
-    if (this.props.splashtagOnHold && this.props.phoneNumber) {
-      this.props.SmsAuthenticate(this.props.phoneNumber, null)
-    } else if (this.props.splashtagOnHold) {
-      this.props.navigation.navigate("EnterPhoneNumber")
-    } else {
-      this.props.navigation.navigate("ChooseSplashtag")
-    }
-  }
+    handleDeepLink = event => {
+        if (event.url) {
+            const parts = event.url.split("/");
+            const splashtag = parts[3];
+            const phoneNumber = parts[4];
 
+            if (
+                !(
+                    splashtag == this.props.splashtagOnHold &&
+                    phoneNumber == this.props.phoneNumber
+                )
+            ) {
+                this.props.getDeepLinkedSplashtag(splashtag, phoneNumber);
+            }
+        }
+    };
+
+    handleClaim = () => {
+        if (this.props.splashtagOnHold && this.props.phoneNumber) {
+            this.props.SmsAuthenticate(this.props.phoneNumber, null);
+        } else if (this.props.splashtagOnHold) {
+            this.props.navigation.navigate("EnterPhoneNumber");
+        } else {
+            this.props.navigation.navigate("ChooseSplashtag");
+        }
+    };
 
     render() {
+        return (
+            <View style={styles.container}>
+                <AnimatedWaves/>
 
-        return (<View style={styles.container}>
+                {!this.props.splashtagOnHold && (
+                    <View style={styles.header}>
+                        <View style={styles.logoWrapper}>
+                            <Image
+                                source={require("../../assets/images/splash-logo.png")}
+                                style={styles.logo}
+                            />
+                            <Text style={styles.logoText}>Splash</Text>
+                        </View>
+                        <View style={styles.slogan}>
+                            <Text style={styles.sloganText}>
+                                Splash is your wallet
+                            </Text>
+                            <Text style={styles.sloganSubText}>
+                                Make it personal with a splashtag
+                            </Text>
+                        </View>
+                    </View>
+                )}
 
-            <Image style={styles.wavesImage} source={require("../../assets/images/waves.png")}/>
+                {this.props.splashtagOnHold && (
+                    <View style={styles.claimedHeader}>
+                        <View style={styles.leftLogoWrapper}>
+                            <Image
+                                source={require("../../assets/images/splash-logo.png")}
+                                style={styles.logo}
+                            />
+                            <Text style={styles.logoText}>Splash</Text>
+                        </View>
+                        <View style={styles.slogan}>
+                            <Text style={styles.sloganText}>Welcome,</Text>
+                            <Text style={styles.sloganText}>
+                                @{this.props.splashtagOnHold}
+                            </Text>
+                            <Text style={styles.sloganSubText}>
+                                Nice to see you again!
+                            </Text>
+                        </View>
+                    </View>
+                )}
 
-            {!this.props.splashtagOnHold && <View style={styles.header}>
-                <View style={styles.logoWrapper}>
-                    <Image source={require("../../assets/images/splash-logo.png")} style={styles.logo}/>
-                    <Text style={styles.logoText}>Splash</Text>
+                <View style={styles.floating} />
+
+                <View style={styles.footer}>
+                    <TouchableOpacity
+                        style={styles.footerButton}
+                        onPress={this.handleClaim}
+                    >
+                        <Text style={styles.footerButtonText}>
+                            Claim your splashtag
+                        </Text>
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.slogan}>
-                    <Text style={styles.sloganText}>
-                        Splash is your wallet
-                    </Text>
-                    <Text style={styles.sloganSubText}>
-                        Make it personal with a splashtag
-                    </Text>
-                </View>
-            </View>}
-
-            {this.props.splashtagOnHold && <View style={styles.claimedHeader}>
-                <View style={styles.leftLogoWrapper}>
-                    <Image source={require("../../assets/images/splash-logo.png")}
-                        style={styles.logo}/>
-                    <Text style={styles.logoText}>Splash</Text>
-                </View>
-                <View style={styles.slogan}>
-                    <Text style={styles.sloganText}>
-                        Welcome,
-                    </Text>
-                    <Text style={styles.sloganText}>
-                        @{this.props.splashtagOnHold}
-                    </Text>
-                    <Text style={styles.sloganSubText}>
-                        Nice to see you again!
-                    </Text>
-                </View>
-            </View>}
-
-            <View style={styles.floating}></View>
-
-            <View style={styles.footer}>
-                <TouchableOpacity style={styles.footerButton} onPress={this.handleClaim}>
-                    <Text style={styles.footerButtonText}>
-                        Claim your splashtag
-                    </Text>
-                </TouchableOpacity>
-
+                {this.props.splashtagOnHold && (
+                    <TouchableOpacity
+                        onPress={() =>
+                            this.props.navigation.navigate("ChooseSplashtag")
+                        }
+                    >
+                        <Text style={styles.newSplash}>
+                            Or choose a new one...
+                        </Text>
+                    </TouchableOpacity>
+                )}
             </View>
-            {this.props.splashtagOnHold && <TouchableOpacity onPress={() => this.props.navigation.navigate("ChooseSplashtag")}>
-              <Text style={styles.newSplash}>Or choose a new one...</Text>
-            </TouchableOpacity>}
-
-        </View>)
-
+        );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -126,7 +153,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 30,
         paddingHorizontal: 20,
-        flexDirection: "column",
+        flexDirection: "column"
     },
     logoWrapper: {
         flexDirection: "row",
@@ -148,7 +175,7 @@ const styles = StyleSheet.create({
     logoText: {
         fontSize: 22,
         paddingBottom: 4,
-        fontWeight: '400',
+        fontWeight: "400",
         color: colors.nearBlack
     },
     slogan: {
@@ -159,7 +186,7 @@ const styles = StyleSheet.create({
     },
     sloganText: {
         fontSize: 32,
-        fontWeight: '500',
+        fontWeight: "500",
         color: colors.nearBlack,
         textAlign: "center"
     },
@@ -187,17 +214,16 @@ const styles = StyleSheet.create({
         color: colors.purple
     },
     splashField: {
-      marginTop: 85,
+        marginTop: 85
     },
     newSplash: {
-      textAlign: 'center',
-      backgroundColor: 'rgba(0,0,0,0)',
-      color: colors.white,
-      textDecorationLine: 'underline',
-      fontSize: 17,
-      paddingBottom: 15
+        textAlign: "center",
+        backgroundColor: "rgba(0,0,0,0)",
+        color: colors.white,
+        textDecorationLine: "underline",
+        fontSize: 17,
+        paddingBottom: 15
     }
+});
 
-})
-
-export default Landing
+export default Landing;
