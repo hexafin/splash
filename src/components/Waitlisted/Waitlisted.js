@@ -25,13 +25,13 @@ class Waitlisted extends Component {
 
                 <View style={styles.body}>
                     <Text style={styles.title}>
-                        We{"'"}re excited to have{"\n"}
-                        you onboard!
+                        We{"'"}re excited to have you{"\n"}
+                        onboard!
                     </Text>
                     <Text style={styles.subtitle}>
                         You{"'"}ve claimed your{"\n"}
-                        splashtag and spot on{"\n"}
-                        the waitlist.
+                        splashtag and spot on the{"\n"}
+                        waitlist.
                     </Text>
 
                     <View style={styles.ringWrapper}>
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         ...defaults.container,
         justifyContent: "space-between",
         position: "relative",
-        paddingTop: 40
+        paddingTop: 64
     },
     wavesImage: {
         position: "absolute",
@@ -107,22 +107,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 30,
+        fontSize: 23,
         fontWeight: '500',
         color: colors.nearBlack,
         marginBottom: 20,
         textAlign: "center"
     },
     subtitle: {
-        fontSize: 20,
+        fontSize: 17,
         textAlign: "center",
         color: colors.nearBlack,
-        marginBottom: 20,
+        marginBottom: 10,
     },
     ringWrapper: {
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 20
+        padding: 15
     },
     smileSplash: {
         width: 44,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     },
     splashtag: {
         color: colors.nearBlack,
-        fontSize: 22,
+        fontSize: 20.16,
         fontWeight: '700',
         textAlign: 'center',
         padding: 10

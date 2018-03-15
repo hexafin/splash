@@ -101,13 +101,15 @@ class ChooseSplashtag extends Component {
 
                 <View style={styles.body}>
 
-                    <Text style={styles.title}>
-                        Let{"'"}s get you setup
-                    </Text>
+                    <View>
+                      <Text style={styles.title}>
+                          Let{"'"}s get you setup
+                      </Text>
 
-                    <Text style={styles.description}>
-                        Your splashtag is your unique username, how others find you on Splash
-                    </Text>
+                      <Text style={styles.description}>
+                          Your splashtag is your unique username, how others find you on Splash
+                      </Text>
+                    </View>
 
                     <Field
                         style={[
@@ -116,7 +118,7 @@ class ChooseSplashtag extends Component {
                         ]}
                         name='splashtag' placeholder='Choose splashtag' component={Input}
                         autoCapitalize="none" autoCorrect={false} spellCheck={false}
-                        autoFocus={this.props.splashtag == ""} normalize={lower}
+                        autoFocus={true} normalize={lower}
                         onChange={this.debouncedOnChange}
                         />
 
@@ -176,14 +178,14 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     title: {
-        fontSize: 30,
-        fontWeight: '500',
+        fontSize: 23,
         color: colors.nearBlack,
-        marginBottom: 20,
+        paddingTop: 29,
+        paddingBottom: 10,
         textAlign: "center"
     },
     description: {
-        fontSize: 20,
+        fontSize: 17,
         textAlign: "center",
         color: colors.lightGray,
         marginBottom: 20
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
 
     },
     negButton: {
-        backgroundColor: colors.red
+        backgroundColor: colors.lightGray
     },
     posField: {},
     negField: {}

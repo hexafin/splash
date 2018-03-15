@@ -132,14 +132,13 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     title: {
-        fontSize: 30,
-        fontWeight: '500',
+        fontSize: 29,
         color: colors.nearBlack,
-        marginBottom: 20,
+        marginBottom: 15,
         textAlign: "center"
     },
     subtitle: {
-        fontSize: 20,
+        fontSize: 17,
         textAlign: "center",
         color: colors.nearBlack,
         marginBottom: 20,
