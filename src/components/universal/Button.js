@@ -29,7 +29,7 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
     )
 
 	return (
-			<TouchableOpacity disabled={ disabled }
+			<TouchableOpacity disabled={ disabled || loading }
                     onPress={ onPress }
                     style={[
                         styles.base,
