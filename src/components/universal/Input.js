@@ -8,21 +8,25 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
+import Checkmark from './Checkmark'
 import PropTypes from 'prop-types'
-export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input={}, style={}}) => {
+export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input={}, style={}, checkmark=false}) => {
 
 	return (
+    <View style={styles.input}>
 			<TextInput
 				{...inputProps}
 				onChangeText={ input.onChange }
 				name={name} value={value}
 				placeholder={placeholder}
-				style={[styles.input, input.style, style]}
+				style={[{flex:1, fontSize: 20}, input.style, style]}
 				onBlur={input.onBlur}
 				secureTextEntry={secureTextEntry}
         onFocus={input.onFocus}
         value={input.value}
         />
+        {checkmark && <Checkmark style={{paddingRight: 10}} size={8} />}
+    </View>
 
 		)
 }
@@ -102,7 +106,8 @@ const styles = StyleSheet.create({
 		shadowRadius: defaults.shadowRadius,
 		borderRadius: 5,
 		padding: 20,
-		fontSize: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
 	},
 	multiInput: {
 		padding: 20,
