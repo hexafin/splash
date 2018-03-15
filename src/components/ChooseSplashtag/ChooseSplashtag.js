@@ -17,6 +17,7 @@ import { Field, reduxForm } from 'redux-form'
 import axios from "axios"
 import api from "../../api"
 import LoadingCircle from "../universal/LoadingCircle"
+import Checkmark from "../universal/Checkmark"
 import debounce from 'lodash/debounce';
 
 const lower = value => value && value.toLowerCase()
@@ -35,7 +36,6 @@ class ChooseSplashtag extends Component {
     }
 
     checkSplashtag(splashtag) {
-        console.log('here',splashtag);
         this.setState((prevState) => {
             return {
                 ...prevState,
@@ -78,17 +78,15 @@ class ChooseSplashtag extends Component {
         }
         else if (this.props.splashtag.length > 15) {
           buttonTitle = "Too Long"
-        } else if (this.props.splashtag.length != 0){
-          if (this.state.checkingSplashtag) {
-              buttonTitle = "Checking..."
-          }
-          else if (splashtagWorks && this.state.splashtagAvailable.available) {
+        }
+        else if (this.props.splashtag.length != 0){
+          if (splashtagWorks) {
               buttonTitle = "Claim splashtag"
           }
           else if (!this.state.splashtagAvailable.validSplashtag) {
-            buttonTitle = "Please only use letters and numbers"
+            buttonTitle = "Only use letters and numbers"
           }
-          else if (!this.state.splashtagAvailable.availableWaitlist || !this.state.splashtagAvailable.availableUser) {
+          else if (!this.state.splashtagAvailable.available) {
               buttonTitle = "Splashtag already taken"
           }
           else if(this.state.errorCheckingSplashtag) {
@@ -110,13 +108,10 @@ class ChooseSplashtag extends Component {
                     </Text>
 
                     <Field
-                        style={[
-                            styles.splashtag,
-                            this.state.splashtagAvailable.available ? styles.posField : styles.negField
-                        ]}
                         name='splashtag' placeholder='Choose splashtag' component={Input}
                         autoCapitalize="none" autoCorrect={false} spellCheck={false}
-                        autoFocus={this.props.splashtag == ""} normalize={lower}
+                        autoFocus={true} normalize={lower}
+                        checkmark={this.state.splashtagAvailable.available && this.props.splashtag.length > 0 && !this.state.checkingSplashtag}
                         onChange={this.debouncedOnChange}
                         />
 
@@ -132,10 +127,9 @@ class ChooseSplashtag extends Component {
                             this.state.splashtagAvailable.available ? styles.posButton : styles.negButton
                         ]}
                         title={buttonTitle}
-                        disabled={!splashtagWorks}
                         primary={true}
                         loading={this.state.checkingSplashtag}
-                        disabled={!this.state.splashtagAvailable && this.props.splashtag.length > 0 && !this.state.checkingSplashtag}
+                        disabled={!this.state.splashtagAvailable.available || this.props.splashtag.length == 0 || this.state.checkingSplashtag}
                         />
 
                 </View>
@@ -192,10 +186,8 @@ const styles = StyleSheet.create({
 
     },
     negButton: {
-        backgroundColor: colors.red
+        backgroundColor: colors.lightGray
     },
-    posField: {},
-    negField: {}
 })
 
 
