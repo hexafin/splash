@@ -59,7 +59,7 @@ class Landing extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <AnimatedWaves bottom={-100}/>
+                <AnimatedWaves/>
 
                 {!this.props.splashtagOnHold && (
                     <View style={styles.header}>
