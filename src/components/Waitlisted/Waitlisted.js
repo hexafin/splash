@@ -110,12 +110,14 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: '500',
         color: colors.nearBlack,
+        backgroundColor: 'rgba(0,0,0,0)',
         marginBottom: 20,
         textAlign: "center"
     },
     subtitle: {
         fontSize: 20,
         textAlign: "center",
+        backgroundColor: 'rgba(0,0,0,0)',
         color: colors.nearBlack,
         marginBottom: 20,
     },
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     },
     splashtag: {
         color: colors.nearBlack,
+        backgroundColor: 'rgba(0,0,0,0)',
         fontSize: 22,
         fontWeight: '700',
         textAlign: 'center',
