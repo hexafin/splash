@@ -22,6 +22,7 @@
 		087DB66D2023CAE2003E76D2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */; };
 		08861E3D20228FAA00DD4DFF /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 08861E3C20228FAA00DD4DFF /* main.jsbundle */; };
 		08890FA8202293AC00F154AD /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 08890FA7202293AC00F154AD /* assets */; };
+		08EB1F3A205A423900C9D0E2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08EB1F39205A423900C9D0E2 /* GoogleService-Info.plist */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -53,7 +54,6 @@
 		7554170F24854729801A72A8 /* AvenirNextLTPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2F704CF9B1A44B69DAB8EF4 /* AvenirNextLTPro-Regular.otf */; };
 		800485871FF7713300A72B72 /* CoinbaseApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 800485851FF7713100A72B72 /* CoinbaseApi.m */; };
 		8037186220424187001C8843 /* FirebaseDynamicLinks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8037183520424186001C8843 /* FirebaseDynamicLinks.framework */; };
-		80378976204F925500D9FA0F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 80378975204F925500D9FA0F /* GoogleService-Info.plist */; };
 		8043B9F51FD37D0600AA4F4B /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8043B9F41FD37D0600AA4F4B /* fontello.ttf */; };
 		8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8063032E202AD32B00EEF03C /* libCodePush.a */; };
 		80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80703ED9202673BF00A59434 /* libRNFIRMessaging.a */; };
@@ -418,6 +418,7 @@
 		08861E3C20228FAA00DD4DFF /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		08890FA7202293AC00F154AD /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		08890FA92022990F00F154AD /* splash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = splash.entitlements; path = splash/splash.entitlements; sourceTree = "<group>"; };
+		08EB1F39205A423900C9D0E2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13ADCDDE40F34737BECBDD1E /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -449,7 +450,6 @@
 		800485851FF7713100A72B72 /* CoinbaseApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinbaseApi.m; sourceTree = "<group>"; };
 		800485861FF7713200A72B72 /* CoinbaseApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinbaseApi.h; sourceTree = "<group>"; };
 		8037183520424186001C8843 /* FirebaseDynamicLinks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseDynamicLinks.framework; path = Pods/FirebaseDynamicLinks/Frameworks/FirebaseDynamicLinks.framework; sourceTree = SOURCE_ROOT; };
-		80378975204F925500D9FA0F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8043B9F41FD37D0600AA4F4B /* fontello.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fontello.ttf; sourceTree = "<group>"; };
 		8043ED9336E5474986803186 /* libUdpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUdpSockets.a; sourceTree = "<group>"; };
 		8063032E202AD32B00EEF03C /* libCodePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCodePush.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -683,13 +683,13 @@
 		13B07FAE1A68108700A75B9A /* hexa */ = {
 			isa = PBXGroup;
 			children = (
+				08EB1F39205A423900C9D0E2 /* GoogleService-Info.plist */,
 				0822225E20244688002D9633 /* Assets.xcassets */,
 				087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */,
 				08890FA7202293AC00F154AD /* assets */,
 				08861E3C20228FAA00DD4DFF /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
-				80378975204F925500D9FA0F /* GoogleService-Info.plist */,
 				080CFF082022D41A007AA6C8 /* ios_splash.png */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -1451,7 +1451,7 @@
 				3D9B063A65F443A6AAA77496 /* Octicons.ttf in Resources */,
 				2B1A87801DA546B085939E3A /* SimpleLineIcons.ttf in Resources */,
 				85BBFAFEEF22476FBE95A6E4 /* Zocial.ttf in Resources */,
-				80378976204F925500D9FA0F /* GoogleService-Info.plist in Resources */,
+				08EB1F3A205A423900C9D0E2 /* GoogleService-Info.plist in Resources */,
 				D2BCCAB4F84449CE9474DA77 /* AvenirNextLTPro-Bold.otf in Resources */,
 				7554170F24854729801A72A8 /* AvenirNextLTPro-Regular.otf in Resources */,
 			);

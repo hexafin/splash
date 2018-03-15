@@ -46,8 +46,8 @@ class VerifyPhoneNumber extends Component {
             <View style={styles.body}>
 
                 <Text style={styles.title}>
-                    Enter the 6-digit code{"\n"}
-                    we just texted you
+                    Enter the 6-digit code we{"\n"}
+                    just texted you
                 </Text>
 
                 <View>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
         ...defaults.container,
         justifyContent: "space-between",
         position: "relative",
-        paddingBottom: 0,
+        paddingBottom: 27,
         paddingTop: 80
     },
     body: {
@@ -105,9 +105,9 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     title: {
-        fontSize: 30,
-        fontWeight: '500',
+        fontSize: 23,
         color: colors.nearBlack,
+        marginTop: 20,
         marginBottom: 20,
         textAlign: "center"
     },
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     resendText: {
-        fontSize: 18,
+        fontSize: 16,
         color: colors.lightGray
     },
     resendButton: {

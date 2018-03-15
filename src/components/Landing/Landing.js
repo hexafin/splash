@@ -128,25 +128,25 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: "column",
     },
-    centerLogoWrapper: {
+    logoWrapper: {
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        padding: 30
+        paddingTop: 63
     },
     leftLogoWrapper: {
         flexDirection: "row",
         justifyContent: "flex-start",
         alignItems: "center",
-        paddingVertical: 30,
+        paddingTop: 63
     },
     logo: {
-        height: 36,
-        width: 28,
-        marginRight: 10
+        height: 30,
+        width: 22.5,
+        margin: 5
     },
     logoText: {
-        fontSize: 28,
+        fontSize: 22,
         paddingBottom: 4,
         fontWeight: '400',
         color: colors.nearBlack
@@ -158,14 +158,14 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     sloganText: {
-        fontSize: 34,
+        fontSize: 32,
         fontWeight: '500',
         color: colors.nearBlack,
         textAlign: "center"
     },
     sloganSubText: {
         marginTop: 20,
-        fontSize: 24,
+        fontSize: 22,
         textAlign: "center",
         color: colors.lightGray
     },
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     footerButtonText: {
-        fontSize: 24,
+        fontSize: 22,
         color: colors.purple
     },
     splashField: {

@@ -99,13 +99,15 @@ class ChooseSplashtag extends Component {
 
                 <View style={styles.body}>
 
-                    <Text style={styles.title}>
-                        Let{"'"}s get you setup
-                    </Text>
+                    <View>
+                      <Text style={styles.title}>
+                          Let{"'"}s get you setup
+                      </Text>
 
-                    <Text style={styles.description}>
-                        Your splashtag is your unique username, how others find you on Splash
-                    </Text>
+                      <Text style={styles.description}>
+                          Your splashtag is your unique username, how others find you on Splash
+                      </Text>
+                    </View>
 
                     <Field
                         name='splashtag' placeholder='Choose splashtag' component={Input}
@@ -129,7 +131,7 @@ class ChooseSplashtag extends Component {
                         title={buttonTitle}
                         primary={true}
                         loading={this.state.checkingSplashtag}
-                        disabled={!this.state.splashtagAvailable.available || this.props.splashtag.length == 0 || this.state.checkingSplashtag}
+                        disabled={!this.state.splashtagAvailable.available || this.props.splashtag.length == 0}
                         />
 
                 </View>
@@ -170,14 +172,14 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     title: {
-        fontSize: 30,
-        fontWeight: '500',
+        fontSize: 23,
         color: colors.nearBlack,
-        marginBottom: 20,
+        paddingTop: 29,
+        paddingBottom: 10,
         textAlign: "center"
     },
     description: {
-        fontSize: 20,
+        fontSize: 17,
         textAlign: "center",
         color: colors.lightGray,
         marginBottom: 20
