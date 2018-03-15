@@ -518,7 +518,7 @@ const countryData = {
 Takes props:
 - autofocus boolean (defualts to false)
 - countryName string (defaults to "United States")
-- countryCode string (defaults to "+1")
+- countryCode string (defaults to "1")
 - countryFlag string (defualts to "🇺🇸")
 - number string (defualts to "")
 - callback function (state) => {}
@@ -530,7 +530,7 @@ class PhoneNumberInput extends Component {
         super(props);
         this.state = {
             countryName: props.countryName || "United States",
-            countryCode: props.countryCode || "+1",
+            countryCode: props.countryCode || "1",
             countryFlag: props.countryFlag || "🇺🇸",
             number: normalizePhone(props.number, "") || "",
             isChoosingCountry: false
@@ -611,11 +611,11 @@ class PhoneNumberInput extends Component {
                     <View>
                         {!this.state.isChoosingCountry && (
                             <Text style={styles.countryCodeText}>
-                            {this.state.countryFlag} {this.state.countryCode}
-                        </Text>
+                                {this.state.countryFlag} +{this.state.countryCode}
+                            </Text>
                         )}
                         {this.state.isChoosingCountry && (
-                            <LoadingCircle size={50}/>
+                            <LoadingCircle size={50} primary={false}/>
                         )}
                     </View>
                 </TouchableWithoutFeedback>

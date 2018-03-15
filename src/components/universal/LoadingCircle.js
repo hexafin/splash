@@ -54,7 +54,7 @@ export default class LoadingCircle extends Component {
                     <LottieView
                         ref={animation => {
                             this.animation = animation
-                        }} source={}
+                        }} source={animationSource}
                         style={{
                             height: animationSize,
                             width: animationSize,
