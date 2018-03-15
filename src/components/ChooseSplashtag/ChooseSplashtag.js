@@ -131,7 +131,7 @@ class ChooseSplashtag extends Component {
                         title={buttonTitle}
                         primary={true}
                         loading={this.state.checkingSplashtag}
-                        disabled={!this.state.splashtagAvailable.available || this.props.splashtag.length == 0 || this.state.checkingSplashtag}
+                        disabled={!this.state.splashtagAvailable.available || this.props.splashtag.length == 0}
                         />
 
                 </View>
