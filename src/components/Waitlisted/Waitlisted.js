@@ -12,6 +12,7 @@ import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import CircleButton from "./CircleButton"
 import Ring from "../universal/Ring"
+import AnimatedWaves from "../universal/AnimatedWaves";
 
 class Waitlisted extends Component {
 
@@ -20,8 +21,7 @@ class Waitlisted extends Component {
         return (
             <View style={styles.container}>
 
-                <Image style={styles.wavesImage}
-                    source={require("../../assets/images/waves.png")}/>
+                <AnimatedWaves bottom={0}/>
 
                 <View style={styles.body}>
                     <Text style={styles.title}>

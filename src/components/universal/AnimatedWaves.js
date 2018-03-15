@@ -10,10 +10,12 @@ export default class AnimatedWaves extends Component {
 	}
 
 	render() {
-		const width = 800;
-		const height = 400;
+		const width = 900;
+		const height = 600;
 
-		const defaultBottom = isIphoneX() ? -20 : -40;
+		const bottomProp = this.props.bottom || -40
+
+		const defaultBottom = (isIphoneX()) ? bottomProp + 20 : bottomProp;
 
 		return (
 			<View
@@ -23,7 +25,7 @@ export default class AnimatedWaves extends Component {
 						height: height,
 						width: width,
 						bottom: this.props.bottom || defaultBottom,
-						left: -40
+						left: -100
 					},
 					this.props.style || {}
 				]}
