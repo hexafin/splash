@@ -1,4 +1,5 @@
 import React, {Component} from "react"
+import {isIphoneX} from "react-native-iphone-x-helper"
 import {
     View,
     Text,
@@ -117,13 +118,15 @@ class EnterPhoneNumber extends Component {
 
 }
 
+const containerPaddingTop = (isIphoneX()) ? 80 : 60
+
 const styles = StyleSheet.create({
     container: {
         ...defaults.container,
         justifyContent: "space-between",
         position: "relative",
         paddingBottom: 0,
-        paddingTop: 80
+        paddingTop: containerPaddingTop
     },
     body: {
         flex: 1,
