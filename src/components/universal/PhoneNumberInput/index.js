@@ -5,6 +5,8 @@ import {
     Text,
     TextInput,
     ActionSheetIOS,
+    Picker,
+    Modal,
     TouchableWithoutFeedback
 } from "react-native";
 import { colors } from "../../../lib/colors";
@@ -12,6 +14,7 @@ import { defaults } from "../../../lib/styles";
 import PropTypes from "prop-types";
 import LoadingCircle from "../LoadingCircle"
 import CountryPicker from "./CountryPicker"
+import Button from "../Button"
 
 // function that formats and restricts phone number input - used with redux-form's normalize
 const normalizePhone = (value, previousValue) => {
@@ -204,7 +207,7 @@ const countryList = [
     "Portugal",
     "Puerto Rico",
     "Qatar",
-    "R\xc3\xa9union",
+    // "R\xc3\xa9union",
     "Romania",
     "Russia",
     "Rwanda",
@@ -550,7 +553,7 @@ class PhoneNumberInput extends Component {
                 countryName: country,
                 countryCode: countryData[country].code,
                 countryFlag: countryData[country].flag,
-                isChoosingCountry: false
+                // isChoosingCountry: false
             };
         });
 
@@ -576,35 +579,63 @@ class PhoneNumberInput extends Component {
     }
 
     handleCountryClick() {
-
         this.setState(prevState => {
             return {
                 ...prevState,
                 isChoosingCountry: true
             };
         });
-
-        const countryButtons = [];
-        for (let i = 0; i < countryList.length; i++) {
-            const country = countryList[i];
-            if (countryData.hasOwnProperty(country)) {
-                countryButtons.push(countryData[country].flag + " " + country);
-            }
-        }
-
-        ActionSheetIOS.showActionSheetWithOptions(
-            {
-                options: countryButtons
-            },
-            buttonIndex => {
-                this.handleCountryChange(buttonIndex);
-            }
-        );
     }
 
     render() {
+
+        const countryItems = [];
+        for (let i = 0; i < countryList.length; i++) {
+            const country = countryList[i];
+            if (countryData.hasOwnProperty(country)) {
+                countryItems.push(
+                    <Picker.Item
+                        key={"countryPickerItem"+i}
+                        label={countryData[country].flag + " " + country}
+                        value={country}/>
+                );
+            }
+        }
+
         return (
             <View style={styles.wrapper}>
+
+                <Modal
+                    animationType="slide"
+                    transparent={false}
+                    visible={this.state.isChoosingCountry}>
+                    <View style={styles.modalWrapper}>
+                        <Text style={styles.modalTitle}>
+                            Choose your country
+                        </Text>
+
+                        <View style={styles.pickerWrapper}>
+                            <Picker
+                                selectedValue={this.state.countryName}
+                                onValueChange={(itemValue, itemIndex) => this.handleCountryChange(itemIndex)}>
+                                {countryItems}
+                            </Picker>
+                        </View>
+
+                        <Button 
+                            title="Done"
+                            primary={true}
+                            onPress={() => {
+                                this.setState((prevState) => {
+                                    return {
+                                        ...prevState,
+                                        isChoosingCountry: false
+                                    }
+                                })
+                            }}/>
+
+                    </View>
+                </Modal>
                 
                 <TouchableWithoutFeedback
                     style={styles.countryCode}
@@ -639,7 +670,6 @@ class PhoneNumberInput extends Component {
                     autoFocus={this.props.autoFocus || false}
                 />
 
-                
             </View>
         );
     }
@@ -696,8 +726,28 @@ const styles = StyleSheet.create({
         fontSize: 22,
         color: colors.nearBlack
     },
-    loadingWrapper: {
+    modalWrapper: {
+        flex: 1,
+        padding: 40,
+        flexDirection: "column",
+        justifyContent: "space-around",
         
+    },
+    modalCardWrapper: {},
+    modalTitle: {
+        fontSize: 22,
+        fontWeight: "600",
+        textAlign: "center",
+        color: colors.nearBlack
+    },
+    pickerWrapper: {
+        backgroundColor: colors.white,
+        shadowOffset: {
+            width: 0,
+            height: 10,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
     }
 });
 
