@@ -11,12 +11,12 @@ LoadingCircle Component
 
 Props:
 - size; optional number, defaults to 20
-- primary; optional bool, primary->white, !primary->purple, defaults to true->white
+- color; optional string, defaults to "white"
 
 Usage:
 <LoadingCircle/>
 <LoadingCircle size={60}/>
-<LoadingCircle size={60} primary={false}/>
+<LoadingCircle size={60} color={"purple"}/>
 
 */
 
@@ -30,8 +30,8 @@ export default class LoadingCircle extends Component {
         const wrapperSize = this.props.size || 20
         const animationSize = wrapperSize * 3
 
-        const primary = this.props.color || true
-        const animationSource = (primary === true) 
+        const color = this.props.color || "white"
+        const animationSource = (color == "white") 
             ? require('../../assets/animations/loadingCircleWhite.json') 
             : require('../../assets/animations/loadingCirclePurple.json')
 
@@ -70,5 +70,5 @@ export default class LoadingCircle extends Component {
 
 LoadingCircle.propTypes = {
     size: PropTypes.number,
-    primary: PropTypes.bool
+    color: PropTypes.string
 }

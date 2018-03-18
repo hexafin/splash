@@ -1,47 +1,11 @@
-import React, { Component } from "react";
+import React, {Component} from "react"
 import {
-    View,
-    StyleSheet,
-    Text,
-    TextInput,
-    ActionSheetIOS,
-    TouchableWithoutFeedback
-} from "react-native";
-import { colors } from "../../../lib/colors";
-import { defaults } from "../../../lib/styles";
-import PropTypes from "prop-types";
-import LoadingCircle from "../LoadingCircle"
-import CountryPicker from "./CountryPicker"
-
-// function that formats and restricts phone number input - used with redux-form's normalize
-const normalizePhone = (value, previousValue) => {
-    if (!value) {
-        return value;
-    }
-    const onlyNums = value.replace(/[^\d]/g, "");
-    if (!previousValue || value.length > previousValue.length) {
-        // typing forward
-        if (onlyNums.length === 3) {
-            return onlyNums + " ";
-        }
-        if (onlyNums.length === 6) {
-            return onlyNums.slice(0, 3) + " " + onlyNums.slice(3) + " ";
-        }
-    }
-    if (onlyNums.length <= 3) {
-        return onlyNums;
-    }
-    if (onlyNums.length <= 6) {
-        return onlyNums.slice(0, 3) + " " + onlyNums.slice(3);
-    }
-    return (
-        onlyNums.slice(0, 3) +
-        " " +
-        onlyNums.slice(3, 6) +
-        " " +
-        onlyNums.slice(6, 10)
-    );
-};
+	Picker,
+	View,
+	StyleSheet
+} from "react-native"
+import PropTypes from "prop-types"
+import {colors} from "../../../lib/colors"
 
 const countryList = [
     "Afghanistan",
@@ -514,191 +478,63 @@ const countryData = {
     Comoros: { flag: "\ud83c\uddf0\ud83c\uddf2", code: "269" }
 };
 
-/*
+export default class CountryPicker extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			activeItem: this.props.activeItem || "United States"
+		}
+		this.handleClick = this.handleClick.bind(this)
+	}
 
-Takes props:
-- autofocus boolean (defualts to false)
-- countryName string (defaults to "United States")
-- countryCode string (defaults to "1")
-- countryFlag string (defualts to "🇺🇸")
-- number string (defualts to "")
-- callback function (state) => {}
-
-*/
-
-class PhoneNumberInput extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            countryName: props.countryName || "United States",
-            countryCode: props.countryCode || "1",
-            countryFlag: props.countryFlag || "🇺🇸",
-            number: normalizePhone(props.number, "") || "",
-            isChoosingCountry: false
-        };
-        this.handleCountryChange = this.handleCountryChange.bind(this);
-        this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
-        this.handleCountryClick = this.handleCountryClick.bind(this);
-    }
-
-    handleCountryChange(countryIndex) {
-        const country = countryList[countryIndex];
-
-        this.setState(prevState => {
+	handleClick(itemValue, itemIndex) {
+		this.setState(prevState => {
             return {
                 ...prevState,
-                countryName: country,
-                countryCode: countryData[country].code,
-                countryFlag: countryData[country].flag,
-                isChoosingCountry: false
+                activeItem: itemValue
             };
-        });
+        })
+		if (this.props.callback) {
+			this.props.callback(itemIndex)
+		}
+	}
 
-        if (this.props.callback) {
-            this.props.callback(this.state);
-        }
-    }
+	render() {
+		const countryItems = [];
+	    for (let i = 0; i < countryList.length; i++) {
+	        const country = countryList[i];
+	        if (countryData.hasOwnProperty(country)) {
+	            countryItems.push(
+	            	<Picker.Item
+	            		label={countryData[country].flag + " " + country}
+	            		value={country}/>
+            	);
+	        }
+	    }
 
-    handlePhoneNumberChange(number) {
-        const normalizedNumber = normalizePhone(number, this.state.number);
-        this.setState(prevState => {
-            if (this.props.callback) {
-                this.props.callback({
-                    ...prevState,
-                    number: normalizedNumber
-                });
-            }
-            return {
-                ...prevState,
-                number: normalizedNumber
-            };
-        });
-    }
-
-    handleCountryClick() {
-
-        this.setState(prevState => {
-            return {
-                ...prevState,
-                isChoosingCountry: true
-            };
-        });
-
-        const countryButtons = [];
-        for (let i = 0; i < countryList.length; i++) {
-            const country = countryList[i];
-            if (countryData.hasOwnProperty(country)) {
-                countryButtons.push(countryData[country].flag + " " + country);
-            }
-        }
-
-        ActionSheetIOS.showActionSheetWithOptions(
-            {
-                options: countryButtons
-            },
-            buttonIndex => {
-                this.handleCountryChange(buttonIndex);
-            }
-        );
-    }
-
-    render() {
-        return (
-            <View style={styles.wrapper}>
-                
-                <TouchableWithoutFeedback
-                    style={styles.countryCode}
-                    onPress={() => this.handleCountryClick()}
-                >
-                    <View style={{
-                        padding: (this.state.isChoosingCountry) ? 10 : 0
-                    }}>
-                        {!this.state.isChoosingCountry && (
-                            <Text style={styles.countryCodeText}>
-                                {this.state.countryFlag} +{this.state.countryCode}
-                            </Text>
-                        )}
-                        <View style={[
-                            styles.loadingWrapper,
-                            {
-                                display: (this.state.isChoosingCountry) ? "flex" : "none"
-                            }
-                        ]}>
-                            <LoadingCircle size={20} color={"purple"}/>
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
-                <View style={styles.divider} />
-                <TextInput
-                    style={styles.phoneNumber}
-                    onChangeText={text => this.handlePhoneNumberChange(text)}
-                    value={this.state.number}
-                    keyboardType={"number-pad"}
-                    placeholder={"### ### ####"}
-                    maxLength={12}
-                    autoFocus={this.props.autoFocus || false}
-                />
-
-                
-            </View>
-        );
-    }
+		return (
+			<View style={styles.wrapper}>
+				<Picker
+					selectedValue={this.state.activeItem}
+					onValueChange={(itemValue, itemIndex) => this.handleClick(itemValue, itemIndex)}>
+					{countryItems}
+				</Picker>
+			</View>
+		)
+	}
 }
 
-PhoneNumberInput.propTypes = {
-    autofocus: PropTypes.bool,
-    countryName: PropTypes.string,
-    countryCode: PropTypes.string,
-    countryFlag: PropTypes.string,
-    number: PropTypes.string,
-    callback: PropTypes.func
-};
+CountryPicker.propTypes = {
+	activeItem: PropTypes.string,
+	callback: PropTypes.func
+}
 
 const styles = StyleSheet.create({
-    wrapper: {
-        flexDirection: "row",
-        alignItems: "center",
-        height: 60,
-        shadowOffset: {
-            width: 0,
-            height: 5
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        borderRadius: 5
-    },
-    divider: {
-        width: 1,
-        height: 60,
-        backgroundColor: "rgba(0,0,0,0.1)"
-    },
-    countryCode: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingRight: 10,
-        height: 60,
-        backgroundColor: colors.white
-    },
-    countryCodeText: {
-        padding: 10,
-        fontSize: 22,
-        color: colors.nearBlack
-    },
-    phoneNumber: {
-        flex: 3,
-        height: 60,
-        padding: 10,
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: 22,
-        color: colors.nearBlack
-    },
-    loadingWrapper: {
-        
-    }
-});
-
-export default PhoneNumberInput;
+	wrapper: {
+		position: "absolute",
+		height: 600,
+		width: "90%",
+		backgroundColor: colors.white,
+		zIndex: 80
+	}
+})
