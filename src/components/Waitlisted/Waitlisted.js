@@ -13,6 +13,7 @@ import {defaults, icons} from "../../lib/styles"
 import CircleButton from "./CircleButton"
 import Ring from "../universal/Ring"
 import AnimatedWaves from "../universal/AnimatedWaves";
+import {isIphoneX} from "react-native-iphone-x-helper"
 
 class Waitlisted extends Component {
 
@@ -21,7 +22,7 @@ class Waitlisted extends Component {
         return (
             <View style={styles.container}>
 
-                <AnimatedWaves bottom={0}/>
+                <AnimatedWaves bottom={(isIphoneX()) ? 0 : -80}/>
 
                 <View style={styles.body}>
                     <Text style={styles.title}>
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
         ...defaults.container,
         justifyContent: "space-between",
         position: "relative",
-        paddingTop: 64
+        paddingTop: (isIphoneX()) ? 64 : 10
     },
     wavesImage: {
         position: "absolute",
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
         color: colors.white,
         backgroundColor: 'transparent',
         fontSize: 18,
-        marginBottom: 20,
+        marginBottom: (isIphoneX()) ? 20 : 0,
         padding: 20,
     },
     footerButtons: {
