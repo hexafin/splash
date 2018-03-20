@@ -5,6 +5,21 @@ import {
 import LottieView from 'lottie-react-native'
 import PropTypes from "prop-types"
 
+/*
+
+LoadingCircle Component
+
+Props:
+- size; optional number, defaults to 20
+- color; optional string, defaults to "white"
+
+Usage:
+<LoadingCircle/>
+<LoadingCircle size={60}/>
+<LoadingCircle size={60} color={"purple"}/>
+
+*/
+
 export default class LoadingCircle extends Component {
     componentDidMount() {
         this.animation.play()
@@ -14,6 +29,11 @@ export default class LoadingCircle extends Component {
 
         const wrapperSize = this.props.size || 20
         const animationSize = wrapperSize * 3
+
+        const color = this.props.color || "white"
+        const animationSource = (color == "white") 
+            ? require('../../assets/animations/loadingCircleWhite.json') 
+            : require('../../assets/animations/loadingCirclePurple.json')
 
         return (
             <View style={[
@@ -34,7 +54,7 @@ export default class LoadingCircle extends Component {
                     <LottieView
                         ref={animation => {
                             this.animation = animation
-                        }} source={require('../../assets/animations/loadingCircle.json')}
+                        }} source={animationSource}
                         style={{
                             height: animationSize,
                             width: animationSize,
@@ -49,5 +69,6 @@ export default class LoadingCircle extends Component {
 }
 
 LoadingCircle.propTypes = {
-    size: PropTypes.number
+    size: PropTypes.number,
+    color: PropTypes.string
 }
