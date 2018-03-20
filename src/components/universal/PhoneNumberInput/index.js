@@ -13,7 +13,6 @@ import { colors } from "../../../lib/colors";
 import { defaults } from "../../../lib/styles";
 import PropTypes from "prop-types";
 import LoadingCircle from "../LoadingCircle"
-import CountryPicker from "./CountryPicker"
 import Button from "../Button"
 
 // function that formats and restricts phone number input - used with redux-form's normalize
