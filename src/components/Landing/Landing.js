@@ -4,19 +4,42 @@ import {
     Text,
     StyleSheet,
     Image,
-    Alert,
+    Animated,
+    Easing,
     TouchableOpacity,
     TouchableWithoutFeedback
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { Input } from "../universal/Input";
+import Ring from "../universal/Ring";
 import firebase from "react-native-firebase";
 import AnimatedWaves from "../universal/AnimatedWaves";
 import TouchID from 'react-native-touch-id'
 
 class Landing extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+          yPos: new Animated.Value(-200),
+          opacity: new Animated.Value(0),
+        }
+    }
+
     componentDidMount() {
+
+        Animated.sequence([
+          Animated.spring(this.state.yPos, {
+            toValue: 0,
+            friction: 8,
+          }),
+          Animated.timing(this.state.opacity, {
+            toValue: 1,
+            easing: Easing.linear(),
+            duration: 200,
+          })
+        ]).start()
+
         if (this.props.smsAuthenticated) {
             this.props.navigation.navigate("Waitlisted");
         }
@@ -61,72 +84,19 @@ class Landing extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <AnimatedWaves/>
-
-                {!this.props.splashtagOnHold && (
-                    <View style={styles.header}>
-                        <View style={styles.logoWrapper}>
-                            <Image
-                                source={require("../../assets/images/splash-logo.png")}
-                                style={styles.logo}
-                            />
-                            <Text style={styles.logoText}>Splash</Text>
-                        </View>
-                        <View style={styles.slogan}>
-                            <Text style={styles.sloganText}>
-                                Splash is your wallet
-                            </Text>
-                            <Text style={styles.sloganSubText}>
-                                Make it personal with a splashtag
-                            </Text>
-                        </View>
-                    </View>
-                )}
-
-                {this.props.splashtagOnHold && (
-                    <View style={styles.claimedHeader}>
-                        <View style={styles.leftLogoWrapper}>
-                            <Image
-                                source={require("../../assets/images/splash-logo.png")}
-                                style={styles.logo}
-                            />
-                            <Text style={styles.logoText}>Splash</Text>
-                        </View>
-                        <View style={styles.slogan}>
-                            <Text style={styles.sloganText}>Welcome,</Text>
-                            <Text style={styles.sloganText}>
-                                @{this.props.splashtagOnHold}
-                            </Text>
-                            <Text style={styles.sloganSubText}>
-                                Nice to see you again!
-                            </Text>
-                        </View>
-                    </View>
-                )}
-
-                <View style={styles.floating} />
-
-                <View style={styles.footer}>
-                    <TouchableOpacity
-                        style={styles.footerButton}
-                        onPress={this.handleClaim}
-                    >
-                        <Text style={styles.footerButtonText}>
-                            Claim your splashtag
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                {this.props.splashtagOnHold && (
-                    <TouchableOpacity
-                        onPress={() =>
-                            this.props.navigation.navigate("ChooseSplashtag")
-                        }
-                    >
-                        <Text style={styles.newSplash}>
-                            Or choose a new one...
-                        </Text>
-                    </TouchableOpacity>
-                )}
+              <Animated.View style={[styles.centerButton, {opacity: this.state.opacity}]}>
+                <TouchableOpacity onPress={this.handleClaim} style={{alignItems: 'center'}}>
+                  <Ring size={108} ringSecondary={"#EFEFFD"} ringRatio={0.75}>
+                      <Image source={require("../../assets/images/smile-splash.png")} style={styles.topSplash}/>
+                  </Ring>
+                  <Text style={styles.enterText}>Touch to enter</Text>
+                </TouchableOpacity>
+              </Animated.View>
+              <Animated.View style={[styles.footer, {bottom: this.state.yPos}]}>
+                <Image source={require("../../assets/images//smile-splash-white.png")} style={styles.bottomSplash}/>
+                {!this.props.splashtagOnHold && <Text style={styles.footerText}>Welcome to Splash!</Text>}
+                {this.props.splashtagOnHold && <Text style={styles.footerText}>Welcome to Splash,{'\n'}@{this.props.splashtagOnHold}</Text>}
+              </Animated.View>
             </View>
         );
     }
@@ -138,6 +108,28 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         position: "relative"
     },
+    centerButton: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    topSplash: {
+        width: 44,
+        height: 57
+    },
+    enterText: {
+      paddingTop: 7,
+      color: colors.lightGray,
+      fontSize: 20.16,
+      backgroundColor: 'rgba(0, 0, 0, 0)'
+    },
+    bottomSplash: {
+        position: 'relative',
+        left: -20,
+        bottom: -10,
+        width: 84,
+        height: 84
+    },
     wavesImage: {
         position: "absolute",
         bottom: -50,
@@ -146,77 +138,16 @@ const styles = StyleSheet.create({
         width: 400,
         height: 400
     },
-    header: {
-        flex: 1,
-        padding: 30,
-        flexDirection: "column"
-    },
-    claimedHeader: {
-        flex: 1,
-        paddingVertical: 30,
-        paddingHorizontal: 20,
-        flexDirection: "column"
-    },
-    logoWrapper: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingTop: 63
-    },
-    leftLogoWrapper: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        paddingTop: 63
-    },
-    logo: {
-        height: 30,
-        width: 22.5,
-        margin: 5
-    },
-    logoText: {
-        fontSize: 22,
-        paddingBottom: 4,
-        fontWeight: "400",
-        color: colors.nearBlack
-    },
-    slogan: {
-        flexDirection: "column",
-        alignItems: "center",
-        padding: 0,
-        marginTop: 30
-    },
-    sloganText: {
-        fontSize: 32,
-        fontWeight: "500",
-        color: colors.nearBlack,
-        textAlign: "center"
-    },
-    sloganSubText: {
-        marginTop: 20,
-        fontSize: 22,
-        textAlign: "center",
-        color: colors.lightGray
-    },
-    floating: {},
     footer: {
-        padding: 20,
-        marginBottom: 10
+        position: "absolute",
+        paddingHorizontal: 30,
+        marginBottom: 50
     },
-    footerButton: {
-        backgroundColor: colors.white,
-        borderRadius: 5,
-        flex: 1,
-        padding: 30,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    footerButtonText: {
-        fontSize: 22,
-        color: colors.purple
-    },
-    splashField: {
-        marginTop: 85
+    footerText: {
+      color: colors.nearBlack,
+      backgroundColor: "rgba(0, 0, 0, 0)",
+      fontWeight: "500",
+      fontSize: 27
     },
     newSplash: {
         textAlign: "center",
