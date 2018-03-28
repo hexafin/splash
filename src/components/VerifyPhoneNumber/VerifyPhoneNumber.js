@@ -76,6 +76,7 @@ class VerifyPhoneNumber extends Component {
                         this.props.SmsConfirm(this.state.code)
                     }} style={styles.footerButton} title={"Claim splashtag"}
                     primary={true}
+                    loading={this.props.isSmsConfirming}
                     disabled={this.state.code.length < 6}/>
 
             </View>
