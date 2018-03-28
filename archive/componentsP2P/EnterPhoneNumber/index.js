@@ -1,7 +1,7 @@
 import EnterPhoneNumber from "./EnterPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {SmsAuthenticate} from "../../redux/waitlist/actions"
+import {SmsAuthenticate} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
 

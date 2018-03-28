@@ -1,11 +1,11 @@
 import VerifyPhoneNumber from "./VerifyPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {SmsConfirm, SmsAuthenticate} from "../../redux/waitlist/actions"
+import {SmsConfirm, SmsAuthenticate} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
     return {
-      waitlisted: state.user.waitlisted,
+      waitlisted: state.general.waitlisted,
       username: state.waitlist.username,
       phoneNumber: state.waitlist.phoneNumber,
       countryName: state.waitlist.countryName,

@@ -1,6 +1,7 @@
 import ChooseSplashtag from "./ChooseSplashtag"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
+import {ClaimUsername, InviteFriends} from "../../actions/waitlist"
 
 const mapStateToProps = (state) => {
 

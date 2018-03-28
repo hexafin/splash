@@ -7,9 +7,13 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import "RNFIRMessaging.h"
+#import "CoinbaseOAuth.h"
+#import "CoinbaseApi.h"
 #import "EventEmitter.h"
 #import <CodePush/CodePush.h>
 #import <React/RCTBridge.h>
@@ -56,13 +60,14 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  return YES;
+  return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                      didFinishLaunchingWithOptions:launchOptions];
 }
 
 // Facebook SDK
-// - (void)applicationDidBecomeActive:(UIApplication *)application {
-//     [FBSDKAppEvents activateApp];
-// }
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [FBSDKAppEvents activateApp];
+}
 //
 // - (BOOL)application:(UIApplication *)application
 //             openURL:(NSURL *)url
