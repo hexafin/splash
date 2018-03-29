@@ -2,7 +2,7 @@ import { Sentry } from 'react-native-sentry';
 import { createStore, applyMiddleware, compose } from 'redux'
 import { persistStore, persistCombineReducers } from "redux-persist"
 import storage from 'redux-persist/es/storage'
-import reducers from '../reducers'
+import reducers from '../redux/reducers'
 import thunkMiddleware from "redux-thunk"
 import {createLogger} from 'redux-logger'
 import createRavenMiddleware from "raven-for-redux";

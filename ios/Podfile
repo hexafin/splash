@@ -15,7 +15,7 @@ target 'splash' do
   pod 'Firebase/Firestore'
   pod 'Firebase/Auth'
   pod 'Firebase/Messaging'
-  pod "coinbase-official"
+  # pod "coinbase-official"
 
   pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
