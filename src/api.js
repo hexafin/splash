@@ -32,6 +32,8 @@ function GetAccount(uid) {
     })
 }
 
+// Bitcoin:
+
 function NewBitcoinWallet() {
     var keyPair = bitcoin.ECPair.makeRandom({
         rng: random
@@ -42,6 +44,66 @@ function NewBitcoinWallet() {
         address: keyPair.getAddress()
     }
 }
+
+function GetAddressBalance(address, testnet=false) {
+  return new Promise((resolve, reject) => {
+    if (!testnet) {
+        const APIaddress = 'https://blockchain.info/q/addressbalance/' + address + '?confirmations=6'
+        axios.get(APIaddress)
+        .then(response => {
+          if (response.data !== null){
+            resolve(parseFloat(response.data));
+          } else {
+            reject('Cannot retrieve balance');
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    } else {
+      axios.get('https://testnet.blockexplorer.com/api/addr/' + address + '/balance').then(response => {
+					resolve(parseFloat(response.data));
+      })
+    }
+  });
+}
+
+function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet") {
+    return new Promise((resolve, reject) => {
+
+      GetAddressBalance(from, testnet=true).then((balanceSatoshi) => {
+          console.log(balanceSatoshi);
+          if (amtBTC < balanceSatoshi*0.00000001) {
+              bitcoinTransaction.sendTransaction({
+                  from: from,
+                  to: to,
+                  privKeyWIF: privateKey,
+                  // TODO: figure out better way of converting to BTC
+                  btc: amtBTC,
+                  fee: 'hour',
+                  dryrun: true,
+                  network: network,
+                  // feesProvider: bitcoinTransaction.providers.fees.mainnet.earn,
+                  // utxoProvider: bitcoinTransaction.providers.utxo.mainnet.blockchain,
+              }).then(txHex => {
+                  const tx = bitcoin.Transaction.fromHex(txHex);
+                  const txid = tx.getId();
+                  resolve({
+                    txid: txid,
+                    txhex: txHex,
+                  });
+              }).catch(error => {
+                  reject(error);
+              });
+          } else {
+              reject('Error: not enough btc.');
+          }
+      }).catch(error => {
+          reject(error);
+      });
+  })
+}
+
 
 const NewAccount = (uid, {
     username, firstName = null, lastName = null, email = null, facebookId = null, defaultCurrency = "USD",
@@ -513,6 +575,8 @@ export default api = {
     NewTransactionFromRequest: NewTransactionFromRequest,
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
+    GetAddressBalance,
+    BuildBitcoinTransaction,
     GetBalance: GetBalance,
     GetAddress: GetAddress,
     GetCrypto: GetCrypto,
