@@ -32,6 +32,8 @@ function GetAccount(uid) {
     })
 }
 
+// Bitcoin:
+
 function NewBitcoinWallet() {
     var keyPair = bitcoin.ECPair.makeRandom({
         rng: random
@@ -42,6 +44,125 @@ function NewBitcoinWallet() {
         address: keyPair.getAddress()
     }
 }
+
+function GetAddressBalance(address, testnet=false) {
+  return new Promise((resolve, reject) => {
+    if (!testnet) {
+        const APIaddress = 'https://blockchain.info/q/addressbalance/' + address + '?confirmations=6'
+        axios.get(APIaddress)
+        .then(response => {
+          if (response.data !== null){
+            resolve(parseFloat(response.data));
+          } else {
+            reject('Cannot retrieve balance');
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    } else {
+      axios.get('https://testnet.blockexplorer.com/api/addr/' + address + '/balance').then(response => {
+					resolve(parseFloat(response.data));
+      })
+    }
+  });
+}
+
+// feenames: "fastestFee", "halfHourFee", "hourFee"
+// if from and amtSatoshi are provided returns total fee. if not returns feePerByte
+function GetBitcoinFees({feeName="hourFee", network="mainnet", from=null, amtSatoshi=null}) {
+
+  const getTransactionSize = (numInputs, numOutputs) => {
+  	return numInputs*180 + numOutputs*34 + 10 + numInputs;
+  }
+
+  return new Promise((resolve, reject) => {
+    axios.get('https://bitcoinfees.earn.com/api/v1/fees/recommended').then(response => {
+        const feePerByte = response.data[feeName]
+        if (from && amtSatoshi) {
+          axios.get('https://' + (network == 'testnet' ? 'testnet.' : '') + 'blockexplorer.com/api/addr/' + from + '/utxo?noCache=1').then(response => {
+
+            const utxos = response.data.map((e) => {
+                                						return {
+                                							txid: e.txid,
+                                							vout: e.vout,
+                                							satoshis: e.satoshis,
+                                							confirmations: e.confirmations
+                                						};
+                                					});
+            let tx = new bitcoin.TransactionBuilder(network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin);
+        		let ninputs = 0;
+        		let availableSat = 0;
+        		for (var i = 0; i < utxos.length; i++) {
+        			const utxo = utxos[i];
+        			if (utxo.confirmations >= 6) {
+        				tx.addInput(utxo.txid, utxo.vout);
+        				availableSat += utxo.satoshis;
+        				ninputs++;
+
+        				if (availableSat >= amtSatoshi) break;
+        			}
+        		}
+        		const change = availableSat - amtSatoshi;
+        		const fee = getTransactionSize(ninputs, change > 0 ? 2 : 1)*feePerByte;
+            resolve(fee)
+
+          }).catch(error => {
+            reject(error)
+          })
+
+        } else {
+          resolve(feePerByte)
+        }
+      }).catch(error => {
+        reject(error)
+      });
+  })
+}
+
+function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet") {
+    return new Promise((resolve, reject) => {
+      GetAddressBalance(from, testnet=true).then((balanceSatoshi) => {
+          if (amtBTC < balanceSatoshi*0.00000001) {
+              bitcoinTransaction.sendTransaction({
+                  from: from,
+                  to: to,
+                  privKeyWIF: privateKey,
+                  // TODO: figure out better way of converting to BTC
+                  btc: amtBTC,
+                  fee: 'hour',
+                  dryrun: true,
+                  network: network,
+              }).then(txHex => {
+                  const tx = bitcoin.Transaction.fromHex(txHex);
+                  const txid = tx.getId();
+                  if(network == 'mainnet') {
+                    axios.post('https://blockchain.info/pushtx?tx=' + txHex).then(() => {
+                      resolve({
+                        txid: txid,
+                        txhex: txHex,
+                      });
+                    }).catch(error => reject(error))
+                  } else {
+                    axios.post('https://api.blockcypher.com/v1/btc/test3/txs/push', {tx: txHex}).then(() => {
+                      resolve({
+                        txid: txid,
+                        txhex: txHex,
+                      });
+                    }).catch(error => reject(error))
+                  }
+              }).catch(error => {
+                  reject(error);
+              });
+          } else {
+              reject('Error: not enough btc.');
+          }
+      }).catch(error => {
+          reject(error);
+      });
+  })
+}
+
 
 const NewAccount = (uid, {
     username, firstName = null, lastName = null, email = null, facebookId = null, defaultCurrency = "USD",
@@ -513,6 +634,9 @@ export default api = {
     NewTransactionFromRequest: NewTransactionFromRequest,
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
+    GetAddressBalance,
+    BuildBitcoinTransaction,
+    GetBitcoinFees,
     GetBalance: GetBalance,
     GetAddress: GetAddress,
     GetCrypto: GetCrypto,
