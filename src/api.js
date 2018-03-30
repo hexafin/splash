@@ -68,11 +68,21 @@ function GetAddressBalance(address, testnet=false) {
   });
 }
 
+// feenames: "fastestFee", "halfHourFee", "hourFee"
+function GetBitcoinFees(feeName="hourFee", network="mainnet") {
+  return new Promise((resolve, reject) => {
+    axios.get('https://bitcoinfees.earn.com/api/v1/fees/recommended').then(response => {
+        resolve(response.data[feeName])
+      }).catch(error => {
+        reject(error)
+      });
+  })
+}
+
 function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet") {
     return new Promise((resolve, reject) => {
 
       GetAddressBalance(from, testnet=true).then((balanceSatoshi) => {
-          console.log(balanceSatoshi);
           if (amtBTC < balanceSatoshi*0.00000001) {
               bitcoinTransaction.sendTransaction({
                   from: from,
@@ -577,6 +587,7 @@ export default api = {
     LoadTransactions: LoadTransactions,
     GetAddressBalance,
     BuildBitcoinTransaction,
+    GetBitcoinFees,
     GetBalance: GetBalance,
     GetAddress: GetAddress,
     GetCrypto: GetCrypto,
