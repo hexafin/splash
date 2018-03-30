@@ -69,10 +69,51 @@ function GetAddressBalance(address, testnet=false) {
 }
 
 // feenames: "fastestFee", "halfHourFee", "hourFee"
-function GetBitcoinFees(feeName="hourFee", network="mainnet") {
+// if from and amtSatoshi are provided returns total fee. if not returns feePerByte
+function GetBitcoinFees({feeName="hourFee", network="mainnet", from=null, amtSatoshi=null}) {
+
+  const getTransactionSize = (numInputs, numOutputs) => {
+  	return numInputs*180 + numOutputs*34 + 10 + numInputs;
+  }
+
   return new Promise((resolve, reject) => {
     axios.get('https://bitcoinfees.earn.com/api/v1/fees/recommended').then(response => {
-        resolve(response.data[feeName])
+        const feePerByte = response.data[feeName]
+        if (from && amtSatoshi) {
+          axios.get('https://' + (network == 'testnet' ? 'testnet.' : '') + 'blockexplorer.com/api/addr/' + from + '/utxo?noCache=1').then(response => {
+
+            const utxos = response.data.map((e) => {
+                                						return {
+                                							txid: e.txid,
+                                							vout: e.vout,
+                                							satoshis: e.satoshis,
+                                							confirmations: e.confirmations
+                                						};
+                                					});
+            let tx = new bitcoin.TransactionBuilder(network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin);
+        		let ninputs = 0;
+        		let availableSat = 0;
+        		for (var i = 0; i < utxos.length; i++) {
+        			const utxo = utxos[i];
+        			if (utxo.confirmations >= 6) {
+        				tx.addInput(utxo.txid, utxo.vout);
+        				availableSat += utxo.satoshis;
+        				ninputs++;
+
+        				if (availableSat >= amtSatoshi) break;
+        			}
+        		}
+        		const change = availableSat - amtSatoshi;
+        		const fee = getTransactionSize(ninputs, change > 0 ? 2 : 1)*feePerByte;
+            resolve(fee)
+
+          }).catch(error => {
+            reject(error)
+          })
+
+        } else {
+          resolve(feePerByte)
+        }
       }).catch(error => {
         reject(error)
       });
@@ -81,7 +122,6 @@ function GetBitcoinFees(feeName="hourFee", network="mainnet") {
 
 function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet") {
     return new Promise((resolve, reject) => {
-
       GetAddressBalance(from, testnet=true).then((balanceSatoshi) => {
           if (amtBTC < balanceSatoshi*0.00000001) {
               bitcoinTransaction.sendTransaction({
@@ -93,15 +133,24 @@ function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet"
                   fee: 'hour',
                   dryrun: true,
                   network: network,
-                  // feesProvider: bitcoinTransaction.providers.fees.mainnet.earn,
-                  // utxoProvider: bitcoinTransaction.providers.utxo.mainnet.blockchain,
               }).then(txHex => {
                   const tx = bitcoin.Transaction.fromHex(txHex);
                   const txid = tx.getId();
-                  resolve({
-                    txid: txid,
-                    txhex: txHex,
-                  });
+                  if(network == 'mainnet') {
+                    axios.post('https://blockchain.info/pushtx?tx=' + txHex).then(() => {
+                      resolve({
+                        txid: txid,
+                        txhex: txHex,
+                      });
+                    }).catch(error => reject(error))
+                  } else {
+                    axios.post('https://api.blockcypher.com/v1/btc/test3/txs/push', {tx: txHex}).then(() => {
+                      resolve({
+                        txid: txid,
+                        txhex: txHex,
+                      });
+                    }).catch(error => reject(error))
+                  }
               }).catch(error => {
                   reject(error);
               });
