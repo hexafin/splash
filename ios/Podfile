@@ -20,6 +20,8 @@ target 'splash' do
   pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
+  pod 'TouchID', :path => "../node_modules/react-native-touch-id"
+
   pod 'lottie-ios', :path => '../node_modules/lottie-ios'
   pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
 

@@ -24,6 +24,8 @@
 	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Secure your private keys with Face ID</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
