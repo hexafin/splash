@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     Image,
+    Alert,
     TouchableOpacity,
     TouchableWithoutFeedback
 } from "react-native";
@@ -12,6 +13,7 @@ import { defaults, icons } from "../../lib/styles";
 import { Input } from "../universal/Input";
 import firebase from "react-native-firebase";
 import AnimatedWaves from "../universal/AnimatedWaves";
+import TouchID from 'react-native-touch-id'
 
 class Landing extends Component {
     componentDidMount() {

@@ -128,6 +128,8 @@ PODS:
     - React
     - Sentry (~> 3.10.0)
     - Sentry/KSCrash (~> 3.10.0)
+  - TouchID (4.0.1):
+    - React
   - yoga (0.50.3.React)
 
 DEPENDENCIES:
@@ -141,6 +143,7 @@ DEPENDENCIES:
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - React (from `../node_modules/react-native`)
   - SentryReactNative (from `../node_modules/react-native-sentry`)
+  - TouchID (from `../node_modules/react-native-touch-id`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
@@ -154,6 +157,8 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native
   SentryReactNative:
     :path: ../node_modules/react-native-sentry
+  TouchID:
+    :path: ../node_modules/react-native-touch-id
   yoga:
     :path: ../node_modules/react-native/ReactCommon/yoga
 
@@ -183,8 +188,9 @@ SPEC CHECKSUMS:
   React: 0ba6cae888dc82dc47d6d5f3090615e1b5f6f3e7
   Sentry: 546079394a729c35ba8c10332942c25f96cac921
   SentryReactNative: 2ef9eb2ef558cf6b52a3f6b6eae0cd7d7fff9e5f
+  TouchID: 73098f66ad9dee0cda99e3e34793c14dcacac787
   yoga: faecc6be81ca7823ccbb470b93a1b228499fa1c0
 
-PODFILE CHECKSUM: 2f63ddd8bf49a06e8d7e59cf9aa5b8da50b84d2b
+PODFILE CHECKSUM: 9953b4c75418bdcf94c17fcc8fb7bab1843bd0b1
 
 COCOAPODS: 1.3.1
