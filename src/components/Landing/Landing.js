@@ -29,13 +29,6 @@ class Landing extends Component {
                     this.handleDeepLink({ url: url });
                 }
             });
-
-        // test face id
-        TouchID.authenticate("Login to Splash").then(success => {
-            console.log(success)
-        }).catch(error => {
-            Alert.alert(error)
-        })
     }
 
     handleDeepLink = event => {
