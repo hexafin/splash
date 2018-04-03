@@ -105,7 +105,7 @@ export const ClaimUsername = user => {
 								push_token: token
 							})
 							.then(person => {
-								NavigatorService.navigate("Waitlisted");
+								NavigatorService.navigate("FadeRouter");
 
 								FCM.on(FCMEvent.Notification, async notif => {
 									console.log("Notification", notif);
@@ -191,4 +191,3 @@ export const SmsConfirm = confirmationCode => {
 			});
 	};
 };
-
