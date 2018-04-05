@@ -1,11 +1,13 @@
 import user from "./user/reducer"
 import waitlist from "./waitlist/reducer"
+import transaction from "./transaction/reducer"
 import { reducer as formReducer } from 'redux-form';
 
 const reducers = {
-	user,
+		user,
     waitlist,
-   	form: formReducer
+   	form: formReducer,
+		transaction
 }
 
 export default reducers

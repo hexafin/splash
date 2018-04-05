@@ -220,6 +220,19 @@ const UpdateAccount = (uid, updateDict) => {
     })
 }
 
+const UpdateTransaction = (transactionId, updateDict) => {
+
+    return new Promise ((resolve, reject) => {
+
+        firestore.collection("transactions").doc(transactionId).update(updateDict).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+
+    })
+}
+
 const UpdateRequest = (requestId, updateDict) => {
 
     return new Promise ((resolve, reject) => {
@@ -624,6 +637,7 @@ function Log(type, content) {
 export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
+    UpdateTransaction,
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,

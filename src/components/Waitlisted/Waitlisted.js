@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
     Linking,
+    Alert,
     Share
 } from "react-native"
 import {colors} from "../../lib/colors"
@@ -14,8 +15,40 @@ import CircleButton from "./CircleButton"
 import Ring from "../universal/Ring"
 import AnimatedWaves from "../universal/AnimatedWaves";
 import {isIphoneX} from "react-native-iphone-x-helper"
+import FCM, {
+	FCMEvent,
+} from "react-native-fcm";
+import TouchID from 'react-native-touch-id'
 
 class Waitlisted extends Component {
+
+    componentWillMount() {
+      FCM.on(FCMEvent.Notification, async notif => {
+        console.log("Notification", notif);
+        // reload on notifications
+        const {transactionId, relativeAmount, domain, relativeCurrency} = notif
+        if (transactionId && relativeAmount && domain && relativeCurrency) {
+          Alert.alert('Approve Magic Card', 'You will be charged $' + relativeAmount + ' to use on ' + domain, [
+              {
+                  text: 'Dismiss',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel'
+              }, {
+                  text: 'Approve',
+                  onPress: () => {
+                    TouchID.authenticate("Approve Card").then(success => {
+                        if(success) {
+                          this.props.ApproveTransaction({transactionId, relativeAmount, domain, relativeCurrency})
+                        }
+                    }).catch(error => {
+                      console.log('TouchID Error:', error);
+                    })
+                  }
+              }
+          ])
+        }
+      });
+    }
 
     render() {
 
