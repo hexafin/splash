@@ -8,6 +8,7 @@ import EnterPhoneNumber from "./components/EnterPhoneNumber"
 import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
 import Waitlisted from "./components/Waitlisted"
 import Unlock from "./components/Unlock"
+import ApproveModal from "./components/ApproveModal"
 
 const fade = (props) => {
     const {position, scene} = props
@@ -22,6 +23,23 @@ const fade = (props) => {
     return {
         opacity,
     }
+}
+
+function forVertical(props) {
+  const { layout, position, scene } = props;
+
+  const index = scene.index;
+  const height = layout.initHeight;
+
+  const translateX = 0;
+  const translateY = position.interpolate({
+    inputRange: ([index - 1, index, index + 1]: Array<number>),
+    outputRange: ([height, 0, 0]: Array<number>)
+  });
+
+  return {
+    transform: [{ translateX }, { translateY }]
+  };
 }
 
 const FadeRouter = StackNavigator(
@@ -50,7 +68,7 @@ const FadeRouter = StackNavigator(
   }
 )
 
-export default OnboardingRouter = TabNavigator(
+const OnboardingRouter = TabNavigator(
     {
         Landing: {
             screen: Landing,
@@ -88,4 +106,25 @@ export default OnboardingRouter = TabNavigator(
         swipeEnabled: false,
         initialRouteName: "Landing",
     }
+)
+
+export default ModalRouter = StackNavigator(
+  {
+    ApproveModal: {
+      screen: ApproveModal
+    },
+    OnboardingRouter: {
+      screen: OnboardingRouter
+    }
+  },
+  {
+    headerMode: 'none',
+    mode: 'modal',
+    swipeEnabled: false,
+    initialRouteName: 'OnboardingRouter',
+    transitionConfig: () => ({ screenInterpolator: forVertical }),
+    cardStyle: {
+      backgroundColor: 'rgba(0,0,0,0.2)',
+    },
+  }
 )

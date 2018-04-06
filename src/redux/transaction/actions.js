@@ -12,6 +12,11 @@ import { cryptoUnits } from '../../lib/cryptos'
 
 import NavigatorService from "../navigator";
 
+export const DISMISS_TRANSACTION = "DISMISS_TRANSACTION";
+export function dismissTransaction() {
+	return { type: DISMISS_TRANSACTION };
+}
+
 export const APPROVE_TRANSACTION_INIT = "APPROVE_TRANSACTION_INIT";
 export function approveTransactionInit(transaction) {
 	return { type: APPROVE_TRANSACTION_INIT, transaction };
@@ -37,17 +42,15 @@ export const ApproveTransaction = (transaction) => {
 			const privateKey = '923wtnjvBfgQmdXoahtHfYAgpQvbN1oziBm7udTeSf6zvynhf2q'
 			const userBtcAddress = 'mnQ721k3BDzKXbaCsPMk8nC7ogBRs6Rtmo'
 			const hexaBtcAddress = 'miWRTjQr21jNKN9u2wdBt284ZsgdRjnuwJ' //delete this
-			console.log(transaction);
 			dispatch(approveTransactionInit(transaction))
 			try {
 				const exchangeRate = await api.GetExchangeRate()
 				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
 				const feeSatoshi = await api.GetBitcoinFees({network: 'testnet', from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
 				const totalbtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				console.log(totalbtcAmount);
 				const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount)
-				console.log(txid, txhex)
 				await api.UpdateTransaction(transaction.transactionId, {approved: true, txId: txid})
+				await api.GenerateCard(transaction.transactionId)
 				return Promise.resolve();
 			} catch (e) {
 				return Promise.reject(e)
@@ -59,5 +62,11 @@ export const ApproveTransaction = (transaction) => {
 		}).catch(error => {
 			dispatch(approveTransactionFailure(error))
 		})
+	}
+}
+
+export const DismissTransaction = () => {
+	return (dispatch, getState) => {
+		dispatch(dismissTransaction())
 	}
 }

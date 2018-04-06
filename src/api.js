@@ -163,6 +163,18 @@ function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet"
   })
 }
 
+function GenerateCard(transactionId) {
+  return new Promise((resolve, reject) => {
+    axios.post('https://us-central1-hexa-splash.cloudfunctions.net/generateCard', {transactionId}).then((response) => {
+      if(response.data == 'Success') {
+        resolve()
+      } else {
+        reject(response.data)
+      }
+    }).catch(error => reject(error))
+  })
+}
+
 
 const NewAccount = (uid, {
     username, firstName = null, lastName = null, email = null, facebookId = null, defaultCurrency = "USD",
@@ -638,6 +650,7 @@ export default api = {
     NewAccount: NewAccount,
     UpdateAccount: UpdateAccount,
     UpdateTransaction,
+    GenerateCard,
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,
