@@ -1,13 +1,34 @@
 import React, {Component} from "react"
 import {
-    View
+    View,
+    Animated,
+    Easing
 } from "react-native"
 import LottieView from 'lottie-react-native'
 import PropTypes from "prop-types"
 
 export default class Checkmark extends Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        progress: new Animated.Value(0)
+      }
+    }
+
     componentDidMount() {
+      if (this.props.callback) {
+        Animated.timing(this.state.progress, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.linear,
+        }).start(({finished}) => {
+          if (finished) {
+            this.props.callback()
+          }
+        })
+      } else {
         this.animation.play()
+      }
     }
 
     render() {
@@ -39,6 +60,7 @@ export default class Checkmark extends Component {
                             height: animationSize,
                             width: animationSize,
                         }}
+                        progress={this.state.progress}
                         loop={false}
                         autoplay={true}
                     />

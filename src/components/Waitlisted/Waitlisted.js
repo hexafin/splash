@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
     Linking,
+    Alert,
     Share
 } from "react-native"
 import {colors} from "../../lib/colors"
@@ -14,8 +15,22 @@ import CircleButton from "./CircleButton"
 import Ring from "../universal/Ring"
 import AnimatedWaves from "../universal/AnimatedWaves";
 import {isIphoneX} from "react-native-iphone-x-helper"
+import FCM, {
+	FCMEvent,
+} from "react-native-fcm";
 
 class Waitlisted extends Component {
+
+    componentWillMount() {
+      FCM.on(FCMEvent.Notification, async notif => {
+        console.log("Notification", notif);
+        // reload on notifications
+        const {transactionId, relativeAmount, domain, relativeCurrency} = notif
+        if (transactionId && relativeAmount && domain && relativeCurrency) {
+          this.props.navigation.navigate("ApproveModal", {transactionId, relativeAmount, domain, relativeCurrency})
+        }
+      });
+    }
 
     render() {
 
