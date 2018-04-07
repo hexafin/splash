@@ -6,9 +6,7 @@ let analytics = firebase.analytics();
 import { NavigationActions } from "react-navigation";
 analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits } from '../../lib/cryptos'
-// import { hexaBtcAddress } from '../../env/keys.json' uncomment this
-
-// TODO clean this file before merge (address all comments)
+import { hexaBtcAddress } from '../../env/keys.json'
 
 import NavigatorService from "../navigator";
 
@@ -23,7 +21,7 @@ export function approveTransactionInit(transaction) {
 }
 
 export const APPROVE_TRANSACTION_SUCCESS = "APPROVE_TRANSACTION_SUCCESS";
-export function approveTransactionSuccess() {
+export function successApprovingTransaction() {
 	return { type: APPROVE_TRANSACTION_SUCCESS };
 }
 
@@ -37,11 +35,8 @@ export const ApproveTransaction = (transaction) => {
 
 		const approveTransaction = async (transaction) => {
 			const state = getState()
-			// const privateKey = state.user.btcPrivateKey
-			// const userBtcAddress = state.user.btcAddress
-			const privateKey = '923wtnjvBfgQmdXoahtHfYAgpQvbN1oziBm7udTeSf6zvynhf2q'
-			const userBtcAddress = 'mnQ721k3BDzKXbaCsPMk8nC7ogBRs6Rtmo'
-			const hexaBtcAddress = 'miWRTjQr21jNKN9u2wdBt284ZsgdRjnuwJ' //delete this
+			const privateKey = state.user.btcPrivateKey
+			const userBtcAddress = state.user.btcAddress
 			dispatch(approveTransactionInit(transaction))
 			try {
 				const exchangeRate = await api.GetExchangeRate()
@@ -58,7 +53,7 @@ export const ApproveTransaction = (transaction) => {
 		}
 
 		approveTransaction(transaction).then(() => {
-			dispatch(approveTransactionSuccess())
+			dispatch(successApprovingTransaction())
 		}).catch(error => {
 			dispatch(approveTransactionFailure(error))
 		})

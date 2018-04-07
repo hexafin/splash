@@ -13,8 +13,8 @@ import {
 const initialState = {
   isApprovingTransaction: false,
   pendingTransaction: {},
-  approveTransactionError: null,
-  approveTransactionSuccess: false,
+  errorApprovingTransaction: null,
+  successApprovingTransaction: false,
 }
 
 export default function transactionReducer(state = initialState, action) {
@@ -24,8 +24,8 @@ export default function transactionReducer(state = initialState, action) {
           return {
               ...state,
               isApprovingTransaction: false,
-              approveTransactionSuccess: false,
-              approveTransactionError: null,
+              successApprovingTransaction: false,
+              errorApprovingTransaction: null,
               pendingTransaction: {}
           }
 
@@ -33,7 +33,7 @@ export default function transactionReducer(state = initialState, action) {
             return {
                 ...state,
                 isApprovingTransaction: true,
-                approveTransactionSuccess: false,
+                successApprovingTransaction: false,
                 pendingTransaction: action.transaction
             }
 
@@ -41,17 +41,17 @@ export default function transactionReducer(state = initialState, action) {
             return {
                 ...state,
                 isApprovingTransaction: false,
-                approveTransactionSuccess: true,
+                successApprovingTransaction: true,
                 pendingTransaction: {},
             }
 
         case APPROVE_TRANSACTION_FAILURE:
             return {
                 ...state,
-                approveTransactionError: action.error,
+                errorApprovingTransaction: action.error,
                 pendingTransaction: {},
                 isApprovingTransaction: false,
-                approveTransactionSuccess: false,
+                successApprovingTransaction: false,
             }
 
         default:
