@@ -11,7 +11,8 @@ const mapStateToProps = state => {
 		countryName: state.waitlist.countryName,
 		confirmError: state.waitlist.errorSmsConfirming,
 		claimError: state.waitlist.errorClaimingUsername,
-		isSmsConfirming: state.waitlist.isSmsConfirming
+		isSmsConfirming: state.waitlist.isSmsConfirming,
+		isSmsAuthenticating: state.waitlist.isSmsAuthenticating
 	};
 };
 

@@ -66,7 +66,7 @@ class VerifyPhoneNumber extends Component {
                             onPress={() => {
                                 this.props.SmsAuthenticate(this.props.phoneNumber, this.props.countryName)
                             }} style={styles.resendButton} title={"Resend"}
-                            primary={false} small/>
+                            primary={false} loading={this.props.isSmsAuthenticating} small/>
                     </View>
                 </View>
 
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
         color: colors.lightGray
     },
     resendButton: {
+        width: 90,
         marginLeft: 10,
     }
 })

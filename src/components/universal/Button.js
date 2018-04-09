@@ -14,7 +14,7 @@ import PropTypes from "prop-types"
 const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, small=false, style={}}) => {
 
     const loadingView = (
-        <LoadingCircle size={34}/>
+        <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 34}/>
     )
 
     const normalView = (
@@ -40,8 +40,8 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
                         style
                     ]}>
                 <View style={styles.wrapper}>
-                    {!small && loading && loadingView}
-                    {(small || !loading) && normalView}
+                    {loading && loadingView}
+                    {!loading && normalView}
                 </View>
 			</TouchableOpacity>
 		)
