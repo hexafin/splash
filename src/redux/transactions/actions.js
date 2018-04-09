@@ -6,7 +6,7 @@ let analytics = firebase.analytics();
 import { NavigationActions } from "react-navigation";
 analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits } from '../../lib/cryptos'
-import { hexaBtcAddress } from '../../env/keys.json'
+import { hexaBtcAddress } from '../../../env/keys.json'
 
 import NavigatorService from "../navigator";
 
