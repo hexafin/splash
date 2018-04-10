@@ -1,7 +1,7 @@
 import EnterPhoneNumber from "./EnterPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {SmsAuthenticate} from "../../redux/waitlist/actions"
+import {SmsAuthenticate} from "../../redux/onboarding/actions"
 
 const mapStateToProps = (state) => {
 
@@ -18,7 +18,7 @@ const mapStateToProps = (state) => {
     return {
       phoneNumber: phoneNumber,
       splashtag: splashtag,
-      smsError: state.waitlist.errorSmsAuthenticating,
+      smsError: state.onboarding.errorSmsAuthenticating,
     }
 }
 

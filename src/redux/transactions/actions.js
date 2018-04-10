@@ -35,8 +35,8 @@ export const ApproveTransaction = (transaction) => {
 
 		const approveTransaction = async (transaction) => {
 			const state = getState()
-			const privateKey = state.user.btcPrivateKey
-			const userBtcAddress = state.user.btcAddress
+			const privateKey = state.user.bitcoin.privateKey
+			const userBtcAddress = state.user.bitcoin.address
 			dispatch(approveTransactionInit(transaction))
 			try {
 				const exchangeRate = await api.GetExchangeRate()

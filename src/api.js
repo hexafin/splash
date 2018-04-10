@@ -22,7 +22,7 @@ function UsernameExists(username) {
 function GetAccount(uid) {
     return new Promise((resolve, reject) => {
         // get account from uid
-        firestore.collection("people").doc(uid).get().then(person => {
+        firestore.collection("users").doc(uid).get().then(person => {
 
             resolve(person)
 
@@ -179,7 +179,7 @@ function GenerateCard(transactionId) {
 const NewAccount = (uid, {
     username, firstName = null, lastName = null, email = null, facebookId = null, defaultCurrency = "USD",
     address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null, push_token = null,
-    coinbaseId = null
+    coinbaseId = null, bitcoin = null
 }) => {
 
     return new Promise((resolve, reject) => {
@@ -198,6 +198,7 @@ const NewAccount = (uid, {
             default_currency: defaultCurrency,
             push_token: push_token,
             phone_number: phoneNumber,
+            bitcoinAddress: bitcoin.address
             // address: address,
             // city: city,
             // state: state,
@@ -205,7 +206,7 @@ const NewAccount = (uid, {
             // country: country,
         }
 
-        firestore.collection("people").doc(uid).set(newPerson).then(() => {
+        firestore.collection("users").doc(uid).set(newPerson).then(() => {
             resolve(newPerson)
         }).catch(error => {
             reject(error)
@@ -219,8 +220,8 @@ const UpdateAccount = (uid, updateDict) => {
 
     return new Promise((resolve, reject) => {
 
-        firestore.collection("people").doc(uid).update(updateDict).then(() => {
-            firestore.collection("people").doc(uid).get().then(person => {
+        firestore.collection("users").doc(uid).update(updateDict).then(() => {
+            firestore.collection("users").doc(uid).get().then(person => {
                 resolve(person)
             }).catch(error => {
                 reject(error)
@@ -296,7 +297,7 @@ function GetBalance(uid, currency = null) {
 
         // if currency is defined, get balance of that specific currency
         if (currency) {
-            firestore.collection("people").doc(uid).get().then(person => {
+            firestore.collection("users").doc(uid).get().then(person => {
                 if (person.exists) {
                     resolve(person.data().crypto[currency].balance)
                 } else {
@@ -308,7 +309,7 @@ function GetBalance(uid, currency = null) {
         }
         else {
             // get all balances
-            firestore.collection("people").doc(uid).get().then(person => {
+            firestore.collection("users").doc(uid).get().then(person => {
                 if (person.exists) {
 
                     const returnable = {}
@@ -335,7 +336,7 @@ function GetAddress(uid, currency = null) {
 
         // if currency is defined, get address of that specific currency
         if (currency) {
-            firestore.collection("people").doc(uid).get().then(person => {
+            firestore.collection("users").doc(uid).get().then(person => {
                 if (person.exists) {
                     resolve(person.data().crypto[currency].address)
                 } else {
@@ -347,7 +348,7 @@ function GetAddress(uid, currency = null) {
         }
         else {
             // get all addresses
-            firestore.collection("people").doc(uid).get().then(person => {
+            firestore.collection("users").doc(uid).get().then(person => {
                 if (person.exists) {
 
                     const returnable = {}
@@ -374,7 +375,7 @@ function GetCrypto(uid, currency = null) {
 
         // if currency is defined, get crypto of that specific currency
 
-        firestore.collection("people").doc(uid).get().then(person => {
+        firestore.collection("users").doc(uid).get().then(person => {
             if (person.exists) {
                 if (currency) {
                     let specificCrypto = person.data().crypto[currency]
@@ -485,7 +486,7 @@ function NewTransaction({transactionType, from_id, to_id, to_address = null, amo
 
 function GetUidFromFB(facebook_id) {
     return new Promise((resolve, reject) => {
-        firestore.collection("people").where("facebook_id", "==", facebook_id).get().then(query => {
+        firestore.collection("users").where("facebook_id", "==", facebook_id).get().then(query => {
             const person = query.docs[0]
             resolve(person.id)
         }).catch(error => {
@@ -513,7 +514,7 @@ function LoadTransactions(uid, transactionType) {
         }
 
         for(let i = 0; i < query.size; i++) {
-          firestore.collection("people").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
+          firestore.collection("users").doc(query.docs[i].data()[otherPersonId]).get().then(response => {
             const person = response.data()
             const transaction = query.docs[i].data()
 
@@ -612,7 +613,7 @@ function LoadFriends(facebook_id, access_token) {
 
             for (let i = 0; i < friendsData.length; i++) {
 
-                firestore.collection("people").where("facebook_id", "=", friendsData[i].id).get().then(person => {
+                firestore.collection("users").where("facebook_id", "=", friendsData[i].id).get().then(person => {
                     if (!person.empty) {
                         const newFriend = person.docs[0].data()
                         friends.push(newFriend)
@@ -664,6 +665,7 @@ export default api = {
     GetAddressBalance,
     BuildBitcoinTransaction,
     GetBitcoinFees,
+    NewBitcoinWallet,
     GetBalance: GetBalance,
     GetAddress: GetAddress,
     GetCrypto: GetCrypto,

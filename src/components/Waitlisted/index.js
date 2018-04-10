@@ -5,7 +5,7 @@ import {bindActionCreators} from "redux"
 const mapStateToProps = (state) => {
     return {
       waitlisted: state.user.waitlisted,
-      splashtag: state.waitlist.username || "yourname"
+      splashtag: state.user.entity.username || "yourname"
     }
 }
 
