@@ -32,7 +32,7 @@ class ChooseSplashtag extends Component {
             checkingSplashtag: false
         }
         this.checkSplashtag = this.checkSplashtag.bind(this);
-        this.debouncedOnChange = debounce(this.checkSplashtag, 100);
+        this.debouncedOnChange = debounce(this.checkSplashtag, 250);
     }
 
     checkSplashtag(splashtag) {
@@ -73,7 +73,7 @@ class ChooseSplashtag extends Component {
         const splashtagWorks = splashtagCorrectlyFormatted && this.state.splashtagAvailable.available
 
         let buttonTitle = "Choose your splashtag"
-        if (this.props.splashtag.length < 3 && this.props.splashtag.length != 0) {
+        if (this.props.splashtag.length < 3 && this.props.splashtag.length > 0) {
           buttonTitle = "Too short"
         }
         else if (this.props.splashtag.length > 15) {
@@ -83,7 +83,7 @@ class ChooseSplashtag extends Component {
           if (splashtagWorks) {
               buttonTitle = "Claim splashtag"
           }
-          else if (!this.state.splashtagAvailable.validSplashtag) {
+          else if (!splashtagCorrectlyFormatted) {
             buttonTitle = "Only use letters and numbers"
           }
           else if (!this.state.splashtagAvailable.available) {
@@ -95,7 +95,7 @@ class ChooseSplashtag extends Component {
         }
 
         return (
-            <KeyboardAvoidingView style={styles.container} behavior={"height"}>
+            <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
 
                 <View style={styles.body}>
 
@@ -130,9 +130,9 @@ class ChooseSplashtag extends Component {
                         ]}
                         title={buttonTitle}
                         primary={true}
-                        loading={this.state.checkingSplashtag}
-                        disabled={!this.state.splashtagAvailable.available 
-                            || this.props.splashtag.length == 0 
+                        loading={this.state.checkingSplashtag && splashtagCorrectlyFormatted}
+                        disabled={!this.state.splashtagAvailable.available
+                            || this.props.splashtag.length == 0
                             || this.props.checkingSplashtag}
                         />
 

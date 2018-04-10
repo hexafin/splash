@@ -54,7 +54,7 @@ class EnterPhoneNumber extends Component {
     }
 
     render() {
-        return (<KeyboardAvoidingView style={styles.container} behavior={"height"}>
+        return (<KeyboardAvoidingView style={styles.container} behavior={"padding"}>
 
             <View style={styles.body}>
 
