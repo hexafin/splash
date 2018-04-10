@@ -5,9 +5,9 @@ import { ApproveTransaction, DismissTransaction } from "../../redux/transactions
 
 const mapStateToProps = (state) => {
     return {
-      loading: state.transaction.isApprovingTransaction,
-      success: state.transaction.successApprovingTransaction,
-      error: state.transaction.errorApprovingTransaction
+      loading: state.transactions.isApprovingTransaction,
+      success: state.transactions.successApprovingTransaction,
+      error: state.transactions.errorApprovingTransaction
     }
 }
 

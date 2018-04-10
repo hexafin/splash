@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
     return {
-      splashtag: state.waitlist.username || "yourname"
+      splashtag: state.user.entity.username || "yourname"
     }
 }
 

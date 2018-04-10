@@ -2,19 +2,19 @@ import Landing from "./Landing";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
-	ClaimUsername,
 	InviteFriends,
 	getDeepLinkedSplashtag,
 	SmsAuthenticate
-} from "../../redux/waitlist/actions";
+} from "../../redux/onboarding/actions";
+import { ClaimUsername } from "../../redux/user/actions"
 
 const mapStateToProps = state => {
 	return {
 		waitlisted: state.user.waitlisted,
-		splashtagOnHold: state.waitlist.splashtagOnHold,
-		phoneNumber: state.waitlist.phoneNumber,
+		splashtagOnHold: state.onboarding.splashtagOnHold,
+		phoneNumber: state.onboarding.phoneNumber,
 		username: state.user.splashtag,
-		smsAuthenticated: state.waitlist.smsAuthenticated
+		smsAuthenticated: state.onboarding.smsAuthenticated
 	};
 };
 

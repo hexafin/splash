@@ -19,9 +19,6 @@ import {
 const initialState = {
     isSmsAuthenticating: false,
     errorSmsAuthenticating: null,
-    isClaimingUsername: false,
-    errorClaimingUsername: null,
-    username: null,
     splashtagOnHold: null,
     phoneNumber: null,
     countryName: null,
@@ -30,30 +27,8 @@ const initialState = {
     errorSmsConfirming: null
 }
 
-export default function waitlistReducer(state = initialState, action) {
+export default function onboardingReducer(state = initialState, action) {
     switch (action.type) {
-
-        case CLAIM_USERNAME_INIT:
-            return {
-                ...state,
-                isClaimingUsername: true,
-                errorClaimingUsername: null
-            }
-
-        case CLAIM_USERNAME_SUCCESS:
-            return {
-                ...state,
-                isClaimingUsername: false,
-                username: action.username
-            }
-
-        case CLAIM_USERNAME_FAILURE:
-            Sentry.captureMessage(action.error)
-            return {
-                ...state,
-                isClaimingUsername: false,
-                errorClaimingUsername: action.error
-            }
 
         case HOLD_SPLASHTAG:
             return {

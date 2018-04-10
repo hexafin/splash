@@ -1,18 +1,17 @@
 import VerifyPhoneNumber from "./VerifyPhoneNumber";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { SmsConfirm, SmsAuthenticate } from "../../redux/waitlist/actions";
+import { SmsConfirm, SmsAuthenticate } from "../../redux/onboarding/actions";
 
 const mapStateToProps = state => {
 	return {
 		waitlisted: state.user.waitlisted,
-		username: state.waitlist.username,
-		phoneNumber: state.waitlist.phoneNumber,
-		countryName: state.waitlist.countryName,
-		confirmError: state.waitlist.errorSmsConfirming,
-		claimError: state.waitlist.errorClaimingUsername,
-		isSmsConfirming: state.waitlist.isSmsConfirming,
-		isSmsAuthenticating: state.waitlist.isSmsAuthenticating
+		phoneNumber: state.onboarding.phoneNumber,
+		countryName: state.onboarding.countryName,
+		confirmError: state.onboarding.errorSmsConfirming,
+		claimError: state.onboarding.errorClaimingUsername,
+		isSmsConfirming: state.onboarding.isSmsConfirming,
+		isSmsAuthenticating: state.onboarding.isSmsAuthenticating
 	};
 };
 
