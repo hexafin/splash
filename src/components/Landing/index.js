@@ -10,7 +10,7 @@ import { ClaimUsername } from "../../redux/user/actions"
 
 const mapStateToProps = state => {
 	return {
-		waitlisted: state.user.waitlisted,
+		loggedIn: state.user.loggedIn,
 		splashtagOnHold: state.onboarding.splashtagOnHold,
 		phoneNumber: state.onboarding.phoneNumber,
 		username: state.user.splashtag,

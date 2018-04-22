@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, { Component } from "react"
 import {
     View,
     Text,
@@ -9,35 +9,40 @@ import {
     Alert,
     Share
 } from "react-native"
-import {colors} from "../../lib/colors"
-import {defaults, icons} from "../../lib/styles"
+import { colors } from "../../lib/colors"
+import { defaults, icons } from "../../lib/styles"
 import CircleButton from "./CircleButton"
 import Ring from "../universal/Ring"
-import AnimatedWaves from "../universal/AnimatedWaves";
-import {isIphoneX} from "react-native-iphone-x-helper"
-import FCM, {
-	FCMEvent,
-} from "react-native-fcm";
+import AnimatedWaves from "../universal/AnimatedWaves"
+import { isIphoneX } from "react-native-iphone-x-helper"
+import FCM, { FCMEvent } from "react-native-fcm"
 
 class Waitlisted extends Component {
-
     componentWillMount() {
-      FCM.on(FCMEvent.Notification, async notif => {
-        console.log("Notification", notif);
-        // reload on notifications
-        const {transactionId, relativeAmount, domain, relativeCurrency} = notif
-        if (transactionId && relativeAmount && domain && relativeCurrency) {
-          this.props.navigation.navigate("ApproveModal", {transactionId, relativeAmount, domain, relativeCurrency})
-        }
-      });
+        FCM.on(FCMEvent.Notification, async notif => {
+            console.log("Notification", notif)
+            // reload on notifications
+            const {
+                transactionId,
+                relativeAmount,
+                domain,
+                relativeCurrency
+            } = notif
+            if (transactionId && relativeAmount && domain && relativeCurrency) {
+                this.props.navigation.navigate("ApproveModal", {
+                    transactionId,
+                    relativeAmount,
+                    domain,
+                    relativeCurrency
+                })
+            }
+        })
     }
 
     render() {
-
         return (
             <View style={styles.container}>
-
-                <AnimatedWaves bottom={(isIphoneX()) ? 0 : -80}/>
+                <AnimatedWaves bottom={isIphoneX() ? 0 : -80} />
 
                 <View style={styles.body}>
                     <Text style={styles.title}>
@@ -52,9 +57,14 @@ class Waitlisted extends Component {
 
                     <View style={styles.ringWrapper}>
                         <Ring size={120}>
-                            <Image source={require("../../assets/images/smile-splash.png")} style={styles.smileSplash}/>
+                            <Image
+                                source={require("../../assets/images/smile-splash.png")}
+                                style={styles.smileSplash}
+                            />
                         </Ring>
-                        <Text style={styles.splashtag}>@{this.props.splashtag}</Text>
+                        <Text style={styles.splashtag}>
+                            @{this.props.splashtag}
+                        </Text>
                     </View>
 
                     <Text style={styles.subtitle}>
@@ -66,39 +76,54 @@ class Waitlisted extends Component {
                 </View>
 
                 <View style={styles.footer}>
-                    <Text style={styles.footerTitle}>
-                        In the meantime
-                    </Text>
+                    <Text style={styles.footerTitle}>In the meantime</Text>
                     <View style={styles.footerButtons}>
-                        <CircleButton title={"Join the\ncommunity"} onPress={() => {
-                            Linking.openURL("https://t.me/joinchat/EjQODwyF10VliZ4fQ0SL8Q")
-                        }}>
-                            <Image source={require("../../assets/images/telegram.png")} style={styles.telegramImage}/>
+                        <CircleButton
+                            title={"Join the\ncommunity"}
+                            onPress={() => {
+                                Linking.openURL(
+                                    "https://t.me/joinchat/EjQODwyF10VliZ4fQ0SL8Q"
+                                )
+                            }}>
+                            <Image
+                                source={require("../../assets/images/telegram.png")}
+                                style={styles.telegramImage}
+                            />
                         </CircleButton>
-                        <CircleButton title={"Invite\nfriends"} onPress={() => {
-                            Share.share({
-                                url: "https://www.splashwallet.io",
-                                message: "Try Splash, the best way to use cryptocurrency",
-                                title: "Welcome to the future of crypto"
-                            }).then(result => {
-                                console.log("share result: ", result)
-                            })
-                        }}>
-                            <Image source={require("../../assets/images/invite.png")} style={styles.inviteImage}/>
+                        <CircleButton
+                            title={"Invite\nfriends"}
+                            onPress={() => {
+                                Share.share({
+                                    url: "https://www.splashwallet.io",
+                                    message:
+                                        "Try Splash, the best way to use cryptocurrency",
+                                    title: "Welcome to the future of crypto"
+                                }).then(result => {
+                                    console.log("share result: ", result)
+                                })
+                            }}>
+                            <Image
+                                source={require("../../assets/images/invite.png")}
+                                style={styles.inviteImage}
+                            />
                         </CircleButton>
-                        <CircleButton title={"Learn\nmore"} onPress={() => {
-                            Linking.openURL("https://www.medium.com/splash-wallet")
-                        }}>
-                            <Image source={require("../../assets/images/medium.png")} style={styles.mediumImage}/>
+                        <CircleButton
+                            title={"Learn\nmore"}
+                            onPress={() => {
+                                Linking.openURL(
+                                    "https://www.medium.com/splash-wallet"
+                                )
+                            }}>
+                            <Image
+                                source={require("../../assets/images/medium.png")}
+                                style={styles.mediumImage}
+                            />
                         </CircleButton>
                     </View>
                 </View>
-
             </View>
         )
-
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -106,7 +131,7 @@ const styles = StyleSheet.create({
         ...defaults.container,
         justifyContent: "space-between",
         position: "relative",
-        paddingTop: (isIphoneX()) ? 64 : 10
+        paddingTop: isIphoneX() ? 64 : 10
     },
     wavesImage: {
         position: "absolute",
@@ -120,26 +145,26 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 30,
         flexDirection: "column",
-        alignItems: 'center',
+        alignItems: "center"
     },
     title: {
         fontSize: 23,
-        fontWeight: '500',
+        fontWeight: "500",
         color: colors.nearBlack,
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: "rgba(0,0,0,0)",
         marginBottom: 20,
         textAlign: "center"
     },
     subtitle: {
         fontSize: 17,
         textAlign: "center",
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: "rgba(0,0,0,0)",
         color: colors.nearBlack,
-        marginBottom: 10,
+        marginBottom: 10
     },
     ringWrapper: {
-        flexDirection: 'column',
-        alignItems: 'center',
+        flexDirection: "column",
+        alignItems: "center",
         padding: 15
     },
     smileSplash: {
@@ -148,26 +173,26 @@ const styles = StyleSheet.create({
     },
     splashtag: {
         color: colors.nearBlack,
-        backgroundColor: 'rgba(0,0,0,0)',
+        backgroundColor: "rgba(0,0,0,0)",
         fontSize: 22,
-        fontWeight: '700',
-        textAlign: 'center',
+        fontWeight: "700",
+        textAlign: "center",
         padding: 10
     },
     footer: {
-        flexDirection: 'column',
+        flexDirection: "column",
         padding: 20
     },
     footerTitle: {
         color: colors.white,
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         fontSize: 18,
-        marginBottom: (isIphoneX()) ? 20 : 0,
-        padding: 20,
+        marginBottom: isIphoneX() ? 20 : 0,
+        padding: 20
     },
     footerButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between'
+        flexDirection: "row",
+        justifyContent: "space-between"
     },
     telegramImage: {
         width: 45,
