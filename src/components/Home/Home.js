@@ -21,6 +21,7 @@ class Home extends Component {
 		this.state = {
 			currency: "USD"
 		}
+		this.handleBalancePress = this.handleBalancePress.bind(this)
 	}
 
 	componentWillMount() {
@@ -46,6 +47,15 @@ class Home extends Component {
 				});
 			}
 		});
+	}
+
+	handleBalancePress() {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				currency: (prevState.currency == "BTC") ? "USD" : "BTC"
+			}
+		})
 	}
 
 	render() {
@@ -86,7 +96,7 @@ class Home extends Component {
 							<Image source={icons.whiteSplash} style={styles.headerLogoButton}/>
 						</TouchableWithoutFeedback>
 					</View>
-					<TouchableWithoutFeedback>
+					<TouchableWithoutFeedback onPress={this.handleBalancePress}>
 						<View style={styles.balanceWrapper}>
 							<Text style={styles.balanceText}>25.59</Text>
 							<View style={styles.balanceCurrencyWrapper}>
