@@ -24,6 +24,10 @@ class Home extends Component {
 	}
 
 	componentWillMount() {
+        if (!this.props.loggedIn) {
+            this.props.navigation.navigate("Landing");
+        }
+
 		FCM.on(FCMEvent.Notification, async notif => {
 			console.log("Notification", notif);
 			// reload on notifications
@@ -45,6 +49,11 @@ class Home extends Component {
 	}
 
 	render() {
+
+		const currencyPrefix = {
+			BTC: "BTC ",
+			USD: "$"
+		}
 
 		const transactions = [
 			{
@@ -70,6 +79,7 @@ class Home extends Component {
 
 		return (
 			<View style={styles.container}>
+				<Image source={require("../../assets/images/header.png")} style={styles.headerImage}/>
 				<View style={styles.header}>
 					<View style={styles.topbar}>
 						<TouchableWithoutFeedback>
@@ -78,10 +88,10 @@ class Home extends Component {
 					</View>
 					<TouchableWithoutFeedback>
 						<View style={styles.balanceWrapper}>
-							<Text style={styles.balanceText}></Text>
+							<Text style={styles.balanceText}>25.59</Text>
 							<View style={styles.balanceCurrencyWrapper}>
 								<Image source={icons.refresh} style={styles.refreshIcon}/>
-								<Text style={styles.balanceCurrencyText}>{this.state.relativeCurrency}</Text>
+								<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
@@ -98,9 +108,13 @@ class Home extends Component {
 							<TransactionLine 
 								key={"transactionLine"+transaction.id}
 								direction={(transaction.type == "card") ? "out" : "in"} 
-								amount={transaction.amount[this.state.currency]}
+								amount={currencyPrefix[this.state.currency] + transaction.amount[this.state.currency]}
 								date={transaction.date}
-								title={(transaction.type == "card") ? transaction.domain : "A bitcoin wallet"}
+								title={
+									(transaction.type == "card") 
+									? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
+									: "A bitcoin wallet"
+								}
 								onPress={() => {
 									console.log("press:", transaction)
 								}}
@@ -116,22 +130,86 @@ class Home extends Component {
 const styles = StyleSheet.create({
 	container: {
 		...defaults.container,
-		backgroundColor: colors.purple
+		justifyContent: "space-between"
 	},
-	header: {},
-	topbar: {},
+	header: {
+		flexDirection: "column",
+		alignItems: "center",
+		height: 200,
+		marginBottom: 40,
+		backgroundColor: colors.primary
+	},
+	headerImage: {
+		position: "absolute",
+		width: 400,
+		height: 300,
+		top: -60
+	},
+	topbar: {
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		width: "100%",
+		paddingTop: 40,
+		paddingRight: 30
+	},
 	headerLogoButton: {
-		width: 50,
-		height: 50,
+		width: 24,
+		height: 32,
 	},
-	balanceWrapper: {},
-	balanceText: {},
-	balanceCurrencyWrapper: {},
-	balanceCurrencyText: {},
-	addCryptoButton: {},
-	addCryptoText: {},
-	history: {},
-	historyTitle: {}
+	balanceWrapper: {
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 15,
+		marginBottom: 5
+	},
+	balanceText: {
+		color: colors.white,
+		fontWeight: "600",
+		fontSize: 34,
+		backgroundColor: colors.primary
+	},
+	balanceCurrencyWrapper: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: colors.primary
+	},
+	balanceCurrencyText: {
+		color: "rgba(255,255,255,0.7)",
+		fontSize: 14,
+		fontWeight: "600",
+		marginLeft: 5
+	},
+	refreshIcon: {
+		width: 13,
+		height: 13
+	},
+	addCryptoButton: {
+		paddingLeft: 20,
+		paddingRight: 20,
+		paddingTop: 8,
+		paddingBottom: 8,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: colors.primaryDark,
+		borderRadius: 5
+	},
+	addCryptoText: {
+		color: colors.white,
+		fontSize: 14,
+		fontWeight: "600"
+	},
+	history: {
+		flex: 1,
+		padding: 20
+	},
+	historyTitle: {
+		color: colors.primaryDarkText,
+		fontSize: 18,
+		fontWeight: "700"
+	}
 });
 
 export default Home;

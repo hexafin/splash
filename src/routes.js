@@ -64,14 +64,21 @@ function forVertical(props) {
 // 	}
 // );
 
-const AppRouter = TabNavigator({
-	Home: {
-		screen: Home,
-		navigationOptions: {
-			tabBarVisible: false
+const AppRouter = TabNavigator(
+	{
+		Home: {
+			screen: Home,
+			navigationOptions: {
+				tabBarVisible: false
+			}
 		}
+	},
+	{
+		animationEnabled: true,
+		swipeEnabled: false,
+		initialRouteName: "Home"
 	}
-})
+)
 
 const OnboardingRouter = TabNavigator(
 	{
@@ -129,7 +136,7 @@ const Router = StackNavigator(
 		headerMode: "none",
 		mode: "modal",
 		swipeEnabled: false,
-		initialRouteName: "OnboardingRouter",
+		initialRouteName: "AppRouter",
 		transitionConfig: () => ({ screenInterpolator: forVertical }),
 		cardStyle: {
 			backgroundColor: "rgba(0,0,0,0.2)"
