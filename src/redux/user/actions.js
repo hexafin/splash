@@ -1,67 +1,67 @@
-import api from "../../api";
-var axios = require("axios");
-import firebase from "react-native-firebase";
-let firestore = firebase.firestore();
-let analytics = firebase.analytics();
-import { Sentry } from "react-native-sentry";
+import api from "../../api"
+var axios = require("axios")
+import firebase from "react-native-firebase"
+let firestore = firebase.firestore()
+let analytics = firebase.analytics()
+import { Sentry } from "react-native-sentry"
 import FCM, {
-    FCMEvent,
-    RemoteNotificationResult,
-    WillPresentNotificationResult,
-    NotificationType
-} from "react-native-fcm";
-analytics.setAnalyticsCollectionEnabled(true);
-import NavigatorService from "../navigator";
+	FCMEvent,
+	RemoteNotificationResult,
+	WillPresentNotificationResult,
+	NotificationType
+} from "react-native-fcm"
+analytics.setAnalyticsCollectionEnabled(true)
+import NavigatorService from "../navigator"
 
 export const ActionTypes = {
-    TAKE_OFF_WAITLIST: "TAKE_OFF_WAITLIST",
-    CLAIM_USERNAME_INIT: "CLAIM_USERNAME_INIT",
-    CLAIM_USERNAME_SUCCESS: "CLAIM_USERNAME_SUCCESS",
-    CLAIM_USERNAME_FAILURE: "CLAIM_USERNAME_FAILURE",
-}
-
-export function takeOffWaitlist() {
-    return { types: ActionTypes.TAKE_OFF_WAITLIST }
+	CLAIM_USERNAME_INIT: "CLAIM_USERNAME_INIT",
+	CLAIM_USERNAME_SUCCESS: "CLAIM_USERNAME_SUCCESS",
+	CLAIM_USERNAME_FAILURE: "CLAIM_USERNAME_FAILURE"
 }
 
 export function claimUsernameInit() {
-	return { type: ActionTypes.CLAIM_USERNAME_INIT };
+	return { type: ActionTypes.CLAIM_USERNAME_INIT }
 }
 
 export function claimUsernameSuccess(username, phoneNumber, bitcoin) {
-	return { type: ActionTypes.CLAIM_USERNAME_SUCCESS, username, phoneNumber, bitcoin };
+	return {
+		type: ActionTypes.CLAIM_USERNAME_SUCCESS,
+		username,
+		phoneNumber,
+		bitcoin
+	}
 }
 
 export function claimUsernameFailure(error) {
-	return { type: ActionTypes.CLAIM_USERNAME_FAILURE, error };
+	return { type: ActionTypes.CLAIM_USERNAME_FAILURE, error }
 }
 
 export const ClaimUsername = user => {
 	return (dispatch, getState) => {
-		const state = getState();
-		let splashtag = state.onboarding.splashtagOnHold;
-    const phoneNumber = state.onboarding.phoneNumber
-    const bitcoinData = api.NewBitcoinWallet()
+		const state = getState()
+		let splashtag = state.onboarding.splashtagOnHold
+		const phoneNumber = state.onboarding.phoneNumber
+		const bitcoinData = api.NewBitcoinWallet()
 
 		if (
 			typeof state.form.chooseSplashtag !== "undefined" &&
 			state.form.chooseSplashtag.values.splashtag
 		) {
-			splashtag = state.form.chooseSplashtag.values.splashtag;
+			splashtag = state.form.chooseSplashtag.values.splashtag
 		}
 
-		dispatch(claimUsernameInit());
+		dispatch(claimUsernameInit())
 		// check to see if username is available
 		api
 			.UsernameExists(splashtag)
 			.then(data => {
 				if (!data.availableUser) {
-					dispatch(claimUsernameFailure("Error: Username taken"));
+					dispatch(claimUsernameFailure("Error: Username taken"))
 				} else {
 					Sentry.setUserContext({
 						userID: user.uid,
 						username: splashtag
-					});
+					})
 
 					FCM.requestPermissions()
 						.then(() =>
@@ -69,7 +69,7 @@ export const ClaimUsername = user => {
 						)
 						.catch(() =>
 							console.log("notification permission rejected")
-						);
+						)
 
 					FCM.getFCMToken().then(async token => {
 						api
@@ -77,13 +77,13 @@ export const ClaimUsername = user => {
 								username: splashtag,
 								phoneNumber: phoneNumber,
 								push_token: token,
-                bitcoin: bitcoinData
+								bitcoin: bitcoinData
 							})
 							.then(person => {
-								NavigatorService.navigate("FadeRouter");
+								NavigatorService.navigate("Home")
 
 								FCM.on(FCMEvent.Notification, async notif => {
-									console.log("Notification", notif);
+									console.log("Notification", notif)
 									// reload on notifications
 									if (
 										!notif.local_notification ||
@@ -97,21 +97,37 @@ export const ClaimUsername = user => {
 											sound: "default",
 											vibrate: 300,
 											show_in_foreground: true
-										});
+										})
 									}
-								});
+								})
 
-                dispatch(claimUsernameSuccess(splashtag, phoneNumber, bitcoinData));
-
+								dispatch(
+									claimUsernameSuccess(
+										splashtag,
+										phoneNumber,
+										bitcoinData
+									)
+								)
 							})
 							.catch(error => {
-								dispatch(claimUsernameFailure(error));
-							});
-					});
+								dispatch(claimUsernameFailure(error))
+							})
+					})
 				}
 			})
 			.catch(error => {
-				dispatch(claimUsernameFailure(error));
-			});
-	};
-};
+				dispatch(claimUsernameFailure(error))
+			})
+	}
+}
+
+export const LoadApp = () => {
+	return (dispatch, getState) => {
+		const state = getState()
+		console.log("load app", state)
+
+		if (state.user.loggedIn) {
+			NavigatorService.navigate("Home")
+		}
+	}
+}

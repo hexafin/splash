@@ -8,6 +8,7 @@ import Routes from "./routes";
 import configureStore from "./store/configureStore";
 import Loading from "./components/universal/Loading";
 import NavigatorService from "./redux/navigator";
+import { LoadApp } from "./redux/user/actions"
 
 const { persistor, store } = configureStore();
 
@@ -30,9 +31,6 @@ class App extends Component {
 			<Provider store={store}>
 				<PersistGate
 					loading={<Loading />}
-					onBeforeLift={() => {
-						// LoadApp();
-					}}
 					persistor={persistor}
 				>
 					<Routes
