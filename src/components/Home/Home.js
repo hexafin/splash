@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {
 	View,
 	Text,
+	ScrollView,
 	StyleSheet,
 	Image,
 	TouchableWithoutFeedback,
@@ -22,11 +23,12 @@ class Home extends Component {
 			currency: "USD"
 		}
 		this.handleBalancePress = this.handleBalancePress.bind(this)
+		this.handleAddCrypto = this.handleAddCrypto.bind(this)
 	}
 
 	componentWillMount() {
         if (!this.props.loggedIn) {
-            this.props.navigation.navigate("Landing");
+            this.props.navigation.navigate("Landing")
         }
 
 		FCM.on(FCMEvent.Notification, async notif => {
@@ -58,11 +60,21 @@ class Home extends Component {
 		})
 	}
 
+	handleAddCrypto() {
+		console.log("hey!")
+		this.props.navigation.navigate("AddCrypto")
+	}
+
 	render() {
 
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
+		}
+
+		const balance = {
+			BTC: "0.0048",
+			USD: "45.39"
 		}
 
 		const transactions = [
@@ -85,6 +97,44 @@ class Home extends Component {
 					BTC: 0.00023
 				}
 			},
+			{
+				id: 3,
+				type: "card",
+				domain: "apple.com",
+				date: "Jan 04, 2018",
+				amount: {
+					USD: 999.99,
+					BTC: 0.00023
+				}
+			},
+			{
+				id: 4,
+				type: "fund",
+				date: "Jan 04, 2018",
+				amount: {
+					USD: 999.99,
+					BTC: 0.00023
+				}
+			},
+			{
+				id: 5,
+				type: "card",
+				domain: "apple.com",
+				date: "Jan 04, 2018",
+				amount: {
+					USD: 999.99,
+					BTC: 0.00023
+				}
+			},
+			{
+				id: 6,
+				type: "fund",
+				date: "Jan 04, 2018",
+				amount: {
+					USD: 999.99,
+					BTC: 0.00023
+				}
+			},
 		]
 
 		return (
@@ -92,26 +142,26 @@ class Home extends Component {
 				<Image source={require("../../assets/images/header.png")} style={styles.headerImage}/>
 				<View style={styles.header}>
 					<View style={styles.topbar}>
-						<TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={this.handleAddCrypto}>
 							<Image source={icons.whiteSplash} style={styles.headerLogoButton}/>
 						</TouchableWithoutFeedback>
 					</View>
 					<TouchableWithoutFeedback onPress={this.handleBalancePress}>
 						<View style={styles.balanceWrapper}>
-							<Text style={styles.balanceText}>25.59</Text>
+							<Text style={styles.balanceText}>{balance[this.state.currency]}</Text>
 							<View style={styles.balanceCurrencyWrapper}>
 								<Image source={icons.refresh} style={styles.refreshIcon}/>
 								<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback>
+					<TouchableWithoutFeedback onPress={this.handleAddCrypto}>
 						<View style={styles.addCryptoButton}>
 							<Text style={styles.addCryptoText}>Add crypto</Text>
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
-				<View style={styles.history}>
+				<ScrollView style={styles.history}>
 					<Text style={styles.historyTitle}>Your history</Text>
 					{transactions.map(transaction => {
 						return (
@@ -131,7 +181,7 @@ class Home extends Component {
 							/>
 						)
 					})}
-				</View>
+				</ScrollView>
 			</View>
 		);
 	}

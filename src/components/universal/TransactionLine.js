@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
 	arrow: {
 		width: 48,
 		height: 24,
-		right: -3
+		right: -3,
+		overflow: "visible"
 	},
 	amount: {
 		fontSize: 14,

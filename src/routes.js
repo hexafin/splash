@@ -9,6 +9,7 @@ import EnterPhoneNumber from "./components/EnterPhoneNumber"
 import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
 import Waitlisted from "./components/Waitlisted"
 import Home from "./components/Home"
+import AddCrypto from "./components/AddCrypto"
 import Unlock from "./components/Unlock"
 import ApproveModal from "./components/ApproveModal"
 
@@ -68,6 +69,12 @@ const AppRouter = TabNavigator(
 	{
 		Home: {
 			screen: Home,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		},
+		AddCrypto: {
+			screen: AddCrypto,
 			navigationOptions: {
 				tabBarVisible: false
 			}
