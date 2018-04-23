@@ -18,7 +18,6 @@ import TouchID from 'react-native-touch-id'
 class Landing extends Component {
 
     componentWillMount() {
-        console.log(this.props)
         if (this.props.loggedIn) {
             this.props.navigation.navigate("Home");
         }

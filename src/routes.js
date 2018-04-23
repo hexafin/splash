@@ -9,6 +9,7 @@ import EnterPhoneNumber from "./components/EnterPhoneNumber"
 import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
 import Waitlisted from "./components/Waitlisted"
 import Home from "./components/Home"
+import AddCrypto from "./components/AddCrypto"
 import Unlock from "./components/Unlock"
 import ApproveModal from "./components/ApproveModal"
 
@@ -64,14 +65,27 @@ function forVertical(props) {
 // 	}
 // );
 
-const AppRouter = TabNavigator({
-	Home: {
-		screen: Home,
-		navigationOptions: {
-			tabBarVisible: false
+const AppRouter = TabNavigator(
+	{
+		Home: {
+			screen: Home,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		},
+		AddCrypto: {
+			screen: AddCrypto,
+			navigationOptions: {
+				tabBarVisible: false
+			}
 		}
+	},
+	{
+		animationEnabled: true,
+		swipeEnabled: false,
+		initialRouteName: "Home"
 	}
-})
+)
 
 const OnboardingRouter = TabNavigator(
 	{
@@ -129,7 +143,7 @@ const Router = StackNavigator(
 		headerMode: "none",
 		mode: "modal",
 		swipeEnabled: false,
-		initialRouteName: "OnboardingRouter",
+		initialRouteName: "AppRouter",
 		transitionConfig: () => ({ screenInterpolator: forVertical }),
 		cardStyle: {
 			backgroundColor: "rgba(0,0,0,0.2)"

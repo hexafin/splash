@@ -35,8 +35,10 @@ if (isIphoneX()) {
 export const icons = {
 	BTC: require("../assets/images/bitcoin-logo.png"),
 	whiteSplash: require("../assets/icons/whiteSplash.png"),
+	primarySplash: require("../assets/icons/primarySplash.png"),
 	arrow: {
-		out: null,
-		in: null
-	}
+		out: require("../assets/icons/primaryRightArrow.png"),
+		in: require("../assets/icons/greenLeftArrow.png")
+	},
+	refresh: require("../assets/icons/refreshCircle.png")
 }
