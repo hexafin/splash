@@ -39,11 +39,13 @@ export const ApproveTransaction = (transaction) => {
 			const userBtcAddress = state.user.bitcoin.address
 			dispatch(approveTransactionInit(transaction))
 			try {
-				const exchangeRate = await api.GetExchangeRate()
-				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-				const feeSatoshi = await api.GetBitcoinFees({network: 'testnet', from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
-				const totalbtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount)
+				// commented for demo
+				// const exchangeRate = await api.GetExchangeRate()
+				// const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
+				// const feeSatoshi = await api.GetBitcoinFees({network: 'testnet', from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
+				// const totalbtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
+				// const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount)
+				const txid = 1 // dummy data
 				await api.UpdateTransaction(transaction.transactionId, {approved: true, txId: txid})
 				await api.GenerateCard(transaction.transactionId)
 				return Promise.resolve();

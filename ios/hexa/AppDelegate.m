@@ -37,7 +37,7 @@
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   NSURL *jsCodeLocation;
   // CODEPUSH
-//  jsCodeLocation = [CodePush bundleURL];
+  // jsCodeLocation = [CodePush bundleURL];
   // BUNDLE
   // jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   // DEVELOP WITH NODE

@@ -9,12 +9,17 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 import LoadingCircle from "./LoadingCircle"
+import Checkmark from "./Checkmark"
 import PropTypes from "prop-types"
 
-const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, small=false, style={}}) => {
+const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkCallback=null, small=false, style={}}) => {
 
     const loadingView = (
         <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 34}/>
+    )
+
+    const checkmarkView = (
+        <Checkmark color={primary ? 'white' : 'purple'} size={15} callback={checkmarkCallback}/>
     )
 
     const normalView = (
@@ -41,7 +46,8 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
                     ]}>
                 <View style={styles.wrapper}>
                     {loading && loadingView}
-                    {!loading && normalView}
+                    {!loading && !checkmark && normalView}
+                    {checkmark && !loading && checkmarkView}
                 </View>
 			</TouchableOpacity>
 		)

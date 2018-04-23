@@ -5,6 +5,7 @@ export const colors = {
     primaryLight: "#EFEFFD",
     white: '#FFFFFF',
     purple: '#4D00FF',
+    blue: '#6364F1',
     green: '#4CD964',
     red: '#FF3B30',
     nearWhite: "#EBEBEB",

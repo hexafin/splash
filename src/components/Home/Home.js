@@ -14,6 +14,7 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import FCM, { FCMEvent } from "react-native-fcm";
 import TransactionLine from "../universal/TransactionLine"
+import api from '../../api'
 
 class Home extends Component {
 
@@ -41,12 +42,15 @@ class Home extends Component {
 				relativeCurrency
 			} = notif;
 			if (transactionId && relativeAmount && domain && relativeCurrency) {
-				this.props.navigation.navigate("ApproveModal", {
-					transactionId,
-					relativeAmount,
-					domain,
-					relativeCurrency
-				});
+				api.GetExchangeRate().then(exchangeRate => {
+					this.props.navigation.navigate("ApproveModal", {
+						transactionId,
+						relativeAmount,
+						domain,
+						relativeCurrency,
+						exchangeRate: exchangeRate[relativeCurrency]
+					});
+				})
 			}
 		});
 	}
@@ -165,13 +169,13 @@ class Home extends Component {
 					<Text style={styles.historyTitle}>Your history</Text>
 					{transactions.map(transaction => {
 						return (
-							<TransactionLine 
+							<TransactionLine
 								key={"transactionLine"+transaction.id}
-								direction={(transaction.type == "card") ? "out" : "in"} 
+								direction={(transaction.type == "card") ? "out" : "in"}
 								amount={currencyPrefix[this.state.currency] + transaction.amount[this.state.currency]}
 								date={transaction.date}
 								title={
-									(transaction.type == "card") 
+									(transaction.type == "card")
 									? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
 									: "A bitcoin wallet"
 								}
