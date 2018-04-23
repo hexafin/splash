@@ -13,6 +13,7 @@ import {
 const initialState = {
   isApprovingTransaction: false,
   pendingTransaction: {},
+  transactions: [],
   errorApprovingTransaction: null,
   successApprovingTransaction: false,
 }
@@ -38,11 +39,13 @@ export default function transactionReducer(state = initialState, action) {
             }
 
         case APPROVE_TRANSACTION_SUCCESS:
+            const transaction = [action.transaction]
             return {
                 ...state,
                 isApprovingTransaction: false,
                 successApprovingTransaction: true,
                 pendingTransaction: {},
+                transactions: transaction.concat(state.transactions)
             }
 
         case APPROVE_TRANSACTION_FAILURE:

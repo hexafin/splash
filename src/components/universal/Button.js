@@ -19,7 +19,7 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
     )
 
     const checkmarkView = (
-        <Checkmark color={primary ? 'white' : 'purple'} size={15} callback={checkmarkCallback}/>
+        <Checkmark color={primary ? 'white' : 'purple'} size={12} callback={checkmarkCallback}/>
     )
 
     const normalView = (

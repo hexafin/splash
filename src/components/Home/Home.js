@@ -71,6 +71,8 @@ class Home extends Component {
 
 	render() {
 
+		// dummy data
+
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
@@ -81,7 +83,7 @@ class Home extends Component {
 			USD: "45.39"
 		}
 
-		const transactions = [
+		let dummyTransactions = [
 			{
 				id: 1,
 				type: "card",
@@ -141,6 +143,9 @@ class Home extends Component {
 			},
 		]
 
+		dummyTransactions = this.props.transactions.concat(dummyTransactions)
+		console.log(dummyTransactions);
+
 		return (
 			<View style={styles.container}>
 				<Image source={require("../../assets/images/header.png")} style={styles.headerImage}/>
@@ -167,7 +172,7 @@ class Home extends Component {
 				</View>
 				<ScrollView style={styles.history}>
 					<Text style={styles.historyTitle}>Your history</Text>
-					{transactions.map(transaction => {
+					{dummyTransactions.map(transaction => {
 						return (
 							<TransactionLine
 								key={"transactionLine"+transaction.id}
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		height: 200,
 		marginBottom: 40,
-		backgroundColor: colors.primary
+		backgroundColor: 'rgba(0,0,0,0)'
 	},
 	headerImage: {
 		position: "absolute",
@@ -232,13 +237,13 @@ const styles = StyleSheet.create({
 		color: colors.white,
 		fontWeight: "600",
 		fontSize: 34,
-		backgroundColor: colors.primary
+		backgroundColor: 'rgba(0,0,0,0)'
 	},
 	balanceCurrencyWrapper: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: colors.primary
+		backgroundColor: 'rgba(0,0,0,0)'
 	},
 	balanceCurrencyText: {
 		color: "rgba(255,255,255,0.7)",
@@ -247,7 +252,7 @@ const styles = StyleSheet.create({
 		marginLeft: 5
 	},
 	refreshIcon: {
-		width: 13,
+		width: 15,
 		height: 13
 	},
 	addCryptoButton: {

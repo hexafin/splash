@@ -11,7 +11,7 @@ export const colors = {
     nearWhite: "#EBEBEB",
     lighterGray: "#CECECE",
     lightGray: '#ADADAD',
-    gray: "#ABABAB",
+    gray: "#919191",
     nearBlack: "#333333",
     lightShadow: 'rgba(63,63,63,10)'
 }
