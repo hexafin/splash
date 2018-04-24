@@ -15,6 +15,7 @@ import { defaults, icons } from "../../lib/styles";
 import FCM, { FCMEvent } from "react-native-fcm";
 import TransactionLine from "../universal/TransactionLine"
 import api from '../../api'
+import { isIphoneX } from "react-native-iphone-x-helper"
 
 class Home extends Component {
 
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		width: 400,
 		height: 300,
-		top: -60
+		top: (isIphoneX()) ? -40 : -60
 	},
 	topbar: {
 		flexDirection: "row",

@@ -12,14 +12,14 @@ import LoadingCircle from "./LoadingCircle"
 import Checkmark from "./Checkmark"
 import PropTypes from "prop-types"
 
-const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkCallback=null, small=false, style={}}) => {
+const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkPersist=false, checkmarkCallback=null, small=false, style={}}) => {
 
     const loadingView = (
-        <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 34}/>
+        <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 28}/>
     )
 
     const checkmarkView = (
-        <Checkmark color={primary ? 'white' : 'purple'} size={12} callback={checkmarkCallback}/>
+        <Checkmark color={primary ? 'white' : 'purple'} size={10} callback={checkmarkCallback} persist={checkmarkPersist}/>
     )
 
     const normalView = (
@@ -42,6 +42,7 @@ const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, 
                         primary ? styles.buttonPrimary : styles.buttonSecondary,
                         disabled ? styles.buttonDisabled : {},
                         loading ? styles.buttonLoading : {},
+                        checkmark ? styles.buttonCheckmark : {},
                         style
                     ]}>
                 <View style={styles.wrapper}>
@@ -78,7 +79,10 @@ const styles = StyleSheet.create({
         padding: 10
     },
     buttonLoading: {
-        padding: 15
+        padding: 16
+    },
+    buttonCheckmark: {
+        padding: 25
     },
 	text: {
 		fontSize: 20,

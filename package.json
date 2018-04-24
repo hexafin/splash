@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "bundle": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ./ios",
     "test": "jest",
     "postinstall": "./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto --hack"
   },
