@@ -144,7 +144,6 @@ class Home extends Component {
 		]
 
 		dummyTransactions = this.props.transactions.concat(dummyTransactions)
-		console.log(dummyTransactions);
 
 		return (
 			<View style={styles.container}>
