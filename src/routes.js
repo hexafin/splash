@@ -146,7 +146,7 @@ const Router = StackNavigator(
 		initialRouteName: "AppRouter",
 		transitionConfig: () => ({ screenInterpolator: forVertical }),
 		cardStyle: {
-			backgroundColor: "rgba(0,0,0,0.2)"
+			backgroundColor: "rgba(0,0,0,0)"
 		}
 	}
 )

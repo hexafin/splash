@@ -35,6 +35,9 @@ export default class Checkmark extends Component {
 
         const wrapperSize = this.props.size || 20
         const animationSize = wrapperSize * 3
+        const animationSource = (this.props.color == "white")
+            ? require('../../assets/animations/checkmarkWhite.json')
+            : require('../../assets/animations/checkmarkPurple.json')
 
         return (
             <View style={[
@@ -55,7 +58,7 @@ export default class Checkmark extends Component {
                     <LottieView
                         ref={animation => {
                             this.animation = animation
-                        }} source={require('../../assets/animations/checkmark.json')}
+                        }} source={animationSource}
                         style={{
                             height: animationSize,
                             width: animationSize,

@@ -21,13 +21,19 @@ export function approveTransactionInit(transaction) {
 }
 
 export const APPROVE_TRANSACTION_SUCCESS = "APPROVE_TRANSACTION_SUCCESS";
-export function successApprovingTransaction() {
-	return { type: APPROVE_TRANSACTION_SUCCESS };
+export function successApprovingTransaction(transaction) {
+	return { type: APPROVE_TRANSACTION_SUCCESS, transaction };
 }
 
 export const APPROVE_TRANSACTION_FAILURE = "APPROVE_TRANSACTION_FAILURE";
 export function approveTransactionFailure(error) {
 	return { type: APPROVE_TRANSACTION_FAILURE, error };
+}
+
+const getDate = () => {
+	const date = new Date()
+	const parts = date.toDateString().split(' ')
+	return parts[1] + ' ' + parts[2] + ', ' + parts[3]
 }
 
 export const ApproveTransaction = (transaction) => {
@@ -39,21 +45,33 @@ export const ApproveTransaction = (transaction) => {
 			const userBtcAddress = state.user.bitcoin.address
 			dispatch(approveTransactionInit(transaction))
 			try {
+				// commented for demo
 				const exchangeRate = await api.GetExchangeRate()
 				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-				const feeSatoshi = await api.GetBitcoinFees({network: 'testnet', from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
+				const feeSatoshi = await api.GetBitcoinFees({network: 'mainnet', from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
 				const totalbtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount)
+				// const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount)
+				const txid = 1 // dummy data
 				await api.UpdateTransaction(transaction.transactionId, {approved: true, txId: txid})
 				await api.GenerateCard(transaction.transactionId)
-				return Promise.resolve();
+				const record = {
+													id: transaction.transactionId,
+													type: "card",
+													domain: transaction.domain,
+													date: getDate(),
+													amount: {
+														USD: parseFloat(transaction.relativeAmount).toFixed(2),
+														BTC: totalbtcAmount.toFixed(5)
+													}
+												}
+				return Promise.resolve(record);
 			} catch (e) {
 				return Promise.reject(e)
 			}
 		}
 
-		approveTransaction(transaction).then(() => {
-			dispatch(successApprovingTransaction())
+		approveTransaction(transaction).then(transaction => {
+			dispatch(successApprovingTransaction(transaction))
 		}).catch(error => {
 			dispatch(approveTransactionFailure(error))
 		})
