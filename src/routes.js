@@ -65,29 +65,8 @@ function forVertical(props) {
 // 	}
 // );
 
-const AppRouter = TabNavigator(
-	{
-		Home: {
-			screen: Home,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		},
-		AddCrypto: {
-			screen: AddCrypto,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		}
-	},
-	{
-		animationEnabled: true,
-		swipeEnabled: false,
-		initialRouteName: "Home"
-	}
-)
 
-const OnboardingRouter = TabNavigator(
+const AppRouter = TabNavigator(
 	{
 		Landing: {
 			screen: Landing,
@@ -112,6 +91,18 @@ const OnboardingRouter = TabNavigator(
 			navigationOptions: {
 				tabBarVisible: false
 			}
+		},
+		Home: {
+			screen: Home,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		},
+		AddCrypto: {
+			screen: AddCrypto,
+			navigationOptions: {
+				tabBarVisible: false
+			}
 		}
 		// FadeRouter: {
 		// 	screen: FadeRouter,
@@ -123,7 +114,7 @@ const OnboardingRouter = TabNavigator(
 	{
 		animationEnabled: true,
 		swipeEnabled: false,
-		initialRouteName: "Landing"
+		initialRouteName: "Home"
 	}
 )
 
@@ -131,9 +122,6 @@ const Router = StackNavigator(
 	{
 		ApproveModal: {
 			screen: ApproveModal
-		},
-		OnboardingRouter: {
-			screen: OnboardingRouter
 		},
 		AppRouter: {
 			screen: AppRouter
