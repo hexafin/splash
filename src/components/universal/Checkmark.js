@@ -22,9 +22,18 @@ export default class Checkmark extends Component {
           duration: 1000,
           easing: Easing.linear,
         }).start(({finished}) => {
-          if (finished) {
-            this.props.callback()
-          }
+        	if (this.props.persist) {
+        		if (finished) {
+        			setTimeout(() => {
+        				this.props.callback()
+        			}, 500)
+        		}
+        	}
+        	else {
+        		if (finished) {
+	            this.props.callback()
+	          }
+        	}
         })
       } else {
         this.animation.play()

@@ -92,8 +92,8 @@ class ApproveModal extends Component {
 	                <View style={styles.information}>
 	                  <Text style={styles.exchangeText}>1 BTC = ${rate} {relativeCurrency}</Text>
 	                  <View style={styles.amountBox}>
-	                    <Text style={{fontSize: 24, color: colors.white, fontWeight: '600'}}>{relativeCurrency} ${relativeAmount}</Text>
-	                    <Text style={{fontSize: 15, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{btcAmount} BTC</Text>
+	                    <Text style={{fontSize: 28, color: colors.white, fontWeight: '600'}}>{relativeCurrency} ${relativeAmount}</Text>
+	                    <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{btcAmount} BTC</Text>
 	                  </View>
 	                  <View style={styles.domainInfo}>
 	                    <Text style={{paddingRight: 10, fontSize: 12, fontWeight: '700', color: colors.nearBlack}}>on</Text>
@@ -106,8 +106,15 @@ class ApproveModal extends Component {
 	                </View>
 	                <View style={styles.footer}>
 	                  <Text style={styles.description}>We will load {relativeCurrency} ${relativeAmount} onto a temporary {'\n'} “magic” credit card you can use in your browser.</Text>
-	                  <Button onPress={() => approve(transaction)} style={styles.button} loading={this.props.loading && !this.props.success} checkmark={this.props.success && !this.props.loading}
-											checkmarkCallback={() => dismiss()} disabled={this.props.error || this.props.loading} title={"Approve Transaction"} primary={true}/>
+	                  <Button
+	                  	onPress={() => approve(transaction)}
+	                  	style={styles.button} 
+	                  	loading={this.props.loading && !this.props.success}
+	                  	checkmark={this.props.success && !this.props.loading}
+	                  	checkmarkPersist={true}
+											checkmarkCallback={() => dismiss()}
+											disabled={this.props.error}
+											title={"Approve Transaction"} primary={true}/>
 	                  <View style={{flexDirection: 'row', paddingTop: 10, alignSelf: 'center', alignItems: 'center'}}>
 	                    <Image style={{height: 13, width: 10}} source={require('../../assets/icons/lockIcon.png')}/>
 	                    <Text style={{paddingLeft: 10, backgroundColor: 'rgba(0,0,0,0)', color: colors.lightGray, fontSize: 15, fontWeight: '600'}}>Payment secured by Splash</Text>
@@ -182,8 +189,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 	exchangeText: {
-		fontSize: 12,
-		fontWeight: '600',
+		fontSize: 14,
+		fontWeight: '500',
 		color: colors.gray
 	},
   amountBox: {
@@ -205,9 +212,9 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 14,
     color: colors.gray,
-    fontWeight: '600',
+    fontWeight: '500',
 		paddingTop: 10,
     paddingBottom: 20,
   },

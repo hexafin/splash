@@ -26,25 +26,6 @@ class AddCrypto extends Component {
         if (!this.props.loggedIn) {
             this.props.navigation.navigate("Landing");
         }
-
-		FCM.on(FCMEvent.Notification, async notif => {
-			console.log("Notification", notif);
-			// reload on notifications
-			const {
-				transactionId,
-				relativeAmount,
-				domain,
-				relativeCurrency
-			} = notif;
-			if (transactionId && relativeAmount && domain && relativeCurrency) {
-				this.props.navigation.navigate("ApproveModal", {
-					transactionId,
-					relativeAmount,
-					domain,
-					relativeCurrency
-				});
-			}
-		});
 	}
 
 	handleCopy() {
