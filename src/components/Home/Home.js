@@ -22,10 +22,20 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			currency: "USD"
+			currency: "USD",
+			transactions: props.transactions
 		}
 		this.handleBalancePress = this.handleBalancePress.bind(this)
 		this.handleAddCrypto = this.handleAddCrypto.bind(this)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				transactions: nextProps.transactions
+			}
+		})
 	}
 
 	componentWillMount() {
@@ -56,6 +66,27 @@ class Home extends Component {
 		});
 	}
 
+	componentDidMount() {
+
+		this.props.LoadTransactions()
+
+		FCM.getFCMToken().then(token => {
+
+			console.log(token)
+			if (!token) {
+				FCM.requestPermissions()
+					.then(() =>
+						console.log("notification permission granted")
+					)
+					.catch(() =>
+						console.log("notification permission rejected")
+					)
+			}
+
+			api.UpdateAccount(user.uid, {push_token: token})
+		})
+	}
+
 	handleBalancePress() {
 		this.setState(prevState => {
 			return {
@@ -66,14 +97,10 @@ class Home extends Component {
 	}
 
 	handleAddCrypto() {
-		console.log("hey!")
 		this.props.navigation.navigate("AddCrypto")
 	}
 
 	render() {
-
-		// dummy data
-
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
@@ -83,68 +110,6 @@ class Home extends Component {
 			BTC: "0.0048",
 			USD: "45.39"
 		}
-
-		let dummyTransactions = [
-			{
-				id: 1,
-				type: "card",
-				domain: "apple.com",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 2,
-				type: "fund",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 3,
-				type: "card",
-				domain: "apple.com",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 4,
-				type: "fund",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 5,
-				type: "card",
-				domain: "apple.com",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 6,
-				type: "fund",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-		]
-
-		dummyTransactions = this.props.transactions.concat(dummyTransactions)
 
 		return (
 			<View style={styles.container}>
@@ -172,12 +137,12 @@ class Home extends Component {
 				</View>
 				<ScrollView style={styles.history}>
 					<Text style={styles.historyTitle}>Your history</Text>
-					{dummyTransactions.map(transaction => {
+					{this.state.transactions.map(transaction => {
 						return (
 							<TransactionLine
 								key={"transactionLine"+transaction.id}
 								direction={(transaction.type == "card") ? "out" : "in"}
-								amount={currencyPrefix[this.state.currency] + transaction.amount[this.state.currency]}
+								amount={currencyPrefix[this.state.currency] + transaction.relativeAmount}
 								date={transaction.date}
 								title={
 									(transaction.type == "card")

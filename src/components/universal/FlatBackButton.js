@@ -11,17 +11,17 @@ import {defaults} from '../../lib/styles'
 const FlatBackButton = ({onPress, color="gray", absolute=true}) => {
 
     const source = (color == "gray") 
-        ? require("../../assets/icons/left-carrot.png") 
+        ? require("../../assets/icons/leftCarrotGray.png") 
         : require("../../assets/icons/leftCarrotWhite.png")
 
 	return (
-			<TouchableOpacity onPress={ onPress } style={[
-                styles.wrapper,
-                (absolute) ? styles.absolute : {}
-            ]}>
-                <Image source={source} style={styles.carrot} />
-			</TouchableOpacity>
-		)
+		<TouchableOpacity onPress={ onPress } style={[
+            styles.wrapper,
+            (absolute) ? styles.absolute : {}
+        ]}>
+            <Image source={source} style={styles.carrot} />
+		</TouchableOpacity>
+	)
 }
 
 const styles = StyleSheet.create({

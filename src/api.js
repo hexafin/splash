@@ -1,12 +1,12 @@
 import firebase from 'react-native-firebase'
-
+import moment from "moment"
+import {cryptoNames} from "./lib/cryptos"
+const SATOSHI_CONVERSION = 100000000;
 let firestore = firebase.firestore()
 let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
 let bitcoinTransaction = require('bitcoin-transaction')
 var axios = require('axios')
-import {cryptoNames} from "./lib/cryptos"
-const SATOSHI_CONVERSION = 100000000;
 
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
@@ -176,40 +176,22 @@ function GenerateCard(transactionId) {
 }
 
 
-const NewAccount = (uid, {
-    username, firstName = null, lastName = null, email = null, facebookId = null, defaultCurrency = "USD",
-    address = null, city = null, state = null, zipCode = null, country = null, phoneNumber = null, push_token = null,
-    coinbaseId = null, bitcoin = null
-}) => {
+const CreateUser = (uid, entity) => {
 
     return new Promise((resolve, reject) => {
 
-        const dateTime = Date.now();
-        const ts = Math.floor(dateTime * 1.0 / 1000);
+    		const data = {
+    			...entity,
+    			timestampJoined: moment().unix(),
+    		}
 
-        const newPerson = {
-            joined: ts,
-            username: username,
-            first_name: firstName,
-            last_name: lastName,
-            email: email,
-            facebook_id: facebookId,
-            coinbase_id: coinbaseId,
-            default_currency: defaultCurrency,
-            push_token: push_token,
-            phone_number: phoneNumber,
-            bitcoinAddress: bitcoin.address
-            // address: address,
-            // city: city,
-            // state: state,
-            // zip_code: zipCode,
-            // country: country,
-        }
+        console.log(uid, data)
 
-        firestore.collection("users").doc(uid).set(newPerson).then(() => {
-            resolve(newPerson)
+        firestore.collection("users").doc(uid).set(data).then(userData => {
+          console.log('should resolve')
+          resolve(data)
         }).catch(error => {
-            reject(error)
+          reject(error)
         })
 
     })
@@ -648,7 +630,7 @@ function Log(type, content) {
 }
 
 export default api = {
-    NewAccount: NewAccount,
+    CreateUser,
     UpdateAccount: UpdateAccount,
     UpdateTransaction,
     GenerateCard,

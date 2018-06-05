@@ -114,7 +114,7 @@ const AppRouter = TabNavigator(
 	{
 		animationEnabled: true,
 		swipeEnabled: false,
-		initialRouteName: "Home"
+		initialRouteName: "Landing"
 	}
 )
 
