@@ -73,6 +73,17 @@ export const ClaimUsername = user => {
 					api.CreateUser(user.uid, entity).then(userEntity => {
 						dispatch(claimUsernameSuccess(user.uid, userEntity, bitcoinData))
 						NavigatorService.navigate("Home")
+
+						FCM.requestPermissions()
+							.then(() =>
+								FCM.getFCMToken().then(token => {
+									api.UpdateAccount(user.uid, {push_token: token})
+								})
+							)
+							.catch(() =>
+								console.log("notification permission rejected")
+							)
+				
 					})
 					.catch(error => {
 						dispatch(claimUsernameFailure(error))

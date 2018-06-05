@@ -9,7 +9,8 @@ const mapStateToProps = (state) => {
     	loggedIn: state.user.loggedIn,
     	transactions: state.transactions.transactions,
     	isLoadingTransactions: state.transactions.isLoadingTransactions,
-    	errorLoadingTransactions: state.transactions.errorLoadingTransactions
+    	errorLoadingTransactions: state.transactions.errorLoadingTransactions,
+        bitcoinAddress: state.user.bitcoin.address
     }
 }
 

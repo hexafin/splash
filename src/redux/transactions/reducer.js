@@ -44,7 +44,6 @@ export default function transactionReducer(state = initialState, action) {
             }
 
         case APPROVE_TRANSACTION_SUCCESS:
-            const transaction = [action.transaction]
             return {
                 ...state,
                 isApprovingTransaction: false,
