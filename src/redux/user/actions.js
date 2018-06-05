@@ -9,6 +9,7 @@ import FCM, {
 	NotificationType
 } from "react-native-fcm"
 import NavigatorService from "../navigator"
+import {reset} from 'redux-form';
 let firestore = firebase.firestore()
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
@@ -16,12 +17,17 @@ analytics.setAnalyticsCollectionEnabled(true)
 export const ActionTypes = {
 	CLAIM_USERNAME_INIT: "CLAIM_USERNAME_INIT",
 	CLAIM_USERNAME_SUCCESS: "CLAIM_USERNAME_SUCCESS",
-	CLAIM_USERNAME_FAILURE: "CLAIM_USERNAME_FAILURE"
+	CLAIM_USERNAME_FAILURE: "CLAIM_USERNAME_FAILURE",
+	UPDATE_USERNAME_INIT: "UPDATE_USERNAME_INIT",
+	UPDATE_USERNAME_SUCCESS: "UPDATE_USERNAME_SUCCESS",
+	UPDATE_USERNAME_FAILURE: "UPDATE_USERNAME_FAILURE",
+	RESET_USER: "RESET_USER"
 }
 
 export function claimUsernameInit() {
 	return { type: ActionTypes.CLAIM_USERNAME_INIT }
 }
+
 
 export function claimUsernameSuccess(userId, entity, bitcoin) {
 	return {
@@ -34,6 +40,22 @@ export function claimUsernameSuccess(userId, entity, bitcoin) {
 
 export function claimUsernameFailure(error) {
 	return { type: ActionTypes.CLAIM_USERNAME_FAILURE, error }
+}
+
+export function updateUsernameInit() {
+	return { type: ActionTypes.UPDATE_USERNAME_INIT }
+}
+
+export function updateUsernameSuccess(entity) {
+	return {type: ActionTypes.UPDATE_USERNAME_SUCCESS, entity}
+}
+
+export function updateUsernameFailure(error) {
+	return { type: ActionTypes.UPDATE_USERNAME_FAILURE, error }
+}
+
+export function resetUser() {
+	return { type: ActionTypes.RESET_USER, }
 }
 
 export const ClaimUsername = user => {
@@ -93,5 +115,23 @@ export const ClaimUsername = user => {
 			.catch(error => {
 				dispatch(claimUsernameFailure(error))
 			})
+	}
+}
+
+export const ChangeUsername = () => {
+	return (dispatch, getState) => {
+		dispatch(updateUsernameInit())
+		const state = getState()
+		const uid = state.user.entity.uid
+		const updatedUsername = state.form.updateSplashtag.values.updateUsername
+		api.UpdateAccount(uid, {username: updatedUsername}).then(() => {
+			const entity = {uid: uid, username: updatedUsername, phoneNumber: state.user.entity.phoneNumber}
+			dispatch(updateUsernameSuccess(entity))
+			NavigatorService.navigate("Account")
+			dispatch(reset('updateSplashtag'))
+		}).catch(error => {
+			dispatch(updateUsernameFailure(error))
+			dispatch(reset('updateSplashtag'))
+		})
 	}
 }

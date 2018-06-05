@@ -10,7 +10,8 @@ import {
     LOAD_TRANSACTIONS_INIT,
     LOAD_TRANSACTIONS_SUCCESS,
     LOAD_TRANSACTIONS_FAILURE,
-    DISMISS_TRANSACTION
+    DISMISS_TRANSACTION,
+    RESET_TRANSACTIONS
 } from "./actions.js"
 
 const initialState = {
@@ -60,6 +61,9 @@ export default function transactionReducer(state = initialState, action) {
                 successApprovingTransaction: false,
             }
 
+        case RESET_TRANSACTIONS:
+            return initialState
+        
         case LOAD_TRANSACTIONS_INIT:
             return {
                 ...state,
