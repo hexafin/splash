@@ -16,16 +16,45 @@ import FCM, { FCMEvent } from "react-native-fcm";
 import TransactionLine from "../universal/TransactionLine"
 import api from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
+import moment from "moment"
 
 class Home extends Component {
 
 	constructor(props) {
 		super(props)
 		this.state = {
-			currency: "USD"
+			currency: "USD",
+			balance: null,
+			exchangeRate: null,
+			transactions: props.transactions
 		}
 		this.handleBalancePress = this.handleBalancePress.bind(this)
 		this.handleAddCrypto = this.handleAddCrypto.bind(this)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				transactions: nextProps.transactions
+			}
+		})
+		api.GetAddressBalance(this.props.bitcoinAddress).then(balance => {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					balance
+				}
+			})
+		}).catch(error => {
+			Alert.alert("Could not load balance")
+			this.setState(prevState => {
+				return {
+					...prevState,
+					balance: null
+				}
+			})
+		})
 	}
 
 	componentWillMount() {
@@ -51,9 +80,52 @@ class Home extends Component {
 						relativeCurrency,
 						exchangeRate: exchangeRate[relativeCurrency]
 					});
+				}).catch(error => {
+					Alert.alert("Could not load exchange rate")
 				})
 			}
 		});
+	}
+
+	componentDidMount() {
+
+		this.props.LoadTransactions()
+
+		// get balance
+        api.GetAddressBalance(this.props.bitcoinAddress).then(balanceBtc => {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					balanceBtc
+				}
+			})
+		}).catch(error => {
+			Alert.alert("Could not load balance")
+			this.setState(prevState => {
+				return {
+					...prevState,
+					balanceBtc: null
+				}
+			})
+		})
+
+		// get exchange rate
+        api.GetExchangeRate().then(exchangeRate => {
+        	this.setState(prevState => {
+        		return {
+        			...prevState,
+        			exchangeRate
+        		}
+        	})
+        }).catch(error => {
+        	this.setState(prevState => {
+        		return {
+        			...prevState,
+        			exchangeRate: null
+        		}
+        	})
+        })
+
 	}
 
 	handleBalancePress() {
@@ -66,85 +138,23 @@ class Home extends Component {
 	}
 
 	handleAddCrypto() {
-		console.log("hey!")
 		this.props.navigation.navigate("AddCrypto")
 	}
 
 	render() {
-
-		// dummy data
-
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
 		}
 
-		const balance = {
-			BTC: "0.0048",
-			USD: "45.39"
+		let balance = null
+		if (this.state.exchangeRate != null && this.state.balanceBtc != null) {
+			const rate = this.state.exchangeRate[this.state.currency]
+			balance = {
+				BTC: this.state.balanceBtc,
+				USD: this.state.balanceBtc * rate
+			}
 		}
-
-		let dummyTransactions = [
-			{
-				id: 1,
-				type: "card",
-				domain: "apple.com",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 2,
-				type: "fund",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 3,
-				type: "card",
-				domain: "apple.com",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 4,
-				type: "fund",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 5,
-				type: "card",
-				domain: "apple.com",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-			{
-				id: 6,
-				type: "fund",
-				date: "Jan 04, 2018",
-				amount: {
-					USD: 999.99,
-					BTC: 0.00023
-				}
-			},
-		]
-
-		dummyTransactions = this.props.transactions.concat(dummyTransactions)
 
 		return (
 			<View style={styles.container}>
@@ -157,7 +167,7 @@ class Home extends Component {
 					</View>
 					<TouchableWithoutFeedback onPress={this.handleBalancePress}>
 						<View style={styles.balanceWrapper}>
-							<Text style={styles.balanceText}>{balance[this.state.currency]}</Text>
+							{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
 							<View style={styles.balanceCurrencyWrapper}>
 								<Image source={icons.refresh} style={styles.refreshIcon}/>
 								<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
@@ -172,13 +182,14 @@ class Home extends Component {
 				</View>
 				<ScrollView style={styles.history}>
 					<Text style={styles.historyTitle}>Your history</Text>
-					{dummyTransactions.map(transaction => {
+					{this.state.transactions.map(transaction => {
+						const amount = this.state.currency == "BTC" ? transaction.amount : transaction.relativeAmount
 						return (
 							<TransactionLine
 								key={"transactionLine"+transaction.id}
 								direction={(transaction.type == "card") ? "out" : "in"}
-								amount={currencyPrefix[this.state.currency] + transaction.amount[this.state.currency]}
-								date={transaction.date}
+								amount={currencyPrefix[this.state.currency] + amount}
+								date={moment.unix(transaction.timestampApproved).fromNow()}
 								title={
 									(transaction.type == "card")
 									? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)

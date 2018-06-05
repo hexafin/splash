@@ -1,8 +1,6 @@
 import api from "../../api"
-var axios = require("axios")
+import axios from "axios"
 import firebase from "react-native-firebase"
-let firestore = firebase.firestore()
-let analytics = firebase.analytics()
 import { Sentry } from "react-native-sentry"
 import FCM, {
 	FCMEvent,
@@ -10,8 +8,10 @@ import FCM, {
 	WillPresentNotificationResult,
 	NotificationType
 } from "react-native-fcm"
-analytics.setAnalyticsCollectionEnabled(true)
 import NavigatorService from "../navigator"
+let firestore = firebase.firestore()
+let analytics = firebase.analytics()
+analytics.setAnalyticsCollectionEnabled(true)
 
 export const ActionTypes = {
 	CLAIM_USERNAME_INIT: "CLAIM_USERNAME_INIT",
@@ -23,11 +23,11 @@ export function claimUsernameInit() {
 	return { type: ActionTypes.CLAIM_USERNAME_INIT }
 }
 
-export function claimUsernameSuccess(username, phoneNumber, bitcoin) {
+export function claimUsernameSuccess(userId, entity, bitcoin) {
 	return {
 		type: ActionTypes.CLAIM_USERNAME_SUCCESS,
-		username,
-		phoneNumber,
+		userId,
+		entity,
 		bitcoin
 	}
 }
@@ -59,75 +59,39 @@ export const ClaimUsername = user => {
 					dispatch(claimUsernameFailure("Error: Username taken"))
 				} else {
 					Sentry.setUserContext({
-						userID: user.uid,
+						userId: user.uid,
 						username: splashtag
 					})
 
-					FCM.requestPermissions()
-						.then(() =>
-							console.log("notification permission granted")
-						)
-						.catch(() =>
-							console.log("notification permission rejected")
-						)
+					const entity = {
+						splashtag: splashtag,
+						phoneNumber,
+			            defaultCurrency: "USD",
+			            bitcoinAddress: bitcoinData.address
+					}
 
-					FCM.getFCMToken().then(async token => {
-						api
-							.NewAccount(user.uid, {
-								username: splashtag,
-								phoneNumber: phoneNumber,
-								push_token: token,
-								bitcoin: bitcoinData
-							})
-							.then(person => {
-								NavigatorService.navigate("Home")
+					api.CreateUser(user.uid, entity).then(userEntity => {
+						dispatch(claimUsernameSuccess(user.uid, userEntity, bitcoinData))
+						NavigatorService.navigate("Home")
 
-								FCM.on(FCMEvent.Notification, async notif => {
-									console.log("Notification", notif)
-									// reload on notifications
-									if (
-										!notif.local_notification ||
-										notif.opened_from_tray
-									) {
-										FCM.presentLocalNotification({
-											title: notif.title,
-											body: notif.body,
-											data: notif.data,
-											priority: "high",
-											sound: "default",
-											vibrate: 300,
-											show_in_foreground: true
-										})
-									}
+						FCM.requestPermissions()
+							.then(() =>
+								FCM.getFCMToken().then(token => {
+									api.UpdateAccount(user.uid, {push_token: token})
 								})
-
-								dispatch(
-									claimUsernameSuccess(
-										splashtag,
-										phoneNumber,
-										bitcoinData
-									)
-								)
-							})
-							.catch(error => {
-								dispatch(claimUsernameFailure(error))
-							})
+							)
+							.catch(() =>
+								console.log("notification permission rejected")
+							)
+				
+					})
+					.catch(error => {
+						dispatch(claimUsernameFailure(error))
 					})
 				}
 			})
 			.catch(error => {
 				dispatch(claimUsernameFailure(error))
 			})
-	}
-}
-
-export const LoadApp = () => {
-	return (dispatch, getState) => {
-		const state = getState()
-		console.log("load app", state)
-
-		if (state.user.loggedIn) {
-			NavigatorService.navigate("Home")
-		}
 	}
 }

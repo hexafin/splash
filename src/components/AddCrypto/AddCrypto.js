@@ -58,7 +58,7 @@ class AddCrypto extends Component {
 				<Image source={require("../../assets/images/header.png")} resizeMode="cover" style={styles.headerImage}/>
 				<View style={styles.header}>
 					<FlatBackButton color="white" onPress={() => {
-						this.props.navigation.goBack()
+						this.props.navigation.navigate("Home")
 					}}/>
 					<Text style={styles.title}>Your splash wallet</Text>
 				</View>

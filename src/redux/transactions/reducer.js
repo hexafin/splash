@@ -7,6 +7,9 @@ import {
     APPROVE_TRANSACTION_INIT,
     APPROVE_TRANSACTION_SUCCESS,
     APPROVE_TRANSACTION_FAILURE,
+    LOAD_TRANSACTIONS_INIT,
+    LOAD_TRANSACTIONS_SUCCESS,
+    LOAD_TRANSACTIONS_FAILURE,
     DISMISS_TRANSACTION
 } from "./actions.js"
 
@@ -16,6 +19,8 @@ const initialState = {
   transactions: [],
   errorApprovingTransaction: null,
   successApprovingTransaction: false,
+  isLoadingTransactions: false,
+  errorLoadingTransactions: null
 }
 
 export default function transactionReducer(state = initialState, action) {
@@ -39,13 +44,11 @@ export default function transactionReducer(state = initialState, action) {
             }
 
         case APPROVE_TRANSACTION_SUCCESS:
-            const transaction = [action.transaction]
             return {
                 ...state,
                 isApprovingTransaction: false,
                 successApprovingTransaction: true,
-                pendingTransaction: {},
-                transactions: transaction.concat(state.transactions)
+                pendingTransaction: {}
             }
 
         case APPROVE_TRANSACTION_FAILURE:
@@ -55,6 +58,26 @@ export default function transactionReducer(state = initialState, action) {
                 pendingTransaction: {},
                 isApprovingTransaction: false,
                 successApprovingTransaction: false,
+            }
+
+        case LOAD_TRANSACTIONS_INIT:
+            return {
+                ...state,
+                isLoadingTransactions: true
+            }
+
+        case LOAD_TRANSACTIONS_SUCCESS:
+            return {
+                ...state,
+                isLoadingTransactions: false,
+                transactions: action.transactions
+            }
+
+        case LOAD_TRANSACTIONS_FAILURE:
+            return {
+                ...state,
+                isLoadingTransactions: false,
+                errorLoadingTransactions: action.error
             }
 
         default:

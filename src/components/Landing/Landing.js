@@ -14,6 +14,7 @@ import { Input } from "../universal/Input";
 import firebase from "react-native-firebase";
 import AnimatedWaves from "../universal/AnimatedWaves";
 import TouchID from 'react-native-touch-id'
+let firestore = firebase.firestore()
 
 class Landing extends Component {
 
