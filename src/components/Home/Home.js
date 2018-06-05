@@ -8,7 +8,8 @@ import {
 	TouchableWithoutFeedback,
 	Linking,
 	Alert,
-	Share
+	Share,
+	Dimensions
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
@@ -17,15 +18,13 @@ import TransactionLine from "../universal/TransactionLine"
 import api from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
 
-class Home extends Component {
 
+class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			currency: "USD"
 		}
-		this.handleBalancePress = this.handleBalancePress.bind(this)
-		this.handleAddCrypto = this.handleAddCrypto.bind(this)
 	}
 
 	componentWillMount() {
@@ -56,21 +55,24 @@ class Home extends Component {
 		});
 	}
 
-	handleBalancePress() {
-		this.setState(prevState => {
-			return {
-				...prevState,
-				currency: (prevState.currency == "BTC") ? "USD" : "BTC"
-			}
-		})
-	}
-
-	handleAddCrypto() {
-		console.log("hey!")
-		this.props.navigation.navigate("AddCrypto")
-	}
-
 	render() {
+
+		const handleBalancePress = () => {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					currency: (prevState.currency == "BTC") ? "USD" : "BTC"
+				}
+			})
+		}
+
+		const handleAddCrypto = () => {
+			this.props.navigation.navigate("AddCrypto")
+		}
+
+		const handleAccount = () => {
+			this.props.navigation.navigate("Account")
+		}
 
 		// dummy data
 
@@ -151,11 +153,11 @@ class Home extends Component {
 				<Image source={require("../../assets/images/header.png")} style={styles.headerImage}/>
 				<View style={styles.header}>
 					<View style={styles.topbar}>
-						<TouchableWithoutFeedback onPress={this.handleAddCrypto}>
+						<TouchableWithoutFeedback onPress={handleAccount}>
 							<Image source={icons.whiteSplash} style={styles.headerLogoButton}/>
 						</TouchableWithoutFeedback>
 					</View>
-					<TouchableWithoutFeedback onPress={this.handleBalancePress}>
+					<TouchableWithoutFeedback onPress={handleBalancePress}>
 						<View style={styles.balanceWrapper}>
 							<Text style={styles.balanceText}>{balance[this.state.currency]}</Text>
 							<View style={styles.balanceCurrencyWrapper}>
@@ -164,7 +166,7 @@ class Home extends Component {
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback onPress={this.handleAddCrypto}>
+					<TouchableWithoutFeedback onPress={handleAddCrypto}>
 						<View style={styles.addCryptoButton}>
 							<Text style={styles.addCryptoText}>Add crypto</Text>
 						</View>
@@ -210,7 +212,7 @@ const styles = StyleSheet.create({
 	},
 	headerImage: {
 		position: "absolute",
-		width: 400,
+		width: Dimensions.get('window').width,
 		height: 300,
 		top: (isIphoneX()) ? -40 : -60
 	},

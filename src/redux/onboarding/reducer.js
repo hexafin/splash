@@ -13,7 +13,8 @@ import {
     HOLD_SPLASHTAG,
     SMS_CONFIRM_INIT,
     SMS_CONFIRM_SUCCESS,
-    SMS_CONFIRM_FAILURE
+    SMS_CONFIRM_FAILURE,
+    RESET_ONBOARDING
 } from "./actions.js"
 
 const initialState = {
@@ -85,6 +86,8 @@ export default function onboardingReducer(state = initialState, action) {
                 errorSmsConfirming: action.error
             }
 
+        case RESET_ONBOARDING:
+            return initialState
 
         default:
             return state

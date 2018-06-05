@@ -7,7 +7,8 @@ import {
     APPROVE_TRANSACTION_INIT,
     APPROVE_TRANSACTION_SUCCESS,
     APPROVE_TRANSACTION_FAILURE,
-    DISMISS_TRANSACTION
+    DISMISS_TRANSACTION,
+    RESET_TRANSACTIONS
 } from "./actions.js"
 
 const initialState = {
@@ -56,6 +57,9 @@ export default function transactionReducer(state = initialState, action) {
                 isApprovingTransaction: false,
                 successApprovingTransaction: false,
             }
+
+        case RESET_TRANSACTIONS:
+            return initialState
 
         default:
             return state

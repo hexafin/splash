@@ -9,6 +9,8 @@ const initialState = {
 	loggedIn: false,
 	isClaimingUsername: false,
 	errorClaimingUsername: null,
+	isUpdatingUsername: false,
+	errorUpdatingUsername: null,
 	entity: {},
 	bitcoin: {},
 	splashtag: null
@@ -30,6 +32,7 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isClaimingUsername: false,
 				entity: {
+					uid: action.uid,
 					username: action.username,
 					phoneNumber: action.phoneNumber
 				},
@@ -49,6 +52,32 @@ export default function reducer(state = initialState, action) {
 				entity: initialState.entity,
 				bitcoin: initialState.bitcoin
 			}
+
+		case ActionTypes.UPDATE_USERNAME_INIT:
+			return {
+				...state,
+				isUpdatingUsername: true,
+				errorUpdatingUsername: null,
+			}
+
+		case ActionTypes.UPDATE_USERNAME_SUCCESS:
+			return {
+				...state,
+				isUpdatingUsername: false,
+				errorUpdatingUsername: null,
+				entity: action.entity
+			}
+		
+		case ActionTypes.UPDATE_USERNAME_FAILURE:
+			Sentry.captureMessage(action.error)
+			return {
+				...state,
+				isUpdatingUsername: false,
+				errorUpdatingUsername: action.error,
+			}
+
+		case ActionTypes.RESET_USER:
+			return initialState
 
 		default:
 			return state

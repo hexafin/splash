@@ -30,6 +30,11 @@ export function approveTransactionFailure(error) {
 	return { type: APPROVE_TRANSACTION_FAILURE, error };
 }
 
+export const RESET_TRANSACTIONS = "RESET_TRANSACTIONS";
+export function resetTransactions() {
+	return { type: RESET_TRANSACTIONS };
+}
+
 const getDate = () => {
 	const date = new Date()
 	const parts = date.toDateString().split(' ')
