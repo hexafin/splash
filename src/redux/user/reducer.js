@@ -13,7 +13,8 @@ const initialState = {
 	errorUpdatingUsername: null,
 	entity: {},
 	bitcoin: {},
-	splashtag: null
+	splashtag: null,
+	id: null
 }
 
 export default function reducer(state = initialState, action) {
@@ -31,6 +32,7 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				isClaimingUsername: false,
+				id: action.userId,
 				entity: {
 					uid: action.uid,
 					username: action.username,
