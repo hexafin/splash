@@ -31,14 +31,8 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isClaimingUsername: false,
 				id: action.userId,
-				entity: {
-					username: action.username,
-					phoneNumber: action.phoneNumber
-				},
-				bitcoin: {
-					address: action.bitcoin.address,
-					privateKey: action.bitcoin.wif
-				},
+				entity: action.entity,
+				bitcoin: action.bitcoin,
 				loggedIn: true
 			}
 
