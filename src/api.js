@@ -34,9 +34,11 @@ function GetAccount(uid) {
 
 // Bitcoin:
 
-function NewBitcoinWallet() {
+function NewBitcoinWallet(network='mainnet') {
+    network = (network == 'mainnet') ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
     var keyPair = bitcoin.ECPair.makeRandom({
-        rng: random
+        rng: random,
+        network: network
     })
     return {
         wif: keyPair.toWIF(),
@@ -44,14 +46,14 @@ function NewBitcoinWallet() {
     }
 }
 
-function GetAddressBalance(address, testnet=false) {
+function GetAddressBalance(address, network='mainnet') {
   return new Promise((resolve, reject) => {
-    if (!testnet) {
+    if (network == 'mainnet') {
         const APIaddress = 'https://blockchain.info/q/addressbalance/' + address + '?confirmations=6'
         axios.get(APIaddress)
         .then(response => {
           if (response.data !== null){
-            resolve(parseFloat(response.data));
+            resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
           } else {
             reject('Cannot retrieve balance');
           }
@@ -61,7 +63,7 @@ function GetAddressBalance(address, testnet=false) {
         });
     } else {
       axios.get('https://testnet.blockexplorer.com/api/addr/' + address + '/balance').then(response => {
-					resolve(parseFloat(response.data));
+					resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
       })
     }
   });
@@ -121,8 +123,8 @@ function GetBitcoinFees({feeName="hourFee", network="mainnet", from=null, amtSat
 
 function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet") {
     return new Promise((resolve, reject) => {
-      GetAddressBalance(from, testnet=true).then((balanceSatoshi) => {
-          if (amtBTC < balanceSatoshi*0.00000001) {
+      GetAddressBalance(from, network).then((balanceBtc) => {
+          if (amtBTC < balanceBtc) {
               bitcoinTransaction.sendTransaction({
                   from: from,
                   to: to,
@@ -410,58 +412,14 @@ function NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp) 
   })
 }
 
-function NewTransaction({transactionType, from_id, to_id, to_address = null, amount, fee, emoji, relative_amount, type = 'friend', relative_currency = 'USD', currency = 'BTC'}) {
+function NewTransaction(newTransaction) {
 
     return new Promise((resolve, reject) => {
-
-        const dateTime = Date.now();
-        const timestamp_initiated = Math.floor(dateTime / 1000);
-        if (transactionType == 'send' || transactionType == 'external') {
-          const newTransaction = {
-            from_id: from_id,
-            to_id: to_id,
-            to_address: to_address,
-            amount: amount,
-            relative_amount: relative_amount,
-            fee: fee,
-            emoji: emoji,
-            type: transactionType == 'external' ? 'external' : type,
-            currency: currency,
-            relative_currency: relative_currency,
-            timestamp_initiated: timestamp_initiated,
-            timestamp_completed: timestamp_initiated
-          }
-
-            firestore.collection("transactions").add(newTransaction).then(() => {
-                resolve(newTransaction)
+            firestore.collection("transactions").add(newTransaction).then(response => {
+                resolve(response)
             }).catch(error => {
                 reject(error)
             })
-        } else {
-            const newRequest = {
-                from_id: from_id,
-                to_id: to_id,
-                amount: null,
-                relative_amount: relative_amount,
-                fee: fee,
-                emoji: emoji,
-                type: type,
-                accepted: false,
-                declined: false,
-                number_of_reminders: 0,
-                currency: currency,
-                relative_currency: relative_currency,
-                timestamp_initiated: timestamp_initiated,
-                timestamp_completed: null,
-                timestamp_declined: null,
-            }
-
-            firestore.collection("requests").add(newRequest).then(() => {
-                resolve(newRequest)
-            }).catch(error => {
-                reject(error)
-            })
-        }
     })
 }
 

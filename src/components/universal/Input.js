@@ -10,7 +10,7 @@ import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
 import Checkmark from './Checkmark'
 import PropTypes from 'prop-types'
-export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input={}, style={}, checkmark=false}) => {
+export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input={}, style={}, checkmark=false, children}) => {
 
 	return (
     <View style={styles.input}>
@@ -25,6 +25,7 @@ export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, 
         onFocus={input.onFocus}
         value={input.value}
         />
+        {children}
         {checkmark && <Checkmark style={{paddingRight: 10}} size={8} />}
     </View>
 

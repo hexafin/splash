@@ -12,10 +12,12 @@ import Home from "./components/Home"
 import Receive from "./components/Receive"
 import Account from "./components/Account"
 import UpdateUsername from "./components/UpdateUsername"
+import Send from "./components/Send"
 import Unlock from "./components/Unlock"
-import ApproveModal from "./components/ApproveModal"
 import ViewTransactionModal from "./components/ViewTransactionModal"
 import SwipeApp from "./components/SwipeApp"
+import ApproveTransactionModal from "./components/ApproveTransactionModal"
+import ApproveCardModal from "./components/ApproveCardModal"
 
 const fade = props => {
 	const { position, scene } = props
@@ -105,15 +107,24 @@ const OnboardingRouter = TabNavigator(
 
 const AppRouter = StackNavigator(
 	{
-		ApproveModal: {
-			screen: ApproveModal
+		ApproveCardModal: {
+			screen: ApproveCardModal
+		},
+		ApproveTransactionModal: {
+			screen: ApproveTransactionModal
+		},
+		ViewTransactionModal: {
+			screen: ViewTransactionModal
+		},
+		Send: {
+			screen: Send
 		},
 		UpdateUsername: {
 			screen: UpdateUsername
 		},
 		SwipeApp: {
 			screen: SwipeApp
-		}
+		},
 	},
 	{
 		headerMode: "none",
@@ -130,12 +141,6 @@ const AppRouter = StackNavigator(
 export default (loggedIn) => {
 	return StackNavigator(
 		{
-			ApproveModal: {
-				screen: ApproveModal
-			},
-			ViewTransactionModal: {
-				screen: ViewTransactionModal
-			},
 			AppRouter: {
 				screen: AppRouter
 			},

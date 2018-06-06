@@ -37,14 +37,14 @@ PODS:
   - FirebaseAnalytics (4.1.0):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
     - nanopb (~> 0.3)
   - FirebaseAuth (4.4.4):
     - FirebaseAnalytics (~> 4.1)
-    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - GTMSessionFetcher/Core (~> 1.1)
   - FirebaseCore (4.0.16):
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
   - FirebaseDynamicLinks (2.3.2):
     - FirebaseAnalytics (~> 4.0)
   - FirebaseFirestore (0.10.2):
@@ -66,13 +66,13 @@ PODS:
   - GoogleToolboxForMac/Defines (2.1.3)
   - GoogleToolboxForMac/Logger (2.1.3):
     - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/NSData+zlib (2.1.3):
+  - "GoogleToolboxForMac/NSData+zlib (2.1.3)":
     - GoogleToolboxForMac/Defines (= 2.1.3)
-  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.3):
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.1.3)":
     - GoogleToolboxForMac/DebugUtils (= 2.1.3)
     - GoogleToolboxForMac/Defines (= 2.1.3)
-    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)
-  - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.1.3)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.1.3)"
   - gRPC (1.10.0):
     - gRPC-RxLibrary (= 1.10.0)
     - gRPC/Main (= 1.10.0)
@@ -146,25 +146,48 @@ DEPENDENCIES:
   - TouchID (from `../node_modules/react-native-touch-id`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - BoringSSL
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseAuth
+    - FirebaseCore
+    - FirebaseDynamicLinks
+    - FirebaseFirestore
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - GoogleToolboxForMac
+    - gRPC
+    - gRPC-Core
+    - gRPC-ProtoRPC
+    - gRPC-RxLibrary
+    - GTMSessionFetcher
+    - KSCrash
+    - leveldb-library
+    - nanopb
+    - Protobuf
+    - Sentry
+
 EXTERNAL SOURCES:
   CodePush:
-    :path: ../node_modules/react-native-code-push
+    :path: "../node_modules/react-native-code-push"
   lottie-ios:
-    :path: ../node_modules/lottie-ios
+    :path: "../node_modules/lottie-ios"
   lottie-react-native:
-    :path: ../node_modules/lottie-react-native
+    :path: "../node_modules/lottie-react-native"
   React:
-    :path: ../node_modules/react-native
+    :path: "../node_modules/react-native"
   SentryReactNative:
-    :path: ../node_modules/react-native-sentry
+    :path: "../node_modules/react-native-sentry"
   TouchID:
-    :path: ../node_modules/react-native-touch-id
+    :path: "../node_modules/react-native-touch-id"
   yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
+    :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   BoringSSL: 32764dbaf5f5888cf51fbaa172a010126b41bcd4
-  CodePush: 9400969397b340ee26772b79fcadd1a48a0449dc
+  CodePush: af67b07310e4037ecd5c38f03c7a51c6350240b5
   Firebase: c98c8b1fbcbdccd82539a36c2b17a9b1bb0ee798
   FirebaseAnalytics: 3dfae28d4a5e06f86c4fae830efc2ad3fadb19bc
   FirebaseAuth: d040bb7a9db6dfc29d0e7ec82d48be51352b2581
@@ -181,16 +204,16 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
   KSCrash: 5394936f41e5c1ef7b79cf79b30d53299b0c160e
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
-  lottie-ios: d699fdee68d7b63e721d949388b015fef1aaa4ac
-  lottie-react-native: f2e118cc10f478bc9857bbdb5568b6f4a9d30cf7
+  lottie-ios: 9f24be3ecb13412223b6ac70d97437742b0e3de1
+  lottie-react-native: db4bd75685428c4ad0ec2f913145abff3d38b640
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
-  React: 0ba6cae888dc82dc47d6d5f3090615e1b5f6f3e7
+  React: 541ba768b9855e10cdc76f55427a5cd0653ca806
   Sentry: 546079394a729c35ba8c10332942c25f96cac921
-  SentryReactNative: 2ef9eb2ef558cf6b52a3f6b6eae0cd7d7fff9e5f
-  TouchID: 73098f66ad9dee0cda99e3e34793c14dcacac787
-  yoga: faecc6be81ca7823ccbb470b93a1b228499fa1c0
+  SentryReactNative: a306955d6c4b45954ff04d2fbeaa536f947f5ba4
+  TouchID: b0640fedb86fa2db2fe1df15b61594ad49e76288
+  yoga: 17521bbb0dd54a47c0b3ac43253e78cdac7488e0
 
 PODFILE CHECKSUM: 9953b4c75418bdcf94c17fcc8fb7bab1843bd0b1
 
-COCOAPODS: 1.3.1
+COCOAPODS: 1.5.0

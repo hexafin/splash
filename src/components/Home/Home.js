@@ -7,6 +7,7 @@ import {
 	StyleSheet,
 	Image,
 	TouchableWithoutFeedback,
+	TouchableOpacity,
 	Linking,
 	Alert,
 	Share,
@@ -56,7 +57,7 @@ class Home extends Component {
 				loadingBalance: true
 			}
 		})
-		api.GetAddressBalance(this.props.bitcoinAddress).then(balance => {
+		api.GetAddressBalance(this.props.bitcoinAddress, this.props.bitcoinNetwork).then(balance => {
 			this.setState(prevState => {
 				return {
 					...prevState,
@@ -129,7 +130,7 @@ class Home extends Component {
 			} = notif;
 			if (transactionId && relativeAmount && domain && relativeCurrency) {
 				api.GetExchangeRate().then(exchangeRate => {
-					this.props.navigation.navigate("ApproveModal", {
+					this.props.navigation.navigate("ApproveCardModal", {
 						transactionId,
 						relativeAmount,
 						domain,
@@ -254,6 +255,13 @@ class Home extends Component {
 						})}
 					</View>
 				</Animated.ScrollView>
+				<TouchableOpacity style={styles.sendButton} onPress={() => this.props.navigation.navigate("Send")}>
+				    <Image
+                        resizeMode={"contain"}
+				    	style={{width: 35, height: 35, marginTop: 2, marginRight: 2}}
+                        source={require("../../assets/icons/send.png")}
+                    />
+				</TouchableOpacity>
 				<Animated.View style={[animatedHeader, styles.header]}/>
 				
 				<TouchableWithoutFeedback onPress={handleBalancePress}>
@@ -341,6 +349,23 @@ const styles = StyleSheet.create({
 		color: colors.primaryDarkText,
 		fontSize: 18,
 		fontWeight: "700"
+	},
+	sendButton: {
+		marginRight: 20,
+		marginBottom: 20,
+		justifyContent: 'center',
+		alignItems: 'center',
+		alignSelf: 'flex-end',
+		width: 75,
+		height: 75,
+		borderRadius: 37.5,
+		backgroundColor: '#6364F1',
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowOpacity: 0.35,
+		shadowRadius: 15,
 	}
 });
 

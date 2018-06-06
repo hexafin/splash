@@ -7,12 +7,14 @@ import Checkmark from "../universal/Checkmark"
 import TouchID from "react-native-touch-id"
 import Button from "../universal/Button"
 
-class ApproveModal extends Component {
+class ApproveCardModal extends Component {
 
 	constructor(props) {
 		super(props)
 		this.state = {
-			backgroundOpacity: new Animated.Value(0.0)
+			backgroundOpacity: new Animated.Value(0.0),
+			success: false,
+			wasLoading: false,
 		}
 	}
 
@@ -25,6 +27,27 @@ class ApproveModal extends Component {
  			duration: 200
  		}),
 	 ]).start();
+	}
+
+	componentWillReceiveProps(nextProps) { 
+		if(nextProps.loading == true) {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					wasLoading: true
+				}
+			})			
+		}
+
+		if(nextProps.loading == false && this.state.wasLoading == true) {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					wasLoading: false,
+					success: true,
+				}
+			})			
+		}
 	}
 
 	render() {
@@ -109,8 +132,8 @@ class ApproveModal extends Component {
 	                  <Button
 	                  	onPress={() => approve(transaction)}
 	                  	style={styles.button} 
-	                  	loading={this.props.loading && !this.props.success}
-	                  	checkmark={this.props.success && !this.props.loading}
+	                  	loading={this.props.loading && !this.state.success}
+	                  	checkmark={this.state.success && !this.props.loading}
 	                  	checkmarkPersist={true}
 											checkmarkCallback={() => dismiss()}
 											disabled={this.props.error}
@@ -146,7 +169,7 @@ class ApproveModal extends Component {
 	}
 }
 
-export default ApproveModal
+export default ApproveCardModal
 
 const styles = StyleSheet.create({
 	container: {

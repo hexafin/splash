@@ -29,7 +29,7 @@ class Waitlisted extends Component {
                 relativeCurrency
             } = notif
             if (transactionId && relativeAmount && domain && relativeCurrency) {
-                this.props.navigation.navigate("ApproveModal", {
+                this.props.navigation.navigate("ApproveCardModal", {
                     transactionId,
                     relativeAmount,
                     domain,

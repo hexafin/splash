@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
+import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
 import {Input} from "../universal/Input"
 
@@ -17,8 +18,8 @@ const Account = ({splashtag, logout, navigation}) => {
 
 		const handleLogout = () => {
 			Alert.alert(
-			  'Confirm Logout',
-			  'Are you sure you want to logout?',
+			  'Confirm Delete',
+			  'Are you sure you want to delete your account? Your funds will be irretrievable.',
 			  [
 			    {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
 			    {text: 'Yes', onPress: () => logout()},
@@ -40,7 +41,7 @@ const Account = ({splashtag, logout, navigation}) => {
 						</View>
 					</TouchableOpacity>
 					<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
-						<Text style={styles.logoutText}>Logout</Text>
+						<Text style={styles.logoutText}>Delete Account</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
