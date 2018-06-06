@@ -75,7 +75,7 @@ class UpdateUsername extends Component {
 						<Text style={{fontSize: 18, fontWeight: '700', color: colors.nearBlack}}>Update Splashtag</Text>
 						<TouchableOpacity onPress={() => {
 															Keyboard.dismiss()
-															this.navigation.goBack()
+															this.props.navigation.navigate("Account")
 														}}>
 		                    <Image style={{height: 14, width: 14}} source={require('../../assets/icons/Xbutton.png')}/>
 		                 </TouchableOpacity>
