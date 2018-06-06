@@ -6,11 +6,9 @@ import { LogIn } from "../../redux/user/actions";
 
 const mapStateToProps = state => {
 	return {
-		waitlisted: state.user.waitlisted,
 		phoneNumber: state.onboarding.phoneNumber,
 		countryName: state.onboarding.countryName,
 		isSmsConfirming: state.onboarding.isSmsConfirming,
-		successSigningUp: state.onboarding.successSigningUp,
 		isSmsAuthenticating: state.onboarding.isSmsAuthenticating,
 		isSigningUp: state.onboarding.isSigningUp,
 		successSigningUp: state.onboarding.successSigningUp,
