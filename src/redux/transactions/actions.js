@@ -31,6 +31,11 @@ export function approveTransactionFailure(error) {
 	return { type: APPROVE_TRANSACTION_FAILURE, error };
 }
 
+export const RESET_TRANSACTIONS = "RESET_TRANSACTIONS";
+export function resetTransactions() {
+	return { type: RESET_TRANSACTIONS };
+}
+
 export const LOAD_TRANSACTIONS_INIT = "LOAD_TRANSACTIONS_INIT"
 export function loadTransactionsInit() {
 	return { type: LOAD_TRANSACTIONS_INIT };

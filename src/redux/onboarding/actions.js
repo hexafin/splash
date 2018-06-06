@@ -51,6 +51,11 @@ export function holdSplashtag(splashtag, phoneNumber) {
 	return { type: HOLD_SPLASHTAG, splashtag, phoneNumber };
 }
 
+export const RESET_ONBOARDING = "RESET_ONBOARDING";
+export function resetOnboarding() {
+	return { type: RESET_ONBOARDING };
+}
+
 export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
 	return (dispatch, getState) => {
 		const state = getState();

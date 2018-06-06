@@ -5,7 +5,8 @@ import {
 	StyleSheet,
 	Image,
 	Clipboard,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	Dimensions
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
 	},
 	headerImage: {
 		position: "absolute",
-		width: 400,
+		width: Dimensions.get('window').width,
 		height: 300,
 		top: -120
 	},

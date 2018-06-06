@@ -10,6 +10,8 @@ import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
 import Waitlisted from "./components/Waitlisted"
 import Home from "./components/Home"
 import AddCrypto from "./components/AddCrypto"
+import Account from "./components/Account"
+import UpdateUsername from "./components/UpdateUsername"
 import Unlock from "./components/Unlock"
 import ApproveModal from "./components/ApproveModal"
 
@@ -98,12 +100,24 @@ const AppRouter = TabNavigator(
 				tabBarVisible: false
 			}
 		},
+		Account: {
+			screen: Account,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		},
+		UpdateUsername: {
+			screen: UpdateUsername,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		},
 		AddCrypto: {
 			screen: AddCrypto,
 			navigationOptions: {
 				tabBarVisible: false
 			}
-		}
+		},
 		// FadeRouter: {
 		// 	screen: FadeRouter,
 		// 	navigationOptions: {
