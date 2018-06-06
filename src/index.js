@@ -18,6 +18,14 @@ codePush.getUpdateMetadata().then(update => {
 });
 
 class App extends Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {
+			loggedIn: false
+		}
+	}
+
 	componentDidMount() {
 		codePush.sync({
 			updateDialog: false,
@@ -26,13 +34,24 @@ class App extends Component {
 	}
 
 	render() {
+
+		const Router = Routes(this.state.loggedIn)
+
 		return (
 			<Provider store={store}>
 				<PersistGate
 					loading={<Loading />}
 					persistor={persistor}
-				>
-					<Routes
+					onBeforeLift={() => {
+						const state = store.getState()
+						this.setState(prevState => {
+							return {
+								...prevState,
+								loggedIn: state.user.loggedIn
+							}
+						})
+					}}>
+					<Router
 						ref={navigatorRef => {
 							NavigatorService.setContainer(navigatorRef);
 						}}

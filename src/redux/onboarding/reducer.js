@@ -7,9 +7,9 @@ import {
     SMS_AUTH_INIT,
     SMS_AUTH_SUCCESS,
     SMS_AUTH_FAILURE,
-    CLAIM_USERNAME_INIT,
-    CLAIM_USERNAME_SUCCESS,
-    CLAIM_USERNAME_FAILURE,
+    SIGN_UP_INIT,
+    SIGN_UP_SUCCESS,
+    SIGN_UP_FAILURE,
     HOLD_SPLASHTAG,
     SMS_CONFIRM_INIT,
     SMS_CONFIRM_SUCCESS,
@@ -25,7 +25,10 @@ const initialState = {
     countryName: null,
     smsAuthenticated: false,
     isSmsConfirming: false,
-    errorSmsConfirming: null
+    errorSmsConfirming: null,
+    isSigningUp: false,
+    successSigningUp: false,
+    errorSigningUp: null
 }
 
 export default function onboardingReducer(state = initialState, action) {
@@ -36,6 +39,28 @@ export default function onboardingReducer(state = initialState, action) {
                 ...state,
                 splashtagOnHold: action.splashtag,
                 phoneNumber: action.phoneNumber
+            }
+
+        case SIGN_UP_INIT:
+            return {
+                ...state,
+                isSigningUp: true,
+                errorSigningUp: null
+            }
+
+        case SIGN_UP_SUCCESS:
+            return {
+                ...state,
+                isSigningUp: false,
+                successSigningUp: true
+            }
+
+        case SIGN_UP_FAILURE:
+            Sentry.captureMessage(action.error)
+            return {
+                ...state,
+                isSigningUp: false,
+                errorSigningUp: action.error
             }
 
         case SMS_AUTH_INIT:
@@ -52,8 +77,7 @@ export default function onboardingReducer(state = initialState, action) {
         case SMS_AUTH_SUCCESS:
             return {
                 ...state,
-                isSmsAuthenticating: false,
-                smsAuthenticationToken: action.token
+                isSmsAuthenticating: false
             }
 
         case SMS_AUTH_FAILURE:

@@ -16,6 +16,7 @@ import Button from "../universal/Button"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import PhoneNumberInput from "../universal/PhoneNumberInput"
+import FCM from "react-native-fcm";
 
 class EnterPhoneNumber extends Component {
 
@@ -30,9 +31,9 @@ class EnterPhoneNumber extends Component {
             },
             isLoading: false
         }
-    }
+    }s
 
-    componentWillMount() {
+    componentWillMount () {
         if (this.props.splashtag == "") {
             this.props.navigation.navigate("ChooseSplashtag")
         }
@@ -97,7 +98,12 @@ class EnterPhoneNumber extends Component {
                         })
 
                         // intitiate authentication process
-                        this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName)
+                        this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName).then(confirmResult => {
+                            this.props.navigation.navigate("VerifyPhoneNumber", {confirmResult})
+                        }).catch(error => {
+                            console.log(error)
+                            Alert.alert("An error occurred with SMS authentication. Please try again later")
+                        })
                         Keyboard.dismiss()
 
                     }} style={styles.footerButton}

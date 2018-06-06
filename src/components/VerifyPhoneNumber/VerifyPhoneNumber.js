@@ -14,29 +14,57 @@ import {defaults, icons} from "../../lib/styles"
 import FlatBackButton from "../universal/FlatBackButton"
 import Button from "../universal/Button"
 import NumericCodeInput from "../universal/NumericCodeInput"
+import FCM, {
+    FCMEvent,
+    RemoteNotificationResult,
+    WillPresentNotificationResult,
+    NotificationType
+} from "react-native-fcm"
 
 class VerifyPhoneNumber extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            code: ""
+            code: "",
         }
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
-    componentDidUpdate(prevProps) {
-      if((this.props.confirmError != prevProps.confirmError && this.props.confirmError) || (this.props.claimError != prevProps.claimError && this.props.claimError)) {
-        Alert.alert('An error occurred!', 'Sorry about this. Our team has been notified and we should fix this shortly!', [
-            {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel'
-            }, {
-                text: 'Ok',
-                onPress: () => console.log('OK Pressed')
+    componentDidMount() {
+        this.setState(prevState => {
+            return {
+                ...prevState,
+                 confirmResult: this.props.navigation.state.params.confirmResult
             }
-        ])
-      }
+        })
+        this.props.navigation.setParams({ confirmResult: null })
+    }
+
+    handleSubmit() {
+        Keyboard.dismiss()
+        this.props.SmsConfirm(this.state.confirmResult, this.state.code).then(user => {
+            this.props.SignUp(user).then(userId => {
+                this.props.LogIn(userId).then(() => {
+                    this.props.navigation.navigate("Home")
+                    FCM.requestPermissions().then(() =>
+                        FCM.getFCMToken().then(token => {
+                            api.UpdateAccount(user.uid, {push_token: token})
+                        })
+                    ).catch(error => {
+                        console.log("FCM error", error)
+                    })
+                }).catch(error => {
+                    console.log(error)
+                    Alert.alert("An error occurred while logging in. Please try again later")
+                })
+            }).catch(error => {
+                console.log(error)
+                Alert.alert("An error occurred while signing up. Please try again later")
+            })
+        }).catch(error => {
+            Alert.alert("An error occurred while confirming SMS. Please try again later")
+        })
     }
 
     render() {
@@ -70,13 +98,10 @@ class VerifyPhoneNumber extends Component {
                     </View>
                 </View>
 
-                <Button onPress={() => {
-                        // TODO: sms authentication function
-                        Keyboard.dismiss()
-                        this.props.SmsConfirm(this.state.code)
-                    }} style={styles.footerButton} title={"Claim splashtag"}
+                <Button onPress={this.handleSubmit} style={styles.footerButton} title={"Finish signup"}
                     primary={true}
-                    loading={this.props.isSmsConfirming}
+                    loading={this.props.isSmsConfirming || this.props.isSigningUp}
+                    checkmark={this.props.successSigningUp}
                     disabled={this.state.code.length < 6}/>
 
             </View>

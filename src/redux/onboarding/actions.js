@@ -12,8 +12,6 @@ import FCM, {
 } from "react-native-fcm";
 import { NavigationActions } from "react-navigation";
 analytics.setAnalyticsCollectionEnabled(true);
-
-import { ClaimUsername } from '../user/actions'
 import NavigatorService from "../navigator";
 
 export const SMS_AUTH_INIT = "SMS_AUTH_INIT";
@@ -22,8 +20,8 @@ export function smsAuthInit(phoneNumber, countryName) {
 }
 
 export const SMS_AUTH_SUCCESS = "SMS_AUTH_SUCCESS";
-export function smsAuthSuccess(token) {
-	return { type: SMS_AUTH_SUCCESS, token };
+export function smsAuthSuccess() {
+	return { type: SMS_AUTH_SUCCESS };
 }
 
 export const SMS_AUTH_FAILURE = "SMS_AUTH_FAILURE";
@@ -44,6 +42,21 @@ export function smsConfirmSuccess() {
 export const SMS_CONFIRM_FAILURE = "SMS_CONFIRM_FAILURE";
 export function smsConfirmFailure(error) {
 	return { type: SMS_CONFIRM_FAILURE, error };
+}
+
+export const SIGN_UP_INIT = "SIGN_UP_INIT";
+export function signUpInit() {
+	return { type: SIGN_UP_INIT };
+}
+
+export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
+export function signUpSuccess() {
+	return { type: SIGN_UP_SUCCESS };
+}
+
+export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
+export function signUpFailure(error) {
+	return { type: SIGN_UP_FAILURE, error };
 }
 
 export const HOLD_SPLASHTAG = "SPLASHTAG_ON_HOLD";
@@ -72,37 +85,106 @@ export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
 
 export const SmsAuthenticate = (phoneNumber, countryName) => {
 	return (dispatch, getState) => {
-		const state = getState();
-		if (phoneNumber[0] != "+") {
-			phoneNumber = "+" + phoneNumber;
-		}
-		dispatch(smsAuthInit(phoneNumber, countryName));
-		firebase
-			.auth()
-			.signInWithPhoneNumber(phoneNumber)
-			.then(confirmResult => {
-				NavigatorService.navigate("VerifyPhoneNumber");
-				dispatch(smsAuthSuccess(confirmResult));
-			})
-			.catch(error => {
-				dispatch(smsAuthFailure(error));
-			});
+		return new Promise((resolve, reject) => {
+			const state = getState();
+			if (phoneNumber[0] != "+") {
+				phoneNumber = "+" + phoneNumber;
+			}
+			dispatch(smsAuthInit(phoneNumber, countryName));
+			firebase
+				.auth()
+				.signInWithPhoneNumber(phoneNumber)
+				.then(confirmResult => {
+					dispatch(smsAuthSuccess());
+					resolve(confirmResult)
+				})
+				.catch(error => {
+					dispatch(smsAuthFailure(error));
+					reject(error)
+				});
+		})
 	};
 };
 
-export const SmsConfirm = confirmationCode => {
+export const SmsConfirm = (confirmResult, confirmationCode) => {
 	return (dispatch, getState) => {
-		const state = getState();
-		dispatch(smsConfirmInit());
-		state.onboarding.smsAuthenticationToken
-			.confirm(confirmationCode)
-			.then(user => {
-				const claimUsername = ClaimUsername(user);
-				claimUsername(dispatch, getState);
-				dispatch(smsConfirmSuccess());
-			})
-			.catch(error => {
-				dispatch(smsConfirmFailure(error));
-			});
+		return new Promise((resolve, reject) => {
+			const state = getState();
+			dispatch(smsConfirmInit());
+			confirmResult
+				.confirm(confirmationCode)
+				.then(user => {
+					dispatch(smsConfirmSuccess());
+					resolve(user)
+				})
+				.catch(error => {
+					dispatch(smsConfirmFailure(error));
+					reject(error)
+				});
+		})
 	};
 };
+
+export const SignUp = user => {
+	return (dispatch, getState) => {
+		return new Promise((resolve, reject) => {
+
+			dispatch(signUpInit())
+
+			const state = getState()
+			const userId = user.uid
+			// check if user already exists
+			let userRef = firestore.collection("users").doc(userId)
+			userRef.get().then(userDoc => {
+				if (userDoc.exists) {
+					// user already exists, just log them in but don't create new entity
+					dispatch(signUpSuccess())
+					resolve(userId)
+				}
+				else {
+					api.UsernameExists(splashtag).then(data => {
+						console.log("api response", data)
+						if (!data.availableUser) {
+							// user does not already exist, full signup
+							let splashtag = state.onboarding.splashtagOnHold
+							const phoneNumber = state.onboarding.phoneNumber
+
+							if (typeof state.form.chooseSplashtag !== "undefined" && state.form.chooseSplashtag.values.splashtag) {
+								splashtag = state.form.chooseSplashtag.values.splashtag
+							}
+
+							const entity = {
+								splashtag: splashtag,
+								phoneNumber,
+					            defaultCurrency: "USD",
+					            bitcoinAddress: bitcoinData.address
+							}
+							userRef.set(entity).then(() => {
+								dispatch(signUpSuccess())
+								resolve(userId)
+							}).catch(error => {
+								dispatch(signUpFailure(error))
+								reject(error)
+							})
+						}
+						else {
+							// username already taken
+							const error = "Username already taken"
+							dispatch(signUpFailure(error))
+							reject(error)
+						}
+					})
+				}
+			}).catch(error => {
+				dispatch(signUpFailure(error))
+				reject(error)
+			})
+		})
+	}
+}
+
+
+
+
+
+
