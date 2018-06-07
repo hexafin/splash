@@ -14,6 +14,7 @@ import Account from "./components/Account"
 import UpdateUsername from "./components/UpdateUsername"
 import Unlock from "./components/Unlock"
 import ApproveModal from "./components/ApproveModal"
+import ViewTransactionModal from "./components/ViewTransactionModal"
 
 const fade = props => {
 	const { position, scene } = props
@@ -140,6 +141,9 @@ export default (loggedIn) => {
 		{
 			ApproveModal: {
 				screen: ApproveModal
+			},
+			ViewTransactionModal: {
+				screen: ViewTransactionModal
 			},
 			AppRouter: {
 				screen: AppRouter

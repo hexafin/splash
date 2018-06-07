@@ -203,7 +203,13 @@ class Home extends Component {
 									: "A bitcoin wallet"
 								}
 								onPress={() => {
-									console.log("press:", transaction)
+									this.props.navigation.navigate("ViewTransactionModal", {
+										direction: (transaction.type == "card") ? "out" : "in",
+										domain: transaction.domain,
+										relativeAmount: transaction.relativeAmount,
+										amount: transaction.amount,
+										timestamp: transaction.timestampApproved,
+									})
 								}}
 							/>
 						)
