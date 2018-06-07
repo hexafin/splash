@@ -31,7 +31,7 @@ class EnterPhoneNumber extends Component {
             },
             isLoading: false
         }
-    }s
+    }
 
     componentWillMount () {
         if (this.props.splashtag == "") {
