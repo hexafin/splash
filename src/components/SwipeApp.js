@@ -241,6 +241,9 @@ class SwipeApp extends Component {
 							console.log(error)
 						}
 					}}
+					contentOffset={{
+						x: SCREEN_WIDTH
+					}}
 					scrollEventThrottle={16}
 					bounces={false}
 					onScroll={_onScroll}

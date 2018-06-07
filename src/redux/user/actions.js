@@ -57,18 +57,17 @@ export function resetUser() {
 	return { type: ActionTypes.RESET_USER, }
 }
 
-export const LogIn = userId => {
+export const LogIn = (userId, bitcoinData) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			const state = getState()
 
 			dispatch(logInInit())
+			console.log("login bitcoin data", bitcoinData)
 
 			firestore.collection("users").doc(userId).get().then(userDoc => {
 				// TODO: watch user entity for changes to account
 				const userData = userDoc.data()
-				// create new bitcoin wallet on login
-				const bitcoinData = api.NewBitcoinWallet()
 				Sentry.setUserContext({
 					userId: userId,
 					username: userData.splashtag
