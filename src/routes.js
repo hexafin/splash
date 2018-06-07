@@ -9,7 +9,7 @@ import EnterPhoneNumber from "./components/EnterPhoneNumber"
 import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
 import Waitlisted from "./components/Waitlisted"
 import Home from "./components/Home"
-import AddCrypto from "./components/AddCrypto"
+import Receive from "./components/Receive"
 import Account from "./components/Account"
 import UpdateUsername from "./components/UpdateUsername"
 import Unlock from "./components/Unlock"
@@ -121,8 +121,8 @@ const AppRouter = TabNavigator(
 				tabBarVisible: false
 			}
 		},
-		AddCrypto: {
-			screen: AddCrypto,
+		Receive: {
+			screen: Receive,
 			navigationOptions: {
 				tabBarVisible: false
 			}

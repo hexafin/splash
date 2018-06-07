@@ -85,17 +85,20 @@ export const LogIn = userId => {
 
 export const ChangeUsername = () => {
 	return (dispatch, getState) => {
-		dispatch(updateUsernameInit())
-		const state = getState()
-		const uid = state.user.entity.uid
-		const updatedUsername = state.form.updateSplashtag.values.updateUsername
-		api.UpdateAccount(uid, {username: updatedUsername}).then(userData => {
-			dispatch(updateUsernameSuccess(userData))
-			NavigatorService.navigate("Account")
-			dispatch(reset('updateSplashtag'))
-		}).catch(error => {
-			dispatch(updateUsernameFailure(error))
-			dispatch(reset('updateSplashtag'))
+		return new Promise((resolve, reject) => {
+			dispatch(updateUsernameInit())
+			const state = getState()
+			const uid = state.user.id
+			const updatedUsername = state.form.updateSplashtag.values.updateUsername
+			api.UpdateAccount(uid, {splashtag: updatedUsername}).then(userData => {
+				dispatch(updateUsernameSuccess(userData))
+				resolve()
+				dispatch(reset('updateSplashtag'))
+			}).catch(error => {
+				dispatch(updateUsernameFailure(error))
+				dispatch(reset('updateSplashtag'))
+				reject(error)
+			})
 		})
 	}
 }

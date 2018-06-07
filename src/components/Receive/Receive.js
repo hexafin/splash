@@ -13,7 +13,7 @@ import { defaults, icons } from "../../lib/styles";
 import FCM, { FCMEvent } from "react-native-fcm";
 import FlatBackButton from "../universal/FlatBackButton"
 
-class AddCrypto extends Component {
+class Receive extends Component {
 
 	constructor(props) {
 		super(props)
@@ -186,4 +186,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default AddCrypto;
+export default Receive;
