@@ -14,6 +14,7 @@ import Account from "./components/Account"
 import UpdateUsername from "./components/UpdateUsername"
 import Unlock from "./components/Unlock"
 import ApproveModal from "./components/ApproveModal"
+import SwipeApp from "./components/SwipeApp"
 
 const fade = props => {
 	const { position, scene } = props
@@ -101,46 +102,33 @@ const OnboardingRouter = TabNavigator(
 	}
 )
 
-const AppRouter = TabNavigator(
+const AppRouter = StackNavigator(
 	{
-		Home: {
-			screen: Home,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		},
-		Account: {
-			screen: Account,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+		ApproveModal: {
+			screen: ApproveModal
 		},
 		UpdateUsername: {
-			screen: UpdateUsername,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+			screen: UpdateUsername
 		},
-		Receive: {
-			screen: Receive,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+		SwipeApp: {
+			screen: SwipeApp
 		}
 	},
 	{
-		animationEnabled: true,
+		headerMode: "none",
+		mode: "modal",
 		swipeEnabled: false,
-		initialRouteName: "Home"
+		initialRouteName: "SwipeApp",
+		transitionConfig: () => ({ screenInterpolator: forVertical }),
+		cardStyle: {
+			backgroundColor: "rgba(0,0,0,0)"
+		}
 	}
 )
 
 export default (loggedIn) => {
 	return StackNavigator(
 		{
-			ApproveModal: {
-				screen: ApproveModal
-			},
 			AppRouter: {
 				screen: AppRouter
 			},

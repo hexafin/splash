@@ -28,12 +28,7 @@ const Account = ({splashtag, logout, navigation}) => {
 
 		return (
 			<View style={styles.container}>
-				<Image source={require("../../assets/images/header.png")} resizeMode="cover" style={styles.headerImage}/>
 				<View style={styles.header}>
-					<FlatBackButton color="white" onPress={() => {
-						navigation.goBack()
-					}}/>
-					<Image source={icons.whiteSplash} style={styles.headerLogo}/>
 					<Text style={styles.title}>@{splashtag}</Text>
 				</View>
 				<View style={styles.body}>
@@ -54,25 +49,15 @@ const Account = ({splashtag, logout, navigation}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		...defaults.container
-	},
-	headerImage: {
-		position: "absolute",
-		width: Dimensions.get('window').width,
-		height: 300,
-		top: -120
+		...defaults.container,
+		backgroundColor: "transparent"
 	},
 	header: {
 		height: 150,
-		backgroundColor: colors.primary,
 		justifyContent: "center",
 		alignItems: "center",
 		marginBottom: 40,
 		paddingTop: 60
-	},
-	headerLogo: {
-		width: 24,
-		height: 32,
 	},
 	title: {
 		color: colors.white,
@@ -83,6 +68,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 24,
 		flexDirection: "column",
+		backgroundColor: colors.white
 	},
 	accountText: {
 		paddingBottom: 22,
