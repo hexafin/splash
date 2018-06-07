@@ -7,52 +7,41 @@ import { ActionTypes } from "./actions.js"
 
 const initialState = {
 	loggedIn: false,
-	isClaimingUsername: false,
-	errorClaimingUsername: null,
+	isLoggingIn: false,
+	errorLoggingIn: null,
 	isUpdatingUsername: false,
 	errorUpdatingUsername: null,
 	entity: {},
 	bitcoin: {},
-	splashtag: null,
 	id: null
 }
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
-		case ActionTypes.CLAIM_USERNAME_INIT:
+		
+		case ActionTypes.LOG_IN_INIT:
 			return {
 				...state,
-				isClaimingUsername: true,
-				errorClaimingUsername: null,
-				entity: initialState.entity,
-				bitcoin: initialState.bitcoin
+				isLoggingIn: true,
+				errorLoggingIn: null
 			}
 
-		case ActionTypes.CLAIM_USERNAME_SUCCESS:
+		case ActionTypes.LOG_IN_SUCCESS:
 			return {
 				...state,
-				isClaimingUsername: false,
+				isLoggingIn: false,
 				id: action.userId,
-				entity: {
-					uid: action.uid,
-					username: action.username,
-					phoneNumber: action.phoneNumber
-				},
-				bitcoin: {
-					address: action.bitcoin.address,
-					privateKey: action.bitcoin.wif
-				},
+				entity: action.entity,
+				bitcoin: action.bitcoin,
 				loggedIn: true
 			}
 
-		case ActionTypes.CLAIM_USERNAME_FAILURE:
+		case ActionTypes.LOG_IN_FAILURE:
 			Sentry.captureMessage(action.error)
 			return {
 				...state,
-				isClaimingUsername: false,
-				errorClaimingUsername: action.error,
-				entity: initialState.entity,
-				bitcoin: initialState.bitcoin
+				isLoggingIn: false,
+				errorLoggingIn: action.error
 			}
 
 		case ActionTypes.UPDATE_USERNAME_INIT:

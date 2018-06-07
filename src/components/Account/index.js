@@ -9,7 +9,7 @@ import NavigatorService from "../../redux/navigator"
 
 const mapStateToProps = state => {
 	return {
-		splashtag: state.user.entity.username
+		splashtag: state.user.entity.splashtag
 	}
 }
 

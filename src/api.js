@@ -39,7 +39,6 @@ function NewBitcoinWallet() {
         rng: random
     })
     return {
-        keyPair: keyPair,
         wif: keyPair.toWIF(),
         address: keyPair.getAddress()
     }
@@ -204,7 +203,7 @@ const UpdateAccount = (uid, updateDict) => {
 
         firestore.collection("users").doc(uid).update(updateDict).then(() => {
             firestore.collection("users").doc(uid).get().then(person => {
-                resolve(person)
+                resolve(person.data())
             }).catch(error => {
                 reject(error)
             })

@@ -15,31 +15,30 @@ let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
 export const ActionTypes = {
-	CLAIM_USERNAME_INIT: "CLAIM_USERNAME_INIT",
-	CLAIM_USERNAME_SUCCESS: "CLAIM_USERNAME_SUCCESS",
-	CLAIM_USERNAME_FAILURE: "CLAIM_USERNAME_FAILURE",
+	LOG_IN_INIT: "LOG_IN_INIT",
+	LOG_IN_SUCCESS: "LOG_IN_SUCCESS",
+	LOG_IN_FAILURE: "LOG_IN_FAILURE",
 	UPDATE_USERNAME_INIT: "UPDATE_USERNAME_INIT",
 	UPDATE_USERNAME_SUCCESS: "UPDATE_USERNAME_SUCCESS",
 	UPDATE_USERNAME_FAILURE: "UPDATE_USERNAME_FAILURE",
 	RESET_USER: "RESET_USER"
 }
 
-export function claimUsernameInit() {
-	return { type: ActionTypes.CLAIM_USERNAME_INIT }
+export function logInInit() {
+	return { type: ActionTypes.LOG_IN_INIT }
 }
 
-
-export function claimUsernameSuccess(userId, entity, bitcoin) {
+export function logInSuccess(userId, entity, bitcoin) {
 	return {
-		type: ActionTypes.CLAIM_USERNAME_SUCCESS,
+		type: ActionTypes.LOG_IN_SUCCESS,
 		userId,
 		entity,
 		bitcoin
 	}
 }
 
-export function claimUsernameFailure(error) {
-	return { type: ActionTypes.CLAIM_USERNAME_FAILURE, error }
+export function logInFailure(error) {
+	return { type: ActionTypes.LOG_IN_FAILURE, error }
 }
 
 export function updateUsernameInit() {
@@ -58,63 +57,29 @@ export function resetUser() {
 	return { type: ActionTypes.RESET_USER, }
 }
 
-export const ClaimUsername = user => {
+export const LogIn = userId => {
 	return (dispatch, getState) => {
-		const state = getState()
-		let splashtag = state.onboarding.splashtagOnHold
-		const phoneNumber = state.onboarding.phoneNumber
-		const bitcoinData = api.NewBitcoinWallet()
+		return new Promise((resolve, reject) => {
+			const state = getState()
 
-		if (
-			typeof state.form.chooseSplashtag !== "undefined" &&
-			state.form.chooseSplashtag.values.splashtag
-		) {
-			splashtag = state.form.chooseSplashtag.values.splashtag
-		}
+			dispatch(logInInit())
 
-		dispatch(claimUsernameInit())
-		// check to see if username is available
-		api
-			.UsernameExists(splashtag)
-			.then(data => {
-				if (!data.availableUser) {
-					dispatch(claimUsernameFailure("Error: Username taken"))
-				} else {
-					Sentry.setUserContext({
-						userId: user.uid,
-						username: splashtag
-					})
-
-					const entity = {
-						splashtag: splashtag,
-						phoneNumber,
-			            defaultCurrency: "USD",
-			            bitcoinAddress: bitcoinData.address
-					}
-
-					api.CreateUser(user.uid, entity).then(userEntity => {
-						dispatch(claimUsernameSuccess(user.uid, userEntity, bitcoinData))
-						NavigatorService.navigate("Home")
-
-						FCM.requestPermissions()
-							.then(() =>
-								FCM.getFCMToken().then(token => {
-									api.UpdateAccount(user.uid, {push_token: token})
-								})
-							)
-							.catch(() =>
-								console.log("notification permission rejected")
-							)
-				
-					})
-					.catch(error => {
-						dispatch(claimUsernameFailure(error))
-					})
-				}
+			firestore.collection("users").doc(userId).get().then(userDoc => {
+				// TODO: watch user entity for changes to account
+				const userData = userDoc.data()
+				// create new bitcoin wallet on login
+				const bitcoinData = api.NewBitcoinWallet()
+				Sentry.setUserContext({
+					userId: userId,
+					username: userData.splashtag
+				})
+				dispatch(logInSuccess(userId, userData, bitcoinData))
+				resolve()
+			}).catch(error => {
+				dispatch(logInFailure(error))
+				reject(error)
 			})
-			.catch(error => {
-				dispatch(claimUsernameFailure(error))
-			})
+		})
 	}
 }
 
@@ -124,9 +89,8 @@ export const ChangeUsername = () => {
 		const state = getState()
 		const uid = state.user.entity.uid
 		const updatedUsername = state.form.updateSplashtag.values.updateUsername
-		api.UpdateAccount(uid, {username: updatedUsername}).then(() => {
-			const entity = {uid: uid, username: updatedUsername, phoneNumber: state.user.entity.phoneNumber}
-			dispatch(updateUsernameSuccess(entity))
+		api.UpdateAccount(uid, {username: updatedUsername}).then(userData => {
+			dispatch(updateUsernameSuccess(userData))
 			NavigatorService.navigate("Account")
 			dispatch(reset('updateSplashtag'))
 		}).catch(error => {

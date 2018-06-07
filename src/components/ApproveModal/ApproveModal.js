@@ -33,7 +33,7 @@ class ApproveModal extends Component {
 			relativeAmount,
 			domain,
 			relativeCurrency,
-	    exchangeRate
+	    	exchangeRate
 		} = this.props.navigation.state.params
 		const transaction = {
 			transactionId,

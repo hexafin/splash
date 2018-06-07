@@ -18,6 +18,7 @@ import TransactionLine from "../universal/TransactionLine"
 import api from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
 import moment from "moment"
+import { Sentry } from "react-native-sentry";
 
 
 class Home extends Component {
@@ -46,7 +47,7 @@ class Home extends Component {
 				}
 			})
 		}).catch(error => {
-			Alert.alert("Could not load balance")
+			Sentry.messageCapture(error)
 			this.setState(prevState => {
 				return {
 					...prevState,
@@ -80,7 +81,8 @@ class Home extends Component {
 						exchangeRate: exchangeRate[relativeCurrency]
 					});
 				}).catch(error => {
-					Alert.alert("Could not load exchange rate")
+					// Alert.alert("Could not load exchange rate")
+					// TODO: better visual error handling
 				})
 			}
 		});
@@ -99,6 +101,7 @@ class Home extends Component {
 				}
 			})
 		}).catch(error => {
+			console.log(error)
 			Alert.alert("Could not load balance")
 			this.setState(prevState => {
 				return {

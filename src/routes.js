@@ -67,8 +67,7 @@ function forVertical(props) {
 // 	}
 // );
 
-
-const AppRouter = TabNavigator(
+const OnboardingRouter = TabNavigator(
 	{
 		Landing: {
 			screen: Landing,
@@ -93,7 +92,17 @@ const AppRouter = TabNavigator(
 			navigationOptions: {
 				tabBarVisible: false
 			}
-		},
+		}
+	},
+	{
+		animationEnabled: true,
+		swipeEnabled: false,
+		initialRouteName: "Landing"
+	}
+)
+
+const AppRouter = TabNavigator(
+	{
 		Home: {
 			screen: Home,
 			navigationOptions: {
@@ -117,40 +126,37 @@ const AppRouter = TabNavigator(
 			navigationOptions: {
 				tabBarVisible: false
 			}
-		},
-		// FadeRouter: {
-		// 	screen: FadeRouter,
-		// 	navigationOptions: {
-		// 		tabBarVisible: false
-		// 	}
-		// }
+		}
 	},
 	{
 		animationEnabled: true,
 		swipeEnabled: false,
-		initialRouteName: "Landing"
+		initialRouteName: "Home"
 	}
 )
 
-const Router = StackNavigator(
-	{
-		ApproveModal: {
-			screen: ApproveModal
+export default (loggedIn) => {
+	return StackNavigator(
+		{
+			ApproveModal: {
+				screen: ApproveModal
+			},
+			AppRouter: {
+				screen: AppRouter
+			},
+			OnboardingRouter: {
+				screen: OnboardingRouter
+			}
 		},
-		AppRouter: {
-			screen: AppRouter
+		{
+			headerMode: "none",
+			mode: "modal",
+			swipeEnabled: false,
+			initialRouteName: loggedIn ? "AppRouter" : "OnboardingRouter",
+			transitionConfig: () => ({ screenInterpolator: forVertical }),
+			cardStyle: {
+				backgroundColor: "rgba(0,0,0,0)"
+			}
 		}
-	},
-	{
-		headerMode: "none",
-		mode: "modal",
-		swipeEnabled: false,
-		initialRouteName: "AppRouter",
-		transitionConfig: () => ({ screenInterpolator: forVertical }),
-		cardStyle: {
-			backgroundColor: "rgba(0,0,0,0)"
-		}
-	}
-)
-
-export default Router
+	)
+}
