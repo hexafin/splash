@@ -4,6 +4,7 @@ import {
 	Text,
 	StyleSheet,
 	Image,
+	Animated,
 	Clipboard,
 	TouchableWithoutFeedback,
 	Dimensions
@@ -12,6 +13,7 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import FCM, { FCMEvent } from "react-native-fcm";
 import FlatBackButton from "../universal/FlatBackButton"
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 class Receive extends Component {
 
@@ -27,6 +29,7 @@ class Receive extends Component {
         if (!this.props.loggedIn) {
             this.props.navigation.navigate("Landing");
         }
+        this.animatedAddressCopy = new Animated.Value(1)
 	}
 
 	handleCopy() {
@@ -64,8 +67,25 @@ class Receive extends Component {
 						<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
 					</View>
 					<Image source={{uri: qrCode}} style={styles.qr}/>
-					<TouchableWithoutFeedback onPress={this.handleCopy}>
-						<View style={styles.addressCopyWrapper}>
+					<TouchableWithoutFeedback
+						onPress={this.handleCopy}
+						onPressIn={() => {
+							ReactNativeHapticFeedback.trigger("impactLight", true)
+							Animated.spring(this.animatedAddressCopy, {
+								toValue: .8
+							}).start()
+						}}
+						onPressOut={() => {
+							ReactNativeHapticFeedback.trigger("impactLight", true)
+							Animated.spring(this.animatedAddressCopy, {
+								toValue: 1,
+								friction: 3,
+								tension: 40
+							}).start()
+						}}>
+						<Animated.View style={[styles.addressCopyWrapper, {
+							transform: [{scale: this.animatedAddressCopy}]
+						}]}>
 							<View style={styles.addressWrapper}>
 								<Text style={styles.addressText}>{address}</Text>
 							</View>
@@ -73,7 +93,7 @@ class Receive extends Component {
 								{this.state.isCopying && "Copied!"}
 								{!this.state.isCopying && "Tap to copy"}
 							</Text>
-						</View>
+						</Animated.View>
 					</TouchableWithoutFeedback>
 				</View>
 			</View>

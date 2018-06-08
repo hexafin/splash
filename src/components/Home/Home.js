@@ -27,14 +27,6 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
 
-const yOffset = new Animated.Value(0)
-const _onScroll = Animated.event(
-	[{ nativeEvent: { contentOffset: { y: yOffset } } }],
-	{
-		useNativeDriver: true
-	}
-)
-
 
 class Home extends Component {
 	constructor(props) {
@@ -45,17 +37,22 @@ class Home extends Component {
 			exchangeRate: null,
 			transactions: props.transactions,
 			loadingExchangeRate: true,
-			loadingBalance: true
+			loadingBalance: true,
+			yOffset: new Animated.Value(0),
+			pulledToRefresh: false,
+			refreshing: false
 		}
 		this.loadBalance = this.loadBalance.bind(this)
 		this.loadExchangeRate = this.loadExchangeRate.bind(this)
+		this.refresh = this.refresh.bind(this)
 	}
 
 	loadBalance() {
 		this.setState(prevState => {
 			return {
 				...prevState,
-				loadingBalance: true
+				loadingBalance: true,
+				balance: null
 			}
 		})
 		api.GetAddressBalance(this.props.bitcoinAddress, this.props.bitcoinNetwork).then(balance => {
@@ -82,7 +79,8 @@ class Home extends Component {
 		this.setState(prevState => {
 			return {
 				...prevState,
-				loadingExchangeRate: true
+				loadingExchangeRate: true,
+				exchangeRate: null
 			}
 		})
 		// get exchange rate
@@ -103,6 +101,29 @@ class Home extends Component {
         		}
         	})
         })
+	}
+
+	refresh() {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				pulledToRefresh: true,
+				refreshing: true
+			}
+		})
+		setTimeout(() => {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					refreshing: false
+				}
+			})
+		}, 500)
+		if (!this.state.pulledToRefresh) {
+			ReactNativeHapticFeedback.trigger("impactHeavy", true)
+			this.loadBalance()
+			this.loadExchangeRate()
+		}
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -161,8 +182,6 @@ class Home extends Component {
 
 	render() {
 
-		// console.log(this.state)
-
 		const handleBalancePress = () => {
 			this.setState(prevState => {
 				return {
@@ -196,7 +215,7 @@ class Home extends Component {
 		// console.log(balance)
 
 		const animatedHeader = {
-			opacity: yOffset.interpolate({
+			opacity: this.state.yOffset.interpolate({
 				inputRange: [75, 76, 100, 101],
 				outputRange: [0, 0, 1, 1]
 			})
@@ -205,13 +224,13 @@ class Home extends Component {
 		const animatedBalance = {
 			transform: [
 				{
-					scale: yOffset.interpolate({
+					scale: this.state.yOffset.interpolate({
 						inputRange: [-81, -80, 0, 55, 56],
 						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
 					})
 				},
 				{
-					translateY: yOffset.interpolate({
+					translateY: this.state.yOffset.interpolate({
 						inputRange: [-1, 0, 53, 54],
 						outputRange: [0, 0, -53, -53]
 					})
@@ -224,7 +243,26 @@ class Home extends Component {
 				<Animated.ScrollView
 					scrollEventThrottle={16}
 					contentContainerStyle={styles.container}
-					onScroll={_onScroll}>
+					onScroll={Animated.event(
+						[{ nativeEvent: { contentOffset: { y: this.state.yOffset } } }],
+						{
+							listener: event => {
+								const currentY = event.nativeEvent.contentOffset.y
+								if (currentY < -100) {
+									this.refresh()
+								}
+								if (currentY >= 0) {
+									this.setState(prevState => {
+										return {
+											...prevState,
+											pulledToRefresh: false
+										}
+									})
+								}
+							},
+							useNativeDriver: true
+						}
+					)}>
 					<Image
 						source={require("../../assets/images/headerWaveInverse.png")}
 						style={styles.waveInverse}
@@ -289,8 +327,12 @@ class Home extends Component {
 				
 				<TouchableWithoutFeedback onPress={handleBalancePress}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
-						{balance == null && <LoadingCircle size={30}/>}
+						<Text style={styles.balanceText}>{!(this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? balance[this.state.currency] : " "}</Text>
+						<View style={[styles.balanceRefresh, {
+							opacity: (this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? 100 : 0
+						}]}>
+							<LoadingCircle size={30}/>
+						</View>
 						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
 							<Image source={icons.refresh} style={styles.refreshIcon}/>
 							<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
@@ -345,6 +387,13 @@ const styles = StyleSheet.create({
 		top: (isIphoneX()) ? 90 : 70,
 		width: SCREEN_WIDTH,
 	},
+	balanceRefresh: {
+		position: "absolute",
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "center",
+		top: 0
+	},
 	balanceText: {
 		color: colors.white,
 		fontWeight: "600",
@@ -390,8 +439,8 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'flex-end',
-		width: 75,
-		height: 75,
+		width: 60,
+		height: 60,
 		borderRadius: 37.5,
 		backgroundColor: '#6364F1',
 		shadowOffset: {
@@ -404,7 +453,8 @@ const styles = StyleSheet.create({
 	sendButtonIcon: {
 		width: 30,
 		height: 30,
-		marginRight: 5
+		marginRight: 6,
+		marginTop: 2
 	}
 });
 
