@@ -6,6 +6,7 @@ import {
 	Text,
 	StyleSheet,
 	Image,
+	Keyboard,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 	Dimensions
@@ -17,8 +18,12 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
 import Button from "../universal/Button"
 import {Input} from "../universal/Input"
+import LoadingCircle from "../universal/LoadingCircle"
 
 let bitcoin = require('bitcoinjs-lib')
+
+const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_HEIGHT = Dimensions.get("window").height
 
 class Send extends Component {
 
@@ -125,14 +130,18 @@ class Send extends Component {
 
 		return (
 			<View style={styles.container}>
-				<Image source={require("../../assets/images/header.png")} resizeMode="cover" style={styles.headerImage}/>
+				<View style={styles.headerImageWrapper}>
+					<Image source={require("../../assets/images/headerWave.png")} resizeMode="contain" style={styles.headerImage}/>
+				</View>
 				<View style={styles.header}>
 					<FlatBackButton color="white" onPress={() => {
+						Keyboard.dismiss()
 						this.props.navigation.goBack()
 					}}/>
 					<TouchableWithoutFeedback onPress={handleBalancePress}>
-						<View style={styles.balanceWrapper}>
+						<View style={styles.balance}>
 							{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
+							{balance == null && <LoadingCircle size={30}/>}
 							<View style={styles.balanceCurrencyWrapper}>
 								<Image source={icons.refresh} style={styles.refreshIcon}/>
 								<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
@@ -141,14 +150,15 @@ class Send extends Component {
 					</TouchableWithoutFeedback>
 				</View>
 				<View style={styles.body}>
-					<Text style={styles.SendText}>Send bitcoin</Text>
+					<Text style={styles.sendText}>Send bitcoin</Text>
 					<Text style={styles.inputText}>To address</Text>
-                    <Field name='address' component={Input}
+                    <Field name='address' component={Input} autoFocus={true}
                         autoCapitalize="none" autoCorrect={false} spellCheck={false}/>
 					<Text style={styles.inputText}>{this.state.currency} amount</Text>
-                    <Field name='amount' component={Input}
+                    <Field name='amount' component={Input} keyboardType="numeric"
                         autoCapitalize="none" autoCorrect={false} spellCheck={false}/>
-					<Button style={{marginTop: 10}} title={'Send'} primary={true} onPress={handleSend}/>
+                    
+					<Button style={styles.sendButton} title={'Send'} primary={true} onPress={handleSend}/>
 				</View>
 			</View>
 		);
@@ -159,11 +169,18 @@ const styles = StyleSheet.create({
 	container: {
 		...defaults.container
 	},
+	headerImageWrapper: {
+		width: SCREEN_WIDTH,
+		height: 240,
+		overflow: "hidden",
+		position: "absolute"
+	},
 	headerImage: {
-		position: "absolute",
-		width: Dimensions.get('window').width,
-		height: 300,
-		top: (isIphoneX()) ? -120 : -140
+		top: (isIphoneX()) ? -50 : -30,
+		width: SCREEN_WIDTH,
+		height: 240,
+		overflow: "hidden",
+		position: "absolute"
 	},
 	header: {
 		height: 130,
@@ -173,43 +190,43 @@ const styles = StyleSheet.create({
 		marginBottom: 35,
 		paddingTop: 60
 	},
-	headerLogo: {
-		width: 24,
-		height: 32,
-	},
-	balanceWrapper: {
+	balance: {
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
+		position: "absolute",
+		top: (isIphoneX()) ? 60 : 40,
+		width: SCREEN_WIDTH,
 	},
 	balanceText: {
 		color: colors.white,
 		fontWeight: "600",
-		fontSize: 34,
-		backgroundColor: 'rgba(0,0,0,0)'
+		fontSize: 36,
+		backgroundColor: "transparent"
 	},
 	balanceCurrencyWrapper: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: 'rgba(0,0,0,0)'
+		backgroundColor: "transparent"
 	},
 	balanceCurrencyText: {
 		color: "rgba(255,255,255,0.7)",
-		fontSize: 14,
+		fontSize: 16,
 		fontWeight: "600",
 		marginLeft: 5
 	},
 	refreshIcon: {
-		width: 15,
-		height: 13
+		width: 16,
+		height: 16
 	},
 	body: {
 		flex: 1,
-		paddingHorizontal: 24,
+		padding: 20,
+		marginTop: 0,
 		flexDirection: "column",
 	},
-	SendText: {
+	sendText: {
 		fontSize: 18,
 		fontWeight: "700",
 		color: colors.nearBlack
@@ -219,15 +236,11 @@ const styles = StyleSheet.create({
 		fontWeight: "700",
 		backgroundColor: 'rgba(0,0,0,0)',
 		color: "#B3B3B3",
-		paddingBottom: 6,
-		paddingTop: 7
+		paddingBottom: 8,
+		paddingTop: 15
 	},
-	logoutText: {
-		fontSize: 17,
-		fontWeight: "700",
-		color: '#3F41FA',
-		alignSelf: 'center',
-		backgroundColor: 'rgba(0,0,0,0)'
+	sendButton: {
+		marginTop: 20
 	}
 });
 

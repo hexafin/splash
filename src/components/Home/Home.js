@@ -119,6 +119,8 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
+        this.sendButtonSpring = new Animated.Value(1)
+
 		FCM.on(FCMEvent.Notification, async notif => {
 			console.log("Notification", notif);
 			// reload on notifications
@@ -158,7 +160,7 @@ class Home extends Component {
 
 	render() {
 
-		console.log(this.state)
+		// console.log(this.state)
 
 		const handleBalancePress = () => {
 			this.setState(prevState => {
@@ -190,7 +192,7 @@ class Home extends Component {
 				USD: this.state.balance * rate
 			}
 		}
-		console.log(balance)
+		// console.log(balance)
 
 		const animatedHeader = {
 			opacity: yOffset.interpolate({
@@ -255,13 +257,32 @@ class Home extends Component {
 						})}
 					</View>
 				</Animated.ScrollView>
-				<TouchableOpacity style={styles.sendButton} onPress={() => this.props.navigation.navigate("Send")}>
-				    <Image
-                        resizeMode={"contain"}
-				    	style={{width: 35, height: 35, marginTop: 2, marginRight: 2}}
-                        source={require("../../assets/icons/send.png")}
-                    />
-				</TouchableOpacity>
+				<TouchableWithoutFeedback
+					onPressIn={() => {
+						// ReactNativeHapticFeedback.trigger("impactLight")
+						Animated.spring(this.sendButtonSpring, {
+							toValue: .8
+						}).start()
+					}}
+					onPressOut={() => {
+						// ReactNativeHapticFeedback.trigger("impactLight")
+						Animated.spring(this.sendButtonSpring, {
+							toValue: 1,
+							friction: 3,
+							tension: 40
+						}).start()
+						this.props.navigation.navigate("Send")
+					}}>
+					<Animated.View style={[styles.sendButton, {
+						transform: [{ scale: this.sendButtonSpring}]
+					}]}>
+					    <Image
+	                        resizeMode={"contain"}
+					    	style={styles.sendButtonIcon}
+	                        source={require("../../assets/icons/send.png")}
+	                    />
+                    </Animated.View>
+				</TouchableWithoutFeedback>
 				<Animated.View style={[styles.header]}/>
 				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
 				
@@ -362,8 +383,9 @@ const styles = StyleSheet.create({
 		fontWeight: "700"
 	},
 	sendButton: {
-		marginRight: 20,
-		marginBottom: 20,
+		position: "absolute",
+		right: 20,
+		bottom: (isIphoneX()) ? 40 : 20,
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'flex-end',
@@ -375,8 +397,13 @@ const styles = StyleSheet.create({
 			width: 0,
 			height: 0,
 		},
-		shadowOpacity: 0.35,
-		shadowRadius: 15,
+		shadowOpacity: 0.1,
+		shadowRadius: 10,
+	},
+	sendButtonIcon: {
+		width: 30,
+		height: 30,
+		marginRight: 5
 	}
 });
 
