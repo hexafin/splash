@@ -15,7 +15,7 @@ import { Field, reduxForm } from 'redux-form'
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper"
-import FlatBackButton from "../universal/FlatBackButton"
+import CloseButton from "../universal/CloseButton"
 import Button from "../universal/Button"
 import {Input} from "../universal/Input"
 import LoadingCircle from "../universal/LoadingCircle"
@@ -134,10 +134,6 @@ class Send extends Component {
 					<Image source={require("../../assets/images/headerWave.png")} resizeMode="contain" style={styles.headerImage}/>
 				</View>
 				<View style={styles.header}>
-					<FlatBackButton color="white" onPress={() => {
-						Keyboard.dismiss()
-						this.props.navigation.goBack()
-					}}/>
 					<TouchableWithoutFeedback onPress={handleBalancePress}>
 						<View style={styles.balance}>
 							{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
@@ -160,6 +156,10 @@ class Send extends Component {
                     
 					<Button style={styles.sendButton} title={'Send'} primary={true} onPress={handleSend}/>
 				</View>
+				<CloseButton onPress={() => {
+					Keyboard.dismiss()
+					this.props.navigation.goBack(null)
+				}}/>
 			</View>
 		);
 	}
