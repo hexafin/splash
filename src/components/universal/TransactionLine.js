@@ -9,12 +9,13 @@ import {
 import { icons, defaults } from "../../lib/styles";
 import { colors } from "../../lib/colors";
 
-const TransactionLine = ({ direction, amount, date, title, onPress }) => {
+const TransactionLine = ({ direction, amount, date, title, onPress, currency=null }) => {
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.wrapper}>
 				<View style={styles.letterPreview}>
-					<Text style={styles.letterPreviewText}>{title[0]}</Text>
+					{!currency && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
+					{currency=='BTC' && <Image source={icons.btcLetter} style={{height: 15.75, width: 12}} resizeMode={"contain"}/>}
 				</View>
 				<View style={styles.body}>
 					<View>

@@ -23,6 +23,7 @@ import moment from "moment"
 import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { cryptoUnits } from '../../lib/cryptos'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -92,6 +93,7 @@ class Home extends Component {
         			loadingExchangeRate: false
         		}
         	})
+        	this.props.UpdateExchangeRate(exchangeRate)
         }).catch(error => {
         	this.setState(prevState => {
         		return {
@@ -201,10 +203,16 @@ class Home extends Component {
 			const rate = this.state.exchangeRate[this.state.currency]
 			balance = {
 				BTC: this.state.balance,
-				USD: this.state.balance * rate
+				USD: parseFloat(this.state.balance * rate).toFixed(2)
 			}
 		}
-		// console.log(balance)
+
+		let rate = null
+		if (this.state.exchangeRate == null) {
+			rate = this.props.exchangeRates[this.state.currency]
+		} else {
+			rate = this.state.exchangeRate[this.state.currency]
+		}
 
 		const animatedHeader = {
 			opacity: this.state.yOffset.interpolate({
@@ -262,25 +270,28 @@ class Home extends Component {
 					<View style={styles.history}>
 						<Text style={styles.historyTitle}>Your history</Text>
 						{this.state.transactions.map(transaction => {
-							const amount = this.state.currency == "BTC" ? transaction.amount : transaction.relativeAmount
+							const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
+							const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate).toFixed(5) : parseFloat(cryptoAmount*rate).toFixed(2)
+							const direction = (transaction.type == "card" || typeof transaction.to !== 'undefined') ? "to" : "from"
+
 							return (
 								<TransactionLine
 									key={"transactionLine"+transaction.id}
-									direction={(transaction.type == "card") ? "out" : "in"}
+									direction={direction}
 									amount={currencyPrefix[this.state.currency] + amount}
-									date={moment.unix(transaction.timestampApproved).fromNow()}
+									date={moment.unix(transaction.timestamp).fromNow()}
 									title={
 										(transaction.type == "card")
 										? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
 										: "A bitcoin wallet"
 									}
+									currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 									onPress={() => {
 										this.props.navigation.navigate("ViewTransactionModal", {
-					                      direction: (transaction.type == "card") ? "out" : "in",
-					                      domain: transaction.domain,
-					                      relativeAmount: transaction.relativeAmount,
-					                      amount: transaction.amount,
-					                      timestamp: transaction.timestampApproved,
+											  transaction,
+											  direction,
+  						                      address: transaction.type == 'blockchain' ? transaction[direction].address : null,
+						                      exchangeRate: rate,
 									  })
 									}}
 								/>

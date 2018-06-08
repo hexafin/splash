@@ -69,6 +69,67 @@ function GetAddressBalance(address, network='mainnet') {
   });
 }
 
+async function AddBlockchainTransactions(address, userId, network='mainnet') {
+
+    const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
+    const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
+    const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
+
+    // get list of txs on firebase
+    const query = await firestore.collection("transactions").where("userId", "==", userId).where("type", "==", "blockchain").get()
+    let firebaseTxs = []
+    query.forEach(doc => {
+      firebaseTxs.push(doc.data().txId)
+    })
+
+    // load txs from blockchain
+    const response = await axios.get(addressAPI)
+    const txs = response.data.txs
+    const txsLength = txs.length
+    if (txsLength > firebaseTxs.length) {
+
+      for(var j=0; j < txsLength; j++) {
+
+        // if the txId is not on firebase and the transaction is important (ie not both from and to the user)
+        if (firebaseTxs.indexOf(txs[j].hash) == -1 && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+
+            let newTransaction = {
+              amount: {},
+              relativeAmount: null,
+              relativeCurrency: null,
+              timestamp: txs[j].time,
+              currency: 'BTC',
+              txId: txs[j].hash,
+              userId: userId,
+              type: 'blockchain'
+            }
+
+            // load total tx amount
+            const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
+            if (total < 0) {
+              newTransaction.to = {}
+              newTransaction.to.address = txs[j].out[0].addr
+              newTransaction.amount.total = -1*total
+            } else  {
+              newTransaction.from = {}
+              newTransaction.from.address = txs[j].inputs[0].prev_out.addr
+              newTransaction.amount.total = total
+            }
+
+            // load fees and calculate subtotal
+            newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash)).data
+            newTransaction.amount.subtotal = newTransaction.amount.total - newTransaction.amount.fee
+
+            // if has total add to firebase so that it can be loaded on Home
+            if (newTransaction.amount.total > 0) {
+              await firestore.collection("transactions").add(newTransaction)
+            }
+         }
+      }
+
+    }
+}
+
 // feenames: "fastestFee", "halfHourFee", "hourFee"
 // if from and amtSatoshi are provided returns total fee. if not returns feePerByte
 function GetBitcoinFees({feeName="hourFee", network="mainnet", from=null, amtSatoshi=null}) {
@@ -591,6 +652,7 @@ export default api = {
     UpdateAccount: UpdateAccount,
     UpdateTransaction,
     GenerateCard,
+    AddBlockchainTransactions,
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,
