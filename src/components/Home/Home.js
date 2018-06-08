@@ -194,7 +194,7 @@ class Home extends Component {
 
 		const animatedHeader = {
 			opacity: yOffset.interpolate({
-				inputRange: [50, 51, 80, 81],
+				inputRange: [75, 76, 100, 101],
 				outputRange: [0, 0, 1, 1]
 			})
 		}
@@ -203,8 +203,8 @@ class Home extends Component {
 			transform: [
 				{
 					scale: yOffset.interpolate({
-						inputRange: [-1, 0, 55, 56],
-						outputRange: [1, 1, 0.7, 0.7]
+						inputRange: [-81, -80, 0, 55, 56],
+						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
 					})
 				},
 				{
@@ -262,7 +262,8 @@ class Home extends Component {
                         source={require("../../assets/icons/send.png")}
                     />
 				</TouchableOpacity>
-				<Animated.View style={[animatedHeader, styles.header]}/>
+				<Animated.View style={[styles.header]}/>
+				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
 				
 				<TouchableWithoutFeedback onPress={handleBalancePress}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
@@ -289,6 +290,16 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	header: {
+		flexDirection: "column",
+		alignItems: "center",
+		justifyContent: "center",
+		height: (isIphoneX()) ? 120 : 100,
+		width: SCREEN_WIDTH,
+		position: "absolute",
+		top: 0,
+		backgroundColor: colors.primary,
+	},
+	headerShadow: {
 		flexDirection: "column",
 		alignItems: "center",
 		justifyContent: "center",
