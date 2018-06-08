@@ -13,6 +13,7 @@ const initialState = {
 	errorUpdatingUsername: null,
 	entity: {},
 	bitcoin: {},
+	bitcoinNetwork: 'testnet',
 	id: null
 }
 

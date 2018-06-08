@@ -12,7 +12,7 @@ const mapStateToProps = state => {
     }
 
 	return {
-		splashtag: state.user.entity.username,
+		splashtag: state.user.entity.splashtag,
 		isUpdatingUsername: state.user.isUpdatingUsername,
 		errorUpdatingUsername: state.user.errorUpdatingUsername,
 		usernameValue: usernameValue,

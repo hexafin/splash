@@ -7,6 +7,9 @@ import {
     APPROVE_TRANSACTION_INIT,
     APPROVE_TRANSACTION_SUCCESS,
     APPROVE_TRANSACTION_FAILURE,
+    SEND_TRANSACTION_INIT,
+    SEND_TRANSACTION_SUCCESS,
+    SEND_TRANSACTION_FAILURE,
     LOAD_TRANSACTIONS_INIT,
     LOAD_TRANSACTIONS_SUCCESS,
     LOAD_TRANSACTIONS_FAILURE,
@@ -19,9 +22,10 @@ const initialState = {
   pendingTransaction: {},
   transactions: [],
   errorApprovingTransaction: null,
-  successApprovingTransaction: false,
   isLoadingTransactions: false,
-  errorLoadingTransactions: null
+  errorLoadingTransactions: null,
+  isSendingTransaction: false,
+  errorSendingTransaction: null,
 }
 
 export default function transactionReducer(state = initialState, action) {
@@ -31,8 +35,9 @@ export default function transactionReducer(state = initialState, action) {
           return {
               ...state,
               isApprovingTransaction: false,
-              successApprovingTransaction: false,
               errorApprovingTransaction: null,
+              isSendingTransaction: false,
+              errorSendingTransaction: null,
               pendingTransaction: {}
           }
 
@@ -40,7 +45,7 @@ export default function transactionReducer(state = initialState, action) {
             return {
                 ...state,
                 isApprovingTransaction: true,
-                successApprovingTransaction: false,
+                errorApprovingTransaction: null,
                 pendingTransaction: action.transaction
             }
 
@@ -48,7 +53,7 @@ export default function transactionReducer(state = initialState, action) {
             return {
                 ...state,
                 isApprovingTransaction: false,
-                successApprovingTransaction: true,
+                errorApprovingTransaction: null,
                 pendingTransaction: {}
             }
 
@@ -58,7 +63,27 @@ export default function transactionReducer(state = initialState, action) {
                 errorApprovingTransaction: action.error,
                 pendingTransaction: {},
                 isApprovingTransaction: false,
-                successApprovingTransaction: false,
+            }
+
+        case SEND_TRANSACTION_INIT:
+            return {
+                ...state,
+                isSendingTransaction: true,
+                errorSendingTransaction: null,
+            }
+
+        case SEND_TRANSACTION_SUCCESS:
+            return {
+                ...state,
+                isSendingTransaction: false,
+                errorSendingTransaction: null,
+            }
+
+        case SEND_TRANSACTION_FAILURE:
+            return {
+                ...state,
+                errorSendingTransaction: action.error,
+                isSendingTransaction: false,
             }
 
         case RESET_TRANSACTIONS:

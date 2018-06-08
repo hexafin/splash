@@ -31,6 +31,21 @@ export function approveTransactionFailure(error) {
 	return { type: APPROVE_TRANSACTION_FAILURE, error };
 }
 
+export const SEND_TRANSACTION_INIT = "SEND_TRANSACTION_INIT";
+export function sendTransactionInit() {
+	return { type: SEND_TRANSACTION_INIT };
+}
+
+export const SEND_TRANSACTION_SUCCESS = "SEND_TRANSACTION_SUCCESS";
+export function sendTransactionSuccess() {
+	return { type: SEND_TRANSACTION_SUCCESS };
+}
+
+export const SEND_TRANSACTION_FAILURE = "SEND_TRANSACTION_FAILURE";
+export function sendTransactionFailure(error) {
+	return { type: SEND_TRANSACTION_FAILURE, error };
+}
+
 export const RESET_TRANSACTIONS = "RESET_TRANSACTIONS";
 export function resetTransactions() {
 	return { type: RESET_TRANSACTIONS };
@@ -91,17 +106,17 @@ export const ApproveTransaction = (transaction) => {
 
 		const approveTransaction = async (transaction) => {
 			const state = getState()
-			const privateKey = state.user.bitcoin.privateKey
+			const privateKey = state.user.bitcoin.wif
 			const userBtcAddress = state.user.bitcoin.address
+			const network = state.user.bitcoinNetwork
 			dispatch(approveTransactionInit(transaction))
 			try {
 				// commented for demo
 				const exchangeRate = await api.GetExchangeRate()
 				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-				const feeSatoshi = await api.GetBitcoinFees({network: 'mainnet', from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
+				const feeSatoshi = await api.GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
 				const totalBtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				// const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount)
-				const txid = 1 // dummy data
+				const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount, network)
 				await api.UpdateTransaction(transaction.transactionId, {
 					approved: true,
 					txId: txid,
@@ -120,6 +135,49 @@ export const ApproveTransaction = (transaction) => {
 			dispatch(successApprovingTransaction())
 		}).catch(error => {
 			dispatch(approveTransactionFailure(error))
+		})
+	}
+}
+
+export const SendTransaction = (toAddress, btcAmount, fee, relativeAmount) => {
+	return (dispatch, getState) => {
+		// TODO: figure out where to show fees and do btc payments
+		// add to firebase
+		const state = getState()
+		const privateKey = state.user.bitcoin.wif
+		const userBtcAddress = state.user.bitcoin.address
+		const network = state.user.bitcoinNetwork
+		const totalBtcAmount = parseFloat(btcAmount)+parseFloat(fee)
+
+		const transaction = {
+			amount: {
+				subtotal: btcAmount,
+				total: totalBtcAmount,
+				fee: fee,
+			},
+			currency: 'BTC',
+			relativeAmount: relativeAmount,
+			relativeCurrency: 'USD',
+			type: 'blockchain',
+			timestampInitiated: moment().unix(),
+			to: {
+				address: toAddress
+			},
+			userId: state.user.id,
+		}
+
+		dispatch(sendTransactionInit())
+		console.log(userBtcAddress, toAddress, privateKey, totalBtcAmount, network)
+		api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
+			const {txid, txhex} = response
+			console.log(txid, txhex)
+			api.NewTransaction(transaction).then(() => {
+				dispatch(sendTransactionSuccess())
+			}).catch(error => {
+				dispatch(sendTransactionFailure(error))				
+			})
+		}).catch(error => {
+			dispatch(sendTransactionFailure(error))
 		})
 	}
 }

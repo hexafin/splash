@@ -10,7 +10,8 @@ const mapStateToProps = (state) => {
     	transactions: state.transactions.transactions,
     	isLoadingTransactions: state.transactions.isLoadingTransactions,
     	errorLoadingTransactions: state.transactions.errorLoadingTransactions,
-        bitcoinAddress: state.user.bitcoin.address
+        bitcoinAddress: state.user.bitcoin.address,
+        bitcoinNetwork: state.user.bitcoinNetwork,
     }
 }
 

@@ -1,4 +1,4 @@
-import ApproveModal from "./ApproveModal"
+import ApproveCardModal from "./ApproveCardModal"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import { ApproveTransaction, DismissTransaction } from "../../redux/transactions/actions";
@@ -6,7 +6,6 @@ import { ApproveTransaction, DismissTransaction } from "../../redux/transactions
 const mapStateToProps = (state) => {
     return {
       loading: state.transactions.isApprovingTransaction,
-      success: state.transactions.successApprovingTransaction,
       error: state.transactions.errorApprovingTransaction
     }
 }
@@ -17,4 +16,4 @@ const mapDispatchToProps = (dispatch) => {
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ApproveModal)
+export default connect(mapStateToProps, mapDispatchToProps)(ApproveCardModal)

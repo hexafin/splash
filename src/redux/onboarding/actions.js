@@ -133,6 +133,7 @@ export const SignUp = user => {
 
 			const state = getState()
 			const userId = user.uid
+			const network = state.user.bitcoinNetwork
 
 			// user does not already exist, full signup
 			let splashtag = state.onboarding.splashtagOnHold
@@ -150,7 +151,7 @@ export const SignUp = user => {
 					if (data.availableUser) {
 
 						// create new bitcoin wallet
-						const bitcoinData = api.NewBitcoinWallet()
+						const bitcoinData = api.NewBitcoinWallet(network)
 
 						const entity = {
 							splashtag: splashtag,
