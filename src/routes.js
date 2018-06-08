@@ -14,6 +14,7 @@ import Account from "./components/Account"
 import UpdateUsername from "./components/UpdateUsername"
 import Unlock from "./components/Unlock"
 import ApproveModal from "./components/ApproveModal"
+import ViewTransactionModal from "./components/ViewTransactionModal"
 import SwipeApp from "./components/SwipeApp"
 
 const fade = props => {
@@ -129,6 +130,12 @@ const AppRouter = StackNavigator(
 export default (loggedIn) => {
 	return StackNavigator(
 		{
+			ApproveModal: {
+				screen: ApproveModal
+			},
+			ViewTransactionModal: {
+				screen: ViewTransactionModal
+			},
 			AppRouter: {
 				screen: AppRouter
 			},
