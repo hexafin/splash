@@ -18,8 +18,8 @@ class ApproveModal extends Component {
 
 	componentDidMount() {
 		Animated.sequence([
-		 Animated.delay(300),
-		 Animated.timing(this.state.backgroundOpacity, {
+		Animated.delay(300),
+		Animated.timing(this.state.backgroundOpacity, {
  			toValue: 1,
  			easing: Easing.linear(),
  			duration: 200

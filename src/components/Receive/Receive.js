@@ -13,7 +13,7 @@ import { defaults, icons } from "../../lib/styles";
 import FCM, { FCMEvent } from "react-native-fcm";
 import FlatBackButton from "../universal/FlatBackButton"
 
-class AddCrypto extends Component {
+class Receive extends Component {
 
 	constructor(props) {
 		super(props)
@@ -56,21 +56,12 @@ class AddCrypto extends Component {
 
 		return (
 			<View style={styles.container}>
-				<Image source={require("../../assets/images/header.png")} resizeMode="cover" style={styles.headerImage}/>
 				<View style={styles.header}>
-					<FlatBackButton color="white" onPress={() => {
-						this.props.navigation.navigate("Home")
-					}}/>
 					<Text style={styles.title}>Your splash wallet</Text>
-				</View>
-				<View style={styles.logoWrapper}>
-					<View style={styles.logoCircle}>
-						<Image source={icons.primarySplash} style={styles.logo}/>
-					</View>
 				</View>
 				<View style={styles.body}>
 					<View style={styles.bodyTitleWrapper}>
-						<Text style={styles.bodyTitle}>Add some Bitcoin</Text>
+						<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
 					</View>
 					<Image source={{uri: qrCode}} style={styles.qr}/>
 					<TouchableWithoutFeedback onPress={this.handleCopy}>
@@ -92,52 +83,20 @@ class AddCrypto extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		...defaults.container
+		...defaults.container,
+		backgroundColor: "transparent"
 	},
 	header: {
 		height: 150,
-		backgroundColor: colors.primary,
 		justifyContent: "center",
 		alignItems: "center",
-		marginBottom: 50,
-		paddingTop: 30
+		marginBottom: 40,
+		paddingTop: 60
 	},
 	title: {
 		color: colors.white,
 		fontSize: 24,
 		fontWeight: "700"
-	},
-	headerImage: {
-		position: "absolute",
-		width: Dimensions.get('window').width,
-		height: 300,
-		top: -120
-	},
-	logoWrapper: {
-		position: "absolute",
-		left: 0,
-		right: 0,
-		top: 140,
-		justifyContent: "center",
-		alignItems: "center"
-	},
-	logoCircle: {
-		width: 60,
-		height: 60,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: colors.white,
-		borderRadius: 30,
-		shadowOffset: {
-			width: 0,
-			height: 5,
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 12,
-	},
-	logo: {
-		width: 29,
-		height: 38,
 	},
 	body: {
 		flex: 1,
@@ -186,4 +145,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default AddCrypto;
+export default Receive;

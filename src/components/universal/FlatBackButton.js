@@ -8,16 +8,22 @@ import {
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 
-const FlatBackButton = ({onPress, color="gray", absolute=true}) => {
+const FlatBackButton = ({onPress, color="gray", absolute=true, direction="left"}) => {
 
-    const source = (color == "gray") 
-        ? require("../../assets/icons/leftCarrotGray.png") 
-        : require("../../assets/icons/leftCarrotWhite.png")
+    let source
+    if (direction == "left") {
+        source = color == "gray" ? require("../../assets/icons/leftCarrotGray.png") : require("../../assets/icons/leftCarrotWhite.png")
+    } 
+    if (direction == "right") {
+        source = require("../../assets/icons/rightCarrotWhite.png")
+    }
+        
 
 	return (
 		<TouchableOpacity onPress={ onPress } style={[
             styles.wrapper,
-            (absolute) ? styles.absolute : {}
+            (absolute && direction == "left") ? styles.absoluteLeft : {},
+            (absolute && direction == "right") ? styles.absoluteRight : {},
         ]}>
             <Image source={source} style={styles.carrot} />
 		</TouchableOpacity>
@@ -31,10 +37,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    absolute: {
+    absoluteLeft: {
         position: 'absolute',
-        // backgroundColor: "blue",
         left: 0,
+        top: 30,
+    },
+    absoluteRight: {
+        position: 'absolute',
+        right: 0,
         top: 30,
     },
     carrot: {

@@ -67,8 +67,11 @@ export default function onboardingReducer(state = initialState, action) {
             return {
                 ...state,
                 isSmsAuthenticating: true,
+                isSmsConfirming: false,
+                isSigningUp: false,
                 errorSmsAuthenticating: null,
                 errorSmsConfirming: null,
+                errorSigningUp: null,
                 smsAuthenticated: false,
                 phoneNumber: action.phoneNumber,
                 countryName: action.countryName

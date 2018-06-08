@@ -57,18 +57,17 @@ export function resetUser() {
 	return { type: ActionTypes.RESET_USER, }
 }
 
-export const LogIn = userId => {
+export const LogIn = (userId, bitcoinData) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			const state = getState()
 
 			dispatch(logInInit())
+			console.log("login bitcoin data", bitcoinData)
 
 			firestore.collection("users").doc(userId).get().then(userDoc => {
 				// TODO: watch user entity for changes to account
 				const userData = userDoc.data()
-				// create new bitcoin wallet on login
-				const bitcoinData = api.NewBitcoinWallet()
 				Sentry.setUserContext({
 					userId: userId,
 					username: userData.splashtag
@@ -85,17 +84,20 @@ export const LogIn = userId => {
 
 export const ChangeUsername = () => {
 	return (dispatch, getState) => {
-		dispatch(updateUsernameInit())
-		const state = getState()
-		const uid = state.user.entity.uid
-		const updatedUsername = state.form.updateSplashtag.values.updateUsername
-		api.UpdateAccount(uid, {username: updatedUsername}).then(userData => {
-			dispatch(updateUsernameSuccess(userData))
-			NavigatorService.navigate("Account")
-			dispatch(reset('updateSplashtag'))
-		}).catch(error => {
-			dispatch(updateUsernameFailure(error))
-			dispatch(reset('updateSplashtag'))
+		return new Promise((resolve, reject) => {
+			dispatch(updateUsernameInit())
+			const state = getState()
+			const uid = state.user.id
+			const updatedUsername = state.form.updateSplashtag.values.updateUsername
+			api.UpdateAccount(uid, {splashtag: updatedUsername}).then(userData => {
+				dispatch(updateUsernameSuccess(userData))
+				resolve()
+				dispatch(reset('updateSplashtag'))
+			}).catch(error => {
+				dispatch(updateUsernameFailure(error))
+				dispatch(reset('updateSplashtag'))
+				reject(error)
+			})
 		})
 	}
 }
