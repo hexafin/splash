@@ -3,6 +3,7 @@ import {
 	View,
 	Text,
 	ScrollView,
+	Animated,
 	StyleSheet,
 	Image,
 	TouchableWithoutFeedback,
@@ -19,6 +20,18 @@ import api from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
 import moment from "moment"
 import { Sentry } from "react-native-sentry";
+import LoadingCircle from "../universal/LoadingCircle"
+
+const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_HEIGHT = Dimensions.get("window").height
+
+const yOffset = new Animated.Value(0)
+const _onScroll = Animated.event(
+	[{ nativeEvent: { contentOffset: { y: yOffset } } }],
+	{
+		useNativeDriver: true
+	}
+)
 
 
 class Home extends Component {
@@ -28,8 +41,66 @@ class Home extends Component {
 			currency: "USD",
 			balance: null,
 			exchangeRate: null,
-			transactions: props.transactions
+			transactions: props.transactions,
+			loadingExchangeRate: true,
+			loadingBalance: true
 		}
+		this.loadBalance = this.loadBalance.bind(this)
+		this.loadExchangeRate = this.loadExchangeRate.bind(this)
+	}
+
+	loadBalance() {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				loadingBalance: true
+			}
+		})
+		api.GetAddressBalance(this.props.bitcoinAddress).then(balance => {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					balance,
+					loadingBalance: false
+				}
+			})
+		}).catch(error => {
+			Sentry.messageCapture(error)
+			this.setState(prevState => {
+				return {
+					...prevState,
+					balance: null,
+					loadingBalance: false
+				}
+			})
+		})
+	}
+
+	loadExchangeRate() {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				loadingExchangeRate: true
+			}
+		})
+		// get exchange rate
+        api.GetExchangeRate().then(exchangeRate => {
+        	this.setState(prevState => {
+        		return {
+        			...prevState,
+        			exchangeRate,
+        			loadingExchangeRate: false
+        		}
+        	})
+        }).catch(error => {
+        	this.setState(prevState => {
+        		return {
+        			...prevState,
+        			exchangeRate: null,
+        			loadingExchangeRate: false
+        		}
+        	})
+        })
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -39,22 +110,7 @@ class Home extends Component {
 				transactions: nextProps.transactions
 			}
 		})
-		api.GetAddressBalance(this.props.bitcoinAddress).then(balance => {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balance
-				}
-			})
-		}).catch(error => {
-			Sentry.messageCapture(error)
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balance: null
-				}
-			})
-		})
+		this.loadBalance()
 	}
 
 	componentWillMount() {
@@ -92,45 +148,16 @@ class Home extends Component {
 
 		this.props.LoadTransactions()
 
-		// get balance
-        api.GetAddressBalance(this.props.bitcoinAddress).then(balanceBtc => {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balanceBtc
-				}
-			})
-		}).catch(error => {
-			console.log(error)
-			Alert.alert("Could not load balance")
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balanceBtc: null
-				}
-			})
-		})
+		this.loadExchangeRate()
 
-		// get exchange rate
-        api.GetExchangeRate().then(exchangeRate => {
-        	this.setState(prevState => {
-        		return {
-        			...prevState,
-        			exchangeRate
-        		}
-        	})
-        }).catch(error => {
-        	this.setState(prevState => {
-        		return {
-        			...prevState,
-        			exchangeRate: null
-        		}
-        	})
-        })
+		// get balance
+        this.loadBalance()
 
 	}
 
 	render() {
+
+		console.log(this.state)
 
 		const handleBalancePress = () => {
 			this.setState(prevState => {
@@ -141,8 +168,8 @@ class Home extends Component {
 			})
 		}
 
-		const handleAddCrypto = () => {
-			this.props.navigation.navigate("AddCrypto")
+		const handleReceive = () => {
+			this.props.navigation.navigate("Receive")
 		}
 
 		const handleAccount = () => {
@@ -155,66 +182,90 @@ class Home extends Component {
 		}
 
 		let balance = null
-		if (this.state.exchangeRate != null && this.state.balanceBtc != null) {
+		if (this.state.exchangeRate != null && this.state.balance != null) {
 			const rate = this.state.exchangeRate[this.state.currency]
 			balance = {
-				BTC: this.state.balanceBtc,
-				USD: this.state.balanceBtc * rate
+				BTC: this.state.balance,
+				USD: this.state.balance * rate
 			}
+		}
+		console.log(balance)
+
+		const animatedHeader = {
+			opacity: yOffset.interpolate({
+				inputRange: [50, 51, 80, 81],
+				outputRange: [0, 0, 1, 1]
+			})
+		}
+
+		const animatedBalance = {
+			transform: [
+				{
+					scale: yOffset.interpolate({
+						inputRange: [-1, 0, 55, 56],
+						outputRange: [1, 1, 0.7, 0.7]
+					})
+				},
+				{
+					translateY: yOffset.interpolate({
+						inputRange: [-1, 0, 55, 56],
+						outputRange: [0, 0, -55, -55]
+					})
+				}
+			]
 		}
 
 		return (
-			<View style={styles.container}>
-				<Image source={require("../../assets/images/header.png")} style={styles.headerImage}/>
-				<View style={styles.header}>
-					<View style={styles.topbar}>
-						<TouchableWithoutFeedback onPress={handleAccount}>
-							<Image source={icons.whiteSplash} style={styles.headerLogoButton}/>
-						</TouchableWithoutFeedback>
+			<View style={{flex: 1}}>
+				<Animated.ScrollView
+					scrollEventThrottle={16}
+					contentContainerStyle={styles.container}
+					onScroll={_onScroll}>
+					<Image
+						source={require("../../assets/images/headerWaveInverse.png")}
+						style={styles.waveInverse}
+						resizeMode="contain"/>
+					<View style={styles.history}>
+						<Text style={styles.historyTitle}>Your history</Text>
+						{this.state.transactions.map(transaction => {
+							const amount = this.state.currency == "BTC" ? transaction.amount : transaction.relativeAmount
+							return (
+								<TransactionLine
+									key={"transactionLine"+transaction.id}
+									direction={(transaction.type == "card") ? "out" : "in"}
+									amount={currencyPrefix[this.state.currency] + amount}
+									date={moment.unix(transaction.timestampApproved).fromNow()}
+									title={
+										(transaction.type == "card")
+										? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
+										: "A bitcoin wallet"
+									}
+									onPress={() => {
+										this.props.navigation.navigate("ViewTransactionModal", {
+                      direction: (transaction.type == "card") ? "out" : "in",
+                      domain: transaction.domain,
+                      relativeAmount: transaction.relativeAmount,
+                      amount: transaction.amount,
+                      timestamp: transaction.timestampApproved,
+									  })
+									}}
+								/>
+							)
+						})}
 					</View>
-					<TouchableWithoutFeedback onPress={handleBalancePress}>
-						<View style={styles.balanceWrapper}>
-							{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
-							<View style={styles.balanceCurrencyWrapper}>
-								<Image source={icons.refresh} style={styles.refreshIcon}/>
-								<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
-							</View>
+				</Animated.ScrollView>
+				<Animated.View style={[animatedHeader, styles.header]}/>
+				
+				<TouchableWithoutFeedback onPress={handleBalancePress}>
+					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
+						{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
+						{balance == null && <LoadingCircle size={30}/>}
+						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
+							<Image source={icons.refresh} style={styles.refreshIcon}/>
+							<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
 						</View>
-					</TouchableWithoutFeedback>
-					<TouchableWithoutFeedback onPress={handleAddCrypto}>
-						<View style={styles.addCryptoButton}>
-							<Text style={styles.addCryptoText}>Add crypto</Text>
-						</View>
-					</TouchableWithoutFeedback>
-				</View>
-				<ScrollView style={styles.history}>
-					<Text style={styles.historyTitle}>Your history</Text>
-					{this.state.transactions.map(transaction => {
-						const amount = this.state.currency == "BTC" ? transaction.amount : transaction.relativeAmount
-						return (
-							<TransactionLine
-								key={"transactionLine"+transaction.id}
-								direction={(transaction.type == "card") ? "out" : "in"}
-								amount={currencyPrefix[this.state.currency] + amount}
-								date={moment.unix(transaction.timestampApproved).fromNow()}
-								title={
-									(transaction.type == "card")
-									? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
-									: "A bitcoin wallet"
-								}
-								onPress={() => {
-									this.props.navigation.navigate("ViewTransactionModal", {
-										direction: (transaction.type == "card") ? "out" : "in",
-										domain: transaction.domain,
-										relativeAmount: transaction.relativeAmount,
-										amount: transaction.amount,
-										timestamp: transaction.timestampApproved,
-									})
-								}}
-							/>
-						)
-					})}
-				</ScrollView>
+					</Animated.View>
+				</TouchableWithoutFeedback>
 			</View>
 		);
 	}
@@ -222,81 +273,69 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
 	container: {
-		...defaults.container,
-		justifyContent: "space-between"
+		justifyContent: "space-between",
+		backgroundColor: colors.white,
+		marginTop: 210,
+		paddingTop: 0,
+		position: "relative",
+		flex: 1
 	},
 	header: {
 		flexDirection: "column",
 		alignItems: "center",
-		height: 200,
-		marginBottom: 40,
-		backgroundColor: 'rgba(0,0,0,0)'
-	},
-	headerImage: {
+		justifyContent: "center",
+		height: (isIphoneX()) ? 120 : 100,
+		width: SCREEN_WIDTH,
 		position: "absolute",
-		width: Dimensions.get('window').width,
-		height: 300,
-		top: (isIphoneX()) ? -40 : -60
+		top: 0,
+		backgroundColor: colors.primary,
+		shadowOffset: {
+			width: 0,
+			height: 10,
+		},
+		shadowRadius: 12,
+		shadowOpacity: 0.2
 	},
-	topbar: {
-		flexDirection: "row",
-		justifyContent: "flex-end",
-		alignItems: "center",
-		width: "100%",
-		paddingTop: 40,
-		paddingRight: 30
-	},
-	headerLogoButton: {
-		width: 24,
-		height: 32,
-	},
-	balanceWrapper: {
+	balance: {
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		padding: 15,
-		marginBottom: 5
+		position: "absolute",
+		top: (isIphoneX()) ? 90 : 70,
+		width: SCREEN_WIDTH,
 	},
 	balanceText: {
 		color: colors.white,
 		fontWeight: "600",
-		fontSize: 34,
-		backgroundColor: 'rgba(0,0,0,0)'
+		fontSize: 36,
+		backgroundColor: "transparent"
 	},
 	balanceCurrencyWrapper: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: 'rgba(0,0,0,0)'
+		backgroundColor: "transparent"
 	},
 	balanceCurrencyText: {
 		color: "rgba(255,255,255,0.7)",
-		fontSize: 14,
+		fontSize: 16,
 		fontWeight: "600",
 		marginLeft: 5
 	},
 	refreshIcon: {
-		width: 15,
-		height: 13
+		width: 16,
+		height: 16
 	},
-	addCryptoButton: {
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingTop: 8,
-		paddingBottom: 8,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: colors.primaryDark,
-		borderRadius: 5
-	},
-	addCryptoText: {
-		color: colors.white,
-		fontSize: 14,
-		fontWeight: "600"
+	waveInverse: {
+		width: SCREEN_WIDTH,
+		height: 200,
+		position: "absolute",
+		top: -70
 	},
 	history: {
 		flex: 1,
-		padding: 20
+		padding: 20,
+		backgroundColor: colors.white
 	},
 	historyTitle: {
 		color: colors.primaryDarkText,

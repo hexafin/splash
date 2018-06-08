@@ -3,6 +3,7 @@ import {
 	View,
 	Text,
 	StyleSheet,
+	Alert,
 	TouchableOpacity,
 	Keyboard,
 	KeyboardAvoidingView,
@@ -27,19 +28,6 @@ class UpdateUsername extends Component {
         }
         this.checkSplashtag = this.checkSplashtag.bind(this);
         this.debouncedOnChange = debounce(this.checkSplashtag, 250);
-    }
-
-    componentWillMount() {
-    	if(this.props.errorUpdatingUsername) {
-    		Alert.alert(
-			  'Error',
-			  'Something went wrong updating your account. We\'re looking into this',
-			  [
-			    {text: 'OK', onPress: () => console.log('OK Pressed'), style: 'cancel'},
-			  ],
-			)
-
-    	}
     }
 
     checkSplashtag(splashtag) {
@@ -75,7 +63,7 @@ class UpdateUsername extends Component {
 						<Text style={{fontSize: 18, fontWeight: '700', color: colors.nearBlack}}>Update Splashtag</Text>
 						<TouchableOpacity onPress={() => {
 															Keyboard.dismiss()
-															this.props.navigation.navigate("Account")
+															this.props.navigation.goBack()
 														}}>
 		                    <Image style={{height: 14, width: 14}} source={require('../../assets/icons/Xbutton.png')}/>
 		                 </TouchableOpacity>
@@ -92,7 +80,11 @@ class UpdateUsername extends Component {
                 <Button
                 	onPress={() => {
                 		Keyboard.dismiss()
-                		this.props.ChangeUsername()
+                		this.props.ChangeUsername().then(() => {
+                			this.props.navigation.navigate("Account")
+                		}).catch(error => {
+                			Alert.alert("An error occurred while updating your splashtag. Please try again later")
+                		})
                 	}}
                 	title='Update Splashtag'
                 	style={styles.footerButton}

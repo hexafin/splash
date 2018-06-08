@@ -133,48 +133,47 @@ export const SignUp = user => {
 
 			const state = getState()
 			const userId = user.uid
+
+			// user does not already exist, full signup
+			let splashtag = state.onboarding.splashtagOnHold
+			const phoneNumber = state.onboarding.phoneNumber
+
+			if (typeof state.form.chooseSplashtag !== "undefined" && state.form.chooseSplashtag.values.splashtag) {
+				splashtag = state.form.chooseSplashtag.values.splashtag
+			}
+
 			// check if user already exists
 			let userRef = firestore.collection("users").doc(userId)
 			userRef.get().then(userDoc => {
-				if (userDoc.exists) {
-					// user already exists, just log them in but don't create new entity
-					dispatch(signUpSuccess())
-					resolve(userId)
-				}
-				else {
-					api.UsernameExists(splashtag).then(data => {
-						console.log("api response", data)
-						if (!data.availableUser) {
-							// user does not already exist, full signup
-							let splashtag = state.onboarding.splashtagOnHold
-							const phoneNumber = state.onboarding.phoneNumber
+				api.UsernameExists(splashtag).then(data => {
+					console.log("api response", data)
+					if (data.availableUser) {
 
-							if (typeof state.form.chooseSplashtag !== "undefined" && state.form.chooseSplashtag.values.splashtag) {
-								splashtag = state.form.chooseSplashtag.values.splashtag
-							}
+						// create new bitcoin wallet
+						const bitcoinData = api.NewBitcoinWallet()
 
-							const entity = {
-								splashtag: splashtag,
-								phoneNumber,
-					            defaultCurrency: "USD",
-					            bitcoinAddress: bitcoinData.address
-							}
-							userRef.set(entity).then(() => {
-								dispatch(signUpSuccess())
-								resolve(userId)
-							}).catch(error => {
-								dispatch(signUpFailure(error))
-								reject(error)
-							})
+						const entity = {
+							splashtag: splashtag,
+							phoneNumber,
+				            defaultCurrency: "USD",
+				            bitcoinAddress: bitcoinData.address
 						}
-						else {
-							// username already taken
-							const error = "Username already taken"
+						console.log({userId, bitcoinData})
+						userRef.set(entity).then(() => {
+							dispatch(signUpSuccess())
+							resolve({userId, bitcoinData})
+						}).catch(error => {
 							dispatch(signUpFailure(error))
 							reject(error)
-						}
-					})
-				}
+						})
+					}
+					else {
+						// username already taken
+						const error = "Username already taken"
+						dispatch(signUpFailure(error))
+						reject(error)
+					}
+				})
 			}).catch(error => {
 				dispatch(signUpFailure(error))
 				reject(error)

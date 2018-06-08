@@ -1,4 +1,4 @@
-import AddCrypto from "./AddCrypto"
+import Receive from "./Receive"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
@@ -13,4 +13,4 @@ const mapDispatchToProps = dispatch => {
 	return bindActionCreators({}, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddCrypto)
+export default connect(mapStateToProps, mapDispatchToProps)(Receive)

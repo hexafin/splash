@@ -44,9 +44,11 @@ class VerifyPhoneNumber extends Component {
     handleSubmit() {
         Keyboard.dismiss()
         this.props.SmsConfirm(this.state.confirmResult, this.state.code).then(user => {
-            this.props.SignUp(user).then(userId => {
-                this.props.LogIn(userId).then(() => {
-                    this.props.navigation.navigate("Home")
+            this.props.SignUp(user).then(data => {
+                console.log(data)
+                const {userId, bitcoinData} = data
+                this.props.LogIn(userId, bitcoinData).then(() => {
+                    this.props.navigation.navigate("SwipeApp")
                     FCM.requestPermissions().then(() =>
                         FCM.getFCMToken().then(token => {
                             api.UpdateAccount(user.uid, {push_token: token})
