@@ -104,22 +104,22 @@ class Home extends Component {
 	}
 
 	refresh() {
-		this.setState(prevState => {
-			return {
-				...prevState,
-				pulledToRefresh: true,
-				refreshing: true
-			}
-		})
-		setTimeout(() => {
+		if (!this.state.pulledToRefresh) {
 			this.setState(prevState => {
 				return {
 					...prevState,
-					refreshing: false
+					pulledToRefresh: true,
+					refreshing: true
 				}
 			})
-		}, 500)
-		if (!this.state.pulledToRefresh) {
+			setTimeout(() => {
+				this.setState(prevState => {
+					return {
+						...prevState,
+						refreshing: false
+					}
+				})
+			}, 500)
 			ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			this.loadBalance()
 			this.loadExchangeRate()
@@ -248,7 +248,7 @@ class Home extends Component {
 						{
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
-								if (currentY < -100) {
+								if (currentY < -80) {
 									this.refresh()
 								}
 								if (currentY >= 0) {
