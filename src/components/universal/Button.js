@@ -1,57 +1,98 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {
     Text,
     View,
     Image,
     StyleSheet,
-    TouchableOpacity
+    Animated,
+    TouchableWithoutFeedback
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
 import LoadingCircle from "./LoadingCircle"
 import Checkmark from "./Checkmark"
 import PropTypes from "prop-types"
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-const Button = ({primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkPersist=false, checkmarkCallback=null, small=false, style={}}) => {
+class Button extends Component {
 
-    const loadingView = (
-        <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 28}/>
-    )
+    constructor(props) {
+        super(props)
+        this.handlePressIn = this.handlePressIn.bind(this)
+        this.handlePressOut = this.handlePressOut.bind(this)
+    }
 
-    const checkmarkView = (
-        <Checkmark color={primary ? 'white' : 'purple'} size={10} callback={checkmarkCallback} persist={checkmarkPersist}/>
-    )
+    componentWillMount() {
+        this.animatedValue = new Animated.Value(1)
+    }
 
-    const normalView = (
-        <Text style={[
-            styles.text,
-            small ? styles.textSmall : {},
-            primary ? styles.textPrimary : styles.textSecondary,
-            disabled ? styles.textDisabled : {}
-        ]}>
-            {title}
-        </Text>
-    )
+    handlePressIn() {
+        ReactNativeHapticFeedback.trigger("impactLight", true)
+        Animated.spring(this.animatedValue, {
+            toValue: .8
+        }).start()
+    }
 
-	return (
-			<TouchableOpacity disabled={ disabled || loading }
-                    onPress={ onPress }
-                    style={[
+    handlePressOut() {
+        ReactNativeHapticFeedback.trigger("impactLight", true)
+        Animated.spring(this.animatedValue, {
+            toValue: 1,
+            friction: 3,
+            tension: 40
+        }).start()
+    }
+
+    render() {
+
+        const {primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkPersist=false, checkmarkCallback=null, small=false, style={}} = this.props
+
+        const loadingView = (
+            <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 28}/>
+        )
+
+        const checkmarkView = (
+            <Checkmark color={primary ? 'white' : 'purple'} size={10} callback={checkmarkCallback} persist={checkmarkPersist}/>
+        )
+
+        const normalView = (
+            <Text style={[
+                styles.text,
+                small ? styles.textSmall : {},
+                primary ? styles.textPrimary : styles.textSecondary,
+                disabled ? styles.textDisabled : {}
+            ]}>
+                {title}
+            </Text>
+        )
+
+        return (
+                <TouchableWithoutFeedback disabled={ disabled || loading }
+                        onPress={ onPress }
+                        onPressIn={this.handlePressIn}
+                        onPressOut={this.handlePressOut}>
+                    <Animated.View style={[
                         styles.base,
                         small ? styles.baseSmall : {},
                         primary ? styles.buttonPrimary : styles.buttonSecondary,
                         disabled ? styles.buttonDisabled : {},
                         loading ? styles.buttonLoading : {},
                         checkmark ? styles.buttonCheckmark : {},
-                        style
+                        style,
+                        {
+                            transform: [{scale: this.animatedValue}]
+                        }
                     ]}>
-                <View style={styles.wrapper}>
-                    {loading && loadingView}
-                    {!loading && !checkmark && normalView}
-                    {checkmark && !loading && checkmarkView}
-                </View>
-			</TouchableOpacity>
-		)
+                        <View style={styles.wrapper}>
+                            {loading && loadingView}
+                            {!loading && !checkmark && normalView}
+                            {checkmark && !loading && checkmarkView}
+                        </View>
+                    </Animated.View>
+                </TouchableWithoutFeedback>
+            )
+
+    }
+
 }
 
 Button.propTypes = {

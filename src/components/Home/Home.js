@@ -22,6 +22,7 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import moment from "moment"
 import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -211,8 +212,8 @@ class Home extends Component {
 				},
 				{
 					translateY: yOffset.interpolate({
-						inputRange: [-1, 0, 55, 56],
-						outputRange: [0, 0, -55, -55]
+						inputRange: [-1, 0, 53, 54],
+						outputRange: [0, 0, -53, -53]
 					})
 				}
 			]
@@ -259,13 +260,13 @@ class Home extends Component {
 				</Animated.ScrollView>
 				<TouchableWithoutFeedback
 					onPressIn={() => {
-						// ReactNativeHapticFeedback.trigger("impactLight")
+						ReactNativeHapticFeedback.trigger("impactLight", true)
 						Animated.spring(this.sendButtonSpring, {
 							toValue: .8
 						}).start()
 					}}
 					onPressOut={() => {
-						// ReactNativeHapticFeedback.trigger("impactLight")
+						ReactNativeHapticFeedback.trigger("impactLight", true)
 						Animated.spring(this.sendButtonSpring, {
 							toValue: 1,
 							friction: 3,
