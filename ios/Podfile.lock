@@ -116,6 +116,8 @@ PODS:
   - Protobuf (3.5.0)
   - React (0.50.3):
     - React/Core (= 0.50.3)
+  - react-native-shimmer (0.3.2):
+    - React
   - React/Core (0.50.3):
     - yoga (= 0.50.3.React)
   - Sentry (3.10.0):
@@ -142,12 +144,13 @@ DEPENDENCIES:
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - React (from `../node_modules/react-native`)
+  - react-native-shimmer (from `../node_modules/react-native-shimmer`)
   - SentryReactNative (from `../node_modules/react-native-sentry`)
   - TouchID (from `../node_modules/react-native-touch-id`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - BoringSSL
     - Firebase
     - FirebaseAnalytics
@@ -178,6 +181,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/lottie-react-native"
   React:
     :path: "../node_modules/react-native"
+  react-native-shimmer:
+    :path: "../node_modules/react-native-shimmer"
   SentryReactNative:
     :path: "../node_modules/react-native-sentry"
   TouchID:
@@ -209,11 +214,12 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   React: 541ba768b9855e10cdc76f55427a5cd0653ca806
+  react-native-shimmer: 2d68e432a68f081c33d580719f4584e1580ef50d
   Sentry: 546079394a729c35ba8c10332942c25f96cac921
   SentryReactNative: a306955d6c4b45954ff04d2fbeaa536f947f5ba4
   TouchID: b0640fedb86fa2db2fe1df15b61594ad49e76288
   yoga: 17521bbb0dd54a47c0b3ac43253e78cdac7488e0
 
-PODFILE CHECKSUM: 9953b4c75418bdcf94c17fcc8fb7bab1843bd0b1
+PODFILE CHECKSUM: 87f6cd2224146117c1f2aa0866316ecff00449c5
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.5.3
