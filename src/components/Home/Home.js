@@ -208,9 +208,9 @@ class Home extends Component {
 
 		let rate = null
 		if (!!this.state.exchangeRate) {
-			rate = this.state.exchangeRate[this.state.currency]
+			rate = this.state.exchangeRate
 		} else if (!!this.props.exchangeRates) {
-			rate = this.props.exchangeRates[this.state.currency]
+			rate = this.props.exchangeRates
 		}
 
 		const animatedHeader = {
@@ -266,12 +266,17 @@ class Home extends Component {
 						source={require("../../assets/images/headerWaveInverse.png")}
 						style={styles.waveInverse}
 						resizeMode="contain"/>
-					<PayFlow reset={this.state.refreshing} currency={this.state.currency}/>
+					<PayFlow reset={this.state.refreshing}
+							 currency={this.state.currency}
+							 network={this.props.bitcoinNetwork}
+							 exchangeRate={rate}
+							 balance={balance}
+							 navigation={this.props.navigation}/>
 					<View style={styles.history}>
 						<Text style={styles.sectionTitle}>Your history</Text>
 						{this.state.transactions.map(transaction => {
 							const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
-							const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate).toFixed(5) : parseFloat(cryptoAmount*rate).toFixed(2)
+							const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(5) : parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(2)
 							const direction = (transaction.type == "card" || typeof transaction.to !== 'undefined') ? "to" : "from"
 
 							return (
@@ -292,7 +297,7 @@ class Home extends Component {
 											  transaction,
 											  direction,
   						                      address: transaction.type == 'blockchain' ? transaction[direction].address : null,
-						                      exchangeRate: rate,
+						                      exchangeRate: rate[this.state.currency],
 									  })
 									}}
 								/>

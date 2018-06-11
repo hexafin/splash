@@ -20,6 +20,8 @@ import { defaults, icons } from "../../lib/styles";
 import PayButton from "../universal/PayButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
+let bitcoin = require('bitcoinjs-lib')
+
 class PayFlow extends Component {
 	constructor(props) {
 		super(props)
@@ -120,6 +122,40 @@ class PayFlow extends Component {
 
 	render() {
 
+		const handleSend = () => {
+
+			const amount = parseFloat(this.state.amount)
+			const address = this.state.address
+			const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+			try {
+
+				bitcoin.address.toOutputScript(address, network)
+
+				if (!this.props.balance) {
+					Alert.alert("Unable to load balance")
+				} else if (!this.props.exchangeRate) {
+					Alert.alert("Unable to load exchange rate")
+				} else if (!amount) {
+					Alert.alert("Please enter amount")
+				} else if (!address) {
+					Alert.alert("Please enter address")
+				} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
+					Alert.alert("Not enough balance")
+				} else {
+					this.props.navigation.navigate("ApproveTransactionModal", {
+						address,
+						amount: parseFloat(amount),
+						currency: this.state.currency,
+						exchangeRate: this.props.exchangeRate['USD']
+					});
+				}
+
+			} catch(e) {
+				Alert.alert("Invalid bitcoin address")
+			}
+		}
+
+
 		console.log(this.state)
 		
 		// if (this.state.chooseTypeHeight) {
@@ -179,7 +215,7 @@ class PayFlow extends Component {
 			        <PayButton
 						title={"Send bitcoin"}
 						image={icons.send}
-						onPress={() => this.handleChooseType("clipboard")}/>
+						onPress={handleSend}/>
 					
 				</Animated.View>
 			</Animated.View>
