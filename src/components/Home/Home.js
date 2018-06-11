@@ -258,7 +258,7 @@ class Home extends Component {
 						source={require("../../assets/images/headerWaveInverse.png")}
 						style={styles.waveInverse}
 						resizeMode="contain"/>
-					<PayFlow reset={this.state.refreshing}/>
+					<PayFlow reset={this.state.refreshing} currency={this.state.currency}/>
 					<View style={styles.history}>
 						<Text style={styles.sectionTitle}>Your history</Text>
 						{this.state.transactions.map(transaction => {
@@ -291,7 +291,7 @@ class Home extends Component {
 				<Animated.View style={[styles.header]}/>
 				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
 				
-				<TouchableWithoutFeedback onPress={handleBalancePress}>
+				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={handleBalancePress}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
 						<Text style={styles.balanceText}>{!(this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? balance[this.state.currency] : " "}</Text>
 						<View style={[styles.balanceRefresh, {

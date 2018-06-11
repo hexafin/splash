@@ -27,10 +27,9 @@ class PayFlow extends Component {
 			chooseTypeOpacity: new Animated.Value(1),
 			enterAmountOpacity: new Animated.Value(0),
 			wrapperHeight: new Animated.Value(217),
-			currencySelectScale: new Animated.Value(1),
 			amount: "",
 			address: "",
-			currency: "BTC",
+			currency: props.currency,
 			activeSection: "chooseType"
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
@@ -70,6 +69,7 @@ class PayFlow extends Component {
 		if (nextProps.reset) {
 			this.reset()
 		}
+		this.setState({currency: nextProps.currency})
 	}
 
 	handleChooseType(key) {
@@ -127,7 +127,7 @@ class PayFlow extends Component {
 		// }
 
 		return (
-			<Animated.View style={[styles.wrapper, {
+			<Animated.View keyboardShouldPersistTaps={true} style={[styles.wrapper, {
 				height: this.state.wrapperHeight
 			}]}>
 				<Animated.View
@@ -164,33 +164,7 @@ class PayFlow extends Component {
 					<Text style={styles.subTitle}>{this.state.address}</Text>
 
 					<View style={styles.amountInputWrapper}>
-						<TouchableWithoutFeedback
-							onPress={() => {
-								this.setState(prevState => {
-									return {
-										...prevState,
-										currency: prevState.currency == "BTC" ? "USD" : "BTC"
-									}
-								})
-							}}
-							onPressIn={() => {
-								ReactNativeHapticFeedback.trigger("impactLight", true)
-						        Animated.spring(this.state.currencySelectScale, {
-						            toValue: .8
-						        }).start()
-							}}
-							onPressOut={() => {
-								ReactNativeHapticFeedback.trigger("impactLight", true)
-						        Animated.spring(this.state.currencySelectScale, {
-						            toValue: 1,
-						            friction: 3,
-						            tension: 40
-						        }).start()
-							}}>
-							<Animated.Text style={[styles.inputPrefix, {
-								transform: [{scale: this.state.currencySelectScale}]
-							}]}>{ this.state.currency }</Animated.Text>
-						</TouchableWithoutFeedback>
+						<Text style={styles.inputPrefix}>{ this.state.currency }</Text>
 						<TextInput
 							onChangeText={value => {
 								this.setState({amount: value})
@@ -239,7 +213,7 @@ const styles = StyleSheet.create({
 	inputPrefix: {
 		fontSize: 22,
 		fontWeight: "600",
-		color: colors.primary,
+		color: colors.gray,
 		position: "absolute",
 		left: 20,
 		top: 20
@@ -259,7 +233,8 @@ const styles = StyleSheet.create({
         marginTop: 15,
         marginBottom: 15,
         borderRadius: 5,
-        paddingLeft: 50
+        paddingLeft: 50,
+        backgroundColor: colors.white
 	}
 })
 

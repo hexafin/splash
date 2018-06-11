@@ -5,6 +5,7 @@ import {
 	Image,
 	View,
 	Text,
+	Keyboard,
 	Animated,
 	StyleSheet,
 	TouchableWithoutFeedback
@@ -28,6 +29,9 @@ const xOffset = new Animated.Value(0)
 const _onScroll = Animated.event(
 	[{ nativeEvent: { contentOffset: { x: xOffset } } }],
 	{
+		listener: event => {
+			Keyboard.dismiss()
+		},
 		useNativeDriver: true
 	}
 )
