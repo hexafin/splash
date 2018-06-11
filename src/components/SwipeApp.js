@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import PropTypes from "prop-types"
 import Account from "./Account"
-import Receive from "./Receive"
+import Wallet from "./Wallet"
 import Home from "./Home"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
@@ -108,8 +108,8 @@ class SwipeApp extends Component {
 				image: null
 			},
 			{
-				name: "Receive",
-				component: Receive,
+				name: "Wallet",
+				component: Wallet,
 				image: icons.qrIcon
 			}
 		]

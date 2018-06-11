@@ -15,7 +15,7 @@ import FCM, { FCMEvent } from "react-native-fcm";
 import FlatBackButton from "../universal/FlatBackButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
-class Receive extends Component {
+class Wallet extends Component {
 
 	constructor(props) {
 		super(props)
@@ -165,4 +165,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Receive;
+export default Wallet;
