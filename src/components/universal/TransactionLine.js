@@ -8,23 +8,27 @@ import {
 } from "react-native"
 import { icons, defaults } from "../../lib/styles";
 import { colors } from "../../lib/colors";
+import Shimmer from 'react-native-shimmer';
 
-const TransactionLine = ({ direction, amount, date, title, onPress, currency=null }) => {
+const TransactionLine = ({ direction, amount, date, title, onPress, loading=false, currency=null }) => {
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.wrapper}>
-				<View style={styles.letterPreview}>
-					{!currency && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
-					{currency=='BTC' && <Image source={icons.btcLetter} style={{height: 15.75, width: 12}} resizeMode={"contain"}/>}
+				<View style={[styles.letterPreview, (loading && {backgroundColor: '#EDEEF2'})]}>
+					{!currency && !loading && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
+					{currency=='BTC' && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12}} resizeMode={"contain"}/>}
 				</View>
-				<View style={styles.body}>
+				<View style={[styles.body, (loading && {alignItems: 'flex-start'})]}>
 					<View>
-						<Text style={styles.title}>{title}</Text>
-						<Text style={styles.date}>{date}</Text>
+						{!loading && <Text style={styles.title}>{title}</Text>}
+						{loading && <Shimmer style={{marginBottom: 15}}><Image style={styles.titleLoadingBar} source={icons.placeholder}/></Shimmer>}
+						{!loading && <Text style={styles.date}>{date}</Text>}
+						{loading && <Shimmer style={{width: 66}}><Image style={styles.dateLoadingBar} source={icons.placeholder}/></Shimmer>}
 					</View>
 					<View style={styles.rightBody}>
-						<Image source={icons.arrow[direction]} style={styles.arrow} resizeMode="cover"/>
-						<Text style={styles.amount}>{amount}</Text>
+						{!loading && <Image source={icons.arrow[direction]} style={styles.arrow} resizeMode="cover"/>}
+						{loading && <Shimmer><Image source={icons.placeholder} style={styles.balanceLoadingBar}/></Shimmer>}
+						{!loading && <Text style={styles.amount}>{amount}</Text>}
 					</View>
 				</View>
 			</View>
@@ -90,6 +94,21 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "600",
 		color: colors.primary
+	},
+	titleLoadingBar: {
+		backgroundColor: '#EDEEF2',
+		height: 10,
+		width: 144,
+	},
+	dateLoadingBar: {
+		backgroundColor: '#EDEEF2',
+		height: 10,
+		width: 66,
+	},
+	balanceLoadingBar: {
+		backgroundColor: '#EDEEF2',
+		height: 10,
+		width: 40,
 	}
 })
 

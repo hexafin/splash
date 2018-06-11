@@ -34,6 +34,7 @@ if (isIphoneX()) {
 
 export const icons = {
 	BTC: require("../assets/images/bitcoin-logo.png"),
+	placeholder: require("../assets/images/placeholder-rectangle.png"),
 	btcLetter: require("../assets/icons/bitcoin-letter-icon.png"),
 	whiteSplash: require("../assets/icons/whiteSplash.png"),
 	primarySplash: require("../assets/icons/primarySplash.png"),

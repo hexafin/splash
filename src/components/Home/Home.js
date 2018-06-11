@@ -208,10 +208,10 @@ class Home extends Component {
 		}
 
 		let rate = null
-		if (this.state.exchangeRate == null) {
-			rate = this.props.exchangeRates[this.state.currency]
-		} else {
+		if (!!this.state.exchangeRate) {
 			rate = this.state.exchangeRate[this.state.currency]
+		} else if (!!this.props.exchangeRates) {
+			rate = this.props.exchangeRates[this.state.currency]
 		}
 
 		const animatedHeader = {
@@ -280,6 +280,7 @@ class Home extends Component {
 									direction={direction}
 									amount={currencyPrefix[this.state.currency] + amount}
 									date={moment.unix(transaction.timestamp).fromNow()}
+									loading={!rate || this.props.isLoadingTransactions}
 									title={
 										(transaction.type == "card")
 										? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)

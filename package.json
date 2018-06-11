@@ -57,6 +57,7 @@
     "react-native-randombytes": "^3.0.0",
     "react-native-router-flux": "^4.0.0-beta.28",
     "react-native-sentry": "^0.32.1",
+    "react-native-shimmer": "^0.3.2",
     "react-native-tcp": "^3.3.0",
     "react-native-touch-id": "^4.0.1",
     "react-native-udp": "^2.3.0",

@@ -56,6 +56,7 @@
 		8043B9F51FD37D0600AA4F4B /* fontello.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8043B9F41FD37D0600AA4F4B /* fontello.ttf */; };
 		8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8063032E202AD32B00EEF03C /* libCodePush.a */; };
 		80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80703ED9202673BF00A59434 /* libRNFIRMessaging.a */; };
+		80B67C0720CEA09C00A37840 /* libRNShimmer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 80B67C0620CEA06900A37840 /* libRNShimmer.a */; };
 		80EE3DD21FFD4F6D00EC73E0 /* EventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = 80EE3DD11FFD4F6D00EC73E0 /* EventEmitter.m */; };
 		81978025C5DFB5EC8439A4D9 /* libPods-hexaTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59CA5C96C13325D85175D379 /* libPods-hexaTests.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -387,6 +388,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFIRMessaging;
 		};
+		80B67C0520CEA06900A37840 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 80B67C0120CEA06900A37840 /* RNShimmer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5D7E4C681C88C61600B72F0C;
+			remoteInfo = RNShimmer;
+		};
 		832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
@@ -461,6 +469,10 @@
 		8063032E202AD32B00EEF03C /* libCodePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libCodePush.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8063DEA3202A54FF0044C0C6 /* CodePush.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CodePush.xcodeproj; path = "../node_modules/react-native-code-push/ios/CodePush.xcodeproj"; sourceTree = "<group>"; };
 		80703ED4202673BF00A59434 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
+		80B67BC520CEA00100A37840 /* RNShimmer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShimmer.xcodeproj; path = "../../node_modules/react-native-shimmer/ios/RNShimmer.xcodeproj"; sourceTree = "<group>"; };
+		80B67BF520CEA02400A37840 /* RNShimmer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShimmer.xcodeproj; path = "../../node_modules/react-native-shimmer/ios/RNShimmer.xcodeproj"; sourceTree = "<group>"; };
+		80B67BF820CEA04A00A37840 /* RNShimmer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShimmer.xcodeproj; path = "../../node_modules/react-native-shimmer/ios/RNShimmer.xcodeproj"; sourceTree = "<group>"; };
+		80B67C0120CEA06900A37840 /* RNShimmer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNShimmer.xcodeproj; path = "/Users/lukas/Hexa/splash/node_modules/react-native/Libraries/ActionSheetIOS/../../../react-native-shimmer/ios/RNShimmer.xcodeproj"; sourceTree = "<absolute>"; };
 		80EE3DD01FFD4F6D00EC73E0 /* EventEmitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventEmitter.h; sourceTree = "<group>"; };
 		80EE3DD11FFD4F6D00EC73E0 /* EventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventEmitter.m; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -497,6 +509,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80B67C0720CEA09C00A37840 /* libRNShimmer.a in Frameworks */,
 				08A0192A20CAA59C002AA366 /* libRNReactNativeHapticFeedback.a in Frameworks */,
 				8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */,
 				80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */,
@@ -623,6 +636,9 @@
 		08202C191FD38EB5003EEEB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				80B67BC520CEA00100A37840 /* RNShimmer.xcodeproj */,
+				80B67BF520CEA02400A37840 /* RNShimmer.xcodeproj */,
+				80B67BF820CEA04A00A37840 /* RNShimmer.xcodeproj */,
 				085650D6204E5F5400AB602D /* liblottie-ios.a */,
 				085650D7204E5F5400AB602D /* liblottie-react-native.a */,
 				8063032E202AD32B00EEF03C /* libCodePush.a */,
@@ -802,9 +818,33 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		80B67BC620CEA00100A37840 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80B67BF620CEA02400A37840 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80B67BF920CEA04A00A37840 /* Products */ = {
+			isa = PBXGroup;
+			name = Products;
+			sourceTree = "<group>";
+		};
+		80B67C0220CEA06900A37840 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				80B67C0620CEA06900A37840 /* libRNShimmer.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				80B67C0120CEA06900A37840 /* RNShimmer.xcodeproj */,
 				08A018F820CAA585002AA366 /* RNReactNativeHapticFeedback.xcodeproj */,
 				800485861FF7713200A72B72 /* CoinbaseApi.h */,
 				800485851FF7713100A72B72 /* CoinbaseApi.m */,
@@ -1107,6 +1147,22 @@
 				{
 					ProductGroup = 08A018F920CAA585002AA366 /* Products */;
 					ProjectRef = 08A018F820CAA585002AA366 /* RNReactNativeHapticFeedback.xcodeproj */;
+				},
+				{
+					ProductGroup = 80B67C0220CEA06900A37840 /* Products */;
+					ProjectRef = 80B67C0120CEA06900A37840 /* RNShimmer.xcodeproj */;
+				},
+				{
+					ProductGroup = 80B67BF620CEA02400A37840 /* Products */;
+					ProjectRef = 80B67BF520CEA02400A37840 /* RNShimmer.xcodeproj */;
+				},
+				{
+					ProductGroup = 80B67BC620CEA00100A37840 /* Products */;
+					ProjectRef = 80B67BC520CEA00100A37840 /* RNShimmer.xcodeproj */;
+				},
+				{
+					ProductGroup = 80B67BF920CEA04A00A37840 /* Products */;
+					ProjectRef = 80B67BF820CEA04A00A37840 /* RNShimmer.xcodeproj */;
 				},
 				{
 					ProductGroup = 8043B9191FD378C000AA4F4B /* Products */;
@@ -1427,6 +1483,13 @@
 			fileType = archive.ar;
 			path = libRNFIRMessaging.a;
 			remoteRef = 80703ED8202673BF00A59434 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		80B67C0620CEA06900A37840 /* libRNShimmer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNShimmer.a;
+			remoteRef = 80B67C0520CEA06900A37840 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		832341B51AAA6A8300B99B32 /* libRCTText.a */ = {
