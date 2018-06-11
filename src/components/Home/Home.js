@@ -191,14 +191,6 @@ class Home extends Component {
 			})
 		}
 
-		const handleReceive = () => {
-			this.props.navigation.navigate("Receive")
-		}
-
-		const handleAccount = () => {
-			this.props.navigation.navigate("Account")
-		}
-
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
@@ -284,11 +276,11 @@ class Home extends Component {
 									}
 									onPress={() => {
 										this.props.navigation.navigate("ViewTransactionModal", {
-                      direction: (transaction.type == "card") ? "out" : "in",
-                      domain: transaction.domain,
-                      relativeAmount: transaction.relativeAmount,
-                      amount: transaction.amount,
-                      timestamp: transaction.timestampApproved,
+					                      direction: (transaction.type == "card") ? "out" : "in",
+					                      domain: transaction.domain,
+					                      relativeAmount: transaction.relativeAmount,
+					                      amount: transaction.amount,
+					                      timestamp: transaction.timestampApproved,
 									  })
 									}}
 								/>
