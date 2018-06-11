@@ -62,7 +62,7 @@ function iconTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [198, 0, -198]
+					outputRange: [200, 0, -200]
 				})
 			}
 		]
