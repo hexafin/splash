@@ -19,6 +19,7 @@ import PropTypes from "prop-types"
 import Account from "./Account"
 import Receive from "./Receive"
 import Home from "./Home"
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -182,6 +183,7 @@ class SwipeApp extends Component {
 				<TouchableWithoutFeedback
 					key={"page-icon-" + i}
 					onPressIn={() => {
+						ReactNativeHapticFeedback.trigger("impactLight", true)
 						this.goToPageByIndex(this.scrollView, i)
 					}}>
 					<Animated.Image
@@ -193,6 +195,7 @@ class SwipeApp extends Component {
 							{
 								height: (page.name == "Receive") ? 40 : 45,
 								width: (page.name == "Receive") ? 40 : 45,
+								marginTop: (page.name == "Receive") ? 2 : 0,
 							}
 						]}
 					/>

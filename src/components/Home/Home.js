@@ -22,17 +22,10 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import moment from "moment"
 import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
-
-const yOffset = new Animated.Value(0)
-const _onScroll = Animated.event(
-	[{ nativeEvent: { contentOffset: { y: yOffset } } }],
-	{
-		useNativeDriver: true
-	}
-)
 
 
 class Home extends Component {
@@ -44,17 +37,22 @@ class Home extends Component {
 			exchangeRate: null,
 			transactions: props.transactions,
 			loadingExchangeRate: true,
-			loadingBalance: true
+			loadingBalance: true,
+			yOffset: new Animated.Value(0),
+			pulledToRefresh: false,
+			refreshing: false
 		}
 		this.loadBalance = this.loadBalance.bind(this)
 		this.loadExchangeRate = this.loadExchangeRate.bind(this)
+		this.refresh = this.refresh.bind(this)
 	}
 
 	loadBalance() {
 		this.setState(prevState => {
 			return {
 				...prevState,
-				loadingBalance: true
+				loadingBalance: true,
+				balance: null
 			}
 		})
 		api.GetAddressBalance(this.props.bitcoinAddress, this.props.bitcoinNetwork).then(balance => {
@@ -81,7 +79,8 @@ class Home extends Component {
 		this.setState(prevState => {
 			return {
 				...prevState,
-				loadingExchangeRate: true
+				loadingExchangeRate: true,
+				exchangeRate: null
 			}
 		})
 		// get exchange rate
@@ -104,6 +103,29 @@ class Home extends Component {
         })
 	}
 
+	refresh() {
+		if (!this.state.pulledToRefresh) {
+			this.setState(prevState => {
+				return {
+					...prevState,
+					pulledToRefresh: true,
+					refreshing: true
+				}
+			})
+			setTimeout(() => {
+				this.setState(prevState => {
+					return {
+						...prevState,
+						refreshing: false
+					}
+				})
+			}, 500)
+			ReactNativeHapticFeedback.trigger("impactHeavy", true)
+			this.loadBalance()
+			this.loadExchangeRate()
+		}
+	}
+
 	componentWillReceiveProps(nextProps) {
 		this.setState(prevState => {
 			return {
@@ -118,6 +140,8 @@ class Home extends Component {
         if (!this.props.loggedIn) {
             this.props.navigation.navigate("Landing")
         }
+
+        this.sendButtonSpring = new Animated.Value(1)
 
 		FCM.on(FCMEvent.Notification, async notif => {
 			console.log("Notification", notif);
@@ -158,8 +182,6 @@ class Home extends Component {
 
 	render() {
 
-		console.log(this.state)
-
 		const handleBalancePress = () => {
 			this.setState(prevState => {
 				return {
@@ -167,14 +189,6 @@ class Home extends Component {
 					currency: (prevState.currency == "BTC") ? "USD" : "BTC"
 				}
 			})
-		}
-
-		const handleReceive = () => {
-			this.props.navigation.navigate("Receive")
-		}
-
-		const handleAccount = () => {
-			this.props.navigation.navigate("Account")
 		}
 
 		const currencyPrefix = {
@@ -190,11 +204,11 @@ class Home extends Component {
 				USD: this.state.balance * rate
 			}
 		}
-		console.log(balance)
+		// console.log(balance)
 
 		const animatedHeader = {
-			opacity: yOffset.interpolate({
-				inputRange: [50, 51, 80, 81],
+			opacity: this.state.yOffset.interpolate({
+				inputRange: [75, 76, 100, 101],
 				outputRange: [0, 0, 1, 1]
 			})
 		}
@@ -202,15 +216,15 @@ class Home extends Component {
 		const animatedBalance = {
 			transform: [
 				{
-					scale: yOffset.interpolate({
-						inputRange: [-1, 0, 55, 56],
-						outputRange: [1, 1, 0.7, 0.7]
+					scale: this.state.yOffset.interpolate({
+						inputRange: [-81, -80, 0, 55, 56],
+						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
 					})
 				},
 				{
-					translateY: yOffset.interpolate({
-						inputRange: [-1, 0, 55, 56],
-						outputRange: [0, 0, -55, -55]
+					translateY: this.state.yOffset.interpolate({
+						inputRange: [-1, 0, 53, 54],
+						outputRange: [0, 0, -53, -53]
 					})
 				}
 			]
@@ -221,7 +235,26 @@ class Home extends Component {
 				<Animated.ScrollView
 					scrollEventThrottle={16}
 					contentContainerStyle={styles.container}
-					onScroll={_onScroll}>
+					onScroll={Animated.event(
+						[{ nativeEvent: { contentOffset: { y: this.state.yOffset } } }],
+						{
+							listener: event => {
+								const currentY = event.nativeEvent.contentOffset.y
+								if (currentY < -80) {
+									this.refresh()
+								}
+								if (currentY >= 0) {
+									this.setState(prevState => {
+										return {
+											...prevState,
+											pulledToRefresh: false
+										}
+									})
+								}
+							},
+							useNativeDriver: true
+						}
+					)}>
 					<Image
 						source={require("../../assets/images/headerWaveInverse.png")}
 						style={styles.waveInverse}
@@ -243,11 +276,11 @@ class Home extends Component {
 									}
 									onPress={() => {
 										this.props.navigation.navigate("ViewTransactionModal", {
-                      direction: (transaction.type == "card") ? "out" : "in",
-                      domain: transaction.domain,
-                      relativeAmount: transaction.relativeAmount,
-                      amount: transaction.amount,
-                      timestamp: transaction.timestampApproved,
+					                      direction: (transaction.type == "card") ? "out" : "in",
+					                      domain: transaction.domain,
+					                      relativeAmount: transaction.relativeAmount,
+					                      amount: transaction.amount,
+					                      timestamp: transaction.timestampApproved,
 									  })
 									}}
 								/>
@@ -255,19 +288,43 @@ class Home extends Component {
 						})}
 					</View>
 				</Animated.ScrollView>
-				<TouchableOpacity style={styles.sendButton} onPress={() => this.props.navigation.navigate("Send")}>
-				    <Image
-                        resizeMode={"contain"}
-				    	style={{width: 35, height: 35, marginTop: 2, marginRight: 2}}
-                        source={require("../../assets/icons/send.png")}
-                    />
-				</TouchableOpacity>
-				<Animated.View style={[animatedHeader, styles.header]}/>
+				<TouchableWithoutFeedback
+					onPressIn={() => {
+						ReactNativeHapticFeedback.trigger("impactLight", true)
+						Animated.spring(this.sendButtonSpring, {
+							toValue: .8
+						}).start()
+					}}
+					onPressOut={() => {
+						ReactNativeHapticFeedback.trigger("impactLight", true)
+						Animated.spring(this.sendButtonSpring, {
+							toValue: 1,
+							friction: 3,
+							tension: 40
+						}).start()
+						this.props.navigation.navigate("Send")
+					}}>
+					<Animated.View style={[styles.sendButton, {
+						transform: [{ scale: this.sendButtonSpring}]
+					}]}>
+					    <Image
+	                        resizeMode={"contain"}
+					    	style={styles.sendButtonIcon}
+	                        source={require("../../assets/icons/send.png")}
+	                    />
+                    </Animated.View>
+				</TouchableWithoutFeedback>
+				<Animated.View style={[styles.header]}/>
+				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
 				
 				<TouchableWithoutFeedback onPress={handleBalancePress}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						{balance != null && <Text style={styles.balanceText}>{balance[this.state.currency]}</Text>}
-						{balance == null && <LoadingCircle size={30}/>}
+						<Text style={styles.balanceText}>{!(this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? balance[this.state.currency] : " "}</Text>
+						<View style={[styles.balanceRefresh, {
+							opacity: (this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? 100 : 0
+						}]}>
+							<LoadingCircle size={30}/>
+						</View>
 						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
 							<Image source={icons.refresh} style={styles.refreshIcon}/>
 							<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
@@ -297,6 +354,16 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: 0,
 		backgroundColor: colors.primary,
+	},
+	headerShadow: {
+		flexDirection: "column",
+		alignItems: "center",
+		justifyContent: "center",
+		height: (isIphoneX()) ? 120 : 100,
+		width: SCREEN_WIDTH,
+		position: "absolute",
+		top: 0,
+		backgroundColor: colors.primary,
 		shadowOffset: {
 			width: 0,
 			height: 10,
@@ -311,6 +378,13 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: (isIphoneX()) ? 90 : 70,
 		width: SCREEN_WIDTH,
+	},
+	balanceRefresh: {
+		position: "absolute",
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "center",
+		top: 0
 	},
 	balanceText: {
 		color: colors.white,
@@ -351,21 +425,28 @@ const styles = StyleSheet.create({
 		fontWeight: "700"
 	},
 	sendButton: {
-		marginRight: 20,
-		marginBottom: 20,
+		position: "absolute",
+		right: 20,
+		bottom: (isIphoneX()) ? 40 : 20,
 		justifyContent: 'center',
 		alignItems: 'center',
 		alignSelf: 'flex-end',
-		width: 75,
-		height: 75,
+		width: 60,
+		height: 60,
 		borderRadius: 37.5,
 		backgroundColor: '#6364F1',
 		shadowOffset: {
 			width: 0,
 			height: 0,
 		},
-		shadowOpacity: 0.35,
-		shadowRadius: 15,
+		shadowOpacity: 0.1,
+		shadowRadius: 10,
+	},
+	sendButtonIcon: {
+		width: 30,
+		height: 30,
+		marginRight: 6,
+		marginTop: 2
 	}
 });
 

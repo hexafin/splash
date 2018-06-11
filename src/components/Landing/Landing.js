@@ -14,9 +14,16 @@ import { Input } from "../universal/Input";
 import firebase from "react-native-firebase";
 import AnimatedWaves from "../universal/AnimatedWaves";
 import TouchID from 'react-native-touch-id'
+import Button from "../universal/Button"
+
 let firestore = firebase.firestore()
 
 class Landing extends Component {
+
+    constructor(props) {
+        super(props)
+        this.handlePress = this.handlePress.bind(this)
+    }
 
     componentWillMount() {
         if (this.props.loggedIn) {
@@ -53,7 +60,7 @@ class Landing extends Component {
         }
     };
 
-    handleClaim = () => {
+    handlePress() {
         if (this.props.splashtagOnHold && this.props.phoneNumber) {
             this.props.SmsAuthenticate(this.props.phoneNumber, null);
         } else if (this.props.splashtagOnHold) {
@@ -109,17 +116,11 @@ class Landing extends Component {
                     </View>
                 )}
 
-                <View style={styles.floating} />
-
                 <View style={styles.footer}>
-                    <TouchableOpacity
-                        style={styles.footerButton}
-                        onPress={this.handleClaim}
-                    >
-                        <Text style={styles.footerButtonText}>
-                            Claim your splashtag
-                        </Text>
-                    </TouchableOpacity>
+                    <Button
+                        onPress={this.handlePress}
+                        title={"Get started"}
+                        primary={false}/>
                 </View>
                 {this.props.splashtagOnHold && (
                     <TouchableOpacity
@@ -203,7 +204,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: colors.lightGray
     },
-    floating: {},
     footer: {
         padding: 20,
         marginBottom: 10

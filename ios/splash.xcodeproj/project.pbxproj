@@ -21,6 +21,7 @@
 		087DB66D2023CAE2003E76D2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 087DB66B2023CAE2003E76D2 /* LaunchScreen.xib */; };
 		08861E3D20228FAA00DD4DFF /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 08861E3C20228FAA00DD4DFF /* main.jsbundle */; };
 		08890FA8202293AC00F154AD /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 08890FA7202293AC00F154AD /* assets */; };
+		08A0192A20CAA59C002AA366 /* libRNReactNativeHapticFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08A0192720CAA586002AA366 /* libRNReactNativeHapticFeedback.a */; };
 		08EB1F3A205A423900C9D0E2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 08EB1F39205A423900C9D0E2 /* GoogleService-Info.plist */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
@@ -189,6 +190,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
 			remoteInfo = "privatedata-tvOS";
+		};
+		08A0192620CAA586002AA366 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08A018F820CAA585002AA366 /* RNReactNativeHapticFeedback.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNReactNativeHapticFeedback;
 		};
 		08D497271FBC1DA80002C8F9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -415,6 +423,7 @@
 		08861E3C20228FAA00DD4DFF /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		08890FA7202293AC00F154AD /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = "<group>"; };
 		08890FA92022990F00F154AD /* splash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = splash.entitlements; path = splash/splash.entitlements; sourceTree = "<group>"; };
+		08A018F820CAA585002AA366 /* RNReactNativeHapticFeedback.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNReactNativeHapticFeedback.xcodeproj; path = "../node_modules/react-native-haptic-feedback/ios/RNReactNativeHapticFeedback.xcodeproj"; sourceTree = "<group>"; };
 		08EB1F39205A423900C9D0E2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
@@ -488,6 +497,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08A0192A20CAA59C002AA366 /* libRNReactNativeHapticFeedback.a in Frameworks */,
 				8063032D202AD32B00EEF03C /* libCodePush.a in Frameworks */,
 				80703EDA202673D300A59434 /* libRNFIRMessaging.a in Frameworks */,
 				08202C1D1FD38F26003EEEB3 /* FBSDKLoginKit.framework in Frameworks */,
@@ -649,6 +659,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		08A018F920CAA585002AA366 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				08A0192720CAA586002AA366 /* libRNReactNativeHapticFeedback.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		08D497241FBC1DA70002C8F9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -787,6 +805,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				08A018F820CAA585002AA366 /* RNReactNativeHapticFeedback.xcodeproj */,
 				800485861FF7713200A72B72 /* CoinbaseApi.h */,
 				800485851FF7713100A72B72 /* CoinbaseApi.m */,
 				80703ED4202673BF00A59434 /* RNFIRMessaging.xcodeproj */,
@@ -1086,6 +1105,10 @@
 					ProjectRef = 40A2DCCFEC484A5DAEB77C4B /* RNRandomBytes.xcodeproj */;
 				},
 				{
+					ProductGroup = 08A018F920CAA585002AA366 /* Products */;
+					ProjectRef = 08A018F820CAA585002AA366 /* RNReactNativeHapticFeedback.xcodeproj */;
+				},
+				{
 					ProductGroup = 8043B9191FD378C000AA4F4B /* Products */;
 					ProjectRef = 855D3FF8266449C6A9057141 /* TcpSockets.xcodeproj */;
 				},
@@ -1215,6 +1238,13 @@
 			fileType = archive.ar;
 			path = "libprivatedata-tvOS.a";
 			remoteRef = 089B814E1FBB864A007BDF08 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		08A0192720CAA586002AA366 /* libRNReactNativeHapticFeedback.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNReactNativeHapticFeedback.a;
+			remoteRef = 08A0192620CAA586002AA366 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		08D497281FBC1DA80002C8F9 /* libRNRandomBytes.a */ = {

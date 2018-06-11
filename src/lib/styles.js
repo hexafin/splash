@@ -41,5 +41,7 @@ export const icons = {
 		out: require("../assets/icons/primaryRightArrow.png"),
 		in: require("../assets/icons/greenLeftArrow.png")
 	},
-	refresh: require("../assets/icons/refreshCircle.png")
+	refresh: require("../assets/icons/refreshCircle.png"),
+	crossWhite: require("../assets/icons/crossWhite.png"),
+	crossGray: require("../assets/icons/crossGray.png"),
 }

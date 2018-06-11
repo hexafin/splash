@@ -11,12 +11,13 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
+import { isIphoneX } from "react-native-iphone-x-helper"
 import {Input} from "../universal/Input"
 import Button from "../universal/Button"
 import { Field, reduxForm } from 'redux-form'
 import debounce from 'lodash/debounce';
 import axios from "axios"
-
+import CloseButton from "../universal/CloseButton"
 
 class UpdateUsername extends Component {
 
@@ -60,13 +61,7 @@ class UpdateUsername extends Component {
 			<KeyboardAvoidingView behavior={"padding"} style={styles.container}>
 				<View>
 					<View style={styles.header}>
-						<Text style={{fontSize: 18, fontWeight: '700', color: colors.nearBlack}}>Update Splashtag</Text>
-						<TouchableOpacity onPress={() => {
-															Keyboard.dismiss()
-															this.props.navigation.goBack()
-														}}>
-		                    <Image style={{height: 14, width: 14}} source={require('../../assets/icons/Xbutton.png')}/>
-		                 </TouchableOpacity>
+						<Text style={styles.title}>Update Splashtag</Text>
 					</View>
 					<Text style={styles.splashtagText}>Splashtag</Text>
 	                <Field
@@ -76,7 +71,7 @@ class UpdateUsername extends Component {
 	                    checkmark={this.state.splashtagAvailable && !this.state.checkingSplashtag && this.props.usernameValue.length > 0}
 	                    onChange={this.debouncedOnChange}
 	                    />
-	           </View>
+	            </View>
                 <Button
                 	onPress={() => {
                 		Keyboard.dismiss()
@@ -92,6 +87,10 @@ class UpdateUsername extends Component {
                     loading={this.props.isUpdatingUsername}
                     disabled={this.props.isUpdatingUsername || !this.state.splashtagAvailable || this.state.checkingSplashtag}
                     />
+                <CloseButton color={"gray"} onPress={() => {
+					Keyboard.dismiss()
+					this.props.navigation.goBack(null)
+				}}/>
 			</KeyboardAvoidingView>
 		);
 	}
@@ -103,8 +102,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		paddingHorizontal: 26,
 	},
+	title: {
+		fontSize: 18, 
+		fontWeight: '700', 
+		color: colors.nearBlack
+	},
 	header: {
-		paddingTop: 66,
+		paddingTop: (isIphoneX()) ? 40 : 20,
 		paddingRight: 15,
 		flexDirection: 'row',
 		alignItems: 'center',
@@ -114,8 +118,8 @@ const styles = StyleSheet.create({
 		fontSize: 15,
 		fontWeight: "700",
 		color: "#B3B3B3",
-		paddingBottom: 6,
-		paddingTop: 21,
+		paddingBottom: 8,
+		paddingTop: 40,
 	},
 	footerButton: {
 		marginBottom: 32,
