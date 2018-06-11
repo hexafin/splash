@@ -22,6 +22,7 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import moment from "moment"
 import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
+import PayFlow from "./PayFlow"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -141,8 +142,6 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
-        this.sendButtonSpring = new Animated.Value(1)
-
 		FCM.on(FCMEvent.Notification, async notif => {
 			console.log("Notification", notif);
 			// reload on notifications
@@ -259,8 +258,9 @@ class Home extends Component {
 						source={require("../../assets/images/headerWaveInverse.png")}
 						style={styles.waveInverse}
 						resizeMode="contain"/>
+					<PayFlow reset={this.state.refreshing}/>
 					<View style={styles.history}>
-						<Text style={styles.historyTitle}>Your history</Text>
+						<Text style={styles.sectionTitle}>Your history</Text>
 						{this.state.transactions.map(transaction => {
 							const amount = this.state.currency == "BTC" ? transaction.amount : transaction.relativeAmount
 							return (
@@ -288,32 +288,6 @@ class Home extends Component {
 						})}
 					</View>
 				</Animated.ScrollView>
-				<TouchableWithoutFeedback
-					onPressIn={() => {
-						ReactNativeHapticFeedback.trigger("impactLight", true)
-						Animated.spring(this.sendButtonSpring, {
-							toValue: .8
-						}).start()
-					}}
-					onPressOut={() => {
-						ReactNativeHapticFeedback.trigger("impactLight", true)
-						Animated.spring(this.sendButtonSpring, {
-							toValue: 1,
-							friction: 3,
-							tension: 40
-						}).start()
-						this.props.navigation.navigate("Send")
-					}}>
-					<Animated.View style={[styles.sendButton, {
-						transform: [{ scale: this.sendButtonSpring}]
-					}]}>
-					    <Image
-	                        resizeMode={"contain"}
-					    	style={styles.sendButtonIcon}
-	                        source={require("../../assets/icons/send.png")}
-	                    />
-                    </Animated.View>
-				</TouchableWithoutFeedback>
 				<Animated.View style={[styles.header]}/>
 				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
 				
@@ -414,15 +388,15 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: -70
 	},
+	sectionTitle: {
+		color: colors.primaryDarkText,
+		fontSize: 20,
+		fontWeight: "700"
+	},
 	history: {
 		flex: 1,
 		padding: 20,
 		backgroundColor: colors.white
-	},
-	historyTitle: {
-		color: colors.primaryDarkText,
-		fontSize: 18,
-		fontWeight: "700"
 	},
 	sendButton: {
 		position: "absolute",

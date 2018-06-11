@@ -195,7 +195,6 @@ class SwipeApp extends Component {
 							{
 								height: (page.name == "Receive") ? 40 : 45,
 								width: (page.name == "Receive") ? 40 : 45,
-								marginTop: (page.name == "Receive") ? 2 : 0,
 							}
 						]}
 					/>
