@@ -2,10 +2,12 @@ import React from 'react';
 import {
   View,
   Text,
+  Image
 } from 'react-native';
 import {colors} from "../../lib/colors"
+import {icons} from "../../lib/styles"
 
-const LetterCircle = ({size, letter, textColor=colors.blue, color='#EFEFFD'}) => (
+const LetterCircle = ({size, letter, textColor=colors.blue, color='#EFEFFD', currency=null}) => (
   <View style={{
     height: size,
     width: size,
@@ -14,13 +16,14 @@ const LetterCircle = ({size, letter, textColor=colors.blue, color='#EFEFFD'}) =>
     backgroundColor: color,
     borderRadius: size/2,
   }}>
-    <Text style={{
-      textAlign: 'center',
-      color: textColor,
-      fontSize: 17,
-      fontWeight: '600',
-      backgroundColor: 'rgba(0,0,0,0)'
-    }}>{letter}</Text>
+    {!currency && <Text style={{
+          textAlign: 'center',
+          color: textColor,
+          fontSize: 17,
+          fontWeight: '600',
+          backgroundColor: 'rgba(0,0,0,0)'
+        }}>{letter}</Text>}
+    {currency == 'BTC' && <Image source={icons.btcLetter} style={{width: 12, height: 15.75, alignSelf: 'center'}} resizeMode={'contain'}/>}
   </View>
 );
 

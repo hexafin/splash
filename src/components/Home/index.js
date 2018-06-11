@@ -1,7 +1,7 @@
 import Home from "./Home"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {LoadTransactions} from "../../redux/transactions/actions"
+import {LoadTransactions, UpdateExchangeRate} from "../../redux/transactions/actions"
 
 const mapStateToProps = (state) => {
     return {
@@ -12,12 +12,13 @@ const mapStateToProps = (state) => {
     	errorLoadingTransactions: state.transactions.errorLoadingTransactions,
         bitcoinAddress: state.user.bitcoin.address,
         bitcoinNetwork: state.user.bitcoinNetwork,
+        exchangeRates: state.transactions.exchangeRates
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-    	LoadTransactions
+    	LoadTransactions, UpdateExchangeRate
     }, dispatch)
 }
 

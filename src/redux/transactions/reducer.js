@@ -14,7 +14,8 @@ import {
     LOAD_TRANSACTIONS_SUCCESS,
     LOAD_TRANSACTIONS_FAILURE,
     DISMISS_TRANSACTION,
-    RESET_TRANSACTIONS
+    RESET_TRANSACTIONS,
+    UPDATE_EXCHANGERATE
 } from "./actions.js"
 
 const initialState = {
@@ -26,10 +27,17 @@ const initialState = {
   errorLoadingTransactions: null,
   isSendingTransaction: false,
   errorSendingTransaction: null,
+  exchangeRates: null,
 }
 
 export default function transactionReducer(state = initialState, action) {
     switch (action.type) {
+
+      case UPDATE_EXCHANGERATE:
+          return {
+            ...state,
+            exchangeRates: action.exchangeRate,
+          }
 
       case DISMISS_TRANSACTION:
           return {

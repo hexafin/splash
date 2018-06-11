@@ -84,7 +84,7 @@ class Send extends Component {
 			const rate = this.state.exchangeRate[this.state.currency]
 			balance = {
 				BTC: this.state.balanceBtc,
-				USD: this.state.balanceBtc * rate
+				USD: parseFloat(this.state.balanceBtc * rate).toFixed(2)
 			}
 		}
 
@@ -108,6 +108,8 @@ class Send extends Component {
 
 				if (!balance) {
 					Alert.alert("Unable to load balance")
+				} else if (!this.state.exchangeRate) {
+					Alert.alert("Unable to load exchange rate")
 				} else if (!this.props.formAmount) {
 					Alert.alert("Please enter amount")
 				} else if (!this.props.formAddress) {

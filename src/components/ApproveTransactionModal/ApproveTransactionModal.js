@@ -15,9 +15,6 @@ class ApproveTransactionModal extends Component {
 			backgroundOpacity: new Animated.Value(0.0),
 			success: false,
 			wasLoading: false,
-			address: null,
-			btcAmount: null,
-			rate: null,
 			feeSatoshi: null,
 		}
 	}
@@ -38,17 +35,10 @@ class ApproveTransactionModal extends Component {
 			currency,
 		    exchangeRate
 		} = this.props.navigation.state.params
-	    const rate = parseFloat(exchangeRate).toFixed(2)
-	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)).toFixed(5) : amount.toFixed(5)
-		this.setState(prevState => {
-			return {
-				...prevState,
-				address,
-				btcAmount,
-				rate,
-			}
-		})			
 
+	    const rate = parseFloat(exchangeRate).toFixed(2)
+	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : amount
+	
 		api.GetBitcoinFees({network: this.props.bitcoinNetwork, from: this.props.userBitcoinAddress, amtSatoshi: btcAmount*cryptoUnits.BTC}).then(feeSatoshi => {
 			this.setState(prevState => {
 				return {
@@ -81,17 +71,28 @@ class ApproveTransactionModal extends Component {
 	}
 
 	render() {
+		const {
+			address,
+			amount,
+			currency,
+		    exchangeRate
+		} = this.props.navigation.state.params
+
+	    const rate = parseFloat(exchangeRate).toFixed(2)
+	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
+
+
 
 		const fee = (1.0*this.state.feeSatoshi/cryptoUnits.BTC).toFixed(5)
-		const totalBtcAmount = (parseFloat(this.state.btcAmount)+parseFloat(fee)).toFixed(5)
-		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(this.state.rate)).toFixed(2)
+		const totalBtcAmount = (parseFloat(btcAmount)+parseFloat(fee)).toFixed(5)
+		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
 
 		const confirm = () => {
 			if (totalBtcAmount) {
-				const relativeAmount = 1.0*this.state.btcAmount*parseFloat(this.state.rate)
+				const relativeAmount = (1.0*btcAmount*parseFloat(rate)).toFixed(2)
 				TouchID.authenticate("Confirm Transaction").then(success => {
 					if (success) {
-						this.props.SendTransaction(this.state.address, this.state.btcAmount, fee, relativeAmount)
+						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount)
 					}
 				})
 				.catch(error => {
@@ -133,7 +134,7 @@ class ApproveTransactionModal extends Component {
 	                  </TouchableOpacity>
 	                </View>
 	                <View style={styles.information}>
-	                  <Text style={styles.exchangeText}>1 BTC = ${this.state.rate} USD</Text>
+	                  <Text style={styles.exchangeText}>1 BTC = ${rate} USD</Text>
 	                  <View style={styles.amountBox}>
 	                    <Text style={{fontSize: 28, color: colors.white, fontWeight: '600'}}>USD ${totalRelativeAmount}</Text>
 	                    <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{totalBtcAmount} BTC</Text>
@@ -141,9 +142,9 @@ class ApproveTransactionModal extends Component {
 	                </View>
 	                <View style={{padding: 10}}>
 	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
-	                    <Text style={styles.description}>They receive —— {this.state.btcAmount} BTC</Text>
+	                    <Text style={styles.description}>They receive —— {(btcAmount.toFixed(5))} BTC</Text>
 	                </View>
-                    <Text style={[styles.description, {paddingBottom: 15}]}>To {this.state.address}</Text>
+                    <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
 	                <View style={styles.footer}>
 	                  <Button
 	                  	onPress={confirm}

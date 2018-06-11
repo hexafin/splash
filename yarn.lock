@@ -5020,6 +5020,12 @@ react-native-sentry@^0.32.1:
     "@sentry/wizard" "^0.7"
     raven-js "^3.19.1"
 
+react-native-shimmer@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-shimmer/-/react-native-shimmer-0.3.2.tgz#14e86aa26cfe7bec86ae933e21d35e1b4e8cbe48"
+  dependencies:
+    prop-types "^15.6.0"
+
 "react-native-svg@https://github.com/expo/react-native-svg/archive/5.5.1-exp.1.tar.gz":
   version "5.5.1"
   resolved "https://github.com/expo/react-native-svg/archive/5.5.1-exp.1.tar.gz#0c6e373dbe63cfcbdd465f5b2965ebe011c8962f"

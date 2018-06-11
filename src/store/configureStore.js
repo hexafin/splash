@@ -21,9 +21,11 @@ export default function configureStore () {
 
     Sentry.config(sentryDSN).install();
 
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
     const middleware = [createRavenMiddleware(Sentry), loggerMiddleware, thunkMiddleware]
 
-    let store = compose(
+    let store = composeEnhancers(
         applyMiddleware(...middleware)
     )(createStore)(persistReducers);
 

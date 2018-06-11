@@ -66,30 +66,40 @@ export function loadTransactionsFailure(error) {
 	return { type: LOAD_TRANSACTIONS_FAILURE, error };
 }
 
+export const UPDATE_EXCHANGERATE = "UPDATE_EXCHANGERATE"
+export function updateExchangeRate(exchangeRate) {
+	return { type: UPDATE_EXCHANGERATE, exchangeRate };
+}
+
 export const LoadTransactions = () => {
 	return (dispatch, getState) => {
 		dispatch(loadTransactionsInit())
 
 		const state = getState()
 
-		firestore.collection("transactions").where("userId", "==", state.user.id).onSnapshot(querySnapshot => {
-			// this is a snapshot of the user's transactions => redux will stay up to date with firebase
-			let transactions = []
-			querySnapshot.forEach(doc => {
-				const transaction = {
-					id: doc.id,
-					...doc.data()
-				}
-				switch (transaction.type) {
-					case "card":
-						if (transaction.approved === true) {
-							transactions.push(transaction)
-						}
-				}
+
+		api.AddBlockchainTransactions(state.user.bitcoin.address, state.user.id, state.user.bitcoinNetwork).then(() => {
+			firestore.collection("transactions").where("userId", "==", state.user.id).orderBy('timestamp', 'desc').onSnapshot(querySnapshot => {
+				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
+				let transactions = []
+				querySnapshot.forEach(doc => {
+					const transaction = {
+						id: doc.id,
+						...doc.data()
+					}
+					if (transaction.type == 'card' && transaction.approved === true) {
+						transactions.push(transaction)
+					} else if (transaction.type == "blockchain") {
+						transactions.push(transaction)
+					}
+				})
+				dispatch(loadTransactionsSuccess(transactions))
+			}, error => {
+				dispatch(loadTransactionsFailure(error))
 			})
-			dispatch(loadTransactionsSuccess(transactions))
-		}, error => {
-			dispatch(loadTransactionsFailure(error))
+
+		}).catch(error => {
+			dispatch(loadTransactionsFailure(error))			
 		})
 	}
 }
@@ -120,7 +130,7 @@ export const ApproveTransaction = (transaction) => {
 				await api.UpdateTransaction(transaction.transactionId, {
 					approved: true,
 					txId: txid,
-					timestampApproved: moment().unix(),
+					timestamp: moment().unix(),
 					amount: totalBtcAmount,
 					currency: "BTC"
 				})
@@ -139,27 +149,26 @@ export const ApproveTransaction = (transaction) => {
 	}
 }
 
-export const SendTransaction = (toAddress, btcAmount, fee, relativeAmount) => {
+export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount) => {
 	return (dispatch, getState) => {
-		// TODO: figure out where to show fees and do btc payments
-		// add to firebase
+
 		const state = getState()
 		const privateKey = state.user.bitcoin.wif
 		const userBtcAddress = state.user.bitcoin.address
 		const network = state.user.bitcoinNetwork
-		const totalBtcAmount = parseFloat(btcAmount)+parseFloat(fee)
+		const totalBtcAmount = parseFloat(btcAmount)+parseFloat(feeSatoshi/cryptoUnits.BTC)
 
-		const transaction = {
+		let transaction = {
 			amount: {
-				subtotal: btcAmount,
-				total: totalBtcAmount,
-				fee: fee,
+				subtotal: Math.floor(btcAmount*cryptoUnits.BTC),
+				total: Math.floor(totalBtcAmount*cryptoUnits.BTC),
+				fee: feeSatoshi,
 			},
 			currency: 'BTC',
 			relativeAmount: relativeAmount,
 			relativeCurrency: 'USD',
 			type: 'blockchain',
-			timestampInitiated: moment().unix(),
+			timestamp: moment().unix(),
 			to: {
 				address: toAddress
 			},
@@ -167,10 +176,10 @@ export const SendTransaction = (toAddress, btcAmount, fee, relativeAmount) => {
 		}
 
 		dispatch(sendTransactionInit())
-		console.log(userBtcAddress, toAddress, privateKey, totalBtcAmount, network)
+
 		api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
 			const {txid, txhex} = response
-			console.log(txid, txhex)
+			transaction.txId = txid
 			api.NewTransaction(transaction).then(() => {
 				dispatch(sendTransactionSuccess())
 			}).catch(error => {
@@ -185,5 +194,11 @@ export const SendTransaction = (toAddress, btcAmount, fee, relativeAmount) => {
 export const DismissTransaction = () => {
 	return (dispatch, getState) => {
 		dispatch(dismissTransaction())
+	}
+}
+
+export const UpdateExchangeRate = (exchangeRate) => {
+	return (dispatch, getState) => {
+		dispatch(updateExchangeRate(exchangeRate))
 	}
 }
