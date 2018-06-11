@@ -126,6 +126,7 @@ class Home extends Component {
 			ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			this.loadBalance()
 			this.loadExchangeRate()
+			this.props.LoadTransactions()
 		}
 	}
 
