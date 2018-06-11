@@ -5,6 +5,7 @@ import {
 	Image,
 	View,
 	Text,
+	Keyboard,
 	Animated,
 	StyleSheet,
 	TouchableWithoutFeedback
@@ -17,7 +18,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import PropTypes from "prop-types"
 import Account from "./Account"
-import Receive from "./Receive"
+import Wallet from "./Wallet"
 import Home from "./Home"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
@@ -28,6 +29,9 @@ const xOffset = new Animated.Value(0)
 const _onScroll = Animated.event(
 	[{ nativeEvent: { contentOffset: { x: xOffset } } }],
 	{
+		listener: event => {
+			Keyboard.dismiss()
+		},
 		useNativeDriver: true
 	}
 )
@@ -58,7 +62,7 @@ function iconTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [198, 0, -198]
+					outputRange: [200, 0, -200]
 				})
 			}
 		]
@@ -108,8 +112,8 @@ class SwipeApp extends Component {
 				image: null
 			},
 			{
-				name: "Receive",
-				component: Receive,
+				name: "Wallet",
+				component: Wallet,
 				image: icons.qrIcon
 			}
 		]
@@ -195,7 +199,6 @@ class SwipeApp extends Component {
 							{
 								height: (page.name == "Receive") ? 40 : 45,
 								width: (page.name == "Receive") ? 40 : 45,
-								marginTop: (page.name == "Receive") ? 2 : 0,
 							}
 						]}
 					/>
