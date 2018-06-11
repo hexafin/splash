@@ -23,23 +23,23 @@ class PayButton extends Component {
     }
 
     componentWillMount() {
-        // this.animatedValue = new Animated.Value(1)
+        this.animatedValue = new Animated.Value(1)
     }
 
     handlePressIn() {
         ReactNativeHapticFeedback.trigger("impactLight", true)
-        // Animated.spring(this.animatedValue, {
-        //     toValue: .8
-        // }).start()
+        Animated.spring(this.animatedValue, {
+            toValue: .8
+        }).start()
     }
 
     handlePressOut() {
         ReactNativeHapticFeedback.trigger("impactLight", true)
-        // Animated.spring(this.animatedValue, {
-        //     toValue: 1,
-        //     friction: 3,
-        //     tension: 40
-        // }).start()
+        Animated.spring(this.animatedValue, {
+            toValue: 1,
+            friction: 3,
+            tension: 40
+        }).start()
     }
 
     render() {
@@ -47,9 +47,9 @@ class PayButton extends Component {
         const {onPress=()=>{}, textOnly=false, title, image, disabled=false, loading=false, style={}} = this.props
 
         let styleArray = [style,
-            // {
-            //     transform: [{scale: this.animatedValue}]
-            // }
+            {
+                transform: [{scale: this.animatedValue}]
+            }
         ]
         if (textOnly) {
             styleArray.push(styles.textOnly)
@@ -63,13 +63,13 @@ class PayButton extends Component {
                         onPress={ onPress }
                         onPressIn={this.handlePressIn}
                         onPressOut={this.handlePressOut}>
-                    <View style={styleArray}>
+                    <Animated.View style={styleArray}>
                         {!textOnly && <View style={styles.titleWrapper}>
                             <Image source={image} style={styles.image} resizeMode="contain"/>
                             <Text style={styles.title}>{title}</Text>
                         </View>}
                         {textOnly && <Text style={styles.textOnlyText}>{title}</Text>}
-                    </View>
+                    </Animated.View>
                 </TouchableWithoutFeedback>
             )
 

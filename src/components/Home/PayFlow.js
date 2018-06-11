@@ -24,9 +24,6 @@ class PayFlow extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			chooseTypeOpacity: new Animated.Value(1),
-			enterAmountOpacity: new Animated.Value(0),
-			wrapperHeight: new Animated.Value(217),
 			amount: "",
 			address: "",
 			currency: props.currency,
@@ -37,6 +34,12 @@ class PayFlow extends Component {
 		this.dynamicHeight = this.dynamicHeight.bind(this)
 	}
 
+	componentWillMount() {
+		this.chooseTypeOpacity = new Animated.Value(1)
+		this.enterAmountOpacity = new Animated.Value(0)
+		this.wrapperHeight = new Animated.Value(217)
+	}
+
 	dynamicHeight(event, stateProp) {
 		this.setState({[stateProp]: event.nativeEvent.layout.height})
 	}
@@ -45,18 +48,18 @@ class PayFlow extends Component {
 		this.setState({amount: "", currency: "BTC", activeSection: "chooseType"})
 		Animated.sequence([
 			// fade out enter amount
-			Animated.timing(this.state.enterAmountOpacity, {
+			Animated.timing(this.enterAmountOpacity, {
 				toValue: 0,
 				duration: 500
 			}),
 			Animated.parallel([
 				// fade in choose type
-				Animated.timing(this.state.chooseTypeOpacity, {
+				Animated.timing(this.chooseTypeOpacity, {
 					toValue: 1,
 					duration: 500
 				}),
 				// change height to choose type height
-				Animated.timing(this.state.wrapperHeight, {
+				Animated.timing(this.wrapperHeight, {
 					toValue: this.state.chooseTypeHeight,
 					duration: 500
 				})
@@ -84,11 +87,11 @@ class PayFlow extends Component {
 					this.setState({address: address})
 				})
 				this.setState({activeSection: "enterAmount"})
-				animationArray.push(Animated.timing(this.state.enterAmountOpacity, {
+				animationArray.push(Animated.timing(this.enterAmountOpacity, {
 					toValue: 1,
 					duration: 500
 				}))
-				animationArray.push(Animated.timing(this.state.wrapperHeight, {
+				animationArray.push(Animated.timing(this.wrapperHeight, {
 					toValue: this.state.enterAmountHeight,
 					duration: 500
 				}))
@@ -97,11 +100,11 @@ class PayFlow extends Component {
 				// TODO: get address from QR code
 				address = "sample-address"
 				this.setState({address, activeSection: "enterAmount"})
-				animationArray.push(Animated.timing(this.state.enterAmountOpacity, {
+				animationArray.push(Animated.timing(this.enterAmountOpacity, {
 					toValue: 1,
 					duration: 500
 				}))
-				animationArray.push(Animated.timing(this.state.wrapperHeight, {
+				animationArray.push(Animated.timing(this.wrapperHeight, {
 					toValue: this.state.enterAmountHeight,
 					duration: 500
 				}))
@@ -110,7 +113,7 @@ class PayFlow extends Component {
 
 		Animated.sequence([
 			// fade out choose type
-			Animated.timing(this.state.chooseTypeOpacity, {
+			Animated.timing(this.chooseTypeOpacity, {
 				toValue: 0,
 				duration: 500
 			}),
@@ -122,17 +125,17 @@ class PayFlow extends Component {
 
 		console.log(this.state)
 		
-		// if (this.state.chooseTypeHeight) {
-		// 	this.state.wrapperHeight.setValue(this.state.chooseTypeHeight)
-		// }
+		if (this.chooseTypeHeight) {
+			this.wrapperHeight.setValue(this.state.chooseTypeHeight)
+		}
 
 		return (
 			<Animated.View keyboardShouldPersistTaps={true} style={[styles.wrapper, {
-				height: this.state.wrapperHeight
+				height: this.wrapperHeight
 			}]}>
 				<Animated.View
 					style={[styles.section, {
-						opacity: this.state.chooseTypeOpacity
+						opacity: this.chooseTypeOpacity
 					}]}
 					pointerEvents={this.state.activeSection == "chooseType" ? "auto" : "none"}
 					onLayout={event => this.dynamicHeight(event, "chooseTypeHeight")}>
@@ -155,7 +158,7 @@ class PayFlow extends Component {
 
 				<Animated.View 
 					style={[styles.section, {
-						opacity: this.state.enterAmountOpacity
+						opacity: this.enterAmountOpacity
 					}]}
 					pointerEvents={this.state.activeSection == "enterAmount" ? "auto" : "none"}
 					onLayout={event => this.dynamicHeight(event, "enterAmountHeight")}>
