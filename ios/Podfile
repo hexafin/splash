@@ -27,6 +27,8 @@ target 'splash' do
   pod 'lottie-ios', :path => '../node_modules/lottie-ios'
   pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
 
+  pod 'RNICloudStore', :path => '../node_modules/react-native-icloudstore'
+
   target 'splashTests' do
     inherit! :search_paths
     # Pods for testing

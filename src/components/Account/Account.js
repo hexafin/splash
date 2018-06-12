@@ -12,7 +12,9 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
+import Button from "../universal/Button"
 import {Input} from "../universal/Input"
+import iCloudStorage from 'react-native-icloudstore';
 
 const Account = ({splashtag, logout, navigation}) => {
 
@@ -25,6 +27,15 @@ const Account = ({splashtag, logout, navigation}) => {
 			    {text: 'Yes', onPress: () => logout()},
 			  ],
 			)
+		}
+
+		const handleBackup = () => {
+			// iCloudStorage.setItem('key', '1').then(response => {
+			// 	console.log(response)
+			// })
+			iCloudStorage.getItem('key').then(r => {
+				console.log(r)
+			})
 		}
 
 		return (
@@ -40,6 +51,7 @@ const Account = ({splashtag, logout, navigation}) => {
 							<Input editable={false} input={{value: splashtag}} />
 						</View>
 					</TouchableOpacity>
+					<Button primary={true} title={'Backup to iCloud'} onPress={handleBackup} />
 					<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
 						<Text style={styles.logoutText}>Delete Account</Text>
 					</TouchableOpacity>
