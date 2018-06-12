@@ -4,7 +4,8 @@ import {
 	Text,
 	Image,
 	Dimensions,
-	StyleSheet
+	StyleSheet,
+	Alert
 } from "react-native"
 import { colors } from "../lib/colors"
 import { defaults, icons } from "../lib/styles"
@@ -23,9 +24,21 @@ class ScanQrCode extends Component {
 	render() {
 		return (
 			<QRCodeScanner
+				ref={(node) => { this.scanner = node }}
 				onRead={e => {
-					this.props.captureQr(e.data)
-					this.props.navigation.goBack(null)
+					try {
+						const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+						bitcoin.address.toOutputScript(address, network)
+						this.props.captureQr(e.data)
+						this.props.navigation.goBack(null)
+					}
+					catch (error) {
+						Alert.alert("Invalid bitcoin address", null, [
+							{text: "Dismiss", onPress: () => {
+								this.scanner.reactivate()
+							}}
+						])
+					}
 				}}
 				containerStyle={styles.container}
 				topContent={
@@ -81,7 +94,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		
+		network: state.user.bitcoinNetwork
 	}
 }
 

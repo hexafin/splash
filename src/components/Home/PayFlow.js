@@ -24,16 +24,15 @@ import PayButton from "./PayButton"
 import SplashtagButton from "./SplashtagButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import firebase from "react-native-firebase";
+let bitcoin = require('bitcoinjs-lib') 
 let firestore = firebase.firestore();
-
-let bitcoin = require('bitcoinjs-lib')
 
 class PayFlow extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			amount: "",
-			address: "",
+			address: null,
 			currency: props.currency,
 			activeSection: "chooseType",
 			splashtagSearch: "",
@@ -104,26 +103,34 @@ class PayFlow extends Component {
 		this.setState({currency: nextProps.currency})
 
 		if (nextProps.qrAddress != null) {
-			// just captured a qr address => move the flow along
-			this.setState({activeSection: "enterAmount", address: nextProps.qrAddress})
-			this.props.resetQr()
-			Animated.sequence([
-				// fade out choose type
-				Animated.timing(this.chooseTypeOpacity, {
-					toValue: 0,
-					duration: 500
-				}),
-				Animated.parallel([
-					Animated.timing(this.enterAmountOpacity, {
-						toValue: 1,
+			try {
+				const address = nextProps.qrAddress
+				// just captured a qr address => move the flow along if its a real address
+				const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+				bitcoin.address.toOutputScript(address, network)
+				this.setState({activeSection: "enterAmount", address: address})
+				this.props.resetQr()
+				Animated.sequence([
+					// fade out choose type
+					Animated.timing(this.chooseTypeOpacity, {
+						toValue: 0,
 						duration: 500
 					}),
-					Animated.timing(this.wrapperHeight, {
-						toValue: this.state.enterAmountHeight,
-						duration: 500
-					})
-				])
-			]).start()
+					Animated.parallel([
+						Animated.timing(this.enterAmountOpacity, {
+							toValue: 1,
+							duration: 500
+						}),
+						Animated.timing(this.wrapperHeight, {
+							toValue: this.state.enterAmountHeight,
+							duration: 500
+						})
+					])
+				]).start()
+			}
+			catch (error) {
+				Alert.alert("Invalid bitcoin address")
+			}
 		}
 	}
 
@@ -213,27 +220,32 @@ class PayFlow extends Component {
 
 			case "clipboard":
 				Clipboard.getString().then(address => {
-					console.log(address)
 					this.setState({address: address})
-				})
-				this.setState({activeSection: "enterAmount"})
-				Animated.sequence([
-					// fade out choose type
-					Animated.timing(this.chooseTypeOpacity, {
-						toValue: 0,
-						duration: 500
-					}),
-					Animated.parallel([
-						Animated.timing(this.enterAmountOpacity, {
-							toValue: 1,
+					const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+					bitcoin.address.toOutputScript(this.state.address, network)
+					this.setState({activeSection: "enterAmount"})
+					Animated.sequence([
+						// fade out choose type
+						Animated.timing(this.chooseTypeOpacity, {
+							toValue: 0,
 							duration: 500
 						}),
-						Animated.timing(this.wrapperHeight, {
-							toValue: this.state.enterAmountHeight,
-							duration: 500
-						})
-					])
-				]).start()
+						Animated.parallel([
+							Animated.timing(this.enterAmountOpacity, {
+								toValue: 1,
+								duration: 500
+							}),
+							Animated.timing(this.wrapperHeight, {
+								toValue: this.state.enterAmountHeight,
+								duration: 500
+							}).start()
+						])
+					]).start()
+				}).catch(error => {
+					Alert.alert("Invalid bitcoin address")
+					this.reset()
+				})
+				
 				break
 
 			case "splashtag":
@@ -264,10 +276,6 @@ class PayFlow extends Component {
 	}
 
 	render() {
-		
-		if (this.chooseTypeHeight) {
-			this.wrapperHeight.setValue(this.state.chooseTypeHeight)
-		}
 
 		return (
 			<Animated.View keyboardShouldPersistTaps={true} style={[styles.wrapper, {
