@@ -40,7 +40,6 @@ class Home extends Component {
 			transactions: props.transactions,
 			loadingExchangeRate: true,
 			loadingBalance: true,
-			yOffset: new Animated.Value(0),
 			pulledToRefresh: false,
 			refreshing: false
 		}
@@ -145,6 +144,8 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
+        this.yOffset = new Animated.Value(0)
+
 		FCM.on(FCMEvent.Notification, async notif => {
 			console.log("Notification", notif);
 			// reload on notifications
@@ -215,7 +216,7 @@ class Home extends Component {
 		}
 
 		const animatedHeader = {
-			opacity: this.state.yOffset.interpolate({
+			opacity: this.yOffset.interpolate({
 				inputRange: [75, 76, 100, 101],
 				outputRange: [0, 0, 1, 1]
 			})
@@ -224,13 +225,13 @@ class Home extends Component {
 		const animatedBalance = {
 			transform: [
 				{
-					scale: this.state.yOffset.interpolate({
+					scale: this.yOffset.interpolate({
 						inputRange: [-81, -80, 0, 55, 56],
 						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
 					})
 				},
 				{
-					translateY: this.state.yOffset.interpolate({
+					translateY: this.yOffset.interpolate({
 						inputRange: [-1, 0, 53, 54],
 						outputRange: [0, 0, -53, -53]
 					})
@@ -244,7 +245,7 @@ class Home extends Component {
 					scrollEventThrottle={16}
 					contentContainerStyle={styles.scrollContainer}
 					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { y: this.state.yOffset } } }],
+						[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
 						{
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y

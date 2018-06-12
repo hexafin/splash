@@ -17,7 +17,10 @@ import {
 } from "react-native"
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
-import PayButton from "../universal/PayButton"
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux"
+import { resetQr } from "../../redux/transactions/actions"
+import PayButton from "./PayButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 let bitcoin = require('bitcoinjs-lib')
@@ -32,6 +35,7 @@ class PayFlow extends Component {
 			activeSection: "chooseType"
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
+		this.handleSend = this.handleSend.bind(this)
 		this.reset = this.reset.bind(this)
 		this.dynamicHeight = this.dynamicHeight.bind(this)
 	}
@@ -40,6 +44,7 @@ class PayFlow extends Component {
 		this.chooseTypeOpacity = new Animated.Value(1)
 		this.enterAmountOpacity = new Animated.Value(0)
 		this.wrapperHeight = new Animated.Value(217)
+		this.findSplashtagOpacity = new Animated.Value(0)
 	}
 
 	dynamicHeight(event, stateProp) {
@@ -48,12 +53,19 @@ class PayFlow extends Component {
 
 	reset() {
 		this.setState({amount: "", currency: "BTC", activeSection: "chooseType"})
+		this.props.resetQr()
 		Animated.sequence([
-			// fade out enter amount
-			Animated.timing(this.enterAmountOpacity, {
-				toValue: 0,
-				duration: 500
-			}),
+			Animated.parallel([
+				// fade out enter amount
+				Animated.timing(this.enterAmountOpacity, {
+					toValue: 0,
+					duration: 500
+				}),
+				Animated.timing(this.findSplashtagOpacity, {
+					toValue: 0,
+					duration: 500
+				})
+			]),
 			Animated.parallel([
 				// fade in choose type
 				Animated.timing(this.chooseTypeOpacity, {
@@ -75,12 +87,65 @@ class PayFlow extends Component {
 			this.reset()
 		}
 		this.setState({currency: nextProps.currency})
+
+		if (nextProps.qrAddress != null) {
+			// just captured a qr address => move the flow along
+			this.setState({activeSection: "enterAmount", address: nextProps.qrAddress})
+			this.props.resetQr()
+			Animated.sequence([
+				// fade out choose type
+				Animated.timing(this.chooseTypeOpacity, {
+					toValue: 0,
+					duration: 500
+				}),
+				Animated.parallel([
+					Animated.timing(this.enterAmountOpacity, {
+						toValue: 1,
+						duration: 500
+					}),
+					Animated.timing(this.wrapperHeight, {
+						toValue: this.state.enterAmountHeight,
+						duration: 500
+					})
+				])
+			]).start()
+		}
+	}
+
+	handleSend() {
+
+		const amount = parseFloat(this.state.amount)
+		const address = this.state.address
+		const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+		try {
+
+			bitcoin.address.toOutputScript(address, network)
+
+			if (!this.props.balance) {
+				Alert.alert("Unable to load balance")
+			} else if (!this.props.exchangeRate) {
+				Alert.alert("Unable to load exchange rate")
+			} else if (!amount) {
+				Alert.alert("Please enter amount")
+			} else if (!address) {
+				Alert.alert("Please enter address")
+			} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
+				Alert.alert("Not enough balance")
+			} else {
+				this.props.navigation.navigate("ApproveTransactionModal", {
+					address,
+					amount: parseFloat(amount),
+					currency: this.state.currency,
+					exchangeRate: this.props.exchangeRate['USD']
+				});
+			}
+
+		} catch(e) {
+			Alert.alert("Invalid bitcoin address")
+		}
 	}
 
 	handleChooseType(key) {
-
-		let animationArray = []
-		let address
 
 		switch(key) {
 			case "clipboard":
@@ -89,77 +154,31 @@ class PayFlow extends Component {
 					this.setState({address: address})
 				})
 				this.setState({activeSection: "enterAmount"})
-				animationArray.push(Animated.timing(this.enterAmountOpacity, {
-					toValue: 1,
-					duration: 500
-				}))
-				animationArray.push(Animated.timing(this.wrapperHeight, {
-					toValue: this.state.enterAmountHeight,
-					duration: 500
-				}))
+				Animated.sequence([
+					// fade out choose type
+					Animated.timing(this.chooseTypeOpacity, {
+						toValue: 0,
+						duration: 500
+					}),
+					Animated.parallel([
+						Animated.timing(this.enterAmountOpacity, {
+							toValue: 1,
+							duration: 500
+						}),
+						Animated.timing(this.wrapperHeight, {
+							toValue: this.state.enterAmountHeight,
+							duration: 500
+						})
+					])
+				]).start()
 				break
 			case "qr":
-				// TODO: get address from QR code
-				address = "sample-address"
-				this.setState({address, activeSection: "enterAmount"})
-				animationArray.push(Animated.timing(this.enterAmountOpacity, {
-					toValue: 1,
-					duration: 500
-				}))
-				animationArray.push(Animated.timing(this.wrapperHeight, {
-					toValue: this.state.enterAmountHeight,
-					duration: 500
-				}))
+				this.props.navigation.navigate("ScanQrCode")
 				break
 		}
-
-		Animated.sequence([
-			// fade out choose type
-			Animated.timing(this.chooseTypeOpacity, {
-				toValue: 0,
-				duration: 500
-			}),
-			Animated.parallel(animationArray)
-		]).start()
 	}
 
 	render() {
-
-		const handleSend = () => {
-
-			const amount = parseFloat(this.state.amount)
-			const address = this.state.address
-			const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-			try {
-
-				bitcoin.address.toOutputScript(address, network)
-
-				if (!this.props.balance) {
-					Alert.alert("Unable to load balance")
-				} else if (!this.props.exchangeRate) {
-					Alert.alert("Unable to load exchange rate")
-				} else if (!amount) {
-					Alert.alert("Please enter amount")
-				} else if (!address) {
-					Alert.alert("Please enter address")
-				} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
-					Alert.alert("Not enough balance")
-				} else {
-					this.props.navigation.navigate("ApproveTransactionModal", {
-						address,
-						amount: parseFloat(amount),
-						currency: this.state.currency,
-						exchangeRate: this.props.exchangeRate['USD']
-					});
-				}
-
-			} catch(e) {
-				Alert.alert("Invalid bitcoin address")
-			}
-		}
-
-
-		console.log(this.state)
 		
 		if (this.chooseTypeHeight) {
 			this.wrapperHeight.setValue(this.state.chooseTypeHeight)
@@ -218,9 +237,21 @@ class PayFlow extends Component {
 			        <PayButton
 						title={"Send bitcoin"}
 						image={icons.send}
-						onPress={handleSend}/>
+						onPress={this.handleSend}/>
 					
 				</Animated.View>
+
+				<Animated.View 
+					style={[styles.section, {
+						opacity: this.findSplashtagOpacity
+					}]}
+					pointerEvents={this.state.activeSection == "findSplashtag" ? "auto" : "none"}
+					onLayout={event => this.dynamicHeight(event, "findSplashtagHeight")}>
+
+					
+					
+				</Animated.View>
+
 			</Animated.View>
 		)
 	}
@@ -277,4 +308,19 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default PayFlow
+const mapStateToProps = state => {
+	return {
+		qrAddress: state.transactions.qrAddress
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return bindActionCreators(
+		{
+			resetQr
+		},
+		dispatch
+	)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PayFlow)

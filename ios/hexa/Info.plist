@@ -26,6 +26,8 @@
 	<string>????</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Secure your private keys with Face ID</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Use your camera to scan a QR code</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

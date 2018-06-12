@@ -66,9 +66,19 @@ export function loadTransactionsFailure(error) {
 	return { type: LOAD_TRANSACTIONS_FAILURE, error };
 }
 
-export const UPDATE_EXCHANGERATE = "UPDATE_EXCHANGERATE"
+export const UPDATE_EXCHANGE_RATE = "UPDATE_EXCHANGE_RATE"
 export function updateExchangeRate(exchangeRate) {
-	return { type: UPDATE_EXCHANGERATE, exchangeRate };
+	return { type: UPDATE_EXCHANGE_RATE, exchangeRate };
+}
+
+export const CAPTURE_QR = "CAPTURE_QR"
+export function captureQr(address) {
+	return { type: CAPTURE_QR, address }
+}
+
+export const RESET_QR = "RESET_QR"
+export function resetQr() {
+	return { type: RESET_QR }
 }
 
 export const LoadTransactions = () => {

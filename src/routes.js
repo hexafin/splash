@@ -9,7 +9,7 @@ import EnterPhoneNumber from "./components/EnterPhoneNumber"
 import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
 import Waitlisted from "./components/Waitlisted"
 import UpdateUsername from "./components/UpdateUsername"
-import Send from "./components/Send"
+import ScanQrCode from "./components/ScanQrCode"
 import Unlock from "./components/Unlock"
 import ViewTransactionModal from "./components/ViewTransactionModal"
 import SwipeApp from "./components/SwipeApp"
@@ -113,8 +113,8 @@ const AppRouter = StackNavigator(
 		ViewTransactionModal: {
 			screen: ViewTransactionModal
 		},
-		Send: {
-			screen: Send
+		ScanQrCode: {
+			screen: ScanQrCode
 		},
 		UpdateUsername: {
 			screen: UpdateUsername
