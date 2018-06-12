@@ -116,11 +116,20 @@ PODS:
   - Protobuf (3.5.0)
   - React (0.50.3):
     - React/Core (= 0.50.3)
+  - react-native-camera (1.1.4):
+    - React
+    - react-native-camera/RCT (= 1.1.4)
+    - react-native-camera/RN (= 1.1.4)
+  - react-native-camera/RCT (1.1.4):
+    - React
+  - react-native-camera/RN (1.1.4):
+    - React
   - react-native-shimmer (0.3.2):
     - React
   - React/Core (0.50.3):
     - yoga (= 0.50.3.React)
   - RNKeychain (3.0.0-rc.3):
+  - ReactNativePermissions (1.1.1):
     - React
   - Sentry (3.10.0):
     - Sentry/Core (= 3.10.0)
@@ -146,8 +155,10 @@ DEPENDENCIES:
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - React (from `../node_modules/react-native`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-shimmer (from `../node_modules/react-native-shimmer`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
+  - ReactNativePermissions (from `../node_modules/react-native-permissions`)
   - SentryReactNative (from `../node_modules/react-native-sentry`)
   - TouchID (from `../node_modules/react-native-touch-id`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -184,10 +195,14 @@ EXTERNAL SOURCES:
     :path: "../node_modules/lottie-react-native"
   React:
     :path: "../node_modules/react-native"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-shimmer:
     :path: "../node_modules/react-native-shimmer"
   RNKeychain:
     :path: "../node_modules/react-native-keychain"
+  ReactNativePermissions:
+    :path: "../node_modules/react-native-permissions"
   SentryReactNative:
     :path: "../node_modules/react-native-sentry"
   TouchID:
@@ -219,13 +234,15 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   Protobuf: 8a9838fba8dae3389230e1b7f8c104aa32389c03
   React: 541ba768b9855e10cdc76f55427a5cd0653ca806
+  react-native-camera: ab22041dcf0403d88f2ae4b9ea3ed2644e680423
   react-native-shimmer: 2d68e432a68f081c33d580719f4584e1580ef50d
   RNKeychain: 627c6095cef215dd3d9804a9a9cf45ab96aa3997
+  ReactNativePermissions: 9f2d9c45c98800795e6c2ed330e25d11a66a8169
   Sentry: 546079394a729c35ba8c10332942c25f96cac921
   SentryReactNative: a306955d6c4b45954ff04d2fbeaa536f947f5ba4
   TouchID: b0640fedb86fa2db2fe1df15b61594ad49e76288
   yoga: 17521bbb0dd54a47c0b3ac43253e78cdac7488e0
 
-PODFILE CHECKSUM: b217bcccd3a7357a775d4661382caf0ef028c8a9
+PODFILE CHECKSUM: 359e2bf42787ff797bfa9e5b7c6c293297e821f5
 
 COCOAPODS: 1.5.0

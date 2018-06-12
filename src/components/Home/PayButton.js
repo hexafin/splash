@@ -9,8 +9,8 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults} from '../../lib/styles'
-import LoadingCircle from "./LoadingCircle"
-import Checkmark from "./Checkmark"
+import LoadingCircle from "../universal/LoadingCircle"
+import Checkmark from "../universal/Checkmark"
 import PropTypes from "prop-types"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 

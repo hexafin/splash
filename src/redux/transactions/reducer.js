@@ -14,8 +14,10 @@ import {
     LOAD_TRANSACTIONS_SUCCESS,
     LOAD_TRANSACTIONS_FAILURE,
     DISMISS_TRANSACTION,
+    CAPTURE_QR,
+    RESET_QR,
     RESET_TRANSACTIONS,
-    UPDATE_EXCHANGERATE
+    UPDATE_EXCHANGE_RATE
 } from "./actions.js"
 
 const initialState = {
@@ -28,12 +30,25 @@ const initialState = {
   isSendingTransaction: false,
   errorSendingTransaction: null,
   exchangeRates: null,
+  qrAddress: null
 }
 
 export default function transactionReducer(state = initialState, action) {
     switch (action.type) {
 
-      case UPDATE_EXCHANGERATE:
+      case RESET_QR:
+          return {
+            ...state,
+            qrAddress: null
+          }
+
+      case CAPTURE_QR:
+          return {
+            ...state,
+            qrAddress: action.address,
+          }
+
+      case UPDATE_EXCHANGE_RATE:
           return {
             ...state,
             exchangeRates: action.exchangeRate,

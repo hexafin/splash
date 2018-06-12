@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		color: colors.primaryDarkText,
-		fontSize: 14,
+		fontSize: 16,
 		fontWeight: "600",
 		marginBottom: 3
 	},
 	date: {
 		color: colors.lightGray,
-		fontSize: 10
+		fontSize: 14
 	},
 	arrow: {
 		width: 48,

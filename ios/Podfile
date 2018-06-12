@@ -21,6 +21,8 @@ target 'splash' do
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
   pod 'react-native-shimmer', :path => '../node_modules/react-native-shimmer'
+  pod 'react-native-camera', path: '../node_modules/react-native-camera'
+  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
 
   pod 'TouchID', :path => "../node_modules/react-native-touch-id"
 
