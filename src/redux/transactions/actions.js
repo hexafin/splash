@@ -66,9 +66,19 @@ export function loadTransactionsFailure(error) {
 	return { type: LOAD_TRANSACTIONS_FAILURE, error };
 }
 
-export const UPDATE_EXCHANGERATE = "UPDATE_EXCHANGERATE"
+export const UPDATE_EXCHANGE_RATE = "UPDATE_EXCHANGE_RATE"
 export function updateExchangeRate(exchangeRate) {
-	return { type: UPDATE_EXCHANGERATE, exchangeRate };
+	return { type: UPDATE_EXCHANGE_RATE, exchangeRate };
+}
+
+export const CAPTURE_QR = "CAPTURE_QR"
+export function captureQr(address) {
+	return { type: CAPTURE_QR, address }
+}
+
+export const RESET_QR = "RESET_QR"
+export function resetQr() {
+	return { type: RESET_QR }
 }
 
 export const LoadTransactions = () => {
@@ -152,42 +162,48 @@ export const ApproveTransaction = (transaction) => {
 export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount) => {
 	return (dispatch, getState) => {
 
-		const state = getState()
-		const privateKey = state.user.bitcoin.wif
-		const userBtcAddress = state.user.bitcoin.address
-		const network = state.user.bitcoinNetwork
-		const totalBtcAmount = parseFloat(btcAmount)+parseFloat(feeSatoshi/cryptoUnits.BTC)
+		return new Promise((resolve, reject) => {
+			const state = getState()
+			const privateKey = state.user.bitcoin.wif
+			const userBtcAddress = state.user.bitcoin.address
+			const network = state.user.bitcoinNetwork
+			const totalBtcAmount = parseFloat(btcAmount)+parseFloat(feeSatoshi/cryptoUnits.BTC)
 
-		let transaction = {
-			amount: {
-				subtotal: Math.floor(btcAmount*cryptoUnits.BTC),
-				total: Math.floor(totalBtcAmount*cryptoUnits.BTC),
-				fee: feeSatoshi,
-			},
-			currency: 'BTC',
-			relativeAmount: relativeAmount,
-			relativeCurrency: 'USD',
-			type: 'blockchain',
-			timestamp: moment().unix(),
-			to: {
-				address: toAddress
-			},
-			userId: state.user.id,
-		}
+			let transaction = {
+				amount: {
+					subtotal: Math.floor(btcAmount*cryptoUnits.BTC),
+					total: Math.floor(totalBtcAmount*cryptoUnits.BTC),
+					fee: feeSatoshi,
+				},
+				currency: 'BTC',
+				relativeAmount: relativeAmount,
+				relativeCurrency: 'USD',
+				type: 'blockchain',
+				timestamp: moment().unix(),
+				to: {
+					address: toAddress
+				},
+				userId: state.user.id,
+			}
 
-		dispatch(sendTransactionInit())
+			dispatch(sendTransactionInit())
 
-		api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
-			const {txid, txhex} = response
-			transaction.txId = txid
-			api.NewTransaction(transaction).then(() => {
-				dispatch(sendTransactionSuccess())
+			api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
+				const {txid, txhex} = response
+				transaction.txId = txid
+				api.NewTransaction(transaction).then(() => {
+					dispatch(sendTransactionSuccess())
+					resolve()
+				}).catch(error => {
+					dispatch(sendTransactionFailure(error))
+					reject(error)		
+				})
 			}).catch(error => {
-				dispatch(sendTransactionFailure(error))				
+				dispatch(sendTransactionFailure(error))
+				reject(error)
 			})
-		}).catch(error => {
-			dispatch(sendTransactionFailure(error))
 		})
+
 	}
 }
 

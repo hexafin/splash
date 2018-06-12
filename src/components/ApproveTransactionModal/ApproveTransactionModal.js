@@ -75,7 +75,8 @@ class ApproveTransactionModal extends Component {
 			address,
 			amount,
 			currency,
-		    exchangeRate
+		    exchangeRate,
+		    successCallback=()=>{}
 		} = this.props.navigation.state.params
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
@@ -93,6 +94,11 @@ class ApproveTransactionModal extends Component {
 				TouchID.authenticate("Confirm Transaction").then(success => {
 					if (success) {
 						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount)
+							.then(successCallback)
+							.catch(error => {
+								Alert.alert("An error occurred while signing transaction. Please try again later")
+								console.log(error)
+							})
 					}
 				})
 				.catch(error => {

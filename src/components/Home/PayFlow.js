@@ -17,21 +17,32 @@ import {
 } from "react-native"
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
-import PayButton from "../universal/PayButton"
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux"
+import { resetQr } from "../../redux/transactions/actions"
+import PayButton from "./PayButton"
+import SplashtagButton from "./SplashtagButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
-
-let bitcoin = require('bitcoinjs-lib')
+import firebase from "react-native-firebase";
+let bitcoin = require('bitcoinjs-lib') 
+let firestore = firebase.firestore();
 
 class PayFlow extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
 			amount: "",
-			address: "",
+			address: null,
 			currency: props.currency,
-			activeSection: "chooseType"
+			activeSection: "chooseType",
+			splashtagSearch: "",
+			splashtagSearchResults: [],
+			splashtag: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
+		this.splashtagSearch = this.splashtagSearch.bind(this)
+		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
+		this.handleSend = this.handleSend.bind(this)
 		this.reset = this.reset.bind(this)
 		this.dynamicHeight = this.dynamicHeight.bind(this)
 	}
@@ -40,6 +51,7 @@ class PayFlow extends Component {
 		this.chooseTypeOpacity = new Animated.Value(1)
 		this.enterAmountOpacity = new Animated.Value(0)
 		this.wrapperHeight = new Animated.Value(217)
+		this.findSplashtagOpacity = new Animated.Value(0)
 	}
 
 	dynamicHeight(event, stateProp) {
@@ -47,13 +59,27 @@ class PayFlow extends Component {
 	}
 
 	reset() {
-		this.setState({amount: "", currency: "BTC", activeSection: "chooseType"})
+		this.setState({
+			amount: "", 
+			currency: "BTC", 
+			activeSection: "chooseType", 
+			splashtagSearch: "",
+			splashtagSearchResults: [],
+			splashtag: null
+		})
+		this.props.resetQr()
 		Animated.sequence([
-			// fade out enter amount
-			Animated.timing(this.enterAmountOpacity, {
-				toValue: 0,
-				duration: 500
-			}),
+			Animated.parallel([
+				// fade out enter amount
+				Animated.timing(this.enterAmountOpacity, {
+					toValue: 0,
+					duration: 500
+				}),
+				Animated.timing(this.findSplashtagOpacity, {
+					toValue: 0,
+					duration: 500
+				})
+			]),
 			Animated.parallel([
 				// fade in choose type
 				Animated.timing(this.chooseTypeOpacity, {
@@ -75,95 +101,181 @@ class PayFlow extends Component {
 			this.reset()
 		}
 		this.setState({currency: nextProps.currency})
+
+		if (nextProps.qrAddress != null) {
+			try {
+				const address = nextProps.qrAddress
+				// just captured a qr address => move the flow along if its a real address
+				const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+				bitcoin.address.toOutputScript(address, network)
+				this.setState({activeSection: "enterAmount", address: address})
+				this.props.resetQr()
+				Animated.sequence([
+					// fade out choose type
+					Animated.timing(this.chooseTypeOpacity, {
+						toValue: 0,
+						duration: 500
+					}),
+					Animated.parallel([
+						Animated.timing(this.enterAmountOpacity, {
+							toValue: 1,
+							duration: 500
+						}),
+						Animated.timing(this.wrapperHeight, {
+							toValue: this.state.enterAmountHeight,
+							duration: 500
+						})
+					])
+				]).start()
+			}
+			catch (error) {
+				Alert.alert("Invalid bitcoin address")
+			}
+		}
+	}
+
+	handleSend() {
+
+		const amount = parseFloat(this.state.amount)
+		const address = this.state.address
+		const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+		try {
+
+			bitcoin.address.toOutputScript(address, network)
+
+			if (!this.props.balance) {
+				Alert.alert("Unable to load balance")
+			} else if (!this.props.exchangeRate) {
+				Alert.alert("Unable to load exchange rate")
+			} else if (!amount) {
+				Alert.alert("Please enter amount")
+			} else if (!address) {
+				Alert.alert("Please enter address")
+			} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
+				Alert.alert("Not enough balance")
+			} else {
+				this.props.navigation.navigate("ApproveTransactionModal", {
+					address,
+					amount: parseFloat(amount),
+					currency: this.state.currency,
+					exchangeRate: this.props.exchangeRate['USD'],
+					successCallback: () => {
+						this.reset()
+					}
+				});
+			}
+
+		} catch(e) {
+			Alert.alert("Invalid bitcoin address")
+		}
+	}
+
+	splashtagSearch(splashtag) {
+		// TODO: implement Algolia search
+		ReactNativeHapticFeedback.trigger("impactLight", true)
+		firestore.collection("users").where("splashtag", ">=", splashtag).get().then(query => {
+			let users = []
+			query.forEach(userDoc => {
+				users.push({
+					id: userDoc.id,
+					...userDoc.data()
+				})
+			})
+			console.log(this.state.splashtagSearch, users)
+			this.setState({splashtagSearchResults: users})
+		}).catch(error => {
+			console.log(error)
+			Alert.alert("An error occurred while searching for users")
+		})
+	}
+
+	handleSplashtagClick(user) {
+		this.setState({
+			activeSection: "enterAmount",
+			address: user.bitcoinAddress,
+			splashtag: user.splashtag
+		})
+		Animated.sequence([
+			// fade out choose type
+			Animated.timing(this.findSplashtagOpacity, {
+				toValue: 0,
+				duration: 500
+			}),
+			Animated.parallel([
+				Animated.timing(this.enterAmountOpacity, {
+					toValue: 1,
+					duration: 500
+				}),
+				Animated.timing(this.wrapperHeight, {
+					toValue: this.state.enterAmountHeight,
+					duration: 500
+				})
+			])
+		]).start()
 	}
 
 	handleChooseType(key) {
 
-		let animationArray = []
-		let address
-
 		switch(key) {
+
 			case "clipboard":
 				Clipboard.getString().then(address => {
-					console.log(address)
 					this.setState({address: address})
+					const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+					bitcoin.address.toOutputScript(this.state.address, network)
+					this.setState({activeSection: "enterAmount"})
+					Animated.sequence([
+						// fade out choose type
+						Animated.timing(this.chooseTypeOpacity, {
+							toValue: 0,
+							duration: 500
+						}),
+						Animated.parallel([
+							Animated.timing(this.enterAmountOpacity, {
+								toValue: 1,
+								duration: 500
+							}),
+							Animated.timing(this.wrapperHeight, {
+								toValue: this.state.enterAmountHeight,
+								duration: 500
+							}).start()
+						])
+					]).start()
+				}).catch(error => {
+					Alert.alert("Invalid bitcoin address")
+					this.reset()
 				})
-				this.setState({activeSection: "enterAmount"})
-				animationArray.push(Animated.timing(this.enterAmountOpacity, {
-					toValue: 1,
-					duration: 500
-				}))
-				animationArray.push(Animated.timing(this.wrapperHeight, {
-					toValue: this.state.enterAmountHeight,
-					duration: 500
-				}))
+				
 				break
+
+			case "splashtag":
+				this.setState({activeSection: "findSplashtag"})
+				Animated.sequence([
+					// fade out choose type
+					Animated.timing(this.chooseTypeOpacity, {
+						toValue: 0,
+						duration: 500
+					}),
+					Animated.parallel([
+						Animated.timing(this.findSplashtagOpacity, {
+							toValue: 1,
+							duration: 500
+						}),
+						Animated.timing(this.wrapperHeight, {
+							toValue: this.state.findSplashtagHeight,
+							duration: 500
+						})
+					])
+				]).start()
+				break
+
 			case "qr":
-				// TODO: get address from QR code
-				address = "sample-address"
-				this.setState({address, activeSection: "enterAmount"})
-				animationArray.push(Animated.timing(this.enterAmountOpacity, {
-					toValue: 1,
-					duration: 500
-				}))
-				animationArray.push(Animated.timing(this.wrapperHeight, {
-					toValue: this.state.enterAmountHeight,
-					duration: 500
-				}))
+				this.props.navigation.navigate("ScanQrCode")
 				break
 		}
-
-		Animated.sequence([
-			// fade out choose type
-			Animated.timing(this.chooseTypeOpacity, {
-				toValue: 0,
-				duration: 500
-			}),
-			Animated.parallel(animationArray)
-		]).start()
 	}
 
 	render() {
-
-		const handleSend = () => {
-
-			const amount = parseFloat(this.state.amount)
-			const address = this.state.address
-			const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-			try {
-
-				bitcoin.address.toOutputScript(address, network)
-
-				if (!this.props.balance) {
-					Alert.alert("Unable to load balance")
-				} else if (!this.props.exchangeRate) {
-					Alert.alert("Unable to load exchange rate")
-				} else if (!amount) {
-					Alert.alert("Please enter amount")
-				} else if (!address) {
-					Alert.alert("Please enter address")
-				} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
-					Alert.alert("Not enough balance")
-				} else {
-					this.props.navigation.navigate("ApproveTransactionModal", {
-						address,
-						amount: parseFloat(amount),
-						currency: this.state.currency,
-						exchangeRate: this.props.exchangeRate['USD']
-					});
-				}
-
-			} catch(e) {
-				Alert.alert("Invalid bitcoin address")
-			}
-		}
-
-
-		console.log(this.state)
-		
-		if (this.chooseTypeHeight) {
-			this.wrapperHeight.setValue(this.state.chooseTypeHeight)
-		}
 
 		return (
 			<Animated.View keyboardShouldPersistTaps={true} style={[styles.wrapper, {
@@ -199,11 +311,15 @@ class PayFlow extends Component {
 					pointerEvents={this.state.activeSection == "enterAmount" ? "auto" : "none"}
 					onLayout={event => this.dynamicHeight(event, "enterAmountHeight")}>
 
-					<Text style={styles.title}>Sending to bitcoin address</Text>
-					<Text style={styles.subTitle}>{this.state.address}</Text>
+					<Text style={styles.title}>
+						Sending to {this.state.splashtag != null ? `@${this.state.splashtag}` : "bitcoin address"}
+					</Text>
+					<Text style={styles.subTitle}>
+						{this.state.address}
+					</Text>
 
 					<View style={styles.amountInputWrapper}>
-						<Text style={styles.inputPrefix}>{ this.state.currency }</Text>
+						<Text style={styles.inputPrefix}>{this.state.currency}</Text>
 						<TextInput
 							onChangeText={value => {
 								this.setState({amount: value})
@@ -218,9 +334,45 @@ class PayFlow extends Component {
 			        <PayButton
 						title={"Send bitcoin"}
 						image={icons.send}
-						onPress={handleSend}/>
+						onPress={this.handleSend}/>
 					
 				</Animated.View>
+
+				<Animated.View 
+					style={[styles.section, styles.findSplashtag, {
+						opacity: this.findSplashtagOpacity
+					}]}
+					pointerEvents={this.state.activeSection == "findSplashtag" ? "auto" : "none"}
+					onLayout={event => this.dynamicHeight(event, "findSplashtagHeight")}>
+
+					<Text style={styles.title}>Search for splashtag</Text>
+					
+					<View style={styles.splashtagInputWrapper}>
+						<Text style={styles.inputPrefix}>@</Text>
+						<TextInput
+							onChangeText={value => {
+								this.setState({splashtagSearch: value})
+								this.splashtagSearch(value)
+							}}
+							autoCapitalize={"none"}
+							placeholder={"yourfriend"}
+							style={styles.splashtagInput}
+					        value={this.state.splashtagSearch}
+					        autoCorrect={false}
+				        />
+			        </View>
+
+			        {this.state.splashtagSearchResults.map(user => {
+			        	return (
+				        	<SplashtagButton
+				        		key={"splashtagButton"+user.id}
+				        		user={user}
+				        		onPress={() => this.handleSplashtagClick(user)}/>
+			        	)
+			        })}
+					
+				</Animated.View>
+
 			</Animated.View>
 		)
 	}
@@ -237,6 +389,52 @@ const styles = StyleSheet.create({
 		top: 0,
 		left: 0,
 		right: 0,
+	},
+	findSplashtag: {
+		minHeight: 280
+	},
+	splashtagSearchButton: {
+		position: "absolute",
+		right: 10,
+		top: 10,
+		justifyContent: "center",
+		alignItems: "center",
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+		backgroundColor: colors.primary
+	},
+	splashtagSearchButtonIcon: {
+		width: 20,
+		height: 20,
+		marginRight: 3,
+		marginTop: 1
+	},
+	splashtagResult: {
+		backgroundColor: colors.primary,
+		padding: 20,
+		shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
+        marginTop: 5,
+        marginBottom: 5,
+        borderRadius: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+	},
+	splashtagResultTitle: {
+		color: colors.white,
+		fontSize: 20,
+		fontWeight: "700"
+	},
+	splashtagResultSubTitle: {
+		color: colors.white,
+		fontSize: 18,
+		fontWeight: "700"
 	},
 	title: {
 		color: colors.primaryDarkText,
@@ -274,7 +472,41 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingLeft: 50,
         backgroundColor: colors.white
+	},
+	splashtagInput: {
+		padding: 20,
+		fontSize: 22,
+		fontWeight: "600"
+	},
+	splashtagInputWrapper: {
+		shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
+        marginTop: 10,
+        marginBottom: 15,
+        borderRadius: 5,
+        paddingLeft: 30,
+        paddingRight: 30,
+        backgroundColor: colors.white
 	}
 })
 
-export default PayFlow
+const mapStateToProps = state => {
+	return {
+		qrAddress: state.transactions.qrAddress
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return bindActionCreators(
+		{
+			resetQr
+		},
+		dispatch
+	)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PayFlow)

@@ -40,7 +40,6 @@ class Home extends Component {
 			transactions: props.transactions,
 			loadingExchangeRate: true,
 			loadingBalance: true,
-			yOffset: new Animated.Value(0),
 			pulledToRefresh: false,
 			refreshing: false
 		}
@@ -145,6 +144,8 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
+        this.yOffset = new Animated.Value(0)
+
 		FCM.on(FCMEvent.Notification, async notif => {
 			console.log("Notification", notif);
 			// reload on notifications
@@ -215,7 +216,7 @@ class Home extends Component {
 		}
 
 		const animatedHeader = {
-			opacity: this.state.yOffset.interpolate({
+			opacity: this.yOffset.interpolate({
 				inputRange: [75, 76, 100, 101],
 				outputRange: [0, 0, 1, 1]
 			})
@@ -224,13 +225,13 @@ class Home extends Component {
 		const animatedBalance = {
 			transform: [
 				{
-					scale: this.state.yOffset.interpolate({
+					scale: this.yOffset.interpolate({
 						inputRange: [-81, -80, 0, 55, 56],
 						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
 					})
 				},
 				{
-					translateY: this.state.yOffset.interpolate({
+					translateY: this.yOffset.interpolate({
 						inputRange: [-1, 0, 53, 54],
 						outputRange: [0, 0, -53, -53]
 					})
@@ -238,13 +239,20 @@ class Home extends Component {
 			]
 		}
 
+		const isLoading = (
+			this.state.refreshing 
+			|| this.state.loadingExchangeRate 
+			|| this.state.loadingBalance
+			|| this.props.isLoadingTransactions
+		)
+
 		return (
 			<View style={{flex: 1}}>
 				<Animated.ScrollView
 					scrollEventThrottle={16}
 					contentContainerStyle={styles.scrollContainer}
 					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { y: this.state.yOffset } } }],
+						[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
 						{
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
@@ -313,9 +321,9 @@ class Home extends Component {
 				
 				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={handleBalancePress}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						<Text style={styles.balanceText}>{!(this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? balance[this.state.currency] : " "}</Text>
+						<Text style={styles.balanceText}>{!isLoading ? balance[this.state.currency] : " "}</Text>
 						<View style={[styles.balanceRefresh, {
-							opacity: (this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? 100 : 0
+							opacity: isLoading ? 100 : 0
 						}]}>
 							<LoadingCircle size={30}/>
 						</View>
