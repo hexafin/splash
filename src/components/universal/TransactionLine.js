@@ -10,7 +10,7 @@ import { icons, defaults } from "../../lib/styles";
 import { colors } from "../../lib/colors";
 import Shimmer from 'react-native-shimmer';
 
-const TransactionLine = ({ direction, amount, date, title, onPress, loading=false, currency=null }) => {
+const TransactionLine = ({ direction, amount, date, title, onPress, pending=false, loading=false, currency=null }) => {
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.wrapper}>
@@ -22,7 +22,8 @@ const TransactionLine = ({ direction, amount, date, title, onPress, loading=fals
 					<View>
 						{!loading && <Text style={styles.title}>{title}</Text>}
 						{loading && <Shimmer style={{marginBottom: 15}}><Image style={styles.titleLoadingBar} source={icons.placeholder}/></Shimmer>}
-						{!loading && <Text style={styles.date}>{date}</Text>}
+						{!loading && !pending && <Text style={styles.date}>{date}</Text>}
+						{!loading && pending && <Text style={styles.date}>Pending</Text>}
 						{loading && <Shimmer style={{width: 66}}><Image style={styles.dateLoadingBar} source={icons.placeholder}/></Shimmer>}
 					</View>
 					<View style={styles.rightBody}>
