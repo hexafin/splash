@@ -13,6 +13,7 @@ import FCM, {
 import { NavigationActions } from "react-navigation";
 analytics.setAnalyticsCollectionEnabled(true);
 import NavigatorService from "../navigator";
+import * as Keychain from 'react-native-keychain';
 
 export const SMS_AUTH_INIT = "SMS_AUTH_INIT";
 export function smsAuthInit(phoneNumber, countryName) {
@@ -150,22 +151,29 @@ export const SignUp = user => {
 					console.log("api response", data)
 					if (data.availableUser) {
 
-						// create new bitcoin wallet
-						const bitcoinData = api.NewBitcoinWallet(network)
-
-						const entity = {
-							splashtag: splashtag,
-							phoneNumber,
-				            defaultCurrency: "USD",
-				            bitcoinAddress: bitcoinData.address
-						}
-						console.log({userId, bitcoinData})
-						userRef.set(entity).then(() => {
-							dispatch(signUpSuccess())
-							resolve({userId, bitcoinData})
-						}).catch(error => {
-							dispatch(signUpFailure(error))
-							reject(error)
+						Keychain.getGenericPassword().then(data => {
+							let bitcoinData = {}
+							if(data.username == userId) {
+								console.log('found in Keychain')
+								bitcoinData = JSON.parse(data.password)
+							} else {
+								// create new bitcoin wallet
+								bitcoinData = api.NewBitcoinWallet(network)
+							}
+							const entity = {
+								splashtag: splashtag,
+								phoneNumber,
+					            defaultCurrency: "USD",
+					            bitcoinAddress: bitcoinData.address
+							}
+							console.log({userId, bitcoinData})
+							userRef.set(entity).then(() => {
+								dispatch(signUpSuccess())
+								resolve({userId, bitcoinData})
+							}).catch(error => {
+								dispatch(signUpFailure(error))
+								reject(error)
+							})
 						})
 					}
 					else {

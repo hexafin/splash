@@ -10,6 +10,8 @@ import FCM, {
 } from "react-native-fcm"
 import NavigatorService from "../navigator"
 import {reset} from 'redux-form';
+import * as Keychain from 'react-native-keychain';
+
 let firestore = firebase.firestore()
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
@@ -63,7 +65,6 @@ export const LogIn = (userId, bitcoinData) => {
 			const state = getState()
 
 			dispatch(logInInit())
-			console.log("login bitcoin data", bitcoinData)
 
 			firestore.collection("users").doc(userId).get().then(userDoc => {
 				// TODO: watch user entity for changes to account
@@ -72,8 +73,13 @@ export const LogIn = (userId, bitcoinData) => {
 					userId: userId,
 					username: userData.splashtag
 				})
-				dispatch(logInSuccess(userId, userData, bitcoinData))
-				resolve()
+			  	Keychain.setGenericPassword(userId, JSON.stringify(bitcoinData)).then(() => {
+					dispatch(logInSuccess(userId, userData, {address: bitcoinData.address}))
+					resolve()
+			  	}).catch(error => {
+			  		dispatch(logInFailure(error))
+					reject(error)
+			  	})
 			}).catch(error => {
 				dispatch(logInFailure(error))
 				reject(error)

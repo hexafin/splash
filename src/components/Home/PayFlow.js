@@ -85,7 +85,6 @@ class PayFlow extends Component {
 		switch(key) {
 			case "clipboard":
 				Clipboard.getString().then(address => {
-					console.log(address)
 					this.setState({address: address})
 				})
 				this.setState({activeSection: "enterAmount"})
@@ -157,9 +156,6 @@ class PayFlow extends Component {
 				Alert.alert("Invalid bitcoin address")
 			}
 		}
-
-
-		console.log(this.state)
 		
 		if (this.chooseTypeHeight) {
 			this.wrapperHeight.setValue(this.state.chooseTypeHeight)

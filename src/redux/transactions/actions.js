@@ -4,6 +4,8 @@ import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
 let analytics = firebase.analytics();
 import { NavigationActions } from "react-navigation";
+import * as Keychain from 'react-native-keychain';
+
 analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
@@ -77,22 +79,25 @@ export const LoadTransactions = () => {
 
 		const state = getState()
 
-
 		api.AddBlockchainTransactions(state.user.bitcoin.address, state.user.id, state.user.bitcoinNetwork).then(() => {
-			firestore.collection("transactions").where("userId", "==", state.user.id).orderBy('timestamp', 'desc').onSnapshot(querySnapshot => {
+			let unsub = firestore.collection("transactions").where("userId", "==", state.user.id).orderBy('timestamp', 'desc').onSnapshot(querySnapshot => {
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
-				querySnapshot.forEach(doc => {
-					const transaction = {
-						id: doc.id,
-						...doc.data()
-					}
-					if (transaction.type == 'card' && transaction.approved === true) {
-						transactions.push(transaction)
-					} else if (transaction.type == "blockchain") {
-						transactions.push(transaction)
-					}
-				})
+				if (querySnapshot.size > 0) {
+					querySnapshot.forEach(doc => {
+						const transaction = {
+							id: doc.id,
+							...doc.data()
+						}
+						if (transaction.type == 'card' && transaction.approved === true) {
+							transactions.push(transaction)
+						} else if (transaction.type == "blockchain") {
+							transactions.push(transaction)
+						}
+					})
+				} else {
+					unsub()
+				}
 				dispatch(loadTransactionsSuccess(transactions))
 			}, error => {
 				dispatch(loadTransactionsFailure(error))
@@ -116,7 +121,7 @@ export const ApproveTransaction = (transaction) => {
 
 		const approveTransaction = async (transaction) => {
 			const state = getState()
-			const privateKey = state.user.bitcoin.wif
+			const privateKey = JSON.parse(await Keychain.getGenericPassword().password).wif
 			const userBtcAddress = state.user.bitcoin.address
 			const network = state.user.bitcoinNetwork
 			dispatch(approveTransactionInit(transaction))
@@ -153,7 +158,6 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
 	return (dispatch, getState) => {
 
 		const state = getState()
-		const privateKey = state.user.bitcoin.wif
 		const userBtcAddress = state.user.bitcoin.address
 		const network = state.user.bitcoinNetwork
 		const totalBtcAmount = parseFloat(btcAmount)+parseFloat(feeSatoshi/cryptoUnits.BTC)
@@ -176,14 +180,18 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
 		}
 
 		dispatch(sendTransactionInit())
-
-		api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
-			const {txid, txhex} = response
-			transaction.txId = txid
-			api.NewTransaction(transaction).then(() => {
-				dispatch(sendTransactionSuccess())
+		Keychain.getGenericPassword().then(data => {
+			const privateKey = JSON.parse(data.password).wif
+			api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
+				const {txid, txhex} = response
+				transaction.txId = txid
+				api.NewTransaction(transaction).then(() => {
+					dispatch(sendTransactionSuccess())
+				}).catch(error => {
+					dispatch(sendTransactionFailure(error))				
+				})
 			}).catch(error => {
-				dispatch(sendTransactionFailure(error))				
+				dispatch(sendTransactionFailure(error))
 			})
 		}).catch(error => {
 			dispatch(sendTransactionFailure(error))
