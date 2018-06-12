@@ -239,6 +239,13 @@ class Home extends Component {
 			]
 		}
 
+		const isLoading = (
+			this.state.refreshing 
+			|| this.state.loadingExchangeRate 
+			|| this.state.loadingBalance
+			|| this.props.isLoadingTransactions
+		)
+
 		return (
 			<View style={{flex: 1}}>
 				<Animated.ScrollView
@@ -314,9 +321,9 @@ class Home extends Component {
 				
 				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={handleBalancePress}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						<Text style={styles.balanceText}>{!(this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? balance[this.state.currency] : " "}</Text>
+						<Text style={styles.balanceText}>{!isLoading ? balance[this.state.currency] : " "}</Text>
 						<View style={[styles.balanceRefresh, {
-							opacity: (this.state.refreshing || this.state.loadingExchangeRate || this.state.loadingBalance) ? 100 : 0
+							opacity: isLoading ? 100 : 0
 						}]}>
 							<LoadingCircle size={30}/>
 						</View>

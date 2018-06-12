@@ -21,7 +21,10 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { resetQr } from "../../redux/transactions/actions"
 import PayButton from "./PayButton"
+import SplashtagButton from "./SplashtagButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import firebase from "react-native-firebase";
+let firestore = firebase.firestore();
 
 let bitcoin = require('bitcoinjs-lib')
 
@@ -32,9 +35,14 @@ class PayFlow extends Component {
 			amount: "",
 			address: "",
 			currency: props.currency,
-			activeSection: "chooseType"
+			activeSection: "chooseType",
+			splashtagSearch: "",
+			splashtagSearchResults: [],
+			splashtag: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
+		this.splashtagSearch = this.splashtagSearch.bind(this)
+		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
 		this.handleSend = this.handleSend.bind(this)
 		this.reset = this.reset.bind(this)
 		this.dynamicHeight = this.dynamicHeight.bind(this)
@@ -52,7 +60,14 @@ class PayFlow extends Component {
 	}
 
 	reset() {
-		this.setState({amount: "", currency: "BTC", activeSection: "chooseType"})
+		this.setState({
+			amount: "", 
+			currency: "BTC", 
+			activeSection: "chooseType", 
+			splashtagSearch: "",
+			splashtagSearchResults: [],
+			splashtag: null
+		})
 		this.props.resetQr()
 		Animated.sequence([
 			Animated.parallel([
@@ -136,7 +151,10 @@ class PayFlow extends Component {
 					address,
 					amount: parseFloat(amount),
 					currency: this.state.currency,
-					exchangeRate: this.props.exchangeRate['USD']
+					exchangeRate: this.props.exchangeRate['USD'],
+					successCallback: () => {
+						this.reset()
+					}
 				});
 			}
 
@@ -145,9 +163,54 @@ class PayFlow extends Component {
 		}
 	}
 
+	splashtagSearch(splashtag) {
+		// TODO: implement Algolia search
+		ReactNativeHapticFeedback.trigger("impactLight", true)
+		firestore.collection("users").where("splashtag", ">=", splashtag).get().then(query => {
+			let users = []
+			query.forEach(userDoc => {
+				users.push({
+					id: userDoc.id,
+					...userDoc.data()
+				})
+			})
+			console.log(this.state.splashtagSearch, users)
+			this.setState({splashtagSearchResults: users})
+		}).catch(error => {
+			console.log(error)
+			Alert.alert("An error occurred while searching for users")
+		})
+	}
+
+	handleSplashtagClick(user) {
+		this.setState({
+			activeSection: "enterAmount",
+			address: user.bitcoinAddress,
+			splashtag: user.splashtag
+		})
+		Animated.sequence([
+			// fade out choose type
+			Animated.timing(this.findSplashtagOpacity, {
+				toValue: 0,
+				duration: 500
+			}),
+			Animated.parallel([
+				Animated.timing(this.enterAmountOpacity, {
+					toValue: 1,
+					duration: 500
+				}),
+				Animated.timing(this.wrapperHeight, {
+					toValue: this.state.enterAmountHeight,
+					duration: 500
+				})
+			])
+		]).start()
+	}
+
 	handleChooseType(key) {
 
 		switch(key) {
+
 			case "clipboard":
 				Clipboard.getString().then(address => {
 					console.log(address)
@@ -172,6 +235,28 @@ class PayFlow extends Component {
 					])
 				]).start()
 				break
+
+			case "splashtag":
+				this.setState({activeSection: "findSplashtag"})
+				Animated.sequence([
+					// fade out choose type
+					Animated.timing(this.chooseTypeOpacity, {
+						toValue: 0,
+						duration: 500
+					}),
+					Animated.parallel([
+						Animated.timing(this.findSplashtagOpacity, {
+							toValue: 1,
+							duration: 500
+						}),
+						Animated.timing(this.wrapperHeight, {
+							toValue: this.state.findSplashtagHeight,
+							duration: 500
+						})
+					])
+				]).start()
+				break
+
 			case "qr":
 				this.props.navigation.navigate("ScanQrCode")
 				break
@@ -218,11 +303,15 @@ class PayFlow extends Component {
 					pointerEvents={this.state.activeSection == "enterAmount" ? "auto" : "none"}
 					onLayout={event => this.dynamicHeight(event, "enterAmountHeight")}>
 
-					<Text style={styles.title}>Sending to bitcoin address</Text>
-					<Text style={styles.subTitle}>{this.state.address}</Text>
+					<Text style={styles.title}>
+						Sending to {this.state.splashtag != null ? `@${this.state.splashtag}` : "bitcoin address"}
+					</Text>
+					<Text style={styles.subTitle}>
+						{this.state.address}
+					</Text>
 
 					<View style={styles.amountInputWrapper}>
-						<Text style={styles.inputPrefix}>{ this.state.currency }</Text>
+						<Text style={styles.inputPrefix}>{this.state.currency}</Text>
 						<TextInput
 							onChangeText={value => {
 								this.setState({amount: value})
@@ -242,13 +331,37 @@ class PayFlow extends Component {
 				</Animated.View>
 
 				<Animated.View 
-					style={[styles.section, {
+					style={[styles.section, styles.findSplashtag, {
 						opacity: this.findSplashtagOpacity
 					}]}
 					pointerEvents={this.state.activeSection == "findSplashtag" ? "auto" : "none"}
 					onLayout={event => this.dynamicHeight(event, "findSplashtagHeight")}>
 
+					<Text style={styles.title}>Search for splashtag</Text>
 					
+					<View style={styles.splashtagInputWrapper}>
+						<Text style={styles.inputPrefix}>@</Text>
+						<TextInput
+							onChangeText={value => {
+								this.setState({splashtagSearch: value})
+								this.splashtagSearch(value)
+							}}
+							autoCapitalize={"none"}
+							placeholder={"yourfriend"}
+							style={styles.splashtagInput}
+					        value={this.state.splashtagSearch}
+					        autoCorrect={false}
+				        />
+			        </View>
+
+			        {this.state.splashtagSearchResults.map(user => {
+			        	return (
+				        	<SplashtagButton
+				        		key={"splashtagButton"+user.id}
+				        		user={user}
+				        		onPress={() => this.handleSplashtagClick(user)}/>
+			        	)
+			        })}
 					
 				</Animated.View>
 
@@ -268,6 +381,52 @@ const styles = StyleSheet.create({
 		top: 0,
 		left: 0,
 		right: 0,
+	},
+	findSplashtag: {
+		minHeight: 280
+	},
+	splashtagSearchButton: {
+		position: "absolute",
+		right: 10,
+		top: 10,
+		justifyContent: "center",
+		alignItems: "center",
+		width: 40,
+		height: 40,
+		borderRadius: 20,
+		backgroundColor: colors.primary
+	},
+	splashtagSearchButtonIcon: {
+		width: 20,
+		height: 20,
+		marginRight: 3,
+		marginTop: 1
+	},
+	splashtagResult: {
+		backgroundColor: colors.primary,
+		padding: 20,
+		shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
+        marginTop: 5,
+        marginBottom: 5,
+        borderRadius: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+	},
+	splashtagResultTitle: {
+		color: colors.white,
+		fontSize: 20,
+		fontWeight: "700"
+	},
+	splashtagResultSubTitle: {
+		color: colors.white,
+		fontSize: 18,
+		fontWeight: "700"
 	},
 	title: {
 		color: colors.primaryDarkText,
@@ -304,6 +463,25 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         borderRadius: 5,
         paddingLeft: 50,
+        backgroundColor: colors.white
+	},
+	splashtagInput: {
+		padding: 20,
+		fontSize: 22,
+		fontWeight: "600"
+	},
+	splashtagInputWrapper: {
+		shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 12,
+        marginTop: 10,
+        marginBottom: 15,
+        borderRadius: 5,
+        paddingLeft: 30,
+        paddingRight: 30,
         backgroundColor: colors.white
 	}
 })
