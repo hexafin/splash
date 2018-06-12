@@ -109,16 +109,16 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
             if (total < 0) {
               newTransaction.to = {}
               newTransaction.to.address = txs[j].out[0].addr
-              newTransaction.amount.total = -1*total
+              newTransaction.amount.subtotal = -1*total
             } else  {
               newTransaction.from = {}
               newTransaction.from.address = txs[j].inputs[0].prev_out.addr
-              newTransaction.amount.total = total
+              newTransaction.amount.subtotal = total
             }
 
             // load fees and calculate subtotal
             newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash)).data
-            newTransaction.amount.subtotal = newTransaction.amount.total - newTransaction.amount.fee
+            newTransaction.amount.total = newTransaction.amount.subtotal + newTransaction.amount.fee
 
             // if has total add to firebase so that it can be loaded on Home
             if (newTransaction.amount.total > 0) {
