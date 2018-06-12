@@ -126,6 +126,7 @@ class Home extends Component {
 			ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			this.loadBalance()
 			this.loadExchangeRate()
+			this.props.LoadTransactions()
 		}
 	}
 
@@ -241,7 +242,7 @@ class Home extends Component {
 			<View style={{flex: 1}}>
 				<Animated.ScrollView
 					scrollEventThrottle={16}
-					contentContainerStyle={styles.container}
+					contentContainerStyle={styles.scrollContainer}
 					onScroll={Animated.event(
 						[{ nativeEvent: { contentOffset: { y: this.state.yOffset } } }],
 						{
@@ -262,47 +263,49 @@ class Home extends Component {
 							useNativeDriver: true
 						}
 					)}>
-					<Image
-						source={require("../../assets/images/headerWaveInverse.png")}
-						style={styles.waveInverse}
-						resizeMode="contain"/>
-					<PayFlow reset={this.state.refreshing}
-							 currency={this.state.currency}
-							 network={this.props.bitcoinNetwork}
-							 exchangeRate={rate}
-							 balance={balance}
-							 navigation={this.props.navigation}/>
-					<View style={styles.history}>
-						<Text style={styles.sectionTitle}>Your history</Text>
-						{this.state.transactions.map(transaction => {
-							const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
-							const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(5) : parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(2)
-							const direction = (transaction.type == "card" || typeof transaction.to !== 'undefined') ? "to" : "from"
+					<View style={styles.container}>
+						<Image
+							source={require("../../assets/images/headerWaveInverse.png")}
+							style={styles.waveInverse}
+							resizeMode="contain"/>
+						<PayFlow reset={this.state.refreshing}
+								 currency={this.state.currency}
+								 network={this.props.bitcoinNetwork}
+								 exchangeRate={rate}
+								 balance={balance}
+								 navigation={this.props.navigation}/>
+						<View style={styles.history}>
+							<Text style={styles.sectionTitle}>Your history</Text>
+							{this.state.transactions.map(transaction => {
+								const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
+								const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(5) : parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(2)
+								const direction = (transaction.type == "card" || typeof transaction.to !== 'undefined') ? "to" : "from"
 
-							return (
-								<TransactionLine
-									key={"transactionLine"+transaction.id}
-									direction={direction}
-									amount={currencyPrefix[this.state.currency] + amount}
-									date={moment.unix(transaction.timestamp).fromNow()}
-									loading={!rate || this.props.isLoadingTransactions}
-									title={
-										(transaction.type == "card")
-										? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
-										: "A bitcoin wallet"
-									}
-									currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
-									onPress={() => {
-										this.props.navigation.navigate("ViewTransactionModal", {
-											  transaction,
-											  direction,
-  						                      address: transaction.type == 'blockchain' ? transaction[direction].address : null,
-						                      exchangeRate: rate[this.state.currency],
-									  })
-									}}
-								/>
-							)
-						})}
+								return (
+									<TransactionLine
+										key={"transactionLine"+transaction.id}
+										direction={direction}
+										amount={currencyPrefix[this.state.currency] + amount}
+										date={moment.unix(transaction.timestamp).fromNow()}
+										loading={!rate || this.props.isLoadingTransactions}
+										title={
+											(transaction.type == "card")
+											? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
+											: "A bitcoin wallet"
+										}
+										currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
+										onPress={() => {
+											this.props.navigation.navigate("ViewTransactionModal", {
+												  transaction,
+												  direction,
+	  						                      address: transaction.type == 'blockchain' ? transaction[direction].address : null,
+							                      exchangeRate: rate[this.state.currency],
+										  })
+										}}
+									/>
+								)
+							})}
+						</View>
 					</View>
 				</Animated.ScrollView>
 				<Animated.View style={[styles.header]}/>
@@ -328,13 +331,16 @@ class Home extends Component {
 }
 
 const styles = StyleSheet.create({
+	scrollContainer: {
+		marginTop: 0,
+		paddingTop: 0,
+		position: "relative"
+	},
 	container: {
-		justifyContent: "space-between",
-		backgroundColor: colors.white,
 		marginTop: 210,
 		paddingTop: 0,
 		position: "relative",
-		flex: 1
+		backgroundColor: colors.white
 	},
 	header: {
 		flexDirection: "column",
@@ -411,9 +417,8 @@ const styles = StyleSheet.create({
 		fontWeight: "700"
 	},
 	history: {
-		flex: 1,
 		padding: 20,
-		backgroundColor: colors.white
+		// backgroundColor: colors.white
 	},
 	sendButton: {
 		position: "absolute",
