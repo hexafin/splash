@@ -140,7 +140,6 @@ class PayFlow extends Component {
 		const address = this.state.address
 		const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
 		try {
-
 			bitcoin.address.toOutputScript(address, network)
 
 			if (!this.props.balance) {
@@ -273,8 +272,8 @@ class PayFlow extends Component {
 				this.props.navigation.navigate("ScanQrCode")
 				break
 		}
-	}
-
+  }
+  
 	render() {
 
 		return (

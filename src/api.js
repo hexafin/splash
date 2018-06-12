@@ -631,6 +631,23 @@ function LoadFriends(facebook_id, access_token) {
     })
 }
 
+async function DeleteAccount(userId) {
+  try {
+    const query = await firestore.collection("transactions").where("userId", '==', userId).get()
+    query.forEach(async (doc) => {
+      console.log(doc.id)
+      try {
+        await doc.ref.delete()
+      } catch(e) {
+          console.log(e)
+      }
+    })
+    await firestore.collection('users').doc(userId).delete()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 // log
 function Log(type, content) {
     if (type == "feedback") {
@@ -652,6 +669,7 @@ export default api = {
     UpdateAccount: UpdateAccount,
     UpdateTransaction,
     GenerateCard,
+    DeleteAccount,
     AddBlockchainTransactions,
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,

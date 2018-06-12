@@ -208,7 +208,7 @@ class Home extends Component {
 			}
 		}
 
-		let rate = null
+		let rate = {'USD': 0, 'BTC': 0}
 		if (!!this.state.exchangeRate) {
 			rate = this.state.exchangeRate
 		} else if (!!this.props.exchangeRates) {
