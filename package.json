@@ -38,6 +38,7 @@
     "raven-for-redux": "^1.2.0",
     "react": "16.0.0",
     "react-dom": "^16.2.0",
+    "react-instantsearch": "^5.1.0",
     "react-native": "0.50.3",
     "react-native-camera": "^1.1.4",
     "react-native-code-push": "^5.2.1",
