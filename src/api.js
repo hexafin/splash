@@ -48,24 +48,18 @@ function NewBitcoinWallet(network='mainnet') {
 
 function GetAddressBalance(address, network='mainnet') {
   return new Promise((resolve, reject) => {
-    if (network == 'mainnet') {
-        const APIaddress = 'https://blockchain.info/q/addressbalance/' + address + '?confirmations=6'
-        axios.get(APIaddress)
-        .then(response => {
-          if (response.data !== null){
-            resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
-          } else {
-            reject('Cannot retrieve balance');
-          }
-        })
-        .catch(error => {
-          reject(error);
-        });
-    } else {
-      axios.get('https://testnet.blockexplorer.com/api/addr/' + address + '/balance').then(response => {
-					resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
-      })
-    }
+    const APIaddress = (network == 'mainnet') ? 'https://blockchain.info/q/addressbalance/' : 'https://testnet.blockchain.info/q/addressbalance/'
+    axios.get(APIaddress + address + '?confirmations=6')
+    .then(response => {
+      if (response.data !== null){
+        resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
+      } else {
+        reject('Cannot retrieve balance');
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
   });
 }
 

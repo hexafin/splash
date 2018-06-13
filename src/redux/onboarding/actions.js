@@ -148,13 +148,14 @@ export const SignUp = user => {
 			let userRef = firestore.collection("users").doc(userId)
 			userRef.get().then(userDoc => {
 				api.UsernameExists(splashtag).then(data => {
-					console.log("api response", data)
+
 					if (data.availableUser) {
 
 						Keychain.getGenericPassword().then(data => {
+
 							let bitcoinData = {}
 							if(data.username == userId) {
-								console.log('found in Keychain')
+								console.log('Bitcoin address found in Keychain')
 								bitcoinData = JSON.parse(data.password)
 							} else {
 								// create new bitcoin wallet
@@ -166,7 +167,7 @@ export const SignUp = user => {
 					            defaultCurrency: "USD",
 					            bitcoinAddress: bitcoinData.address
 							}
-							console.log({userId, bitcoinData})
+
 							userRef.set(entity).then(() => {
 								dispatch(signUpSuccess())
 								resolve({userId, bitcoinData})
@@ -174,6 +175,9 @@ export const SignUp = user => {
 								dispatch(signUpFailure(error))
 								reject(error)
 							})
+						}).catch(error => {
+							dispatch(signUpFailure(error))
+							reject(error)
 						})
 					}
 					else {
