@@ -21,11 +21,16 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { resetQr } from "../../redux/transactions/actions"
 import PayButton from "./PayButton"
+import SearchBox from "./SearchBox"
+import Hits from "./Hits"
 import SplashtagButton from "./SplashtagButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import { InstantSearch } from 'react-instantsearch/native';
 import firebase from "react-native-firebase";
 let bitcoin = require('bitcoinjs-lib') 
 let firestore = firebase.firestore();
+
+import { algoliaKeys } from '../../../env/keys.json'
 
 class PayFlow extends Component {
 	constructor(props) {
@@ -40,7 +45,6 @@ class PayFlow extends Component {
 			splashtag: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
-		this.splashtagSearch = this.splashtagSearch.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
 		this.handleSend = this.handleSend.bind(this)
 		this.reset = this.reset.bind(this)
@@ -169,25 +173,6 @@ class PayFlow extends Component {
 		}
 	}
 
-	splashtagSearch(splashtag) {
-		// TODO: implement Algolia search
-		ReactNativeHapticFeedback.trigger("impactLight", true)
-		firestore.collection("users").where("splashtag", ">=", splashtag).get().then(query => {
-			let users = []
-			query.forEach(userDoc => {
-				users.push({
-					id: userDoc.id,
-					...userDoc.data()
-				})
-			})
-			console.log(this.state.splashtagSearch, users)
-			this.setState({splashtagSearchResults: users})
-		}).catch(error => {
-			console.log(error)
-			Alert.alert("An error occurred while searching for users")
-		})
-	}
-
 	handleSplashtagClick(user) {
 		this.setState({
 			activeSection: "enterAmount",
@@ -280,98 +265,76 @@ class PayFlow extends Component {
 			<Animated.View keyboardShouldPersistTaps={true} style={[styles.wrapper, {
 				height: this.wrapperHeight
 			}]}>
-				<Animated.View
-					style={[styles.section, {
-						opacity: this.chooseTypeOpacity
-					}]}
-					pointerEvents={this.state.activeSection == "chooseType" ? "auto" : "none"}
-					onLayout={event => this.dynamicHeight(event, "chooseTypeHeight")}>
+				<InstantSearch {...algoliaKeys}>
+					<Animated.View
+						style={[styles.section, {
+							opacity: this.chooseTypeOpacity
+						}]}
+						pointerEvents={this.state.activeSection == "chooseType" ? "auto" : "none"}
+						onLayout={event => this.dynamicHeight(event, "chooseTypeHeight")}>
 
-					<Text style={styles.title}>Pay with bitcoin</Text>
-					<PayButton
-						title="Scan QR code"
-						image={icons.qrIcon}
-						onPress={() => this.handleChooseType("qr")}/>
-					<PayButton
-						title="Send to splashtag"
-						image={icons.at}
-						onPress={() => this.handleChooseType("splashtag")}/>
-					<PayButton
-						title="Send to copied address"
-						textOnly={true}
-						onPress={() => this.handleChooseType("clipboard")}/>
+						<Text style={styles.title}>Pay with bitcoin</Text>
+						<PayButton
+							title="Scan QR code"
+							image={icons.qrIcon}
+							onPress={() => this.handleChooseType("qr")}/>
+						<PayButton
+							title="Send to splashtag"
+							image={icons.at}
+							onPress={() => this.handleChooseType("splashtag")}/>
+						<PayButton
+							title="Send to copied address"
+							textOnly={true}
+							onPress={() => this.handleChooseType("clipboard")}/>
 
-				</Animated.View>
+					</Animated.View>
 
-				<Animated.View 
-					style={[styles.section, {
-						opacity: this.enterAmountOpacity
-					}]}
-					pointerEvents={this.state.activeSection == "enterAmount" ? "auto" : "none"}
-					onLayout={event => this.dynamicHeight(event, "enterAmountHeight")}>
+					<Animated.View 
+						style={[styles.section, {
+							opacity: this.enterAmountOpacity
+						}]}
+						pointerEvents={this.state.activeSection == "enterAmount" ? "auto" : "none"}
+						onLayout={event => this.dynamicHeight(event, "enterAmountHeight")}>
 
-					<Text style={styles.title}>
-						Sending to {this.state.splashtag != null ? `@${this.state.splashtag}` : "bitcoin address"}
-					</Text>
-					<Text style={styles.subTitle}>
-						{this.state.address}
-					</Text>
+						<Text style={styles.title}>
+							Sending to {this.state.splashtag != null ? `@${this.state.splashtag}` : "bitcoin address"}
+						</Text>
+						<Text style={styles.subTitle}>
+							{this.state.address}
+						</Text>
 
-					<View style={styles.amountInputWrapper}>
-						<Text style={styles.inputPrefix}>{this.state.currency}</Text>
-						<TextInput
-							onChangeText={value => {
-								this.setState({amount: value})
-							}}
-							placeholder={"How much?"}
-							style={styles.amountInput}
-							keyboardType="numeric"
-					        value={this.state.amount}
-				        />
-			        </View>
+						<View style={styles.amountInputWrapper}>
+							<Text style={styles.inputPrefix}>{this.state.currency}</Text>
+							<TextInput
+								onChangeText={value => {
+									this.setState({amount: value})
+								}}
+								placeholder={"How much?"}
+								style={styles.amountInput}
+								keyboardType="numeric"
+						        value={this.state.amount}
+					        />
+				        </View>
 
-			        <PayButton
-						title={"Send bitcoin"}
-						image={icons.send}
-						onPress={this.handleSend}/>
-					
-				</Animated.View>
+				        <PayButton
+							title={"Send bitcoin"}
+							image={icons.send}
+							onPress={this.handleSend}/>
+						
+					</Animated.View>
 
-				<Animated.View 
-					style={[styles.section, styles.findSplashtag, {
-						opacity: this.findSplashtagOpacity
-					}]}
-					pointerEvents={this.state.activeSection == "findSplashtag" ? "auto" : "none"}
-					onLayout={event => this.dynamicHeight(event, "findSplashtagHeight")}>
+					<Animated.View 
+						style={[styles.section, styles.findSplashtag, {
+							opacity: this.findSplashtagOpacity
+						}]}
+						pointerEvents={this.state.activeSection == "findSplashtag" ? "auto" : "none"}
+						onLayout={event => this.dynamicHeight(event, "findSplashtagHeight")}>
 
-					<Text style={styles.title}>Search for splashtag</Text>
-					
-					<View style={styles.splashtagInputWrapper}>
-						<Text style={styles.inputPrefix}>@</Text>
-						<TextInput
-							onChangeText={value => {
-								this.setState({splashtagSearch: value})
-								this.splashtagSearch(value)
-							}}
-							autoCapitalize={"none"}
-							placeholder={"yourfriend"}
-							style={styles.splashtagInput}
-					        value={this.state.splashtagSearch}
-					        autoCorrect={false}
-				        />
-			        </View>
-
-			        {this.state.splashtagSearchResults.map(user => {
-			        	return (
-				        	<SplashtagButton
-				        		key={"splashtagButton"+user.id}
-				        		user={user}
-				        		onPress={() => this.handleSplashtagClick(user)}/>
-			        	)
-			        })}
-					
-				</Animated.View>
-
+						<Text style={styles.title}>Search for splashtag</Text>
+						<SearchBox />
+						<Hits callback={this.handleSplashtagClick}/>
+					</Animated.View>
+				</InstantSearch>
 			</Animated.View>
 		)
 	}
