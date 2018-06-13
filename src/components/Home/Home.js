@@ -296,6 +296,7 @@ class Home extends Component {
 										amount={currencyPrefix[this.state.currency] + amount}
 										date={moment.unix(transaction.timestamp).fromNow()}
 										loading={!rate || this.props.isLoadingTransactions}
+										pending={transaction.pending}
 										title={
 											(transaction.type == "card")
 											? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
