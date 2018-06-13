@@ -1,47 +1,27 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '9.0'
 
 target 'splash' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
 
-  # Pods for hexa
+  # Pods for splash
 
-  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-  pod 'React', :path => '../node_modules/react-native'
+  # Required by RNFirebase
+  pod 'Firebase/Core', '~> 5.0.1'
 
-  pod 'Firebase/Core'
-  pod 'Firebase/DynamicLinks'
-  pod 'Firebase/Firestore'
+  # [OPTIONAL PODS] - comment out pods for firebase products you won't be using.
+  pod 'Firebase/AdMob'
   pod 'Firebase/Auth'
+  pod 'Firebase/Database'
+  pod 'Firebase/DynamicLinks'
+  pod 'Firebase/Performance'
+  pod 'Firebase/Firestore'
   pod 'Firebase/Messaging'
-  # pod "coinbase-official"
+  pod 'Firebase/RemoteConfig'
+  pod 'Firebase/Storage'
+  
+  pod 'Fabric', '~> 1.7.6'
+  pod 'Crashlytics', '~> 3.10.1'
 
-  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
-  pod 'CodePush', :path => '../node_modules/react-native-code-push'
-
-  pod 'react-native-shimmer', :path => '../node_modules/react-native-shimmer'
-  pod 'react-native-camera', path: '../node_modules/react-native-camera'
-  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
-
-  pod 'TouchID', :path => "../node_modules/react-native-touch-id"
-
-  pod 'lottie-ios', :path => '../node_modules/lottie-ios'
-  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
-
-  pod 'RNKeychain', :path => '../node_modules/react-native-keychain'
-
-  target 'splashTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    if target.name == "React"
-      target.remove_from_project
-    end
-  end
 end

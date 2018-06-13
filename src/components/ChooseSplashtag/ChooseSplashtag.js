@@ -156,7 +156,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         position: "relative",
         paddingBottom: 0,
-        paddingTop: 60
+        paddingTop: 60,
+        backgroundColor: colors.white
     },
     wavesImage: {
         position: "absolute",

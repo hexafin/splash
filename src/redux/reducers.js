@@ -4,10 +4,10 @@ import transactions from "./transactions/reducer"
 import { reducer as formReducer } from 'redux-form';
 
 const reducers = {
-		user,
+	user,
     onboarding,
    	form: formReducer,
-		transactions
+	transactions
 }
 
 export default reducers

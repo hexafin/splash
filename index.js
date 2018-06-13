@@ -1,4 +1,3 @@
 import { AppRegistry } from 'react-native';
 import App from './src';
-
-AppRegistry.registerComponent('hexa', () => App);
+AppRegistry.registerComponent('splash', () => App);

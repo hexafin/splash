@@ -35,7 +35,7 @@ class VerifyPhoneNumber extends Component {
         this.setState(prevState => {
             return {
                 ...prevState,
-                 confirmResult: this.props.navigation.state.params.confirmResult
+                 confirmResult: (this.props.navigation.state.params) ? this.props.navigation.state.params.confirmResult : null
             }
         })
         this.props.navigation.setParams({ confirmResult: null })
@@ -49,13 +49,17 @@ class VerifyPhoneNumber extends Component {
                 const {userId, bitcoinData} = data
                 this.props.LogIn(userId, bitcoinData).then(() => {
                     this.props.navigation.navigate("SwipeApp")
-                    FCM.requestPermissions().then(() =>
-                        FCM.getFCMToken().then(token => {
-                            api.UpdateAccount(user.uid, {push_token: token})
-                        })
-                    ).catch(error => {
-                        console.log("FCM error", error)
-                    })
+
+                    // TODO: FCM -> firebase messaging
+
+                    // FCM.requestPermissions().then(() =>
+                    //     FCM.getFCMToken().then(token => {
+                    //         api.UpdateAccount(user.uid, {push_token: token})
+                    //     })
+                    // ).catch(error => {
+                    //     console.log("FCM error", error)
+                    // })
+                    
                 }).catch(error => {
                     console.log(error)
                     Alert.alert("An error occurred while logging in. Please try again later")

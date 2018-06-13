@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>620766359263-1tlm8j49rvd769jdit95k8qk3mm35dva.apps.googleusercontent.com</string>
+	<string>620766359263-df4rc1dn67t2kaim49i8bhtrj71bjd2c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.620766359263-1tlm8j49rvd769jdit95k8qk3mm35dva</string>
+	<string>com.googleusercontent.apps.620766359263-df4rc1dn67t2kaim49i8bhtrj71bjd2c</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCh54T72LbK0TfTDZ1ZK8M7toKp8VvrLl0</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.splash-wallet</string>
+	<string>com.hexafinancialgroup.splash</string>
 	<key>PROJECT_ID</key>
 	<string>hexa-splash</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:620766359263:ios:e212579b7160f254</string>
+	<string>1:620766359263:ios:6236ffce9b31b016</string>
 	<key>DATABASE_URL</key>
 	<string>https://hexa-splash.firebaseio.com</string>
 </dict>
