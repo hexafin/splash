@@ -1,6 +1,6 @@
 {
   "name": "splash",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
   "devDependencies": {
     "babel-jest": "22.0.6",
@@ -18,6 +18,7 @@
     "start": "react-native start",
     "bundle": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ./ios",
     "test": "jest",
+    "codepush": "rm -r codepush;mkdir codepush;react-native bundle --entry-file index.js --platform ios --dev false --bundle-output codepush/main.jsbundle --assets-dest codepush;code-push release lukas.burger/Splash-iOS codepush $npm_package_version",
     "postinstall": "./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto --hack"
   },
   "jest": {
@@ -29,6 +30,7 @@
     "bitcoin-transaction": "^1.1.0",
     "bitcoinjs-lib": "^3.3.2",
     "buffer": "^4.9.1",
+    "crypto": "^1.0.1",
     "events": "^1.1.1",
     "fbjs": "^0.8.16",
     "lottie-react-native": "^2.5.0",
