@@ -20,15 +20,16 @@ import { cryptoUnits } from '../../lib/cryptos'
 class ViewTransactionModal extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			backgroundOpacity: new Animated.Value(0.0)
-		};
+	}
+
+	componentWillMount() {
+		this.backgroundOpacity = new Animated.Value(0)
 	}
 
 	componentDidMount() {
 		Animated.sequence([
 			Animated.delay(300),
-			Animated.timing(this.state.backgroundOpacity, {
+			Animated.timing(this.backgroundOpacity, {
 				toValue: 1,
 				easing: Easing.linear(),
 				duration: 200
@@ -61,7 +62,7 @@ class ViewTransactionModal extends Component {
 	    const infoMessage = (direction == 'from') ? 'Received from' : 'Sent to'
 
 		const dismiss = () => {
-			Animated.timing(this.state.backgroundOpacity, {
+			Animated.timing(this.backgroundOpacity, {
 				toValue: 0,
 				duration: 200,
 				easing: Easing.linear()
@@ -75,7 +76,7 @@ class ViewTransactionModal extends Component {
 		return (
 			<Animated.View
 				style={[styles.container, {
-						backgroundColor: this.state.backgroundOpacity.interpolate(
+						backgroundColor: this.backgroundOpacity.interpolate(
 							{inputRange: [0, 1], outputRange: ["rgba(0, 0, 0, 0)", "rgba(0, 0, 0, 0.2)"]}
 						)
 					}
