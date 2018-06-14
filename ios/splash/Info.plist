@@ -42,7 +42,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>CodePushDeploymentKey</key>
 	<string>nqrtt2vykC-hrpl8Zl1nyXQkk-Axce58783f-382c-4fdf-ac63-34fafe94030d</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -58,24 +58,24 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) Apple Music use.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>$(PRODUCT_NAME) bluetooth use.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>$(PRODUCT_NAME) calendar use.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Use your camera to scan a QR code</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Secure your private keys with Face ID</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>$(PRODUCT_NAME) calendar use.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) photo library use.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>$(PRODUCT_NAME) bluetooth use.</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>$(PRODUCT_NAME) Apple Music use.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>$(PRODUCT_NAME) motion use.</string>
-	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>$(PRODUCT_NAME) speech recognition use.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMotionUsageDescription</key>
+	<string>$(PRODUCT_NAME) motion use.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) photo library use.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>$(PRODUCT_NAME) speech recognition use.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
