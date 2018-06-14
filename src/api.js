@@ -48,24 +48,18 @@ function NewBitcoinWallet(network='mainnet') {
 
 function GetAddressBalance(address, network='mainnet') {
   return new Promise((resolve, reject) => {
-    if (network == 'mainnet') {
-        const APIaddress = 'https://blockchain.info/q/addressbalance/' + address + '?confirmations=6'
-        axios.get(APIaddress)
-        .then(response => {
-          if (response.data !== null){
-            resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
-          } else {
-            reject('Cannot retrieve balance');
-          }
-        })
-        .catch(error => {
-          reject(error);
-        });
-    } else {
-      axios.get('https://testnet.blockexplorer.com/api/addr/' + address + '/balance').then(response => {
-					resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
-      })
-    }
+    const APIaddress = (network == 'mainnet') ? 'https://blockchain.info/q/addressbalance/' : 'https://testnet.blockchain.info/q/addressbalance/'
+    axios.get(APIaddress + address + '?confirmations=6')
+    .then(response => {
+      if (response.data !== null){
+        resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
+      } else {
+        reject('Cannot retrieve balance');
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
   });
 }
 
@@ -74,24 +68,34 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
     const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
     const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
     const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
+    const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
 
     // get list of txs on firebase
     const query = await firestore.collection("transactions").where("userId", "==", userId).where("type", "==", "blockchain").get()
+    let firebaseTxIds = []
     let firebaseTxs = []
     query.forEach(doc => {
-      firebaseTxs.push(doc.data().txId)
+      firebaseTxIds.push(doc.data().txId)
+      firebaseTxs.push(doc.data())
     })
 
     // load txs from blockchain
-    const response = await axios.get(addressAPI)
-    const txs = response.data.txs
+    const blockHeight = (await axios.get(blockHeightAPI)).data
+    const txs = (await axios.get(addressAPI)).data.txs
     const txsLength = txs.length
-    if (txsLength > firebaseTxs.length) {
+    if (txsLength > firebaseTxIds.length) {
 
       for(var j=0; j < txsLength; j++) {
 
+        const index = firebaseTxIds.indexOf(txs[j].hash)
+
         // if the txId is not on firebase and the transaction is important (ie not both from and to the user)
-        if (firebaseTxs.indexOf(txs[j].hash) == -1 && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+        if ((index == -1 || firebaseTxs[index].pending == true || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+
+            let pending = false
+            if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
+              pending = true
+            }
 
             let newTransaction = {
               amount: {},
@@ -100,6 +104,7 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
               timestamp: txs[j].time,
               currency: 'BTC',
               txId: txs[j].hash,
+              pending: pending,
               userId: userId,
               type: 'blockchain'
             }
@@ -122,7 +127,7 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
 
             // if has total add to firebase so that it can be loaded on Home
             if (newTransaction.amount.total > 0) {
-              await firestore.collection("transactions").add(newTransaction)
+              await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction)
             }
          }
       }
