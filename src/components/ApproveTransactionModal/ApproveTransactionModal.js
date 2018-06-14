@@ -12,17 +12,20 @@ class ApproveTransactionModal extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			backgroundOpacity: new Animated.Value(0.0),
 			success: false,
 			wasLoading: false,
 			feeSatoshi: null,
 		}
 	}
 
+	componentWillMount() {
+		this.backgroundOpacity = new Animated.Value(0)
+	}
+
 	componentDidMount() {
 		Animated.sequence([
 		 Animated.delay(300),
-		 Animated.timing(this.state.backgroundOpacity, {
+		 Animated.timing(this.backgroundOpacity, {
  			toValue: 1,
  			easing: Easing.linear(),
  			duration: 200
@@ -110,7 +113,7 @@ class ApproveTransactionModal extends Component {
 		}
 
 		const dismiss = () => {
-			Animated.timing(this.state.backgroundOpacity, {
+			Animated.timing(this.backgroundOpacity, {
 				toValue: 0,
 				duration: 200,
 				easing: Easing.linear(),
@@ -124,7 +127,7 @@ class ApproveTransactionModal extends Component {
 
 		return (
 			<TouchableWithoutFeedback onPress={() => dismiss()}>
-			<Animated.View style={[styles.container, {backgroundColor: this.state.backgroundOpacity.interpolate({
+			<Animated.View style={[styles.container, {backgroundColor: this.backgroundOpacity.interpolate({
 																										        inputRange: [0, 1],
 																									        outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']
 																										    })}]}>
