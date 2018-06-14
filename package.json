@@ -27,7 +27,6 @@
   "dependencies": {
     "assert": "^1.4.1",
     "axios": "^0.18.0",
-    "bitcoin-transaction": "^1.1.0",
     "bitcoinjs-lib": "^3.3.2",
     "buffer": "^4.9.1",
     "crypto": "^1.0.1",

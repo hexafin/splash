@@ -311,7 +311,7 @@ class Home extends Component {
 												  transaction,
 												  direction,
 	  						                      address: transaction.type == 'blockchain' ? transaction[direction].address : null,
-							                      exchangeRate: rate[this.state.currency],
+							                      exchangeRate: rate['USD'],
 										  })
 										}}
 									/>
