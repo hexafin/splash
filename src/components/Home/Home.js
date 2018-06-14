@@ -146,30 +146,33 @@ class Home extends Component {
 
         this.yOffset = new Animated.Value(0)
 
-		FCM.on(FCMEvent.Notification, async notif => {
-			console.log("Notification", notif);
-			// reload on notifications
-			const {
-				transactionId,
-				relativeAmount,
-				domain,
-				relativeCurrency
-			} = notif;
-			if (transactionId && relativeAmount && domain && relativeCurrency) {
-				api.GetExchangeRate().then(exchangeRate => {
-					this.props.navigation.navigate("ApproveCardModal", {
-						transactionId,
-						relativeAmount,
-						domain,
-						relativeCurrency,
-						exchangeRate: exchangeRate[relativeCurrency]
-					});
-				}).catch(error => {
-					// Alert.alert("Could not load exchange rate")
-					// TODO: better visual error handling
-				})
-			}
-		});
+        // TODO: FCM -> firebase messagin
+        // TODO: determine whether or not to open modal based on firebase data
+        
+		// FCM.on(FCMEvent.Notification, async notif => {
+		// 	console.log("Notification", notif);
+		// 	// reload on notifications
+		// 	const {
+		// 		transactionId,
+		// 		relativeAmount,
+		// 		domain,
+		// 		relativeCurrency
+		// 	} = notif;
+		// 	if (transactionId && relativeAmount && domain && relativeCurrency) {
+		// 		api.GetExchangeRate().then(exchangeRate => {
+		// 			this.props.navigation.navigate("ApproveCardModal", {
+		// 				transactionId,
+		// 				relativeAmount,
+		// 				domain,
+		// 				relativeCurrency,
+		// 				exchangeRate: exchangeRate[relativeCurrency]
+		// 			});
+		// 		}).catch(error => {
+		// 			// Alert.alert("Could not load exchange rate")
+		// 			// TODO: better visual error handling
+		// 		})
+		// 	}
+		// });
 	}
   
   componentDidMount() {
@@ -326,7 +329,7 @@ class Home extends Component {
 						<View style={[styles.balanceRefresh, {
 							opacity: isLoading ? 100 : 0
 						}]}>
-							<LoadingCircle size={30}/>
+							<LoadingCircle size={30} restart={isLoading}/>
 						</View>
 						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
 							<Image source={icons.refresh} style={styles.refreshIcon}/>

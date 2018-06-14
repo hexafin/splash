@@ -4,13 +4,9 @@
 <dict>
 	<key>aps-environment</key>
 	<string>development</string>
-	<key>com.apple.developer.associated-domains</key>
-	<array>
-		<string>applinks:j9kf3.app.goo.gl</string>
-	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.splash-wallet</string>
+		<string>$(AppIdentifierPrefix)com.hexafinancialgroup.splash</string>
 	</array>
 </dict>
 </plist>

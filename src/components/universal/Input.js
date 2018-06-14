@@ -107,8 +107,9 @@ const styles = StyleSheet.create({
 		shadowRadius: defaults.shadowRadius,
 		borderRadius: 5,
 		padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+	    flexDirection: 'row',
+	    alignItems: 'center',
+	    backgroundColor: colors.white
 	},
 	multiInput: {
 		padding: 20,

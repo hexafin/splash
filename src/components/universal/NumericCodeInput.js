@@ -79,7 +79,7 @@ class NumericCodeInput extends Component {
     }
 }
 
-NumericCodeInput.PropTypes = {
+NumericCodeInput.propTypes = {
     autofocus: PropTypes.bool,
     size: PropTypes.number,
     code: PropTypes.string,
@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.1,
 		shadowRadius: 10,
-        borderRadius: 5
+        borderRadius: 5,
+        backgroundColor: colors.white
     },
     codeInput: {
         flex: 1,

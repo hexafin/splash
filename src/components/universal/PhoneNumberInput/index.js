@@ -694,7 +694,8 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 10,
-        borderRadius: 5
+        borderRadius: 5,
+        backgroundColor: colors.white
     },
     divider: {
         width: 1,

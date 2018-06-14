@@ -1,7 +1,8 @@
 import React, { Component } from "react"
-import { TabNavigator, StackNavigator } from "react-navigation"
+import { createBottomTabNavigator, createStackNavigator } from "react-navigation"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
+import { colors } from "./lib/colors"
 
 import Landing from "./components/Landing"
 import ChooseSplashtag from "./components/ChooseSplashtag"
@@ -68,7 +69,7 @@ function forVertical(props) {
 // 	}
 // );
 
-const OnboardingRouter = TabNavigator(
+const OnboardingRouter = createBottomTabNavigator(
 	{
 		Landing: {
 			screen: Landing,
@@ -98,11 +99,13 @@ const OnboardingRouter = TabNavigator(
 	{
 		animationEnabled: true,
 		swipeEnabled: false,
-		initialRouteName: "Landing"
+		initialRouteName: "Landing",
+		activeBackgroundColor: colors.white,
+		inactiveBackgroundColor: colors.white
 	}
 )
 
-const AppRouter = StackNavigator(
+const AppRouter = createStackNavigator(
 	{
 		ApproveCardModal: {
 			screen: ApproveCardModal
@@ -136,7 +139,7 @@ const AppRouter = StackNavigator(
 )
 
 export default (loggedIn) => {
-	return StackNavigator(
+	return createStackNavigator(
 		{
 			AppRouter: {
 				screen: AppRouter

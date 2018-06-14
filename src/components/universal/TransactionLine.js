@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.05,
 		shadowRadius: 12,
 		marginTop: 15,
-		borderRadius: 5
+		borderRadius: 5,
+		backgroundColor: colors.white
 	},
 	letterPreview: {
 		width: 30,
