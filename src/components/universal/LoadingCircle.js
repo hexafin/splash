@@ -21,6 +21,13 @@ Usage:
 */
 
 export default class LoadingCircle extends Component {
+
+    componentDidReceiveProps(nextProps) {
+        if (nextProps.restart === true) {
+            this.animation.play()
+        }
+    }
+
     componentDidMount() {
         this.animation.play()
     }
