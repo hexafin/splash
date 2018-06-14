@@ -343,7 +343,6 @@ class PayFlow extends Component {
 const styles = StyleSheet.create({
 	wrapper: {
 		margin: 20,
-		backgroundColor: colors.white,
 		position: "relative",
 	},
 	section: {

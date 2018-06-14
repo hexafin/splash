@@ -144,8 +144,6 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
-        this.yOffset = new Animated.Value(0)
-
         // TODO: FCM -> firebase messagin
         // TODO: determine whether or not to open modal based on firebase data
         
@@ -218,30 +216,6 @@ class Home extends Component {
 			rate = this.props.exchangeRates
 		}
 
-		const animatedHeader = {
-			opacity: this.yOffset.interpolate({
-				inputRange: [75, 76, 100, 101],
-				outputRange: [0, 0, 1, 1]
-			})
-		}
-
-		const animatedBalance = {
-			transform: [
-				{
-					scale: this.yOffset.interpolate({
-						inputRange: [-81, -80, 0, 55, 56],
-						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
-					})
-				},
-				{
-					translateY: this.yOffset.interpolate({
-						inputRange: [-1, 0, 53, 54],
-						outputRange: [0, 0, -53, -53]
-					})
-				}
-			]
-		}
-
 		const isLoading = (
 			this.state.refreshing 
 			|| this.state.loadingExchangeRate 
@@ -250,12 +224,12 @@ class Home extends Component {
 		)
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.wrapper}>
 				<Animated.ScrollView
 					scrollEventThrottle={16}
 					contentContainerStyle={styles.scrollContainer}
 					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+						[{ nativeEvent: { contentOffset: { y: this.props.yOffset } } }],
 						{
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
@@ -275,10 +249,6 @@ class Home extends Component {
 						}
 					)}>
 					<View style={styles.container}>
-						<Image
-							source={require("../../assets/images/headerWaveInverse.png")}
-							style={styles.waveInverse}
-							resizeMode="contain"/>
 						<PayFlow reset={this.state.refreshing}
 								 currency={this.state.currency}
 								 network={this.props.bitcoinNetwork}
@@ -320,108 +290,23 @@ class Home extends Component {
 						</View>
 					</View>
 				</Animated.ScrollView>
-				<Animated.View style={[styles.header]}/>
-				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
-				
-				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={handleBalancePress}>
-					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						<Text style={styles.balanceText}>{!isLoading ? balance[this.state.currency] : " "}</Text>
-						<View style={[styles.balanceRefresh, {
-							opacity: isLoading ? 100 : 0
-						}]}>
-							<LoadingCircle size={30} restart={isLoading}/>
-						</View>
-						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
-							<Image source={icons.refresh} style={styles.refreshIcon}/>
-							<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
-						</View>
-					</Animated.View>
-				</TouchableWithoutFeedback>
 			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	wrapper: {
+		marginTop: 145
+	},
 	scrollContainer: {
-		marginTop: 0,
-		paddingTop: 0,
-		position: "relative"
+		position: "relative",
+		overflow: "hidden",
+		paddingTop: 60
 	},
 	container: {
-		marginTop: 210,
-		paddingTop: 0,
 		position: "relative",
-		backgroundColor: colors.white
-	},
-	header: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		height: (isIphoneX()) ? 120 : 100,
-		width: SCREEN_WIDTH,
-		position: "absolute",
-		top: 0,
-		backgroundColor: colors.primary,
-	},
-	headerShadow: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		height: (isIphoneX()) ? 120 : 100,
-		width: SCREEN_WIDTH,
-		position: "absolute",
-		top: 0,
-		backgroundColor: colors.primary,
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowRadius: 12,
-		shadowOpacity: 0.2
-	},
-	balance: {
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		position: "absolute",
-		top: (isIphoneX()) ? 90 : 70,
-		width: SCREEN_WIDTH,
-	},
-	balanceRefresh: {
-		position: "absolute",
-		width: "100%",
-		flexDirection: "row",
-		justifyContent: "center",
-		top: 0
-	},
-	balanceText: {
-		color: colors.white,
-		fontWeight: "600",
-		fontSize: 36,
-		backgroundColor: "transparent"
-	},
-	balanceCurrencyWrapper: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "transparent"
-	},
-	balanceCurrencyText: {
-		color: "rgba(255,255,255,0.7)",
-		fontSize: 16,
-		fontWeight: "600",
-		marginLeft: 5
-	},
-	refreshIcon: {
-		width: 16,
-		height: 16
-	},
-	waveInverse: {
-		width: SCREEN_WIDTH,
-		height: 200,
-		position: "absolute",
-		top: -70
+		overflow: "hidden"
 	},
 	sectionTitle: {
 		color: colors.primaryDarkText,
