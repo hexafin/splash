@@ -17,6 +17,8 @@ import QRCodeScanner from 'react-native-qrcode-scanner'
 import CloseButton from "./universal/CloseButton"
 import Button from "./universal/Button"
 
+import api from '../api'
+
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
 
@@ -26,13 +28,11 @@ class ScanQrCode extends Component {
 			<QRCodeScanner
 				ref={(node) => { this.scanner = node }}
 				onRead={e => {
-					try {
-						const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-						bitcoin.address.toOutputScript(address, network)
-						this.props.captureQr(e.data)
+					const address = (e.data.slice(0,8) == 'bitcoin:') ? e.data.slice(8) : e.data
+					if (api.IsValidAddress(address, this.props.network)) {
+						this.props.captureQr(address)
 						this.props.navigation.goBack(null)
-					}
-					catch (error) {
+					} else {
 						Alert.alert("Invalid bitcoin address", null, [
 							{text: "Dismiss", onPress: () => {
 								this.scanner.reactivate()

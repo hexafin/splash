@@ -1,11 +1,16 @@
 import firebase from 'react-native-firebase'
 import moment from "moment"
 import {cryptoNames} from "./lib/cryptos"
+import { sendTransaction,
+         getTransactionSize,
+         BITCOIN_ERRORS,
+         getFees,
+         providers } from './bitcoin-api'
+
 const SATOSHI_CONVERSION = 100000000;
 let firestore = firebase.firestore()
 let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
-let bitcoinTransaction = require('bitcoin-transaction')
 var axios = require('axios')
 
 function UsernameExists(username) {
@@ -74,90 +79,80 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
     const query = await firestore.collection("transactions").where("userId", "==", userId).where("type", "==", "blockchain").get()
     let firebaseTxIds = []
     let firebaseTxs = []
-    query.forEach(doc => {
-      firebaseTxIds.push(doc.data().txId)
-      firebaseTxs.push(doc.data())
-    })
+    if(query.size > 0) {
+      query.forEach(doc => {
+        firebaseTxIds.push(doc.data().txId)
+        firebaseTxs.push(doc.data())
+      })      
+    }
 
     // load txs from blockchain
     const blockHeight = (await axios.get(blockHeightAPI)).data
     const txs = (await axios.get(addressAPI)).data.txs
     const txsLength = txs.length
-    if (txsLength > firebaseTxIds.length) {
 
-      for(var j=0; j < txsLength; j++) {
+    for(var j=0; j < txsLength; j++) {
+      
+      const index = firebaseTxIds.indexOf(txs[j].hash)
+      // if the txId is not on firebase and the transaction is important (ie not both from and to the user) or if the transaction is pending
+      if ((index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
 
-        const index = firebaseTxIds.indexOf(txs[j].hash)
+          let pending = false
+          if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
+            pending = true
+          }
 
-        // if the txId is not on firebase and the transaction is important (ie not both from and to the user)
-        if ((index == -1 || firebaseTxs[index].pending == true || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+          let newTransaction = {
+            amount: {},
+            timestamp: txs[j].time,
+            currency: 'BTC',
+            txId: txs[j].hash,
+            pending: pending,
+            userId: userId,
+            type: 'blockchain'
+          }
 
-            let pending = false
-            if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
-              pending = true
-            }
+          // load total tx amount
+          const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
+          if (total < 0) {
+            newTransaction.to = {}
+            newTransaction.to.address = txs[j].out[0].addr
+            newTransaction.amount.subtotal = -1*total
+          } else  {
+            newTransaction.from = {}
+            newTransaction.from.address = txs[j].inputs[0].prev_out.addr
+            newTransaction.amount.subtotal = total
+          }
 
-            let newTransaction = {
-              amount: {},
-              relativeAmount: null,
-              relativeCurrency: null,
-              timestamp: txs[j].time,
-              currency: 'BTC',
-              txId: txs[j].hash,
-              pending: pending,
-              userId: userId,
-              type: 'blockchain'
-            }
-
-            // load total tx amount
-            const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
-            if (total < 0) {
-              newTransaction.to = {}
-              newTransaction.to.address = txs[j].out[0].addr
-              newTransaction.amount.subtotal = -1*total
-            } else  {
-              newTransaction.from = {}
-              newTransaction.from.address = txs[j].inputs[0].prev_out.addr
-              newTransaction.amount.subtotal = total
-            }
-
+          if (index !== -1 && firebaseTxs[index].amount) {
+            newTransaction.amount = {}
+          } else {
             // load fees and calculate subtotal
             newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash)).data
-            newTransaction.amount.total = newTransaction.amount.subtotal + newTransaction.amount.fee
+            newTransaction.amount.total = newTransaction.amount.subtotal + newTransaction.amount.fee            
+          }
 
-            // if has total add to firebase so that it can be loaded on Home
-            if (newTransaction.amount.total > 0) {
-              await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction)
-            }
-         }
-      }
-
+          // if has total add to firebase so that it can be loaded on Home
+          if (newTransaction.amount.total > 0) {
+            await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
+          }
+       }
     }
+
 }
 
-// feenames: "fastestFee", "halfHourFee", "hourFee"
+// feenames: "fastest", "halfHour", "hour"
 // if from and amtSatoshi are provided returns total fee. if not returns feePerByte
-function GetBitcoinFees({feeName="hourFee", network="mainnet", from=null, amtSatoshi=null}) {
-
-  const getTransactionSize = (numInputs, numOutputs) => {
-  	return numInputs*180 + numOutputs*34 + 10 + numInputs;
-  }
+function GetBitcoinFees({feeName="hour", network="mainnet", from=null, amtSatoshi=null}) {
 
   return new Promise((resolve, reject) => {
-    axios.get('https://bitcoinfees.earn.com/api/v1/fees/recommended').then(response => {
-        const feePerByte = response.data[feeName]
-        if (from && amtSatoshi) {
-          axios.get('https://' + (network == 'testnet' ? 'testnet.' : '') + 'blockexplorer.com/api/addr/' + from + '/utxo?noCache=1').then(response => {
 
-            const utxos = response.data.map((e) => {
-                                						return {
-                                							txid: e.txid,
-                                							vout: e.vout,
-                                							satoshis: e.satoshis,
-                                							confirmations: e.confirmations
-                                						};
-                                					});
-            let tx = new bitcoin.TransactionBuilder(network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin);
+    getFees(feeName).then(feePerByte => {
+        if (from && amtSatoshi) {
+          providers.utxo[network].default(from).then(utxos => {
+
+            var bitcoinNetwork = network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
+            let tx = new bitcoin.TransactionBuilder(bitcoinNetwork);
         		let ninputs = 0;
         		let availableSat = 0;
         		for (var i = 0; i < utxos.length; i++) {
@@ -187,47 +182,40 @@ function GetBitcoinFees({feeName="hourFee", network="mainnet", from=null, amtSat
   })
 }
 
-function BuildBitcoinTransaction(from, to, privateKey, amtBTC, network="testnet") {
+function BuildBitcoinTransaction({from, to, privateKey, amtBTC, fee=null, network="testnet"}) {
     return new Promise((resolve, reject) => {
       GetAddressBalance(from, network).then((balanceBtc) => {
           if (amtBTC < balanceBtc) {
-              bitcoinTransaction.sendTransaction({
+              sendTransaction({
                   from: from,
                   to: to,
                   privKeyWIF: privateKey,
-                  // TODO: figure out better way of converting to BTC
                   btc: amtBTC,
-                  fee: 'hour',
-                  dryrun: true,
+                  fee: fee,
+                  dryrun: false,
                   network: network,
-              }).then(txHex => {
-                  const tx = bitcoin.Transaction.fromHex(txHex);
-                  const txid = tx.getId();
-                  if(network == 'mainnet') {
-                    axios.post('https://blockchain.info/pushtx?tx=' + txHex).then(() => {
-                      resolve({
-                        txid: txid,
-                        txhex: txHex,
-                      });
-                    }).catch(error => reject(error))
-                  } else {
-                    axios.post('https://api.blockcypher.com/v1/btc/test3/txs/push', {tx: txHex}).then(() => {
-                      resolve({
-                        txid: txid,
-                        txhex: txHex,
-                      });
-                    }).catch(error => reject(error))
-                  }
+              }).then(response => {
+                resolve(response)
               }).catch(error => {
                   reject(error);
               });
           } else {
-              reject('Error: not enough btc.');
+              reject(BITCOIN_ERRORS.BALANCE);
           }
       }).catch(error => {
           reject(error);
       });
   })
+}
+
+function IsValidAddress(address, btcNetwork='mainnet') {
+  try {
+    const network = (btcNetwork == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+    bitcoin.address.toOutputScript(address, network)
+    return true
+  } catch (e) {
+    return false
+  }
 }
 
 function GenerateCard(transactionId) {
@@ -481,7 +469,7 @@ function NewTransactionFromRequest(requestId, exchangeRate, balance, timestamp) 
 function NewTransaction(newTransaction) {
 
     return new Promise((resolve, reject) => {
-            firestore.collection("transactions").add(newTransaction).then(response => {
+            firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true }).then(response => {
                 resolve(response)
             }).catch(error => {
                 reject(error)
@@ -676,6 +664,7 @@ export default api = {
     GenerateCard,
     DeleteAccount,
     AddBlockchainTransactions,
+    IsValidAddress,
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,

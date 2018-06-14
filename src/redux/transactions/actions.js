@@ -184,6 +184,7 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
         relativeAmount: relativeAmount,
         relativeCurrency: 'USD',
         type: 'blockchain',
+        pending: true,
         timestamp: moment().unix(),
         to: {
           address: toAddress
@@ -194,13 +195,13 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
       dispatch(sendTransactionInit())
       Keychain.getGenericPassword().then(data => {
         const privateKey = JSON.parse(data.password).wif
-        api.BuildBitcoinTransaction(userBtcAddress, toAddress, privateKey, totalBtcAmount, network).then(response => {
+        api.BuildBitcoinTransaction({from: userBtcAddress, to:toAddress, privateKey, amtBTC: totalBtcAmount, fee: feeSatoshi, network}).then(response => {
           const {txid, txhex} = response
           transaction.txId = txid
+
           api.NewTransaction(transaction).then(() => {
             dispatch(sendTransactionSuccess())
             resolve()
-
           }).catch(error => {
             dispatch(sendTransactionFailure(error))	
             reject(error)

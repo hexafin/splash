@@ -19,8 +19,7 @@ import CloseButton from "../universal/CloseButton"
 import Button from "../universal/Button"
 import {Input} from "../universal/Input"
 import LoadingCircle from "../universal/LoadingCircle"
-
-let bitcoin = require('bitcoinjs-lib')
+import api from '../../api'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -101,32 +100,26 @@ class Send extends Component {
 
 			const amount = this.props.formAmount
 			const address = this.props.formAddress
-			const network = (this.props.bitcoinNetwork == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-			try {
 
-				bitcoin.address.toOutputScript(address, network)
-
-				if (!balance) {
-					Alert.alert("Unable to load balance")
-				} else if (!this.state.exchangeRate) {
-					Alert.alert("Unable to load exchange rate")
-				} else if (!this.props.formAmount) {
-					Alert.alert("Please enter amount")
-				} else if (!this.props.formAddress) {
-					Alert.alert("Please enter address")
-				} else if (parseFloat(amount) >= balance[this.state.currency]) {
-					Alert.alert("Not enough balance")
-				} else {
-					this.props.navigation.navigate("ApproveTransactionModal", {
-						address,
-						amount: parseFloat(amount),
-						currency: this.state.currency,
-						exchangeRate: this.state.exchangeRate['USD']
-					});
-				}
-
-			} catch(e) {
+			if (!api.IsValidAddress(address, this.props.bitcoinNetwork)) {
 				Alert.alert("Invalid bitcoin address")
+			} else if (!balance) {
+				Alert.alert("Unable to load balance")
+			} else if (!this.state.exchangeRate) {
+				Alert.alert("Unable to load exchange rate")
+			} else if (!this.props.formAmount) {
+				Alert.alert("Please enter amount")
+			} else if (!this.props.formAddress) {
+				Alert.alert("Please enter address")
+			} else if (parseFloat(amount) >= balance[this.state.currency]) {
+				Alert.alert("Not enough balance")
+			} else {
+				this.props.navigation.navigate("ApproveTransactionModal", {
+					address,
+					amount: parseFloat(amount),
+					currency: this.state.currency,
+					exchangeRate: this.state.exchangeRate['USD']
+				});
 			}
 		}
 

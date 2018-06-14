@@ -17,20 +17,6 @@ import SwipeApp from "./components/SwipeApp"
 import ApproveTransactionModal from "./components/ApproveTransactionModal"
 import ApproveCardModal from "./components/ApproveCardModal"
 
-const fade = props => {
-	const { position, scene } = props
-
-	const index = scene.index
-
-	const opacity = position.interpolate({
-		inputRange: [index - 0.7, index, index + 0.7],
-		outputRange: [0.1, 1, 0.1]
-	})
-
-	return {
-		opacity
-	}
-}
 
 function forVertical(props) {
 	const { layout, position, scene } = props
@@ -49,25 +35,6 @@ function forVertical(props) {
 	}
 }
 
-// const FadeRouter = StackNavigator(
-// 	{
-// 		Unlock: {
-// 			screen: Unlock
-// 		},
-// 		Home: {
-// 			screen: Home
-// 		}
-// 	},
-// 	{
-// 		headerMode: "none",
-// 		initialRouteName: "Unlock",
-// 		transitionConfig: () => ({
-// 			screenInterpolator: props => {
-// 				return fade(props);
-// 			}
-// 		})
-// 	}
-// );
 
 const OnboardingRouter = createBottomTabNavigator(
 	{
