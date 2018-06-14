@@ -74,6 +74,7 @@ class ApproveTransactionModal extends Component {
 	render() {
 		const {
 			address,
+			userId,
 			amount,
 			currency,
 		    exchangeRate,
@@ -107,7 +108,7 @@ class ApproveTransactionModal extends Component {
 				const relativeAmount = (1.0*btcAmount*parseFloat(rate)).toFixed(2)
 				TouchID.authenticate("Confirm Transaction").then(success => {
 					if (success) {
-						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount)
+						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount, userId)
 							.then(successCallback)
 							.catch(error => {
 								if (error == BITCOIN_ERRORS.BALANCE) {

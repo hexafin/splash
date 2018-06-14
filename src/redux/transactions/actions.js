@@ -89,26 +89,57 @@ export const LoadTransactions = () => {
 
 		const state = getState()
 
+		const loadQuery = (query, transactions) => {
+			query.forEach(doc => {
+				const transaction = {
+					id: doc.id,
+					...doc.data()
+				}
+				if (transaction.type == 'card' && transaction.approved === true) {
+					transactions.push(transaction)
+				} else if (transaction.type == "blockchain") {
+					transactions.push(transaction)
+				}
+			})
+			return transactions
+		}
+
 		api.AddBlockchainTransactions(state.user.bitcoin.address, state.user.id, state.user.bitcoinNetwork).then(() => {
-			let unsub = firestore.collection("transactions").where("userId", "==", state.user.id).orderBy('timestamp', 'desc').onSnapshot(querySnapshot => {
+
+			// two listeners for each firebase property
+			// after one listener finds changes merges in the documents found from the other
+			let unsub1 = firestore.collection("transactions").where("toId", "==", state.user.id).onSnapshot(querySnapshot => {
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					querySnapshot.forEach(doc => {
-						const transaction = {
-							id: doc.id,
-							...doc.data()
-						}
-						if (transaction.type == 'card' && transaction.approved === true) {
-							transactions.push(transaction)
-						} else if (transaction.type == "blockchain") {
-							transactions.push(transaction)
-						}
+					firestore.collection("transactions").where("fromId", "==", state.user.id).get().then(query => {
+						transactions = loadQuery(query, transactions)
+						transactions = loadQuery(querySnapshot, transactions)
+						transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
+						dispatch(loadTransactionsSuccess(transactions))
 					})
 				} else {
-					unsub()
+					unsub1()
+					dispatch(loadTransactionsSuccess(transactions))
 				}
-				dispatch(loadTransactionsSuccess(transactions))
+			}, error => {
+				dispatch(loadTransactionsFailure(error))
+			})
+
+			let unsub2 = firestore.collection("transactions").where("toId", "==", state.user.id).onSnapshot(querySnapshot => {
+				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
+				let transactions = []
+				if (querySnapshot.size > 0) {
+				firestore.collection("transactions").where("fromId", "==", state.user.id).get().then(query => {
+					transactions = loadQuery(query, transactions)
+					transactions = loadQuery(querySnapshot, transactions)
+					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
+					dispatch(loadTransactionsSuccess(transactions))
+				})
+				} else {
+					unsub2()
+					dispatch(loadTransactionsSuccess(transactions))
+				}
 			}, error => {
 				dispatch(loadTransactionsFailure(error))
 			})
@@ -164,7 +195,7 @@ export const ApproveTransaction = (transaction) => {
 	}
 }
 
-export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount) => {
+export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount, toId=null) => {
 	return (dispatch, getState) => {
     
     return new Promise((resolve, reject) => {
@@ -186,10 +217,10 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
         type: 'blockchain',
         pending: true,
         timestamp: moment().unix(),
-        to: {
-          address: toAddress
-        },
-        userId: state.user.id,
+        toAddress: toAddress,
+        fromId: state.user.id,
+        toId: toId,
+        fromAddress: userBtcAddress,
       }
 
       dispatch(sendTransactionInit())

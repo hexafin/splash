@@ -76,14 +76,20 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
     const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
 
     // get list of txs on firebase
-    const query = await firestore.collection("transactions").where("userId", "==", userId).where("type", "==", "blockchain").get()
+    const query1 = await firestore.collection("transactions").where("fromId", "==", userId).where("type", "==", "blockchain").get()
+    const query2 = await firestore.collection("transactions").where("toId", "==", userId).where("type", "==", "blockchain").get()
+
     let firebaseTxIds = []
     let firebaseTxs = []
-    if(query.size > 0) {
-      query.forEach(doc => {
+    if(query1.size > 0 || query2.size > 0) {
+      query1.forEach(doc => {
         firebaseTxIds.push(doc.data().txId)
         firebaseTxs.push(doc.data())
-      })      
+      })
+      query2.forEach(doc => {
+        firebaseTxIds.push(doc.data().txId)
+        firebaseTxs.push(doc.data())
+      })            
     }
 
     // load txs from blockchain
@@ -104,23 +110,26 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
 
           let newTransaction = {
             amount: {},
+            fromId: null,
+            toId: null,
             timestamp: txs[j].time,
             currency: 'BTC',
             txId: txs[j].hash,
             pending: pending,
-            userId: userId,
             type: 'blockchain'
           }
 
           // load total tx amount
           const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
           if (total < 0) {
-            newTransaction.to = {}
-            newTransaction.to.address = txs[j].out[0].addr
+            newTransaction.fromId = userId
+            newTransaction.fromAddress = address
+            newTransaction.toAddress = txs[j].out[0].addr
             newTransaction.amount.subtotal = -1*total
           } else  {
-            newTransaction.from = {}
-            newTransaction.from.address = txs[j].inputs[0].prev_out.addr
+            newTransaction.toId = userId
+            newTransaction.toAddress = address
+            newTransaction.fromAddress = txs[j].inputs[0].prev_out.addr
             newTransaction.amount.subtotal = total
           }
 
@@ -133,7 +142,7 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
           }
 
           // if has total add to firebase so that it can be loaded on Home
-          if (newTransaction.amount.total > 0) {
+          if (newTransaction.amount.total > 0 || firebaseTxs[index].amount.total > 0) {
             await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
           }
        }
@@ -626,8 +635,17 @@ function LoadFriends(facebook_id, access_token) {
 
 async function DeleteAccount(userId) {
   try {
-    const query = await firestore.collection("transactions").where("userId", '==', userId).get()
-    query.forEach(async (doc) => {
+    const query1 = await firestore.collection("transactions").where("fromId", '==', userId).get()
+    query1.forEach(async (doc) => {
+      console.log(doc.id)
+      try {
+        await doc.ref.delete()
+      } catch(e) {
+          console.log(e)
+      }
+    })
+    const query2 = await firestore.collection("transactions").where("toId", '==', userId).get()
+    query2.forEach(async (doc) => {
       console.log(doc.id)
       try {
         await doc.ref.delete()
