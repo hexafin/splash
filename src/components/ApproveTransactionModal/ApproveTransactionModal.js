@@ -24,21 +24,13 @@ class ApproveTransactionModal extends Component {
 	}
 
 	componentDidMount() {
-		Animated.sequence([
-		 Animated.delay(300),
-		 Animated.timing(this.backgroundOpacity, {
- 			toValue: 1,
- 			easing: Easing.linear(),
- 			duration: 200
- 			}),
-	 	]).start();
 
 		const {
 			address,
 			amount,
 			currency,
 		    exchangeRate
-		} = this.props.navigation.state.params
+		} = this.props
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : amount
@@ -75,6 +67,17 @@ class ApproveTransactionModal extends Component {
 	}
 
 	render() {
+		const backgroundOpacity = new Animated.Value(0.0)
+
+		Animated.sequence([
+		 Animated.delay(300),
+		 Animated.timing(backgroundOpacity, {
+ 			toValue: 1,
+ 			easing: Easing.linear(),
+ 			duration: 200
+ 			}),
+	 	]).start();
+
 		const {
 			address,
 			userId,
@@ -82,7 +85,7 @@ class ApproveTransactionModal extends Component {
 			currency,
 		    exchangeRate,
 		    successCallback=()=>{}
-		} = this.props.navigation.state.params
+		} = this.props
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
@@ -92,13 +95,13 @@ class ApproveTransactionModal extends Component {
 		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
 
 		const dismiss = () => {
-			Animated.timing(this.state.backgroundOpacity, {
+			Animated.timing(backgroundOpacity, {
 				toValue: 0,
 				duration: 200,
 				easing: Easing.linear(),
 			}).start(({finished}) => {
 				if (finished) {
-					this.props.navigation.goBack()
+					this.props.dismissCallback()
 					this.props.DismissTransaction()
 				}
 			})
@@ -133,10 +136,10 @@ class ApproveTransactionModal extends Component {
 
 		return (
 			<TouchableWithoutFeedback onPress={() => dismiss()}>
-			<Animated.View style={[styles.container, {backgroundColor: this.backgroundOpacity.interpolate({
-																										        inputRange: [0, 1],
-																									        outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']
-																										    })}]}>
+			<Animated.View style={[styles.container, {backgroundColor: backgroundOpacity.interpolate({
+																								        inputRange: [0, 1],
+																							        outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']
+																								    })}]}>
 				<View style={{ flexDirection: "row" }}>
 					<TouchableWithoutFeedback onPress={() => {}}>
 					<View style={styles.popup}>

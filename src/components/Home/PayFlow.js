@@ -10,6 +10,7 @@ import {
 	TouchableOpacity,
 	Linking,
 	Alert,
+	Modal,
 	Clipboard,
 	Share,
 	Dimensions,
@@ -24,6 +25,7 @@ import PayButton from "./PayButton"
 import SearchBox from "./SearchBox"
 import Hits from "./Hits"
 import SplashtagButton from "./SplashtagButton"
+import ApproveTransactionModal from "../ApproveTransactionModal"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { InstantSearch } from 'react-instantsearch/native';
 import api from '../../api'
@@ -44,7 +46,9 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
-			exchangeRates: props.exchangeRates
+			exchangeRates: props.exchangeRates,
+			modalVisible: false,
+			modalProps: null,
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -172,14 +176,18 @@ class PayFlow extends Component {
 		} else if (parseFloat(amount) >= relativeAmount) {
 			Alert.alert("Not enough balance")
 		} else {
-			this.props.navigation.navigate("ApproveTransactionModal", {
-				address,
-				userId,
-				amount: parseFloat(relativeCurrency),
-				currency: this.state.currency,
+			this.setState({
+				modalVisible: true,
+				modalProps: {
+					address,
+					userId,
+					amount: parseFloat(amount),
+					currency: this.state.currency,
 				exchangeRate: this.props.exchangeRates.BTC,
-				successCallback: () => {
-					this.reset()
+					successCallback: () => {
+						this.reset()
+					},
+					dismissCallback: () => this.setState({modalVisible: false})
 				}
 			});
 		}
@@ -349,6 +357,12 @@ class PayFlow extends Component {
 						<Hits callback={this.handleSplashtagClick}/>
 					</Animated.View>
 				</InstantSearch>
+				<Modal
+				    animationType="none"
+			        transparent={true}
+			        visible={this.state.modalVisible}>
+			        {this.state.modalVisible && <ApproveTransactionModal {...this.state.modalProps}/>}
+			    </Modal>
 			</Animated.View>
 		)
 	}

@@ -47,11 +47,11 @@ class Button extends Component {
         const {primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkPersist=false, checkmarkCallback=null, small=false, style={}} = this.props
 
         const loadingView = (
-            <LoadingCircle color={primary ? null : colors.purple} size={small ? 17 : 28}/>
+            <LoadingCircle color={primary ? null : colors.primary} size={small ? 17 : 28}/>
         )
 
         const checkmarkView = (
-            <Checkmark color={primary ? 'white' : 'purple'} size={10} callback={checkmarkCallback} persist={checkmarkPersist}/>
+            <Checkmark color={primary ? 'white' : 'primary'} size={10} callback={checkmarkCallback} persist={checkmarkPersist}/>
         )
 
         const normalView = (
@@ -134,13 +134,13 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
 	textSecondary: {
-		color: colors.purple,
+		color: colors.primary,
 	},
 	textPrimary: {
 		color: colors.white,
 	},
 	buttonPrimary: {
-		backgroundColor: colors.purple,
+		backgroundColor: colors.primary,
 	},
 	buttonSecondary: {
 		backgroundColor: colors.white
