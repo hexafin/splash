@@ -199,6 +199,10 @@ class SwipeApp extends Component {
 		this.props.LoadTransactions()
 	}
 
+	componentWillUnmount() {
+		xOffset.removeAllListeners()
+	}
+
 	render() {
 
 		const Pages = []

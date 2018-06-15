@@ -54,6 +54,10 @@ class Home extends Component {
         }
 	}
 
+	componentWillUnmount() {
+		this.props.yOffset.removeAllListeners()
+	}
+
 	render() {
 
 		console.log("home render")
