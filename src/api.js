@@ -46,7 +46,7 @@ function NewBitcoinWallet(network='mainnet') {
     }
 }
 
-function GetAddressBalance(address, network='mainnet') {
+function GetBitcoinAddressBalance(address, network='mainnet') {
   return new Promise((resolve, reject) => {
     const APIaddress = (network == 'mainnet') ? 'https://blockchain.info/q/addressbalance/' : 'https://testnet.blockchain.info/q/addressbalance/'
     axios.get(APIaddress + address + '?confirmations=6')
@@ -376,70 +376,6 @@ function GetBalance(uid, currency = null) {
                 reject(error)
             })
         }
-
-    });
-}
-
-function GetAddress(uid, currency = null) {
-    return new Promise((resolve, reject) => {
-
-        // if currency is defined, get address of that specific currency
-        if (currency) {
-            firestore.collection("users").doc(uid).get().then(person => {
-                if (person.exists) {
-                    resolve(person.data().crypto[currency].address)
-                } else {
-                    reject("Error: person does not exist")
-                }
-            }).catch(error => {
-                reject(error)
-            })
-        }
-        else {
-            // get all addresses
-            firestore.collection("users").doc(uid).get().then(person => {
-                if (person.exists) {
-
-                    const returnable = {}
-
-                    const crypto = person.data().crypto
-                    crypto.forEach(item => {
-                        returnable[currency].address = item.address
-                    })
-
-                    resolve(returnable)
-                } else {
-                    reject("Error: person does not exist")
-                }
-            }).catch(error => {
-                reject(error)
-            })
-        }
-
-    });
-}
-
-function GetCrypto(uid, currency = null) {
-    return new Promise((resolve, reject) => {
-
-        // if currency is defined, get crypto of that specific currency
-
-        firestore.collection("users").doc(uid).get().then(person => {
-            if (person.exists) {
-                if (currency) {
-                    let specificCrypto = person.data().crypto[currency]
-                    resolve(specificCrypto)
-                }
-                else {
-                    let crypto = person.data().crypto
-                    resolve(crypto)
-                }
-            } else {
-                reject("Error: person does not exist")
-            }
-        }).catch(error => {
-            reject(error)
-        })
 
     });
 }

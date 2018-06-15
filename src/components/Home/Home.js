@@ -34,106 +34,19 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			currency: "USD",
-			balance: null,
-			exchangeRate: null,
 			transactions: props.transactions,
-			loadingExchangeRate: true,
-			loadingBalance: true,
 			pulledToRefresh: false,
-			refreshing: false
+			refreshing: props.refreshing
 		}
-		this.loadBalance = this.loadBalance.bind(this)
-		this.loadExchangeRate = this.loadExchangeRate.bind(this)
 		this.refresh = this.refresh.bind(this)
-	}
-
-	loadBalance() {
-		this.setState(prevState => {
-			return {
-				...prevState,
-				loadingBalance: true,
-				balance: null
-			}
-		})
-		api.GetAddressBalance(this.props.bitcoinAddress, this.props.bitcoinNetwork).then(balance => {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balance,
-					loadingBalance: false
-				}
-			})
-		}).catch(error => {
-			Sentry.messageCapture(error)
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balance: null,
-					loadingBalance: false
-				}
-			})
-		})
-	}
-
-	loadExchangeRate() {
-		this.setState(prevState => {
-			return {
-				...prevState,
-				loadingExchangeRate: true,
-				exchangeRate: null
-			}
-		})
-		// get exchange rate
-        api.GetExchangeRate().then(exchangeRate => {
-        	this.setState(prevState => {
-        		return {
-        			...prevState,
-        			exchangeRate,
-        			loadingExchangeRate: false
-        		}
-        	})
-        	this.props.UpdateExchangeRate(exchangeRate)
-        }).catch(error => {
-        	this.setState(prevState => {
-        		return {
-        			...prevState,
-        			exchangeRate: null,
-        			loadingExchangeRate: false
-        		}
-        	})
-        })
-	}
-
-	refresh() {
-		if (!this.state.pulledToRefresh) {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					pulledToRefresh: true,
-					refreshing: true
-				}
-			})
-			setTimeout(() => {
-				this.setState(prevState => {
-					return {
-						...prevState,
-						refreshing: false
-					}
-				})
-			}, 500)
-			ReactNativeHapticFeedback.trigger("impactHeavy", true)
-			this.loadBalance()
-			this.loadExchangeRate()
-			this.props.LoadTransactions()
-		}
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.setState(prevState => {
 			return {
 				...prevState,
-				transactions: nextProps.transactions
+				transactions: nextProps.transactions,
+				refreshing: nextProps.refreshing
 			}
 		})
 		this.loadBalance()
@@ -216,13 +129,6 @@ class Home extends Component {
 			rate = this.props.exchangeRates
 		}
 
-		const isLoading = (
-			this.state.refreshing 
-			|| this.state.loadingExchangeRate 
-			|| this.state.loadingBalance
-			|| this.props.isLoadingTransactions
-		)
-
 		return (
 			<View style={styles.wrapper}>
 				<Animated.ScrollView
@@ -297,7 +203,8 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
 	wrapper: {
-		marginTop: 145
+		marginTop: 130,
+		flex: 1
 	},
 	scrollContainer: {
 		position: "relative",

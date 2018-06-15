@@ -12,8 +12,6 @@ const initialState = {
 	isUpdatingUsername: false,
 	errorUpdatingUsername: null,
 	entity: {},
-	bitcoin: {},
-	bitcoinNetwork: 'testnet',
 	id: null
 }
 
@@ -32,8 +30,7 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isLoggingIn: false,
 				id: action.userId,
-				entity: action.entity,
-				bitcoin: action.bitcoin,
+				entity: action.entity
 				loggedIn: true
 			}
 

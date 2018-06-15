@@ -16,10 +16,12 @@ import { defaults, icons } from "../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
+import { LoadExchangeRates, LoadBalance } from "../redux/crypto/actions"
 import PropTypes from "prop-types"
 import Account from "./Account"
 import Wallet from "./Wallet"
 import Home from "./Home"
+import LoadingCircle from "./universal/LoadingCircle"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -105,7 +107,9 @@ class SwipeApp extends Component {
 		this.state = {
 			activePage: this.props.activePage ? this.props.activePage : "Home",
 			activeIndex: 1,
-			isScrolling: false
+			isScrolling: false,
+			currency: "USD",
+			refreshing: false,
 		}
 		this.pages = [
 			{
@@ -176,7 +180,34 @@ class SwipeApp extends Component {
 		xOffset.setValue(SCREEN_WIDTH)
 	}
 
+	refresh() {
+		this.setState({refreshing: true})
+		this.props.LoadBalance()
+		this.props.LoadExchangeRates()
+		setTimeout(() => {
+			this.setState(refreshing: false)
+		}, 500)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		this.setState(prevState => {
+			return {
+				...prevState,
+				transactions: nextProps.transactions,
+				refreshing: nextProps.refreshing
+			}
+		})
+		this.refresh()
+	}
+
 	render() {
+
+		const customProps = {
+			home: {
+				refresh: this.refresh.bind(this),
+				refreshing: this.state.refreshing
+			}
+		}
 
 		const Pages = []
 		const Icons = []
@@ -186,7 +217,8 @@ class SwipeApp extends Component {
 				<Page key={"page-" + i}>
 					{React.createElement(page.component, {
 						...this.props,
-						yOffset: yOffsets[page.name]
+						yOffset: yOffsets[page.name],
+						customProps: customProps[page.name]
 					})}
 				</Page>
 			)
@@ -216,19 +248,26 @@ class SwipeApp extends Component {
 		const animatedBalance = {
 			transform: [
 				{
-					scale: this.props.yOffset.interpolate({
+					scale: yOffsets.home.interpolate({
 						inputRange: [-81, -80, 0, 55, 56],
 						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
 					})
 				},
 				{
-					translateY: this.props.yOffset.interpolate({
+					translateY: yOffsets.home.interpolate({
 						inputRange: [-1, 0, 53, 54],
 						outputRange: [0, 0, -53, -53]
 					})
 				}
 			]
 		}
+
+		const isLoading = (
+			this.state.refreshing 
+			|| this.props.isLoadingExchangeRates
+			|| this.props.isLoadingBalance
+			|| this.props.isLoadingTransactions
+		)
 
 		return (
 			<View style={styles.container}>
@@ -285,10 +324,15 @@ class SwipeApp extends Component {
 				{Icons}
 
 				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={() => {
-
-				})}>
+					this.setState(prevState => {
+						return {
+							...prevState,
+							currency: (prevState.currency == "USD") ? "BTC" : "USD"
+						}
+					})
+				}}>
 					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						<Text style={styles.balanceText}>{!isLoading ? balance[this.state.currency] : " "}</Text>
+						<Text style={styles.balanceText}>{this.props.balance[this.state.currency]}</Text>
 						<View style={[styles.balanceRefresh, {
 							opacity: isLoading ? 100 : 0
 						}]}>
@@ -375,14 +419,27 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		
+    	transactions: state.transactions.transactions,
+    	isLoadingTransactions: state.transactions.isLoadingTransactions,
+    	errorLoadingTransactions: state.transactions.errorLoadingTransactions,
+        exchangeRates: state.crypto.exchangeRates,
+        isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
+        loadingExchangeRatesCurrency: state.crypto.loadingExchangeRatesCurrency,
+        successLoadingExchangeRates: state.crypto.successLoadingExchangeRates,
+    	errorLoadingExchangeRates: state.crypto.errorLoadingExchangeRates,
+    	balance: state.crypto.balance,
+        isLoadingBalance: state.crypto.isLoadingBalance,
+        loadingBalanceCurrency: state.crypto.loadingBalanceCurrency,
+        successLoadingBalance: state.crypto.successLoadingBalance,
+    	errorLoadingBalance: state.crypto.errorLoadingBalance,
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
-			
+			LoadBalance,
+			LoadExchangeRates
 		},
 		dispatch
 	)
