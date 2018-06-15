@@ -42,7 +42,8 @@ class PayFlow extends Component {
 			activeSection: "chooseType",
 			splashtagSearch: "",
 			splashtagSearchResults: [],
-			splashtag: null
+			splashtag: null,
+			selectedId: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -69,7 +70,8 @@ class PayFlow extends Component {
 			activeSection: "chooseType", 
 			splashtagSearch: "",
 			splashtagSearchResults: [],
-			splashtag: null
+			splashtag: null,
+			selectedId: null,
 		})
 		this.props.resetQr()
 		Animated.sequence([
@@ -140,6 +142,7 @@ class PayFlow extends Component {
 
 		const amount = parseFloat(this.state.amount)
 		const address = this.state.address
+		const userId = this.state.selectedId
 
 		if (!api.IsValidAddress(address, this.props.network)) {
 			Alert.alert("Invalid bitcoin address")
@@ -156,6 +159,7 @@ class PayFlow extends Component {
 		} else {
 			this.props.navigation.navigate("ApproveTransactionModal", {
 				address,
+				userId,
 				amount: parseFloat(amount),
 				currency: this.state.currency,
 				exchangeRate: this.props.exchangeRate['USD'],
@@ -170,7 +174,8 @@ class PayFlow extends Component {
 		this.setState({
 			activeSection: "enterAmount",
 			address: user.bitcoinAddress,
-			splashtag: user.splashtag
+			splashtag: user.splashtag,
+			selectedId: user.objectID,
 		})
 		Animated.sequence([
 			// fade out choose type

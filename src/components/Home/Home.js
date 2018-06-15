@@ -290,7 +290,7 @@ class Home extends Component {
 							{this.state.transactions.map(transaction => {
 								const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
 								const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(5) : parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(2)
-								const direction = (transaction.type == "card" || typeof transaction.to !== 'undefined') ? "to" : "from"
+								const direction = (transaction.type == "card" || transaction.fromAddress == this.props.bitcoinAddress) ? "to" : "from"
 
 								return (
 									<TransactionLine
@@ -310,8 +310,8 @@ class Home extends Component {
 											this.props.navigation.navigate("ViewTransactionModal", {
 												  transaction,
 												  direction,
-	  						                      address: transaction.type == 'blockchain' ? transaction[direction].address : null,
-							                      exchangeRate: rate['USD'],
+                          address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+                          exchangeRate: rate['USD'],
 										  })
 										}}
 									/>
