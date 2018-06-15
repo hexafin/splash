@@ -152,7 +152,7 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
 
 // feenames: "fastest", "halfHour", "hour"
 // if from and amtSatoshi are provided returns total fee. if not returns feePerByte
-function GetBitcoinFees({feeName="hour", network="mainnet", from=null, amtSatoshi=null}) {
+function GetBitcoinFees({feeName="fastest", network="mainnet", from=null, amtSatoshi=null}) {
 
   return new Promise((resolve, reject) => {
 
