@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
         successLoadingBalance: state.crypto.successLoadingBalance,
         errorLoadingExchangeRates: state.crypto.errorLoadingExchangeRates,
         errorLoadingBalance: state.crypto.errorLoadingBalance,
-        activeCurrency: state.crypto.activeCurrency,
+        currency: state.crypto.activeCurrency,
     }
 }
 
