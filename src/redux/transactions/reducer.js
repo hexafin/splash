@@ -119,6 +119,7 @@ export default function transactionReducer(state = initialState, action) {
             }
 
         case LOAD_TRANSACTIONS_SUCCESS:
+            console.log(action.transactions)
             return {
                 ...state,
                 isLoadingTransactions: false,
