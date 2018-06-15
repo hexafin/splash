@@ -209,7 +209,6 @@ class SwipeApp extends Component {
 	}
 
 	refresh() {
-		ReactNativeHapticFeedback.trigger("impactHeavy", true)
 		this.setState({refreshing: true})
 		this.props.LoadBalance("BTC")
 		this.props.LoadExchangeRates("BTC")

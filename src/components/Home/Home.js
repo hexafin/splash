@@ -35,8 +35,11 @@ class Home extends Component {
 		super(props)
 		this.state = {
 			transactions: props.transactions,
+			isLoadingTransactions: props.isLoadingTransactions,
+			isLoadingExchangeRates: props.isLoadingExchangeRates,
 			pulledToRefresh: false,
-			refreshing: props.refreshing
+			refreshing: props.refreshing,
+			currency: props.currency,
 		}
 	}
 
@@ -48,7 +51,10 @@ class Home extends Component {
 			return {
 				...prevState,
 				transactions: nextProps.transactions,
-				refreshing: nextProps.refreshing
+				refreshing: nextProps.refreshing,
+				isLoadingTransactions: nextProps.isLoadingTransactions,
+				isLoadingExchangeRates: nextProps.isLoadingExchangeRates,
+				currency: nextProps.currency
 			}
 		})
 	}
@@ -88,9 +94,7 @@ class Home extends Component {
 	}
   
   	componentDidMount() {
-
 		this.props.LoadTransactions()
-
 	}
 
 	render() {
@@ -111,6 +115,7 @@ class Home extends Component {
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
 								if (currentY < -80) {
+									ReactNativeHapticFeedback.trigger("impactHeavy", true)
 									this.props.refresh()
 								}
 								if (currentY >= 0) {
@@ -129,7 +134,16 @@ class Home extends Component {
 							<Text style={styles.sectionTitle}>Your history</Text>
 							{this.state.transactions.map(transaction => {
 								const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
-								const amount = this.state.currency == "BTC" ? parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(5) : parseFloat(cryptoAmount*rate[this.state.currency]).toFixed(2)
+								let amount
+								if (this.props.exchangeRates) {
+									let amount = this.state.currency == "BTC"
+										? parseFloat(cryptoAmount).toFixed(5)
+										: parseFloat(cryptoAmount*this.props.exchangeRates[this.state.currency]).toFixed(2)
+								}
+								else {
+									amount = 0
+								}
+									
 								const direction = (transaction.type == "card" || transaction.fromAddress == this.props.bitcoinAddress) ? "to" : "from"
 
 								return (
@@ -138,7 +152,7 @@ class Home extends Component {
 										direction={direction}
 										amount={currencyPrefix[this.state.currency] + amount}
 										date={moment.unix(transaction.timestamp).fromNow()}
-										loading={!rate || this.props.isLoadingTransactions}
+										loading={this.state.isLoadingExchangeRates || this.state.isLoadingTransactions}
 										pending={transaction.pending}
 										title={
 											(transaction.type == "card")
