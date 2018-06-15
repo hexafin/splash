@@ -189,7 +189,7 @@ class PayFlow extends Component {
 	handleSplashtagClick(user) {
 		this.setState({
 			activeSection: "enterAmount",
-			address: user.addresses.BTC,
+			address: user.wallets.BTC.address,
 			splashtag: user.splashtag,
 			selectedId: user.objectID,
 		})

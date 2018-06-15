@@ -75,6 +75,21 @@ class Balance extends Component {
 			}
 		}
 
+		const balanceTranslateY = Animated.add(
+			this.props.yOffsets.home.interpolate({
+				inputRange: [-1, 0, 53, 54],
+				outputRange: [0, 0, -53, -53]
+			}),
+			this.props.xOffset.interpolate({
+				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+				outputRange: [-40, 0, -40]
+			}),
+		)
+
+		const balanceScale = {
+			
+		}
+
 		const animatedBalance = {
 			transform: [
 				{
@@ -84,15 +99,12 @@ class Balance extends Component {
 					})
 				},
 				{
-					translateY: this.props.yOffsets.home.interpolate({
-						inputRange: [-1, 0, 53, 54],
-						outputRange: [0, 0, -53, -53]
-					})
+					translateY: balanceTranslateY
 				},
 				{
 					translateX: this.props.xOffset.interpolate({
 						inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
-						outputRange: [160, 0, -160]
+						outputRange: [150, 0, -150]
 					})
 				}
 			]
