@@ -34,67 +34,38 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			transactions: props.transactions,
-			isLoadingTransactions: props.isLoadingTransactions,
-			isLoadingExchangeRates: props.isLoadingExchangeRates,
-			pulledToRefresh: false,
-			refreshing: props.refreshing,
-			currency: props.currency,
+			loading: false
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState(prevState => {
-			if (nextProps.transactions.length > prevState.transactions.length) {
-				this.props.refresh()
-			}
-			return {
-				...prevState,
-				transactions: nextProps.transactions,
-				refreshing: nextProps.refreshing,
-				isLoadingTransactions: nextProps.isLoadingTransactions,
-				isLoadingExchangeRates: nextProps.isLoadingExchangeRates,
-				currency: nextProps.currency
-			}
-		})
+		if (nextProps.isLoadingTransactions || nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates) {
+			this.setState({loading: true})
+		}
+		else {
+			this.setState({loading: false})
+		}
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.transactions.length > this.props.transactions.length) {
+			return true
+		}
+		else if (nextProps.currency != this.props.currency) {
+			return true
+		}
+		else if (nextState.loading != this.state.loading) {
+			return true
+		}
+		else {
+			return false
+		}
 	}
 
 	componentWillMount() {
         if (!this.props.loggedIn) {
             this.props.navigation.navigate("Landing")
         }
-
-        // TODO: FCM -> firebase messaging
-        // TODO: determine whether or not to open modal based on firebase data
-        
-		// FCM.on(FCMEvent.Notification, async notif => {
-		// 	console.log("Notification", notif);
-		// 	// reload on notifications
-		// 	const {
-		// 		transactionId,
-		// 		relativeAmount,
-		// 		domain,
-		// 		relativeCurrency
-		// 	} = notif;
-		// 	if (transactionId && relativeAmount && domain && relativeCurrency) {
-		// 		api.GetExchangeRate().then(exchangeRate => {
-		// 			this.props.navigation.navigate("ApproveCardModal", {
-		// 				transactionId,
-		// 				relativeAmount,
-		// 				domain,
-		// 				relativeCurrency,
-		// 				exchangeRate: exchangeRate[relativeCurrency]
-		// 			});
-		// 		}).catch(error => {
-		// 			// Alert.alert("Could not load exchange rate")
-		// 			// TODO: better visual error handling
-		// 		})
-		// 	}
-		// });
-	}
-  
-  	componentDidMount() {
-		this.props.LoadTransactions()
 	}
 
 	render() {
@@ -114,31 +85,32 @@ class Home extends Component {
 						{
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
-								if (currentY < -80) {
+
+								if (currentY < -80 && !this.state.loading) {
+									this.setState({loading: true})
+									this.props.LoadBalance("BTC")
+									this.props.LoadExchangeRates("BTC")
+									this.props.LoadTransactions()
 									ReactNativeHapticFeedback.trigger("impactHeavy", true)
-									this.props.refresh()
-								}
-								if (currentY >= 0) {
-									this.setState({pulledToRefresh: false})
 								}
 							},
 							useNativeDriver: true
 						}
 					)}>
 					<View style={styles.container}>
-						<PayFlow reset={this.state.refreshing}
+						<PayFlow
 								 currency={this.props.activeCurrency}
 								 network={this.props.bitcoinNetwork}
 								 navigation={this.props.navigation}/>
 						<View style={styles.history}>
 							<Text style={styles.sectionTitle}>Your history</Text>
-							{this.state.transactions.map(transaction => {
+							{this.props.transactions.map(transaction => {
 								const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
 								let amount
 								if (this.props.exchangeRates) {
-									let amount = this.state.currency == "BTC"
+									amount = this.props.currency == "BTC"
 										? parseFloat(cryptoAmount).toFixed(5)
-										: parseFloat(cryptoAmount*this.props.exchangeRates[this.state.currency]).toFixed(2)
+										: parseFloat(cryptoAmount*this.props.exchangeRates[this.props.currency]).toFixed(2)
 								}
 								else {
 									amount = 0
@@ -150,9 +122,9 @@ class Home extends Component {
 									<TransactionLine
 										key={"transactionLine"+transaction.id}
 										direction={direction}
-										amount={currencyPrefix[this.state.currency] + amount}
+										amount={currencyPrefix[this.props.currency] + amount}
 										date={moment.unix(transaction.timestamp).fromNow()}
-										loading={this.state.isLoadingExchangeRates || this.state.isLoadingTransactions}
+										loading={this.state.loading}
 										pending={transaction.pending}
 										title={
 											(transaction.type == "card")

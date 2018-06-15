@@ -74,7 +74,6 @@ class PayFlow extends Component {
 			splashtag: null,
 			selectedId: null,
 		})
-		this.props.resetQr()
 		Animated.sequence([
 			Animated.parallel([
 				// fade out enter amount

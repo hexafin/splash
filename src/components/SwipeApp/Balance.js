@@ -34,13 +34,7 @@ class Balance extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			balance: props.balance,
-			exchangeRates: props.exchangeRates,
-			currency: props.currency,
-			refreshing: props.refreshing,
-			isLoadingBalance: props.isLoadingBalance,
-			isLoadingExchangeRates: props.isLoadingExchangeRates,
-			isLoadingTransactions: props.isLoadingTransactions,
+			loading: false
 		}
 	}
 
@@ -49,26 +43,39 @@ class Balance extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		this.setState({
-			currency: nextProps.currency, 
-			exchangeRates: nextProps.exchangeRates,
-			balance: nextProps.balance,
-			refreshing: nextProps.refreshing,
-			isLoadingBalance: nextProps.isLoadingBalance,
-			isLoadingExchangeRates: nextProps.isLoadingExchangeRates,
-			isLoadingTransactions: nextProps.isLoadingTransactions,
-		})
+		if (nextProps.isLoadingTransactions || nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates) {
+			this.setState({loading: true})
+		}
+		else {
+			this.setState({loading: false})
+		}
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
+			return true
+		}
+		else if (nextProps.balance.BTC != this.props.balance.BTC) {
+			console.log(nextProps, this.props)
+			return true
+		}
+		else if (nextState.loading != this.state.loading) {
+			return true
+		}
+		else {
+			return false
+		}
 	}
   
 	render() {
 
 		let relativeBalance
-		if (this.state.currency == "BTC") {
-			relativeBalance = this.state.balance.BTC
+		if (this.props.currency == "BTC") {
+			relativeBalance = this.props.balance.BTC.toFixed(5)
 		}
 		else {
-			if (this.state.exchangeRates.BTC) {
-				relativeBalance = this.state.balance.BTC * this.state.exchangeRates.BTC.USD
+			if (this.props.exchangeRates.BTC) {
+				relativeBalance = (this.props.balance.BTC * this.props.exchangeRates.BTC.USD).toFixed(2)
 			}
 			else {
 				relativeBalance = 0
@@ -76,46 +83,63 @@ class Balance extends Component {
 		}
 
 		const balanceTranslateY = Animated.add(
-			this.props.yOffsets.home.interpolate({
-				inputRange: [-1, 0, 53, 54],
-				outputRange: [0, 0, -53, -53]
-			}),
+			Animated.multiply(
+				this.props.xOffset.interpolate({
+					inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+					outputRange: [0, 1, 0]
+				}),
+				this.props.yOffsets.home.interpolate({
+					inputRange: [-1, 0, 53, 54],
+					outputRange: [0, 0, -53, -53]
+				}),
+			),
 			this.props.xOffset.interpolate({
 				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
 				outputRange: [-40, 0, -40]
 			}),
 		)
 
-		const balanceScale = {
-			
-		}
+		const balanceScale = Animated.add(
+			Animated.multiply(
+				this.props.xOffset.interpolate({
+					inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+					outputRange: [0, 1, 0]
+				}),
+				this.props.yOffsets.home.interpolate({
+					inputRange: [-81, -80, 0, 70, 71],
+					outputRange: [0.2, 0.2, 0, -0.2, -0.2]
+				})
+			),
+			this.props.xOffset.interpolate({
+				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+				outputRange: [0.5, 1, 0.5]
+			}),
+		)
+
+		const balanceOpacity = this.props.xOffset.interpolate({
+			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+			outputRange: [0, 1, 0]
+		})
+
+		const balanceTranslateX = this.props.xOffset.interpolate({
+			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+			outputRange: [220, 0, -220]
+		})
 
 		const animatedBalance = {
 			transform: [
 				{
-					scale: this.props.yOffsets.home.interpolate({
-						inputRange: [-81, -80, 0, 55, 56],
-						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
-					})
+					scale: balanceScale
 				},
 				{
-					translateY: balanceTranslateY
+					translateY: balanceTranslateY,
 				},
 				{
-					translateX: this.props.xOffset.interpolate({
-						inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
-						outputRange: [150, 0, -150]
-					})
+					translateX: balanceTranslateX
 				}
-			]
+			],
+			opacity: balanceOpacity,
 		}
-
-		const isLoading = (
-			this.state.refreshing 
-			|| this.state.isLoadingExchangeRates
-			|| this.state.isLoadingBalance
-			|| this.state.isLoadingTransactions
-		)
 
 		return (
 			<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={() => {
@@ -126,16 +150,19 @@ class Balance extends Component {
 					this.props.setActiveCurrency("USD")
 				}
 			}}>
-				<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-					<Text style={styles.balanceText}>{isLoading ? " " : relativeBalance}</Text>
+				<Animated.View pointerEvents="box-only" style={[
+					animatedBalance,
+					styles.balance
+				]}>
+					<Text style={styles.balanceText}>{this.state.loading ? " " : relativeBalance}</Text>
 					<View style={[styles.balanceRefresh, {
-						opacity: isLoading ? 100 : 0
+						opacity: this.state.loading ? 100 : 0
 					}]}>
-						<LoadingCircle size={30} restart={isLoading}/>
+						<LoadingCircle size={30} restart={this.state.loading}/>
 					</View>
 					<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
 						<Image source={icons.refresh} style={styles.refreshIcon}/>
-						<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
+						<Text style={styles.balanceCurrencyText}>{this.props.currency}</Text>
 					</View>
 				</Animated.View>
 			</TouchableWithoutFeedback>

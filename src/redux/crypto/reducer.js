@@ -83,7 +83,7 @@ export default function cryptoReducer(state = initialState, action) {
         return {
           ...state,
           isLoadingBalance: true,
-          loadingBalanceCurrency: action.currency
+          loadingExchangeRatesCurrency: action.currency
         }
 
       case ActionTypes.LOAD_EXCHANGE_RATES_SUCCESS:
@@ -93,7 +93,7 @@ export default function cryptoReducer(state = initialState, action) {
           successLoadingExchangeRates: true,
           exchangeRates: {
             ...state.exchangeRates,
-            [state.loadingExchangeRateCurrency]: action.exchangeRate
+            [state.loadingExchangeRatesCurrency]: action.exchangeRates
           }
         }
 
