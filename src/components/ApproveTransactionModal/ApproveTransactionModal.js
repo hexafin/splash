@@ -6,6 +6,7 @@ import Checkmark from "../universal/Checkmark"
 import TouchID from "react-native-touch-id"
 import Button from "../universal/Button"
 import { cryptoUnits } from '../../lib/cryptos'
+import { BITCOIN_ERRORS } from '../../bitcoin-api'
 
 class ApproveTransactionModal extends Component {
 
@@ -76,6 +77,7 @@ class ApproveTransactionModal extends Component {
 	render() {
 		const {
 			address,
+			userId,
 			amount,
 			currency,
 		    exchangeRate,
@@ -85,35 +87,12 @@ class ApproveTransactionModal extends Component {
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
 
-
-
 		const fee = (1.0*this.state.feeSatoshi/cryptoUnits.BTC).toFixed(5)
 		const totalBtcAmount = (parseFloat(btcAmount)+parseFloat(fee)).toFixed(5)
 		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
 
-		const confirm = () => {
-			if (totalBtcAmount) {
-				const relativeAmount = (1.0*btcAmount*parseFloat(rate)).toFixed(2)
-				TouchID.authenticate("Confirm Transaction").then(success => {
-					if (success) {
-						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount)
-							.then(successCallback)
-							.catch(error => {
-								Alert.alert("An error occurred while signing transaction. Please try again later")
-								console.log(error)
-							})
-					}
-				})
-				.catch(error => {
-					console.log("TouchID Error:", error)
-				})
-			} else {
-				Alert.alert("Unable to calculate fee. Please try again")
-			}
-		}
-
 		const dismiss = () => {
-			Animated.timing(this.backgroundOpacity, {
+			Animated.timing(this.state.backgroundOpacity, {
 				toValue: 0,
 				duration: 200,
 				easing: Easing.linear(),
@@ -125,6 +104,33 @@ class ApproveTransactionModal extends Component {
 			})
 		}
 
+		const confirm = () => {
+			if (totalBtcAmount) {
+				const relativeAmount = (1.0*btcAmount*parseFloat(rate)).toFixed(2)
+				TouchID.authenticate("Confirm Transaction").then(success => {
+					if (success) {
+						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount, userId)
+							.then(successCallback)
+							.catch(error => {
+								if (error == BITCOIN_ERRORS.BALANCE) {
+									Alert.alert("Insufficient balance")
+								} else if (error == BITCOIN_ERRORS.UTXOS) {
+									Alert.alert("Insufficient available balance. Please wait for your transactions to be confirmed before sending more.")
+								} else if (error == BITCOIN_ERRORS.FEE) {
+									Alert.alert("Bitcoin fee is greater than balance. Try lowering the fee in settings.")
+								}
+								dismiss()
+							})
+					}
+				})
+				.catch(error => {
+					console.log("TouchID Error:", error)
+				})
+			} else {
+				Alert.alert("Unable to calculate fee. Please try again")
+			}
+		}
+
 		return (
 			<TouchableWithoutFeedback onPress={() => dismiss()}>
 			<Animated.View style={[styles.container, {backgroundColor: this.backgroundOpacity.interpolate({
@@ -134,8 +140,7 @@ class ApproveTransactionModal extends Component {
 				<View style={{ flexDirection: "row" }}>
 					<TouchableWithoutFeedback onPress={() => {}}>
 					<View style={styles.popup}>
-						{ !this.props.error &&
-								<View style={styles.content}>
+					<View style={styles.content}>
 	                <View style={styles.header}>
 	                  <Text style={styles.title}>Confirm transaction</Text>
 	                  <TouchableOpacity onPress={() => dismiss()}>
@@ -162,29 +167,14 @@ class ApproveTransactionModal extends Component {
 	                  	checkmark={this.state.success && !this.props.loading}
 	                  	checkmarkPersist={true}
 						checkmarkCallback={() => dismiss()}
-						disabled={this.props.error}
+						disabled={(this.props.error != null) ? true : false}
 						title={"Send Transaction"} primary={true}/>
 	                  <View style={{flexDirection: 'row', paddingTop: 10, alignSelf: 'center', alignItems: 'center'}}>
 	                    <Image style={{height: 13, width: 10}} source={require('../../assets/icons/lockIcon.png')}/>
 	                    <Text style={{paddingLeft: 10, backgroundColor: 'rgba(0,0,0,0)', color: colors.lightGray, fontSize: 15, fontWeight: '600'}}>Payment secured by Splash</Text>
 	                  </View>
 	                </View>
-								</View>
-	            }
-
-						{this.props.error &&
-							<View style={styles.content}>
-							<View style={styles.header}>
-								<Text style={styles.title}>Transaction request</Text>
-								<TouchableOpacity onPress={() => dismiss()}>
-									<Image style={{height: 14, width: 14}} source={require('../../assets/icons/Xbutton.png')}/>
-								</TouchableOpacity>
-							</View>
-							<Text style={{justifyContent: 'center', alignItems: 'center'}}>
-								Oops! something went wrong when processing your
-								transaction
-							</Text>
-							</View>}
+					</View>
 					</View>
 					</TouchableWithoutFeedback>
 				</View>

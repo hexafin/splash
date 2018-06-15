@@ -26,8 +26,8 @@ import Hits from "./Hits"
 import SplashtagButton from "./SplashtagButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { InstantSearch } from 'react-instantsearch/native';
+import api from '../../api'
 import firebase from "react-native-firebase";
-let bitcoin = require('bitcoinjs-lib') 
 let firestore = firebase.firestore();
 
 import { algoliaKeys } from '../../../env/keys.json'
@@ -42,7 +42,8 @@ class PayFlow extends Component {
 			activeSection: "chooseType",
 			splashtagSearch: "",
 			splashtagSearchResults: [],
-			splashtag: null
+			splashtag: null,
+			selectedId: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -69,7 +70,8 @@ class PayFlow extends Component {
 			activeSection: "chooseType", 
 			splashtagSearch: "",
 			splashtagSearchResults: [],
-			splashtag: null
+			splashtag: null,
+			selectedId: null,
 		})
 		this.props.resetQr()
 		Animated.sequence([
@@ -107,11 +109,10 @@ class PayFlow extends Component {
 		this.setState({currency: nextProps.currency})
 
 		if (nextProps.qrAddress != null) {
-			try {
-				const address = nextProps.qrAddress
+			const address = nextProps.qrAddress
+			if (api.IsValidAddress(address, this.props.network)) {
+
 				// just captured a qr address => move the flow along if its a real address
-				const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-				bitcoin.address.toOutputScript(address, network)
 				this.setState({activeSection: "enterAmount", address: address})
 				this.props.resetQr()
 				Animated.sequence([
@@ -131,8 +132,7 @@ class PayFlow extends Component {
 						})
 					])
 				]).start()
-			}
-			catch (error) {
+			} else {
 				Alert.alert("Invalid bitcoin address")
 			}
 		}
@@ -142,34 +142,31 @@ class PayFlow extends Component {
 
 		const amount = parseFloat(this.state.amount)
 		const address = this.state.address
-		const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-		try {
-			bitcoin.address.toOutputScript(address, network)
+		const userId = this.state.selectedId
 
-			if (!this.props.balance) {
-				Alert.alert("Unable to load balance")
-			} else if (!this.props.exchangeRate) {
-				Alert.alert("Unable to load exchange rate")
-			} else if (!amount) {
-				Alert.alert("Please enter amount")
-			} else if (!address) {
-				Alert.alert("Please enter address")
-			} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
-				Alert.alert("Not enough balance")
-			} else {
-				this.props.navigation.navigate("ApproveTransactionModal", {
-					address,
-					amount: parseFloat(amount),
-					currency: this.state.currency,
-					exchangeRate: this.props.exchangeRate['USD'],
-					successCallback: () => {
-						this.reset()
-					}
-				});
-			}
-
-		} catch(e) {
+		if (!api.IsValidAddress(address, this.props.network)) {
 			Alert.alert("Invalid bitcoin address")
+		} else if (!this.props.balance) {
+			Alert.alert("Unable to load balance")
+		} else if (!this.props.exchangeRate) {
+			Alert.alert("Unable to load exchange rate")
+		} else if (!amount) {
+			Alert.alert("Please enter amount")
+		} else if (!address) {
+			Alert.alert("Please enter address")
+		} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
+			Alert.alert("Not enough balance")
+		} else {
+			this.props.navigation.navigate("ApproveTransactionModal", {
+				address,
+				userId,
+				amount: parseFloat(amount),
+				currency: this.state.currency,
+				exchangeRate: this.props.exchangeRate['USD'],
+				successCallback: () => {
+					this.reset()
+				}
+			});
 		}
 	}
 
@@ -177,7 +174,8 @@ class PayFlow extends Component {
 		this.setState({
 			activeSection: "enterAmount",
 			address: user.bitcoinAddress,
-			splashtag: user.splashtag
+			splashtag: user.splashtag,
+			selectedId: user.objectID,
 		})
 		Animated.sequence([
 			// fade out choose type
@@ -205,28 +203,29 @@ class PayFlow extends Component {
 			case "clipboard":
 				Clipboard.getString().then(address => {
 					this.setState({address: address})
-					const network = (this.props.network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-					bitcoin.address.toOutputScript(this.state.address, network)
-					this.setState({activeSection: "enterAmount"})
-					Animated.sequence([
-						// fade out choose type
-						Animated.timing(this.chooseTypeOpacity, {
-							toValue: 0,
-							duration: 500
-						}),
-						Animated.parallel([
-							Animated.timing(this.enterAmountOpacity, {
-								toValue: 1,
+					if (api.IsValidAddress(this.state.address, this.props.network)) {
+						this.setState({activeSection: "enterAmount"})
+						Animated.sequence([
+							// fade out choose type
+							Animated.timing(this.chooseTypeOpacity, {
+								toValue: 0,
 								duration: 500
 							}),
-							Animated.timing(this.wrapperHeight, {
-								toValue: this.state.enterAmountHeight,
-								duration: 500
-							}).start()
-						])
-					]).start()
+							Animated.parallel([
+								Animated.timing(this.enterAmountOpacity, {
+									toValue: 1,
+									duration: 500
+								}),
+								Animated.timing(this.wrapperHeight, {
+									toValue: this.state.enterAmountHeight,
+									duration: 500
+								}).start()
+							])
+						]).start()
+					} else {
+						Alert.alert("Invalid bitcoin address")
+					}
 				}).catch(error => {
-					Alert.alert("Invalid bitcoin address")
 					this.reset()
 				})
 				
