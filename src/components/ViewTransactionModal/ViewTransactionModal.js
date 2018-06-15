@@ -12,7 +12,6 @@ import {
 	Image,
 	Dimensions
 } from "react-native";
-import { BlurView } from 'react-native-blur';
 import { colors } from "../../lib/colors"
 import { icons, defaults } from "../../lib/styles";
 import LoadingCircle from "../universal/LoadingCircle"
