@@ -151,34 +151,20 @@ export const SignUp = user => {
 
 					if (data.availableUser) {
 
-						Keychain.getGenericPassword().then(data => {
+						const entity = {
+							splashtag: splashtag,
+							phoneNumber,
+				            defaultCurrency: "USD"
+						}
 
-							let bitcoinData = {}
-							if(data.username == userId) {
-								console.log('Bitcoin address found in Keychain')
-								bitcoinData = JSON.parse(data.password)
-							} else {
-								// create new bitcoin wallet
-								bitcoinData = api.NewBitcoinWallet(network)
-							}
-							const entity = {
-								splashtag: splashtag,
-								phoneNumber,
-					            defaultCurrency: "USD",
-					            bitcoinAddress: bitcoinData.address
-							}
-
-							userRef.set(entity).then(() => {
-								dispatch(signUpSuccess())
-								resolve({userId, bitcoinData})
-							}).catch(error => {
-								dispatch(signUpFailure(error))
-								reject(error)
-							})
+						userRef.set(entity).then(() => {
+							dispatch(signUpSuccess())
+							resolve(userId)
 						}).catch(error => {
 							dispatch(signUpFailure(error))
 							reject(error)
 						})
+
 					}
 					else {
 						// username already taken

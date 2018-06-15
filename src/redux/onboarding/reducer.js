@@ -56,7 +56,6 @@ export default function onboardingReducer(state = initialState, action) {
             }
 
         case SIGN_UP_FAILURE:
-            Sentry.captureMessage(action.error)
             return {
                 ...state,
                 isSigningUp: false,
@@ -84,7 +83,6 @@ export default function onboardingReducer(state = initialState, action) {
             }
 
         case SMS_AUTH_FAILURE:
-            Sentry.captureMessage(action.error)
             return {
                 ...state,
                 isSmsAuthenticating: false,
@@ -106,7 +104,6 @@ export default function onboardingReducer(state = initialState, action) {
             }
 
         case SMS_CONFIRM_FAILURE:
-            Sentry.captureMessage(action.error)
             return {
                 ...state,
                 isSmsConfirming: false,

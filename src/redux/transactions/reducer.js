@@ -29,7 +29,6 @@ const initialState = {
   errorLoadingTransactions: null,
   isSendingTransaction: false,
   errorSendingTransaction: null,
-  exchangeRates: null,
   qrAddress: null
 }
 

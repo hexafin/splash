@@ -22,7 +22,7 @@ Usage:
 
 export default class LoadingCircle extends Component {
 
-    componentDidReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.restart === true) {
             this.animation.play()
         }

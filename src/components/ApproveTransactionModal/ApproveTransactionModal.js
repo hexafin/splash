@@ -13,17 +13,20 @@ class ApproveTransactionModal extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			backgroundOpacity: new Animated.Value(0.0),
 			success: false,
 			wasLoading: false,
 			feeSatoshi: null,
 		}
 	}
 
+	componentWillMount() {
+		this.backgroundOpacity = new Animated.Value(0)
+	}
+
 	componentDidMount() {
 		Animated.sequence([
 		 Animated.delay(300),
-		 Animated.timing(this.state.backgroundOpacity, {
+		 Animated.timing(this.backgroundOpacity, {
  			toValue: 1,
  			easing: Easing.linear(),
  			duration: 200
@@ -84,8 +87,6 @@ class ApproveTransactionModal extends Component {
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
 
-
-
 		const fee = (1.0*this.state.feeSatoshi/cryptoUnits.BTC).toFixed(5)
 		const totalBtcAmount = (parseFloat(btcAmount)+parseFloat(fee)).toFixed(5)
 		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
@@ -132,7 +133,7 @@ class ApproveTransactionModal extends Component {
 
 		return (
 			<TouchableWithoutFeedback onPress={() => dismiss()}>
-			<Animated.View style={[styles.container, {backgroundColor: this.state.backgroundOpacity.interpolate({
+			<Animated.View style={[styles.container, {backgroundColor: this.backgroundOpacity.interpolate({
 																										        inputRange: [0, 1],
 																									        outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']
 																										    })}]}>

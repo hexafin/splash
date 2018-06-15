@@ -34,109 +34,23 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			currency: "USD",
-			balance: null,
-			exchangeRate: null,
 			transactions: props.transactions,
-			loadingExchangeRate: true,
-			loadingBalance: true,
 			pulledToRefresh: false,
-			refreshing: false
-		}
-		this.loadBalance = this.loadBalance.bind(this)
-		this.loadExchangeRate = this.loadExchangeRate.bind(this)
-		this.refresh = this.refresh.bind(this)
-	}
-
-	loadBalance() {
-		this.setState(prevState => {
-			return {
-				...prevState,
-				loadingBalance: true,
-				balance: null
-			}
-		})
-		api.GetAddressBalance(this.props.bitcoinAddress, this.props.bitcoinNetwork).then(balance => {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balance,
-					loadingBalance: false
-				}
-			})
-		}).catch(error => {
-			Sentry.messageCapture(error)
-			this.setState(prevState => {
-				return {
-					...prevState,
-					balance: null,
-					loadingBalance: false
-				}
-			})
-		})
-	}
-
-	loadExchangeRate() {
-		this.setState(prevState => {
-			return {
-				...prevState,
-				loadingExchangeRate: true,
-				exchangeRate: null
-			}
-		})
-		// get exchange rate
-        api.GetExchangeRate().then(exchangeRate => {
-        	this.setState(prevState => {
-        		return {
-        			...prevState,
-        			exchangeRate,
-        			loadingExchangeRate: false
-        		}
-        	})
-        	this.props.UpdateExchangeRate(exchangeRate)
-        }).catch(error => {
-        	this.setState(prevState => {
-        		return {
-        			...prevState,
-        			exchangeRate: null,
-        			loadingExchangeRate: false
-        		}
-        	})
-        })
-	}
-
-	refresh() {
-		if (!this.state.pulledToRefresh) {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					pulledToRefresh: true,
-					refreshing: true
-				}
-			})
-			setTimeout(() => {
-				this.setState(prevState => {
-					return {
-						...prevState,
-						refreshing: false
-					}
-				})
-			}, 500)
-			ReactNativeHapticFeedback.trigger("impactHeavy", true)
-			this.loadBalance()
-			this.loadExchangeRate()
-			this.props.LoadTransactions()
+			refreshing: props.refreshing
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.setState(prevState => {
+			if (nextProps.transactions.length > prevState.transactions.length) {
+				this.props.refresh()
+			}
 			return {
 				...prevState,
-				transactions: nextProps.transactions
+				transactions: nextProps.transactions,
+				refreshing: nextProps.refreshing
 			}
 		})
-		this.loadBalance()
 	}
 
 	componentWillMount() {
@@ -144,9 +58,7 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
-        this.yOffset = new Animated.Value(0)
-
-        // TODO: FCM -> firebase messagin
+        // TODO: FCM -> firebase messaging
         // TODO: determine whether or not to open modal based on firebase data
         
 		// FCM.on(FCMEvent.Notification, async notif => {
@@ -175,115 +87,43 @@ class Home extends Component {
 		// });
 	}
   
-  componentDidMount() {
+  	componentDidMount() {
 
 		this.props.LoadTransactions()
-
-		this.loadExchangeRate()
-
-		// get balance
-        this.loadBalance()
 
 	}
 
 	render() {
-
-		const handleBalancePress = () => {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					currency: (prevState.currency == "BTC") ? "USD" : "BTC"
-				}
-			})
-		}
 
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
 		}
 
-		let balance = null
-		if (this.state.exchangeRate != null && this.state.balance != null) {
-			const rate = this.state.exchangeRate[this.state.currency]
-			balance = {
-				BTC: this.state.balance,
-				USD: parseFloat(this.state.balance * rate).toFixed(2)
-			}
-		}
-
-		let rate = {'USD': 0, 'BTC': 0}
-		if (!!this.state.exchangeRate) {
-			rate = this.state.exchangeRate
-		} else if (!!this.props.exchangeRates) {
-			rate = this.props.exchangeRates
-		}
-
-		const animatedHeader = {
-			opacity: this.yOffset.interpolate({
-				inputRange: [75, 76, 100, 101],
-				outputRange: [0, 0, 1, 1]
-			})
-		}
-
-		const animatedBalance = {
-			transform: [
-				{
-					scale: this.yOffset.interpolate({
-						inputRange: [-81, -80, 0, 55, 56],
-						outputRange: [1.2, 1.2, 1, 0.8, 0.8]
-					})
-				},
-				{
-					translateY: this.yOffset.interpolate({
-						inputRange: [-1, 0, 53, 54],
-						outputRange: [0, 0, -53, -53]
-					})
-				}
-			]
-		}
-
-		const isLoading = (
-			this.state.refreshing 
-			|| this.state.loadingExchangeRate 
-			|| this.state.loadingBalance
-			|| this.props.isLoadingTransactions
-		)
-
 		return (
-			<View style={{flex: 1}}>
+			<View style={styles.wrapper}>
 				<Animated.ScrollView
 					scrollEventThrottle={16}
 					contentContainerStyle={styles.scrollContainer}
 					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { y: this.yOffset } } }],
+						[{ nativeEvent: { contentOffset: { y: this.props.yOffset } } }],
 						{
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
 								if (currentY < -80) {
-									this.refresh()
+									this.props.refresh()
 								}
 								if (currentY >= 0) {
-									this.setState(prevState => {
-										return {
-											...prevState,
-											pulledToRefresh: false
-										}
-									})
+									this.setState({pulledToRefresh: false})
 								}
 							},
 							useNativeDriver: true
 						}
 					)}>
 					<View style={styles.container}>
-						<Image
-							source={require("../../assets/images/headerWaveInverse.png")}
-							style={styles.waveInverse}
-							resizeMode="contain"/>
 						<PayFlow reset={this.state.refreshing}
-								 currency={this.state.currency}
+								 currency={this.props.activeCurrency}
 								 network={this.props.bitcoinNetwork}
-								 exchangeRate={rate}
-								 balance={balance}
 								 navigation={this.props.navigation}/>
 						<View style={styles.history}>
 							<Text style={styles.sectionTitle}>Your history</Text>
@@ -320,108 +160,23 @@ class Home extends Component {
 						</View>
 					</View>
 				</Animated.ScrollView>
-				<Animated.View style={[styles.header]}/>
-				<Animated.View style={[animatedHeader, styles.headerShadow]}/>
-				
-				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={handleBalancePress}>
-					<Animated.View pointerEvents="box-only" style={[animatedBalance, styles.balance]}>
-						<Text style={styles.balanceText}>{!isLoading ? balance[this.state.currency] : " "}</Text>
-						<View style={[styles.balanceRefresh, {
-							opacity: isLoading ? 100 : 0
-						}]}>
-							<LoadingCircle size={30} restart={isLoading}/>
-						</View>
-						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
-							<Image source={icons.refresh} style={styles.refreshIcon}/>
-							<Text style={styles.balanceCurrencyText}>{this.state.currency}</Text>
-						</View>
-					</Animated.View>
-				</TouchableWithoutFeedback>
 			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
+	wrapper: {
+		flex: 1
+	},
 	scrollContainer: {
-		marginTop: 0,
-		paddingTop: 0,
-		position: "relative"
+		position: "relative",
+		overflow: "hidden",
+		paddingTop: 210
 	},
 	container: {
-		marginTop: 210,
-		paddingTop: 0,
 		position: "relative",
-		backgroundColor: colors.white
-	},
-	header: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		height: (isIphoneX()) ? 120 : 100,
-		width: SCREEN_WIDTH,
-		position: "absolute",
-		top: 0,
-		backgroundColor: colors.primary,
-	},
-	headerShadow: {
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		height: (isIphoneX()) ? 120 : 100,
-		width: SCREEN_WIDTH,
-		position: "absolute",
-		top: 0,
-		backgroundColor: colors.primary,
-		shadowOffset: {
-			width: 0,
-			height: 10,
-		},
-		shadowRadius: 12,
-		shadowOpacity: 0.2
-	},
-	balance: {
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-		position: "absolute",
-		top: (isIphoneX()) ? 90 : 70,
-		width: SCREEN_WIDTH,
-	},
-	balanceRefresh: {
-		position: "absolute",
-		width: "100%",
-		flexDirection: "row",
-		justifyContent: "center",
-		top: 0
-	},
-	balanceText: {
-		color: colors.white,
-		fontWeight: "600",
-		fontSize: 36,
-		backgroundColor: "transparent"
-	},
-	balanceCurrencyWrapper: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "transparent"
-	},
-	balanceCurrencyText: {
-		color: "rgba(255,255,255,0.7)",
-		fontSize: 16,
-		fontWeight: "600",
-		marginLeft: 5
-	},
-	refreshIcon: {
-		width: 16,
-		height: 16
-	},
-	waveInverse: {
-		width: SCREEN_WIDTH,
-		height: 200,
-		position: "absolute",
-		top: -70
+		overflow: "hidden"
 	},
 	sectionTitle: {
 		color: colors.primaryDarkText,

@@ -12,8 +12,6 @@ const initialState = {
 	isUpdatingUsername: false,
 	errorUpdatingUsername: null,
 	entity: {},
-	bitcoin: {},
-	bitcoinNetwork: 'testnet',
 	id: null
 }
 
@@ -33,12 +31,10 @@ export default function reducer(state = initialState, action) {
 				isLoggingIn: false,
 				id: action.userId,
 				entity: action.entity,
-				bitcoin: action.bitcoin,
 				loggedIn: true
 			}
 
 		case ActionTypes.LOG_IN_FAILURE:
-			Sentry.captureMessage(action.error)
 			return {
 				...state,
 				isLoggingIn: false,
@@ -61,7 +57,6 @@ export default function reducer(state = initialState, action) {
 			}
 		
 		case ActionTypes.UPDATE_USERNAME_FAILURE:
-			Sentry.captureMessage(action.error)
 			return {
 				...state,
 				isUpdatingUsername: false,

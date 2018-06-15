@@ -12,6 +12,8 @@ import NavigatorService from "../navigator"
 import {reset} from 'redux-form';
 import * as Keychain from 'react-native-keychain';
 
+import { OpenWallet } from "../crypto/actions"
+
 let firestore = firebase.firestore()
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
@@ -30,12 +32,11 @@ export function logInInit() {
 	return { type: ActionTypes.LOG_IN_INIT }
 }
 
-export function logInSuccess(userId, entity, bitcoin) {
+export function logInSuccess(userId, entity) {
 	return {
 		type: ActionTypes.LOG_IN_SUCCESS,
 		userId,
-		entity,
-		bitcoin
+		entity
 	}
 }
 
@@ -59,7 +60,7 @@ export function resetUser() {
 	return { type: ActionTypes.RESET_USER, }
 }
 
-export const LogIn = (userId, bitcoinData) => {
+export const LogIn = (userId) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			const state = getState()
@@ -73,13 +74,10 @@ export const LogIn = (userId, bitcoinData) => {
 					userId: userId,
 					username: userData.splashtag
 				})
-			  	Keychain.setGenericPassword(userId, JSON.stringify(bitcoinData)).then(() => {
-					dispatch(logInSuccess(userId, userData, {address: bitcoinData.address}))
-					resolve()
-			  	}).catch(error => {
-			  		dispatch(logInFailure(error))
-					reject(error)
-			  	})
+
+				dispatch(logInSuccess(userId, userData))
+				resolve()
+
 			}).catch(error => {
 				dispatch(logInFailure(error))
 				reject(error)

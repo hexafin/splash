@@ -11,21 +11,26 @@ import {
 	TouchableWithoutFeedback
 } from "react-native"
 import firebase from "react-native-firebase"
-import { colors } from "../lib/colors"
-import { defaults, icons } from "../lib/styles"
+import { colors } from "../../lib/colors"
+import { defaults, icons } from "../../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
+import { LoadExchangeRates, LoadBalance } from "../../redux/crypto/actions"
 import PropTypes from "prop-types"
-import Account from "./Account"
-import Wallet from "./Wallet"
-import Home from "./Home"
+import Account from "../Account"
+import Wallet from "../Wallet"
+import Home from "../Home"
+import Balance from "./Balance"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
 
 const xOffset = new Animated.Value(0)
+const yOffsets = {
+	home: new Animated.Value(0)
+}
 const _onScroll = Animated.event(
 	[{ nativeEvent: { contentOffset: { x: xOffset } } }],
 	{
@@ -69,18 +74,49 @@ function iconTransform(index: number) {
 	}
 }
 
+function titleTransform(index: number) {
+	return {
+		transform: [
+			{
+				scale: xOffset.interpolate({
+					inputRange: [
+						(index - 1) * SCREEN_WIDTH,
+						index * SCREEN_WIDTH,
+						(index + 1) * SCREEN_WIDTH
+					],
+					outputRange: [0.75, 1, 0.75]
+				})
+			},
+			{
+				translateX: xOffset.interpolate({
+					inputRange: [
+						(index - 1) * SCREEN_WIDTH,
+						index * SCREEN_WIDTH,
+						(index + 1) * SCREEN_WIDTH
+					],
+					outputRange: [340, 0, -340]
+				})
+			}
+		]
+	}
+}
+
+const headerTranslateY = Animated.add(
+	xOffset.interpolate({
+		inputRange: [0, 1 * SCREEN_WIDTH, 2 * SCREEN_WIDTH],
+		outputRange: [-20, 0, -20]
+	}),
+	yOffsets.home.interpolate({
+		inputRange: [-41, -40, 0, 70, 71],
+		outputRange: [40, 40, 0, -70, -70]
+	})
+)
+
 function headerTransform() {
 	return {
 		transform: [
 			{
-				translateY: xOffset.interpolate({
-					inputRange: [
-						0,
-						1 * SCREEN_WIDTH,
-						2 * SCREEN_WIDTH
-					],
-					outputRange: [-20, 0, -20]
-				})
+				translateY: headerTranslateY
 			}
 		]
 	}
@@ -98,23 +134,26 @@ class SwipeApp extends Component {
 		this.state = {
 			activePage: this.props.activePage ? this.props.activePage : "Home",
 			activeIndex: 1,
-			isScrolling: false
+			currency: "USD",
+			refreshing: false,
 		}
 		this.pages = [
 			{
-				name: "Account",
+				name: "account",
 				component: Account,
-				image: icons.whiteSplash
+				image: icons.whiteSplash,
+				title: `@${this.props.splashtag}`,
 			},
 			{
-				name: "Home",
+				name: "home",
 				component: Home,
 				image: null
 			},
 			{
-				name: "Wallet",
+				name: "wallet",
 				component: Wallet,
-				image: icons.qrIcon
+				image: icons.qrIcon,
+				title: "You splash wallet"
 			}
 		]
 		this.pageIndices = {}
@@ -169,17 +208,36 @@ class SwipeApp extends Component {
 		xOffset.setValue(SCREEN_WIDTH)
 	}
 
+	refresh() {
+		ReactNativeHapticFeedback.trigger("impactHeavy", true)
+		this.setState({refreshing: true})
+		this.props.LoadBalance("BTC")
+		this.props.LoadExchangeRates("BTC")
+		setTimeout(() => {
+			this.setState({refreshing: false})
+		}, 500)
+	}
+
 	render() {
+
+		const customProps = {
+			home: {
+				refresh: this.refresh.bind(this),
+				refreshing: this.state.refreshing
+			}
+		}
 
 		const Pages = []
 		const Icons = []
+		const Titles = []
 		for (let i = 0; i < this.pages.length; i++) {
 			const page = this.pages[i]
 			Pages.push(
 				<Page key={"page-" + i}>
 					{React.createElement(page.component, {
 						...this.props,
-
+						yOffset: yOffsets[page.name],
+						...customProps[page.name]
 					})}
 				</Page>
 			)
@@ -204,14 +262,23 @@ class SwipeApp extends Component {
 					/>
 				</TouchableWithoutFeedback>
 			)
+			if (page.title) {
+				Titles.push(
+					<Animated.View
+						key={"swipe-app-title-"+i}
+						style={[
+							styles.title,
+							titleTransform(i)
+						]}
+					>
+						<Text style={styles.titleText}>{page.title}</Text>
+					</Animated.View>
+				)
+			}
 		}
 
 		return (
 			<View style={styles.container}>
-				<Animated.Image
-					source={require("../assets/images/headerWave.png")}
-					resizeMode="contain"
-					style={[headerTransform(), styles.headerImage]}/>
 				<Animated.ScrollView
 					horizontal
 					pagingEnabled
@@ -220,14 +287,14 @@ class SwipeApp extends Component {
 					showsHorizontalScrollIndicator={false}
 					showsVerticalScrollIndicator={false}
 					automaticallyAdjustContentInsets={false}
-					onScrollBeginDrag={event => {
-						this.setState(prevState => {
-							return {
-								...prevState,
-								isScrolling: true
-							}
-						})
-					}}
+					// onScrollBeginDrag={event => {
+					// 	this.setState(prevState => {
+					// 		return {
+					// 			...prevState,
+					// 			isScrolling: true
+					// 		}
+					// 	})
+					// }}
 					onMomentumScrollEnd={event => {
 						try {
 							const xOffset = event.nativeEvent.contentOffset.x
@@ -238,8 +305,7 @@ class SwipeApp extends Component {
 								return {
 									...prevState,
 									activePage: activePageName,
-									activeIndex: this.pageIndices[activePageName],
-									isScrolling: false
+									activeIndex: this.pageIndices[activePageName]
 								}
 							})
 						}
@@ -256,8 +322,19 @@ class SwipeApp extends Component {
 					style={{ flex: 1, flexDirection: "row" }}>
 					{Pages}
 				</Animated.ScrollView>
+
+				<Animated.Image
+					source={require("../../assets/images/headerWave.png")}
+					resizeMode="contain"
+					style={[headerTransform(), styles.headerImage]}/>
+				<View style={styles.header}/>
 				
 				{Icons}
+
+				{Titles}
+
+				<Balance refreshing={this.state.refreshing} yOffsets={yOffsets} xOffset={xOffset}/>
+
 			</View>
 		)
 	}
@@ -281,27 +358,69 @@ const styles = StyleSheet.create({
 			height: 5
 		},
 		shadowOpacity: 0.12,
-		shadowRadius: 12
+		shadowRadius: 12,
+	},
+	header: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		height: 60,
+		backgroundColor: colors.primary
 	},
 	headerImage: {
 		top: (isIphoneX()) ? -30 : -50,
 		width: SCREEN_WIDTH,
 		height: 240,
-		position: "absolute"
+		position: "absolute",
+		shadowOffset: {
+			width: 0,
+			height: 5
+		},
+		shadowOpacity: 0.12,
+		shadowRadius: 12,
+		overflow: "visible"
+	},
+	title: {
+		position: "absolute",
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		width: SCREEN_WIDTH,
+		top: isIphoneX() ? 115 : 95
+	},
+	titleText: {
+		fontSize: 24,
+		color: colors.white,
+		fontWeight: "700"
 	}
 })
 
 
 const mapStateToProps = state => {
 	return {
-		
+		splashtag: state.user.entity.splashtag,
+    	transactions: state.transactions.transactions,
+    	isLoadingTransactions: state.transactions.isLoadingTransactions,
+    	errorLoadingTransactions: state.transactions.errorLoadingTransactions,
+        exchangeRates: state.crypto.exchangeRates,
+        isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
+        loadingExchangeRatesCurrency: state.crypto.loadingExchangeRatesCurrency,
+        successLoadingExchangeRates: state.crypto.successLoadingExchangeRates,
+    	errorLoadingExchangeRates: state.crypto.errorLoadingExchangeRates,
+    	balance: state.crypto.balance,
+        isLoadingBalance: state.crypto.isLoadingBalance,
+        loadingBalanceCurrency: state.crypto.loadingBalanceCurrency,
+        successLoadingBalance: state.crypto.successLoadingBalance,
+    	errorLoadingBalance: state.crypto.errorLoadingBalance,
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
-			
+			LoadBalance,
+			LoadExchangeRates
 		},
 		dispatch
 	)

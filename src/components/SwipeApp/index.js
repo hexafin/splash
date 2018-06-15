@@ -1,8 +1,8 @@
-import Home from "./Home"
+import SwipeApp from "./SwipeApp"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {LoadTransactions} from "../../redux/transactions/actions"
-import {LoadBalance, LoadExchangeRates} from "../../redux/crypto/actions"
+import {LoadBalance, LoadExchangeRates, setActiveCurrency} from "../../redux/crypto/actions"
 
 const mapStateToProps = (state) => {
     return {
@@ -27,8 +27,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-    	LoadTransactions, LoadExchangeRates, LoadBalance
+    	LoadTransactions, LoadBalance, LoadExchangeRates, setActiveCurrency
     }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(SwipeApp)

@@ -68,11 +68,6 @@ export function loadTransactionsFailure(error) {
 	return { type: LOAD_TRANSACTIONS_FAILURE, error };
 }
 
-export const UPDATE_EXCHANGE_RATE = "UPDATE_EXCHANGE_RATE"
-export function updateExchangeRate(exchangeRate) {
-	return { type: UPDATE_EXCHANGE_RATE, exchangeRate };
-}
-
 export const CAPTURE_QR = "CAPTURE_QR"
 export function captureQr(address) {
 	return { type: CAPTURE_QR, address }
@@ -104,7 +99,7 @@ export const LoadTransactions = () => {
 			return transactions
 		}
 
-		api.AddBlockchainTransactions(state.user.bitcoin.address, state.user.id, state.user.bitcoinNetwork).then(() => {
+		api.AddBlockchainTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.bitcoinNetwork).then(() => {
 
 			// two listeners for each firebase property
 			// after one listener finds changes merges in the documents found from the other
@@ -195,14 +190,22 @@ export const ApproveTransaction = (transaction) => {
 	}
 }
 
-export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount, toId=null) => {
+
+export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount, toId=null, currency="BTC") => {
 	return (dispatch, getState) => {
     
     return new Promise((resolve, reject) => {
 
+    	if (currency != "BTC") {
+    		const error = `Send transaction: unsupported currency: ${currency}`
+				Sentry.messageCapture(error)
+    		dispatch(sendTransactionFailure(error))	
+        reject(error)
+    	}
+
       const state = getState()
-      const userBtcAddress = state.user.bitcoin.address
-      const network = state.user.bitcoinNetwork
+      const userBtcAddress = state.crypto.wallets[currency].address
+      const network = state.crypto.wallets[currency].network
       const totalBtcAmount = parseFloat(btcAmount)+parseFloat(feeSatoshi/cryptoUnits.BTC)
 
       let transaction = {
@@ -225,7 +228,7 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
 
       dispatch(sendTransactionInit())
       Keychain.getGenericPassword().then(data => {
-        const privateKey = JSON.parse(data.password).wif
+        const privateKey = JSON.parse(data.password)[currency].wif
         api.BuildBitcoinTransaction({from: userBtcAddress, to:toAddress, privateKey, amtBTC: totalBtcAmount, fee: feeSatoshi, network}).then(response => {
           const {txid, txhex} = response
           transaction.txId = txid
@@ -251,11 +254,5 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
 export const DismissTransaction = () => {
 	return (dispatch, getState) => {
 		dispatch(dismissTransaction())
-	}
-}
-
-export const UpdateExchangeRate = (exchangeRate) => {
-	return (dispatch, getState) => {
-		dispatch(updateExchangeRate(exchangeRate))
 	}
 }
