@@ -14,7 +14,7 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
 import {Input} from "../universal/Input"
 
-const Account = ({splashtag, logout, navigation}) => {
+const Account = ({splashtag, userId, logout, navigation}) => {
 
 		const handleLogout = () => {
 			Alert.alert(
@@ -22,7 +22,7 @@ const Account = ({splashtag, logout, navigation}) => {
 			  'Are you sure you want to delete your account? Your funds will be irretrievable.',
 			  [
 			    {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-			    {text: 'Yes', onPress: () => logout()},
+			    {text: 'Yes', onPress: () => logout(userId)},
 			  ],
 			)
 		}
