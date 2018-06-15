@@ -94,7 +94,7 @@ function titleTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [340, 0, -340]
+					outputRange: [380, 0, -380]
 				})
 			}
 		]
@@ -106,10 +106,16 @@ const headerTranslateY = Animated.add(
 		inputRange: [0, 1 * SCREEN_WIDTH, 2 * SCREEN_WIDTH],
 		outputRange: [-20, 0, -20]
 	}),
-	yOffsets.home.interpolate({
-		inputRange: [-41, -40, 0, 70, 71],
-		outputRange: [40, 40, 0, -70, -70]
-	})
+	Animated.multiply(
+		xOffset.interpolate({
+			inputRange: [0, 1 * SCREEN_WIDTH, 2 * SCREEN_WIDTH],
+			outputRange: [0, 1, 0]
+		}),
+		yOffsets.home.interpolate({
+			inputRange: [-41, -40, 0, 70, 71],
+			outputRange: [40, 40, 0, -70, -70]
+		})
+	)
 )
 
 function headerTransform() {
@@ -131,12 +137,6 @@ class SwipeApp extends Component {
 
 	constructor(props) {
 		super(props)
-		this.state = {
-			activePage: this.props.activePage ? this.props.activePage : "Home",
-			activeIndex: 1,
-			currency: "USD",
-			refreshing: false,
-		}
 		this.pages = [
 			{
 				name: "account",
@@ -169,13 +169,6 @@ class SwipeApp extends Component {
 		try {
 			const xOffset = SCREEN_WIDTH * this.pageIndices[pageName]
 			scrollView.scrollTo({ x: xOffset, y: 0, animated: true })
-			this.setState(prevState => {
-				return {
-					...prevState,
-					activePage: pageName,
-					activeIndex: this.pageIndices[pageName]
-				}
-			})
 		}
 		catch (error) {
 			console.log(error)
@@ -188,13 +181,6 @@ class SwipeApp extends Component {
 				// console.log(index)
 				const xOffset = SCREEN_WIDTH * index
 				scrollView.scrollTo({ x: xOffset, y: 0, animated: true })
-				this.setState(prevState => {
-					return {
-						...prevState,
-						activePage: this.pages[index].name,
-						activeIndex: index
-					}
-				})
 			}
 		}
 		catch (error) {
@@ -206,25 +192,18 @@ class SwipeApp extends Component {
 		this.goToPageByIndex(this.scrollView, 1)
 		// initialize swipe app to center page
 		xOffset.setValue(SCREEN_WIDTH)
+
+		// load
+		this.props.LoadBalance()
+		this.props.LoadExchangeRates()
+		this.props.LoadTransactions()
 	}
 
-	refresh() {
-		this.setState({refreshing: true})
-		this.props.LoadBalance("BTC")
-		this.props.LoadExchangeRates("BTC")
-		setTimeout(() => {
-			this.setState({refreshing: false})
-		}, 500)
+	componentWillUnmount() {
+		xOffset.removeAllListeners()
 	}
 
 	render() {
-
-		const customProps = {
-			home: {
-				refresh: this.refresh.bind(this),
-				refreshing: this.state.refreshing
-			}
-		}
 
 		const Pages = []
 		const Icons = []
@@ -235,8 +214,7 @@ class SwipeApp extends Component {
 				<Page key={"page-" + i}>
 					{React.createElement(page.component, {
 						...this.props,
-						yOffset: yOffsets[page.name],
-						...customProps[page.name]
+						yOffset: yOffsets[page.name]
 					})}
 				</Page>
 			)
@@ -254,9 +232,10 @@ class SwipeApp extends Component {
 							styles.icon,
 							iconTransform(i),
 							{
-								height: (page.name == "Receive") ? 40 : 45,
-								width: (page.name == "Receive") ? 40 : 45,
-							}
+								height: (page.name == "wallet") ? 37 : 45,
+								width: (page.name == "wallet") ? 37 : 45,
+							},
+							(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
 						]}
 					/>
 				</TouchableWithoutFeedback>
@@ -300,13 +279,6 @@ class SwipeApp extends Component {
 							const activePageName = this.pages[
 								xOffset / SCREEN_WIDTH
 							].name
-							this.setState(prevState => {
-								return {
-									...prevState,
-									activePage: activePageName,
-									activeIndex: this.pageIndices[activePageName]
-								}
-							})
 						}
 						catch (error) {
 							console.log(error)
@@ -332,7 +304,7 @@ class SwipeApp extends Component {
 
 				{Titles}
 
-				<Balance refreshing={this.state.refreshing} yOffsets={yOffsets} xOffset={xOffset}/>
+				<Balance yOffsets={yOffsets} xOffset={xOffset}/>
 
 			</View>
 		)

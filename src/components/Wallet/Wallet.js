@@ -66,7 +66,6 @@ class Wallet extends Component {
 					<View style={styles.bodyTitleWrapper}>
 						<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
 					</View>
-					<Image source={{uri: qrCode}} style={styles.qr}/>
 					<TouchableWithoutFeedback
 						onPress={this.handleCopy}
 						onPressIn={() => {
@@ -86,6 +85,7 @@ class Wallet extends Component {
 						<Animated.View style={[styles.addressCopyWrapper, {
 							transform: [{scale: this.animatedAddressCopy}]
 						}]}>
+							<Image source={{uri: qrCode}} style={styles.qr}/>
 							<View style={styles.addressWrapper}>
 								<Text style={styles.addressText}>{address}</Text>
 							</View>
@@ -127,7 +127,8 @@ const styles = StyleSheet.create({
 	bodyTitleWrapper: {
 		width: "100%",
 		flexDirection: "row",
-		justifyContent: "flex-start"
+		justifyContent: "flex-start",
+		marginBottom: 10
 	},
 	bodyTitle: {
 		color: colors.primaryDarkText,

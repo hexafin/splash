@@ -30,8 +30,8 @@ export function setActiveCurrency(currency) {
 	return { type: ActionTypes.SET_ACTIVE_CURRENCY, currency };
 }
 
-export function loadBalanceInit() {
-	return { type: ActionTypes.LOAD_BALANCE_INIT };
+export function loadBalanceInit(currency) {
+	return { type: ActionTypes.LOAD_BALANCE_INIT, currency };
 }
 
 export function loadBalanceSuccess(balance) {

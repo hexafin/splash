@@ -74,7 +74,6 @@ class PayFlow extends Component {
 			splashtag: null,
 			selectedId: null,
 		})
-		this.props.resetQr()
 		Animated.sequence([
 			Animated.parallel([
 				// fade out enter amount
@@ -475,6 +474,8 @@ const mapStateToProps = state => {
 		qrAddress: state.transactions.qrAddress,
 		balance: state.crypto.balance,
 		exchangeRates: state.crypto.exchangeRates,
+		currency: state.crypto.activeCurrency,
+		bitcoinNetwork: state.crypto.wallets.BTC.network,
 		currency: state.crypto.activeCurrency,
 	}
 }
