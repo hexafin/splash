@@ -310,8 +310,8 @@ class Home extends Component {
 											this.props.navigation.navigate("ViewTransactionModal", {
 												  transaction,
 												  direction,
-	  						                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-							                      exchangeRate: rate['USD'],
+                          address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+                          exchangeRate: rate['USD'],
 										  })
 										}}
 									/>

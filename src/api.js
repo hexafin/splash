@@ -89,20 +89,18 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
       query2.forEach(doc => {
         firebaseTxIds.push(doc.data().txId)
         firebaseTxs.push(doc.data())
-      })            
+      })
     }
 
     // load txs from blockchain
     const blockHeight = (await axios.get(blockHeightAPI)).data
     const txs = (await axios.get(addressAPI)).data.txs
     const txsLength = txs.length
-
     for(var j=0; j < txsLength; j++) {
       
       const index = firebaseTxIds.indexOf(txs[j].hash)
       // if the txId is not on firebase and the transaction is important (ie not both from and to the user) or if the transaction is pending
       if ((index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
-
           let pending = false
           if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
             pending = true
