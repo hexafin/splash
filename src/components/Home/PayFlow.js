@@ -43,7 +43,8 @@ class PayFlow extends Component {
 			splashtagSearch: "",
 			splashtagSearchResults: [],
 			splashtag: null,
-			selectedId: null
+			selectedId: null,
+			exchangeRates: props.exchangeRates
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -106,7 +107,11 @@ class PayFlow extends Component {
 		if (nextProps.reset) {
 			this.reset()
 		}
-		this.setState({currency: nextProps.currency})
+		this.setState({
+			currency: nextProps.currency, 
+			exchangeRates: nextProps.exchangeRates,
+			balance: nextProps.balance
+		})
 
 		if (nextProps.qrAddress != null) {
 			const address = nextProps.qrAddress
@@ -141,6 +146,17 @@ class PayFlow extends Component {
 	handleSend() {
 
 		const amount = parseFloat(this.state.amount)
+		let relativeAmount
+		if (this.state.currency == "USD") {
+			if (this.state.exchangeRates.BTC) {
+				relativeAmount = amount * this.state.exchangeRates.BTC.USD
+			}
+			else {
+				relativeAmount = 0
+			}
+		} else {
+			relativeAmount = amount
+		}
 		const address = this.state.address
 		const userId = this.state.selectedId
 
@@ -148,21 +164,21 @@ class PayFlow extends Component {
 			Alert.alert("Invalid bitcoin address")
 		} else if (!this.props.balance) {
 			Alert.alert("Unable to load balance")
-		} else if (!this.props.exchangeRate) {
+		} else if (!this.props.exchangeRates) {
 			Alert.alert("Unable to load exchange rate")
 		} else if (!amount) {
 			Alert.alert("Please enter amount")
 		} else if (!address) {
 			Alert.alert("Please enter address")
-		} else if (parseFloat(amount) >= this.props.balance[this.state.currency]) {
+		} else if (parseFloat(amount) >= relativeAmount) {
 			Alert.alert("Not enough balance")
 		} else {
 			this.props.navigation.navigate("ApproveTransactionModal", {
 				address,
 				userId,
-				amount: parseFloat(amount),
+				amount: parseFloat(relativeCurrency),
 				currency: this.state.currency,
-				exchangeRate: this.props.exchangeRate['USD'],
+				exchangeRate: this.props.exchangeRates.BTC,
 				successCallback: () => {
 					this.reset()
 				}
@@ -173,7 +189,7 @@ class PayFlow extends Component {
 	handleSplashtagClick(user) {
 		this.setState({
 			activeSection: "enterAmount",
-			address: user.bitcoinAddress,
+			address: user.addresses.BTC,
 			splashtag: user.splashtag,
 			selectedId: user.objectID,
 		})
@@ -456,7 +472,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		qrAddress: state.transactions.qrAddress
+		qrAddress: state.transactions.qrAddress,
+		balance: state.crypto.balance,
+		exchangeRates: state.crypto.exchangeRates,
+		currency: state.crypto.activeCurrency,
 	}
 }
 

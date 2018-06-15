@@ -30,12 +30,11 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isLoggingIn: false,
 				id: action.userId,
-				entity: action.entity
+				entity: action.entity,
 				loggedIn: true
 			}
 
 		case ActionTypes.LOG_IN_FAILURE:
-			Sentry.captureMessage(action.error)
 			return {
 				...state,
 				isLoggingIn: false,
@@ -58,7 +57,6 @@ export default function reducer(state = initialState, action) {
 			}
 		
 		case ActionTypes.UPDATE_USERNAME_FAILURE:
-			Sentry.captureMessage(action.error)
 			return {
 				...state,
 				isUpdatingUsername: false,

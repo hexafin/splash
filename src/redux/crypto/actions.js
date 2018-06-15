@@ -66,7 +66,7 @@ export function openWalletFailure(error) {
 	return { type: ActionTypes.OPEN_WALLET_SUCCESS, error };
 }
 
-export const LoadBalance = (currency) => {
+export const LoadBalance = (currency="BTC") => {
 	return (dispatch, getState) => {
 		dispatch(loadBalanceInit(currency))
 
@@ -84,7 +84,7 @@ export const LoadBalance = (currency) => {
 					dispatch(loadBalanceFailure(error))
 				})
 				break
-			case default:
+			default:
 				const error = `Load balance: unsupported currency: ${currency}`
 				Sentry.messageCapture(error)
 				dispatch(loadBalanceFailure(error))
@@ -93,7 +93,7 @@ export const LoadBalance = (currency) => {
 	}
 }
 
-export const LoadExchangeRates = (currency) => {
+export const LoadExchangeRates = (currency="BTC") => {
 	return (dispatch, getState) => {
 		dispatch(loadExchangeRatesInit(currency))
 
@@ -115,15 +115,14 @@ export const LoadExchangeRates = (currency) => {
 	}
 }
 
-export const OpenWallet = (currency, network) => {
+export const OpenWallet = (currency, network="testnet") => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(openWalletInit(currency))
 
 			const state = getState()
 
-			const userId = user.uid
-			const network = state.user.bitcoinNetwork
+			const userId = state.user.id
 
 			Keychain.getGenericPassword().then(data => {
 
@@ -134,10 +133,11 @@ export const OpenWallet = (currency, network) => {
 					
 					// already have a wallet for this currency => load address to redux
 					console.log(currency, 'Address found in Keychain')
-					openWalletSuccess({
+					dispatch(openWalletSuccess({
 						address: keychainData[currency].address,
 						network: keychainData[currency].network,
-					})
+					}))
+					resolve()
 
 				} else {
 
@@ -157,7 +157,7 @@ export const OpenWallet = (currency, network) => {
 								wif: bitcoinData.wif
 							}
 							break
-						case default:
+						default:
 							const error = `Open wallet: unsupported currency: ${currency}`
 							Sentry.messageCapture(error)
 							dispatch(openWalletFailure(error))
@@ -169,12 +169,14 @@ export const OpenWallet = (currency, network) => {
 						[currency]: keychainWalletData
 					}
 
+					console.log(updatedKeychainData)
+
 					// add wallet to keychain
 					Keychain.setGenericPassword(userId, JSON.stringify(updatedKeychainData)).then(() => {
 
 						// update user with public wallet data for currency
 						firestore.collection("users").doc(userId).update({
-							`wallets.${currency}`: publicWalletData
+							[`wallets.${currency}`]: publicWalletData
 						}).then(() => {
 
 							dispatch(openWalletSuccess(publicWalletData))

@@ -60,7 +60,7 @@ export function resetUser() {
 	return { type: ActionTypes.RESET_USER, }
 }
 
-export const LogIn = (userId, bitcoinData) => {
+export const LogIn = (userId) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			const state = getState()

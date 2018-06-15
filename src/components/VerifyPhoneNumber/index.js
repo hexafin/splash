@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { SmsConfirm, SmsAuthenticate, SignUp } from "../../redux/onboarding/actions";
 import { LogIn } from "../../redux/user/actions";
+import { OpenWallet } from "../../redux/crypto/actions";
 
 const mapStateToProps = state => {
 	return {
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => {
 			SmsConfirm,
 			SmsAuthenticate,
 			SignUp,
+			OpenWallet,
 			LogIn
 		},
 		dispatch

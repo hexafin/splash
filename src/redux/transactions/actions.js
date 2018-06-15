@@ -99,7 +99,7 @@ export const LoadTransactions = () => {
 			return transactions
 		}
 
-		api.AddBlockchainTransactions(state.user.bitcoin.address, state.user.id, state.user.bitcoinNetwork).then(() => {
+		api.AddBlockchainTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.bitcoinNetwork).then(() => {
 
 			// two listeners for each firebase property
 			// after one listener finds changes merges in the documents found from the other

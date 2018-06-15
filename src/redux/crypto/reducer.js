@@ -3,7 +3,7 @@ import {Sentry} from 'react-native-sentry'
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
-import ActionTypes from "./actions.js"
+import {ActionTypes} from "./actions.js"
 
 const initialState = {
   activeCurrency: "USD",
@@ -20,10 +20,10 @@ const initialState = {
   errorLoadingExchangeRates: null,
 }
 
-export default function transactionReducer(state = initialState, action) {
+export default function cryptoReducer(state = initialState, action) {
     switch (action.type) {
 
-      case: ActionTypes.SET_ACTIVE_CURRENCY:
+      case ActionTypes.SET_ACTIVE_CURRENCY:
         return {
           ...state,
           activeCurrency: action.currency
@@ -43,7 +43,7 @@ export default function transactionReducer(state = initialState, action) {
           successOpeningWallet: true,
           wallets: {
             ...state.wallets,
-            [state.openingWalletCurrency]: action.currency
+            [state.openingWalletCurrency]: action.wallet
           }
         }
 

@@ -38,18 +38,19 @@ class Home extends Component {
 			pulledToRefresh: false,
 			refreshing: props.refreshing
 		}
-		this.refresh = this.refresh.bind(this)
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.setState(prevState => {
+			if (nextProps.transactions.length > prevState.transactions.length) {
+				this.props.refresh()
+			}
 			return {
 				...prevState,
 				transactions: nextProps.transactions,
 				refreshing: nextProps.refreshing
 			}
 		})
-		this.loadBalance()
 	}
 
 	componentWillMount() {
@@ -57,7 +58,7 @@ class Home extends Component {
             this.props.navigation.navigate("Landing")
         }
 
-        // TODO: FCM -> firebase messagin
+        // TODO: FCM -> firebase messaging
         // TODO: determine whether or not to open modal based on firebase data
         
 		// FCM.on(FCMEvent.Notification, async notif => {
@@ -86,47 +87,17 @@ class Home extends Component {
 		// });
 	}
   
-  componentDidMount() {
+  	componentDidMount() {
 
 		this.props.LoadTransactions()
-
-		this.loadExchangeRate()
-
-		// get balance
-        this.loadBalance()
 
 	}
 
 	render() {
 
-		const handleBalancePress = () => {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					currency: (prevState.currency == "BTC") ? "USD" : "BTC"
-				}
-			})
-		}
-
 		const currencyPrefix = {
 			BTC: "BTC ",
 			USD: "$"
-		}
-
-		let balance = null
-		if (this.state.exchangeRate != null && this.state.balance != null) {
-			const rate = this.state.exchangeRate[this.state.currency]
-			balance = {
-				BTC: this.state.balance,
-				USD: parseFloat(this.state.balance * rate).toFixed(2)
-			}
-		}
-
-		let rate = {'USD': 0, 'BTC': 0}
-		if (!!this.state.exchangeRate) {
-			rate = this.state.exchangeRate
-		} else if (!!this.props.exchangeRates) {
-			rate = this.props.exchangeRates
 		}
 
 		return (
@@ -140,15 +111,10 @@ class Home extends Component {
 							listener: event => {
 								const currentY = event.nativeEvent.contentOffset.y
 								if (currentY < -80) {
-									this.refresh()
+									this.props.refresh()
 								}
 								if (currentY >= 0) {
-									this.setState(prevState => {
-										return {
-											...prevState,
-											pulledToRefresh: false
-										}
-									})
+									this.setState({pulledToRefresh: false})
 								}
 							},
 							useNativeDriver: true
@@ -156,10 +122,8 @@ class Home extends Component {
 					)}>
 					<View style={styles.container}>
 						<PayFlow reset={this.state.refreshing}
-								 currency={this.state.currency}
+								 currency={this.props.activeCurrency}
 								 network={this.props.bitcoinNetwork}
-								 exchangeRate={rate}
-								 balance={balance}
 								 navigation={this.props.navigation}/>
 						<View style={styles.history}>
 							<Text style={styles.sectionTitle}>Your history</Text>
@@ -203,13 +167,12 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
 	wrapper: {
-		marginTop: 130,
 		flex: 1
 	},
 	scrollContainer: {
 		position: "relative",
 		overflow: "hidden",
-		paddingTop: 60
+		paddingTop: 210
 	},
 	container: {
 		position: "relative",
