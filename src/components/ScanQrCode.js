@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		network: state.user.bitcoinNetwork
+		network: state.crypto.wallets.BTC.network
 	}
 }
 
