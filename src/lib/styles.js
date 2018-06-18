@@ -48,4 +48,5 @@ export const icons = {
 	crossGray: require("../assets/icons/crossGray.png"),
 	at: require("../assets/icons/at.png"),
 	send: require("../assets/icons/send.png"),
+	startPay: require("../assets/icons/startPay.png"),
 }

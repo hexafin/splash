@@ -22,6 +22,7 @@ import LoadingCircle from "../universal/LoadingCircle"
 import PayFlow from "./PayFlow"
 import History from "./History"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import StartPayButton from "./StartPayButton"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -57,6 +58,8 @@ class Home extends Component {
         if (!this.props.loggedIn) {
             this.props.navigation.navigate("Landing")
         }
+
+        this.animatedPayScale = new Animated.Value(1)
 	}
 
 	componentDidMount() {
@@ -78,6 +81,12 @@ class Home extends Component {
 
 	render() {
 
+		const animatedPayButton = {
+			transform: [
+				{scale: this.animatedPayScale}
+			]
+		}
+
 		return (
 			<View style={styles.wrapper}>
 				<Animated.ScrollView
@@ -89,13 +98,10 @@ class Home extends Component {
 							useNativeDriver: true
 						}
 					)}>
-					<View style={styles.container}>
-						<PayFlow navigation={this.props.navigation} reset={this.state.loading == true}/>
-						<View style={{flex: 1, minHeight: 800}}>
-							<History/>
-						</View>
-					</View>
+					<History/>
 				</Animated.ScrollView>
+
+				<StartPayButton/>
 			</View>
 		);
 	}
@@ -103,16 +109,16 @@ class Home extends Component {
 
 const styles = StyleSheet.create({
 	wrapper: {
-		flex: 1
+		width: SCREEN_WIDTH,
+		height: SCREEN_HEIGHT,
+		// backgroundColor: colors.primary
 	},
 	scrollContainer: {
 		position: "relative",
 		overflow: "hidden",
-		paddingTop: 210
-	},
-	container: {
-		position: "relative",
-		overflow: "hidden"
+		paddingTop: 210,
+		height: SCREEN_HEIGHT,
+		// backgroundColor: colors.primary
 	},
 });
 
