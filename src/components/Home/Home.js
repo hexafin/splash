@@ -85,7 +85,7 @@ class Home extends Component {
 						}
 					)}>
 					<View style={styles.container}>
-						<PayFlow/>
+						<PayFlow navigation={this.props.navigation}/>
 						<View style={{flex: 1, minHeight: 800}}>
 							<History/>
 						</View>

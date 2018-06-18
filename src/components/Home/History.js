@@ -11,6 +11,7 @@ import {
 	Linking,
 	Alert,
 	Clipboard,
+	Modal,
 	Share,
 	Dimensions,
 	TextInput
@@ -22,6 +23,8 @@ import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import TransactionLine from "../universal/TransactionLine"
+import Popup from "../universal/Popup"
+import ViewTransactionModal from "../ViewTransactionModal"
 import { cryptoUnits } from '../../lib/cryptos'
 import moment from "moment"
 
@@ -32,7 +35,9 @@ class History extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			modalVisible: false,
+			modalProps: null,
 		}
 	}
 
@@ -46,10 +51,13 @@ class History extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
+		if (!nextProps.isLoadingExchangeRates && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
 			return true
 		}
 		else if (nextState.loading != this.state.loading) {
+			return true
+		}
+		else if (nextState.modalVisible != this.state.modalVisible || nextState.modalProps != this.state.modalProps) {
 			return true
 		}
 		else {
@@ -70,11 +78,10 @@ class History extends Component {
 				{this.props.transactions.map(transaction => {
 					const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
 					let amount
-					console.log(this.props.exchangeRates["USD"], cryptoAmount)
-					if (this.props.exchangeRates) {
+					if (this.props.exchangeRates.BTC) {
 						amount = this.props.currency == "BTC"
 							? parseFloat(cryptoAmount).toFixed(5)
-							: parseFloat(cryptoAmount*this.props.exchangeRates[this.props.currency]).toFixed(2)
+							: parseFloat(cryptoAmount*this.props.exchangeRates.BTC[this.props.currency]).toFixed(2)
 					}
 					else {
 						amount = 0
@@ -97,16 +104,25 @@ class History extends Component {
 							}
 							currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 							onPress={() => {
-								this.props.navigation.navigate("ViewTransactionModal", {
-									  transaction,
-									  direction,
-              address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-              exchangeRate: rate['USD'],
-							  })
-							}}
+									this.setState(prevState => {
+										return {
+											...prevState,
+											modalVisible: true,
+											modalProps: {
+											  transaction,
+											  direction,
+  						                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+						                      exchangeRate: this.props.exchangeRates.BTC["USD"],
+						                      dismiss: () => { this.setState({modalVisible: false, modalProps: null}) },
+						                	}
+						             	}
+						            })
+							}
+						}
 						/>
 					)
 				})}
+				<Popup visible={this.state.modalVisible} {...this.state.modalProps} component={ViewTransactionModal} />
 			</View>
 		)
 	}
@@ -126,7 +142,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		exchangeRates: state.crypto.exchangeRates.BTC,
+		exchangeRates: state.crypto.exchangeRates,
 		currency: state.crypto.activeCurrency,
 		transactions: state.transactions.transactions,
 		isLoadingTransactions: state.transactions.isLoadingTransactions,

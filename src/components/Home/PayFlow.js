@@ -24,6 +24,8 @@ import PayButton from "./PayButton"
 import SearchBox from "./SearchBox"
 import Hits from "./Hits"
 import SplashtagButton from "./SplashtagButton"
+import Popup from "../universal/Popup"
+import ApproveTransactionModal from "../ApproveTransactionModal"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { InstantSearch } from 'react-instantsearch/native';
 import api from '../../api'
@@ -44,7 +46,9 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
-			exchangeRates: props.exchangeRates
+			exchangeRates: props.exchangeRates,
+			modalVisible: false,
+			modalProps: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -73,6 +77,8 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
+			modalVisible: false,
+			modalProps: null
 		})
 		Animated.sequence([
 			Animated.parallel([
@@ -114,7 +120,7 @@ class PayFlow extends Component {
 
 		if (nextProps.qrAddress != null) {
 			const address = nextProps.qrAddress
-			if (api.IsValidAddress(address, this.props.network)) {
+			if (api.IsValidAddress(address, nextProps.bitcoinNetwork)) {
 
 				// just captured a qr address => move the flow along if its a real address
 				this.setState({activeSection: "enterAmount", address: address})
@@ -145,21 +151,12 @@ class PayFlow extends Component {
 	handleSend() {
 
 		const amount = parseFloat(this.state.amount)
-		let relativeAmount
-		if (this.state.currency == "USD") {
-			if (this.state.exchangeRates.BTC) {
-				relativeAmount = amount * this.state.exchangeRates.BTC.USD
-			}
-			else {
-				relativeAmount = 0
-			}
-		} else {
-			relativeAmount = amount
-		}
 		const address = this.state.address
 		const userId = this.state.selectedId
 
-		if (!api.IsValidAddress(address, this.props.network)) {
+		const btcAmount = this.state.currency == "BTC" ? amount : amount / this.props.exchangeRates.BTC.USD
+
+		if (!api.IsValidAddress(address, this.props.bitcoinNetwork)) {
 			Alert.alert("Invalid bitcoin address")
 		} else if (!this.props.balance) {
 			Alert.alert("Unable to load balance")
@@ -169,19 +166,25 @@ class PayFlow extends Component {
 			Alert.alert("Please enter amount")
 		} else if (!address) {
 			Alert.alert("Please enter address")
-		} else if (parseFloat(amount) >= relativeAmount) {
+		} else if (btcAmount >= this.props.balance.BTC) {
 			Alert.alert("Not enough balance")
 		} else {
-			this.props.navigation.navigate("ApproveTransactionModal", {
-				address,
-				userId,
-				amount: parseFloat(relativeCurrency),
-				currency: this.state.currency,
-				exchangeRate: this.props.exchangeRates.BTC,
-				successCallback: () => {
-					this.reset()
-				}
-			});
+			this.setState(prevState => {
+				return {
+					...prevState,
+					modalVisible: true,
+					modalProps: {
+						address,
+						userId,
+						amount,
+						currency: this.state.currency,
+						successCallback: () => {
+							this.reset()
+						},
+						dismissCallback: () => {this.setState({modalVisible: false, modalProps: null })},
+	            	}
+	         	}
+	        })
 		}
 	}
 
@@ -217,9 +220,8 @@ class PayFlow extends Component {
 
 			case "clipboard":
 				Clipboard.getString().then(address => {
-					this.setState({address: address})
-					if (api.IsValidAddress(this.state.address, this.props.network)) {
-						this.setState({activeSection: "enterAmount"})
+					if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
+						this.setState({address, activeSection: "enterAmount"})
 						Animated.sequence([
 							// fade out choose type
 							Animated.timing(this.chooseTypeOpacity, {
@@ -349,6 +351,7 @@ class PayFlow extends Component {
 						<Hits callback={this.handleSplashtagClick}/>
 					</Animated.View>
 				</InstantSearch>
+				<Popup visible={this.state.modalVisible} {...this.state.modalProps} component={ApproveTransactionModal} />
 			</Animated.View>
 		)
 	}
