@@ -101,7 +101,10 @@ class Home extends Component {
 					<History/>
 				</Animated.ScrollView>
 
-				<StartPayButton/>
+				<StartPayButton onPress={() => {
+					ReactNativeHapticFeedback.trigger("impactLight", true);
+					this.props.navigation.navigate("PayFlow");
+				}}/>
 			</View>
 		);
 	}

@@ -16,6 +16,7 @@ import ViewTransactionModal from "./components/ViewTransactionModal"
 import SwipeApp from "./components/SwipeApp"
 import ApproveTransactionModal from "./components/ApproveTransactionModal"
 import ApproveCardModal from "./components/ApproveCardModal"
+import EnterAmount from "./components/EnterAmount"
 
 
 function forVertical(props) {
@@ -72,6 +73,24 @@ const OnboardingRouter = createBottomTabNavigator(
 	}
 )
 
+const PayFlowRouter = createBottomTabNavigator(
+	{
+		EnterAmount: {
+			screen: EnterAmount,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		},
+	},
+	{
+		animationEnabled: true,
+		swipeEnabled: false,
+		initialRouteName: "EnterAmount",
+		activeBackgroundColor: colors.white,
+		inactiveBackgroundColor: colors.white
+	}
+)
+
 const AppRouter = createStackNavigator(
 	{
 		ApproveCardModal: {
@@ -89,6 +108,7 @@ const AppRouter = createStackNavigator(
 		UpdateUsername: {
 			screen: UpdateUsername
 		},
+		PayFlow: ({navigation}) => <PayFlowRouter screenProps={{rootNavigation: navigation}}/>,
 		SwipeApp: {
 			screen: SwipeApp
 		},
@@ -113,14 +133,14 @@ export default (loggedIn) => {
 			},
 			OnboardingRouter: {
 				screen: OnboardingRouter
-			}
+			},
 		},
 		{
 			headerMode: "none",
 			mode: "modal",
 			swipeEnabled: false,
 			initialRouteName: loggedIn ? "AppRouter" : "OnboardingRouter",
-			transitionConfig: () => ({ screenInterpolator: forVertical }),
+			// transitionConfig: () => ({ screenInterpolator: forVertical }),
 			cardStyle: {
 				backgroundColor: "rgba(0,0,0,0)"
 			}
