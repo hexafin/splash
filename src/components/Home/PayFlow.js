@@ -24,6 +24,8 @@ import PayButton from "./PayButton"
 import SearchBox from "./SearchBox"
 import Hits from "./Hits"
 import SplashtagButton from "./SplashtagButton"
+import Popup from "../universal/Popup"
+import ApproveTransactionModal from "../ApproveTransactionModal"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { InstantSearch } from 'react-instantsearch/native';
 import api from '../../api'
@@ -44,7 +46,9 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
-			exchangeRates: props.exchangeRates
+			exchangeRates: props.exchangeRates,
+			modalVisible: false,
+			modalProps: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -73,6 +77,8 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
+			modalVisible: false,
+			modalProps: null
 		})
 		Animated.sequence([
 			Animated.parallel([
@@ -114,7 +120,7 @@ class PayFlow extends Component {
 
 		if (nextProps.qrAddress != null) {
 			const address = nextProps.qrAddress
-			if (api.IsValidAddress(address, this.props.network)) {
+			if (api.IsValidAddress(address, nextProps.bitcoinNetwork)) {
 
 				// just captured a qr address => move the flow along if its a real address
 				this.setState({activeSection: "enterAmount", address: address})
@@ -163,19 +169,22 @@ class PayFlow extends Component {
 		} else if (btcAmount >= this.props.balance.BTC) {
 			Alert.alert("Not enough balance")
 		} else {
-			this.props.navigation.navigate("ApproveTransactionModal", {
-				address,
-				userId,
-				amount,
-				currency: this.state.currency,
-				exchangeRate: this.props.exchangeRates.BTC,
-				successCallback: () => {
-					this.reset()
-				},
-				dismissCallback: () => {
-					this.props.navigation.goBack(null)
-				},
-			});
+			this.setState(prevState => {
+				return {
+					...prevState,
+					modalVisible: true,
+					modalProps: {
+						address,
+						userId,
+						amount,
+						currency: this.state.currency,
+						successCallback: () => {
+							this.reset()
+						},
+						dismissCallback: () => {this.setState({modalVisible: false, modalProps: null })},
+	            	}
+	         	}
+	        })
 		}
 	}
 
@@ -342,6 +351,7 @@ class PayFlow extends Component {
 						<Hits callback={this.handleSplashtagClick}/>
 					</Animated.View>
 				</InstantSearch>
+				<Popup visible={this.state.modalVisible} {...this.state.modalProps} component={ApproveTransactionModal} />
 			</Animated.View>
 		)
 	}

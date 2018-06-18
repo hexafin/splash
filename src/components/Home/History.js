@@ -23,8 +23,9 @@ import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import TransactionLine from "../universal/TransactionLine"
-import { cryptoUnits } from '../../lib/cryptos'
+import Popup from "../universal/Popup"
 import ViewTransactionModal from "../ViewTransactionModal"
+import { cryptoUnits } from '../../lib/cryptos'
 import moment from "moment"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -50,13 +51,13 @@ class History extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
+		if (!nextProps.isLoadingExchangeRates && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
 			return true
 		}
 		else if (nextState.loading != this.state.loading) {
 			return true
 		}
-		else if (nextState.modalVisible != this.state.modalVisible) {
+		else if (nextState.modalVisible != this.state.modalVisible || nextState.modalProps != this.state.modalProps) {
 			return true
 		}
 		else {
@@ -103,31 +104,25 @@ class History extends Component {
 							}
 							currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 							onPress={() => {
-								this.setState(prevState => {
-									return {
-										...prevState,
-										modalVisible: true,
-										modalProps: {
-										  transaction,
-										  direction,
-						                  address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-					                      exchangeRate: this.props.exchangeRates.BTC,
-					                      dismiss: () => {
-					                      	this.setState({modalVisible: false})
-					                      }
-										}
-									}
-								})
-							}}
+									this.setState(prevState => {
+										return {
+											...prevState,
+											modalVisible: true,
+											modalProps: {
+											  transaction,
+											  direction,
+  						                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+						                      exchangeRate: this.props.exchangeRates.BTC["USD"],
+						                      dismiss: () => { this.setState({modalVisible: false, modalProps: null}) },
+						                	}
+						             	}
+						            })
+							}
+						}
 						/>
 					)
 				})}
-				<Modal
-				    animationType="none"
-			        transparent={true}
-			        visible={this.state.modalVisible}>
-			        {this.state.modalVisible && <ViewTransactionModal {...this.state.modalProps}/>}
-			    </Modal>
+				<Popup visible={this.state.modalVisible} {...this.state.modalProps} component={ViewTransactionModal} />
 			</View>
 		)
 	}

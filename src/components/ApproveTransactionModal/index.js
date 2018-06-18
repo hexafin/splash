@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
       error: state.transactions.errorSendingTransaction,
       bitcoinNetwork: state.crypto.wallets.BTC.network,
       userBitcoinAddress: state.crypto.wallets.BTC.address,
-      exchangeRate: state.crypto.exchangeRates.BTC,
+      exchangeRate: state.crypto.exchangeRates.BTC.USD,
     }
 }
 

@@ -17,6 +17,7 @@ class ApproveTransactionModal extends Component {
 			wasLoading: false,
 			feeSatoshi: null,
 		}
+		this.animation = new Animated.Value(0.0)
 	}
 
 	componentWillMount() {
@@ -31,6 +32,14 @@ class ApproveTransactionModal extends Component {
 			currency,
 		    exchangeRate
 		} = this.props
+
+		Animated.sequence([
+			Animated.delay(10),
+	        Animated.spring(this.animation, {
+	            toValue: 1.0,
+	        }),
+		]).start();
+
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : amount
@@ -67,16 +76,6 @@ class ApproveTransactionModal extends Component {
 	}
 
 	render() {
-		const backgroundOpacity = new Animated.Value(0.0)
-
-		Animated.sequence([
-		 Animated.delay(300),
-		 Animated.timing(backgroundOpacity, {
- 			toValue: 1,
- 			easing: Easing.linear(),
- 			duration: 200
- 			}),
-	 	]).start();
 
 		const {
 			address,
@@ -84,11 +83,10 @@ class ApproveTransactionModal extends Component {
 			amount,
 			currency,
 		    exchangeRate,
-		    successCallback=()=>{},
-		    dismissCallback=()=>{},
+		    successCallback,
+		    dismissCallback,
 		} = this.props
 
-		console.log(this.props)
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
@@ -97,13 +95,30 @@ class ApproveTransactionModal extends Component {
 		const totalBtcAmount = (parseFloat(btcAmount)+parseFloat(fee)).toFixed(5)
 		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
 
-		const dismiss = () => {
-			Animated.timing(backgroundOpacity, {
+		const modalTransform = () => {
+			return {
+				transform: [
+					{
+						translateY: this.animation.interpolate({
+							inputRange: [0, 1],
+							outputRange: [400, 0]
+						})
+					}
+				]
+			}
+		}
+
+
+		const dismiss = (success=false) => {
+			Animated.timing(this.animation, {
 				toValue: 0,
 				duration: 200,
 				easing: Easing.linear(),
 			}).start(({finished}) => {
 				if (finished) {
+					if(success) {
+						successCallback()
+					}
 					dismissCallback()
 					this.props.DismissTransaction()
 				}
@@ -116,7 +131,7 @@ class ApproveTransactionModal extends Component {
 				TouchID.authenticate("Confirm Transaction").then(success => {
 					if (success) {
 						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount, userId)
-							.then(successCallback)
+							.then(() => dismiss(true))
 							.catch(error => {
 								if (error == BITCOIN_ERRORS.BALANCE) {
 									Alert.alert("Insufficient balance")
@@ -139,17 +154,14 @@ class ApproveTransactionModal extends Component {
 
 		return (
 			<TouchableWithoutFeedback onPress={() => dismiss()}>
-			<Animated.View style={[styles.container, {backgroundColor: backgroundOpacity.interpolate({
-																								        inputRange: [0, 1],
-																							        outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']
-																								    })}]}>
+			<Animated.View style={[styles.container, {backgroundColor: this.animation.interpolate({inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', 'rgba(67,68,167,0.32)']})}]}>
 				<View style={{ flexDirection: "row" }}>
 					<TouchableWithoutFeedback onPress={() => {}}>
-					<View style={styles.popup}>
+					<Animated.View style={[styles.popup, modalTransform()]}>
 					<View style={styles.content}>
 	                <View style={styles.header}>
 	                  <Text style={styles.title}>Confirm transaction</Text>
-	                  <TouchableOpacity onPress={() => dismiss()}>
+	                  <TouchableOpacity onPress={dismiss}>
 	                    <Image style={{height: 20, width: 20}} source={require('../../assets/icons/Xbutton.png')}/>
 	                  </TouchableOpacity>
 	                </View>
@@ -172,7 +184,7 @@ class ApproveTransactionModal extends Component {
 	                  	loading={this.props.loading && !this.state.success}
 	                  	checkmark={this.state.success && !this.props.loading}
 	                  	checkmarkPersist={true}
-						checkmarkCallback={() => dismiss()}
+						checkmarkCallback={dismiss}
 						disabled={(this.props.error != null) ? true : false}
 						title={"Send Transaction"} primary={true}/>
 	                  <View style={{flexDirection: 'row', paddingTop: 10, alignSelf: 'center', alignItems: 'center'}}>
@@ -181,7 +193,7 @@ class ApproveTransactionModal extends Component {
 	                  </View>
 	                </View>
 					</View>
-					</View>
+					</Animated.View>
 					</TouchableWithoutFeedback>
 				</View>
 			</Animated.View>
