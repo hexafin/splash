@@ -77,11 +77,10 @@ class History extends Component {
 				{this.props.transactions.map(transaction => {
 					const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
 					let amount
-					console.log(this.props.exchangeRates["USD"], cryptoAmount)
-					if (this.props.exchangeRates) {
+					if (this.props.exchangeRates.BTC) {
 						amount = this.props.currency == "BTC"
 							? parseFloat(cryptoAmount).toFixed(5)
-							: parseFloat(cryptoAmount*this.props.exchangeRates[this.props.currency]).toFixed(2)
+							: parseFloat(cryptoAmount*this.props.exchangeRates.BTC[this.props.currency]).toFixed(2)
 					}
 					else {
 						amount = 0
@@ -112,7 +111,7 @@ class History extends Component {
 										  transaction,
 										  direction,
 						                  address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-					                      exchangeRate: this.props.exchangeRates,
+					                      exchangeRate: this.props.exchangeRates.BTC,
 					                      dismiss: () => {
 					                      	this.setState({modalVisible: false})
 					                      }
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		exchangeRates: state.crypto.exchangeRates.BTC,
+		exchangeRates: state.crypto.exchangeRates,
 		currency: state.crypto.activeCurrency,
 		transactions: state.transactions.transactions,
 		isLoadingTransactions: state.transactions.isLoadingTransactions,
