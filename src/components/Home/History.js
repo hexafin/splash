@@ -150,6 +150,7 @@ const mapStateToProps = state => {
 		transactions: state.transactions.transactions,
 		isLoadingTransactions: state.transactions.isLoadingTransactions,
 		isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
+		bitcoinAddress: state.crypto.wallets.BTC.address,
 	}
 }
 
