@@ -54,13 +54,24 @@ class Home extends Component {
         }
 	}
 
+	componentDidMount() {
+		this.props.yOffset.addListener(data => {
+			const currentY = data.value
+			if (currentY < -80 && !this.state.loading) {
+				this.setState({loading: true})
+				this.props.LoadBalance("BTC")
+				this.props.LoadExchangeRates("BTC")
+				this.props.LoadTransactions()
+				ReactNativeHapticFeedback.trigger("impactHeavy", true)
+			}
+		})
+	}
+
 	componentWillUnmount() {
 		this.props.yOffset.removeAllListeners()
 	}
 
 	render() {
-
-		console.log("home render")
 
 		return (
 			<View style={styles.wrapper}>
@@ -70,17 +81,6 @@ class Home extends Component {
 					onScroll={Animated.event(
 						[{ nativeEvent: { contentOffset: { y: this.props.yOffset } } }],
 						{
-							listener: event => {
-								const currentY = event.nativeEvent.contentOffset.y
-
-								if (currentY < -80 && !this.state.loading) {
-									this.setState({loading: true})
-									this.props.LoadBalance("BTC")
-									this.props.LoadExchangeRates("BTC")
-									this.props.LoadTransactions()
-									ReactNativeHapticFeedback.trigger("impactHeavy", true)
-								}
-							},
 							useNativeDriver: true
 						}
 					)}>

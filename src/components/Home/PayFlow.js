@@ -47,6 +47,7 @@ class PayFlow extends Component {
 			splashtag: null,
 			selectedId: null,
 			exchangeRates: props.exchangeRates,
+			captureQr: false,
 			modalVisible: false,
 			modalProps: null
 		}
