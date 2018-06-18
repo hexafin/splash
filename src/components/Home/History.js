@@ -13,6 +13,7 @@ import {
 	Clipboard,
 	Share,
 	Dimensions,
+	Modal,
 	TextInput
 } from "react-native"
 import { colors } from "../../lib/colors";
@@ -21,6 +22,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import ViewTransactionModal from "../ViewTransactionModal"
 import TransactionLine from "../universal/TransactionLine"
 import { cryptoUnits } from '../../lib/cryptos'
 import moment from "moment"
@@ -32,7 +34,9 @@ class History extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			modalVisible: false,
+			modalProps: null
 		}
 	}
 
@@ -97,16 +101,30 @@ class History extends Component {
 							}
 							currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 							onPress={() => {
-								this.props.navigation.navigate("ViewTransactionModal", {
-									  transaction,
-									  direction,
-              address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-              exchangeRate: rate['USD'],
-							  })
-							}}
+											this.setState(prevState => {
+												return {
+													...prevState,
+													modalVisible: true,
+													modalProps: {
+													  transaction,
+													  direction,
+		  						                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+								                      exchangeRate: this.state.exchangeRates['USD'],
+								                      dismiss: () => {
+								                      	this.setState({modalVisible: false})
+								                      }							
+								                  }
+								              }
+								          })}}
 						/>
 					)
 				})}
+				<Modal
+				    animationType="none"
+			        transparent={true}
+			        visible={this.state.modalVisible}>
+			        {this.state.modalVisible && <ViewTransactionModal {...this.state.modalProps}/>}
+			    </Modal>
 			</View>
 		)
 	}
