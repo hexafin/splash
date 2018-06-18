@@ -45,7 +45,12 @@ class Home extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		return false
+		if (nextState.loading != this.state.loading) {
+			return true
+		}
+		else {
+			return false
+		}
 	}
 
 	componentWillMount() {
@@ -85,7 +90,7 @@ class Home extends Component {
 						}
 					)}>
 					<View style={styles.container}>
-						<PayFlow navigation={this.props.navigation}/>
+						<PayFlow navigation={this.props.navigation} reset={this.state.loading == true}/>
 						<View style={{flex: 1, minHeight: 800}}>
 							<History/>
 						</View>

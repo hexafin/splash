@@ -51,7 +51,7 @@ class History extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (!nextProps.isLoadingExchangeRates && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
+		if (!nextProps.isLoadingExchangeRates && nextProps.exchangeRates.BTC && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
 			return true
 		}
 		else if (nextProps.currency != this.props.currency) {
