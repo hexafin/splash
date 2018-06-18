@@ -12,6 +12,7 @@ let firestore = firebase.firestore()
 let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
+import * as Keychain from 'react-native-keychain';
 
 function UsernameExists(username) {
     return new Promise((resolve, reject) => {
@@ -191,7 +192,7 @@ function GetBitcoinFees({feeName="fastest", network="mainnet", from=null, amtSat
 
 function BuildBitcoinTransaction({from, to, privateKey, amtBTC, fee=null, network="testnet"}) {
     return new Promise((resolve, reject) => {
-      GetAddressBalance(from, network).then((balanceBtc) => {
+      GetBitcoinAddressBalance(from, network).then((balanceBtc) => {
           if (amtBTC < balanceBtc) {
               sendTransaction({
                   from: from,
@@ -569,6 +570,7 @@ function LoadFriends(facebook_id, access_token) {
 
 async function DeleteAccount(userId) {
   try {
+  	await Keychain.resetGenericPassword()
     const query1 = await firestore.collection("transactions").where("fromId", '==', userId).get()
     query1.forEach(async (doc) => {
       console.log(doc.id)

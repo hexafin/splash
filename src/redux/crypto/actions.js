@@ -128,22 +128,35 @@ export const OpenWallet = (currency, network="testnet") => {
 
 				const keychainUserId = data.username
 				const keychainData = JSON.parse(data.password)
+				let publicWalletData
+				let keychainWalletData
 
 				if (!!keychainData[currency]) {
 					
 					// already have a wallet for this currency => load address to redux
 					console.log(currency, 'Address found in Keychain')
-					dispatch(openWalletSuccess({
+					const publicWalletData = {
 						address: keychainData[currency].address,
 						network: keychainData[currency].network,
-					}))
-					resolve()
+					}
+
+					// update user with public wallet data for currency
+					firestore.collection("users").doc(userId).update({
+						[`wallets.${currency}`]: publicWalletData
+					}).then(() => {
+
+						dispatch(openWalletSuccess(publicWalletData))
+						resolve()
+
+					}).catch(error => {
+						dispatch(openWalletFailure(error))
+						reject(error)
+					})
+
 
 				} else {
 
 					// generate wallet for currency
-					let publicWalletData
-					let keychainWalletData
 					switch(currency) {
 						case "BTC":
 							const bitcoinData = api.NewBitcoinWallet(network)

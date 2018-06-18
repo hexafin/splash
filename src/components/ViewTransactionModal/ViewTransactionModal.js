@@ -153,48 +153,48 @@ class ViewTransactionModal extends Component {
 	    const domainCapitalized = (type == 'card') ? domain[0].toUpperCase() + domain.slice(1) : null
 	    const date = moment.unix(timestamp).format('LLL')
 	    const cryptoAmount = (type == 'card') ? amount/cryptoUnits.BTC : amount.subtotal/cryptoUnits.BTC
-	    const rate = (relativeCurrency !== null && typeof relativeCurrency !== 'undefined') ? parseFloat(1.0*relativeAmount/cryptoAmount).toFixed(2) : parseFloat(exchangeRate.USD)
+	    const rate = (relativeCurrency !== null && typeof relativeCurrency !== 'undefined') ? parseFloat(1.0*relativeAmount/cryptoAmount).toFixed(2) : parseFloat(exchangeRate)
 	    const infoMessage = (direction == 'from') ? 'Received from' : 'Sent to'
 
 		return (
-			<TouchableWithoutFeedback onPress={this.handleClose}>
-				<Animated.View pointerEvents={this.state.dismissed ? 'none' : 'auto'}
-							   style={[styles.container, {backgroundColor: this.opacityAnimation.interpolate(
-																									{inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', 'rgba(67,68,167,0.32)']}
-																									)}]}>
-						{!this.state.dismissed && <Animated.View 
-							{...this.PanResponder.panHandlers}
-							style={[styles.popup, this.rotateAndTranslate]}>
-							<View style={styles.content}>
-								<View style={styles.header}>
-								  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-					                  <Text style={styles.title}>You {(direction == 'from') ? 'received' : 'sent'}</Text>
-									  <Image source={icons.arrow[direction]} style={styles.arrow} resizeMode="cover"/>
-								  </View>	                  
-				                  <TouchableOpacity onPress={this.handleClose}>
-				                    <Image style={{height: 20, width: 20}} source={require('../../assets/icons/Xbutton.png')}/>
-				                  </TouchableOpacity>
-				                </View>
-				                <View style={styles.amountBox}>
-				                  <Text style={{fontSize: 28, color: colors.white, fontWeight: '600'}}>USD ${parseFloat(rate*cryptoAmount).toFixed(2)}</Text>
-				                  <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{parseFloat(cryptoAmount).toFixed(5)} BTC</Text>
-				                </View>
-				                {type == 'card' && <Text style={styles.subtitle}>Created on</Text>}
-				                {type == 'blockchain' && <Text style={styles.subtitle}>{infoMessage}</Text>}
-				                <View style={{flexDirection: 'row', alignItems: 'center', paddingBottom: 12}}>
-				                    <LetterCircle size={32} letter={letter} currency={currency}/>
-				                    {type == 'card' && <Text style={{color: colors.nearBlack, fontSize: 15, paddingLeft: 10}}>{domainCapitalized}</Text>}
-				                    {type == 'blockchain' && <Text style={{color: colors.nearBlack, fontSize: 10, paddingLeft: 5, fontWeight: '600'}}>{address}</Text>}
-				                </View>
-				                <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
-				                <Text style={{color: colors.nearBlack, fontSize: 15, paddingBottom: 15}}>{(!!relativeCurrency) ? '$'+String(parseFloat(relativeAmount).toFixed(2))+' '+relativeCurrency+' on ': ''}{date}</Text>
-				                <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Exchange rate used' : 'Current exchange rate'}</Text>
-				                <Text style={{color: colors.nearBlack, fontSize: 15, paddingBottom: 32}}>1 Bitcoin = USD ${rate}</Text>
-				                <Button primary={true} title={'Got it'} onPress={this.handleClose} />
-							</View>    							
-						</Animated.View>}
-				</Animated.View>
-			</TouchableWithoutFeedback>
+		<TouchableWithoutFeedback onPress={this.handleClose}>
+			<Animated.View pointerEvents={this.state.dismissed ? 'none' : 'auto'}
+						   style={[styles.container, {backgroundColor: this.opacityAnimation.interpolate(
+																								{inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', 'rgba(67,68,167,0.32)']}
+																								)}]}>
+					{!this.state.dismissed && <Animated.View 
+						{...this.PanResponder.panHandlers}
+						style={[styles.popup, this.rotateAndTranslate]}>
+						<View style={styles.content}>
+							<View style={styles.header}>
+							  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+				                  <Text style={styles.title}>You {(direction == 'from') ? 'received' : 'sent'}</Text>
+								  <Image source={icons.arrow[direction]} style={styles.arrow} resizeMode="cover"/>
+							  </View>	                  
+			                  <TouchableOpacity onPress={this.handleClose}>
+			                    <Image style={{height: 20, width: 20}} source={require('../../assets/icons/Xbutton.png')}/>
+			                  </TouchableOpacity>
+			                </View>
+			                <View style={styles.amountBox}>
+			                  <Text style={{fontSize: 28, color: colors.white, fontWeight: '600'}}>USD ${parseFloat(rate*cryptoAmount).toFixed(2)}</Text>
+			                  <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{parseFloat(cryptoAmount).toFixed(5)} BTC</Text>
+			                </View>
+			                {type == 'card' && <Text style={styles.subtitle}>Created on</Text>}
+			                {type == 'blockchain' && <Text style={styles.subtitle}>{infoMessage}</Text>}
+			                <View style={{flexDirection: 'row', alignItems: 'center', paddingBottom: 12}}>
+			                    <LetterCircle size={32} letter={letter} currency={currency}/>
+			                    {type == 'card' && <Text style={{color: colors.nearBlack, fontSize: 15, paddingLeft: 10}}>{domainCapitalized}</Text>}
+			                    {type == 'blockchain' && <Text style={{color: colors.nearBlack, fontSize: 10, paddingLeft: 5, fontWeight: '600'}}>{address}</Text>}
+			                </View>
+			                <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
+			                <Text style={{color: colors.nearBlack, fontSize: 15, paddingBottom: 15}}>{(!!relativeCurrency) ? '$'+String(parseFloat(relativeAmount).toFixed(2))+' '+relativeCurrency+' on ': ''}{date}</Text>
+			                <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Exchange rate used' : 'Current exchange rate'}</Text>
+			                <Text style={{color: colors.nearBlack, fontSize: 15, paddingBottom: 32}}>1 Bitcoin = USD ${rate}</Text>
+			                <Button primary={true} title={'Got it'} onPress={this.handleClose} />
+						</View>    							
+					</Animated.View>}
+			</Animated.View>
+		</TouchableWithoutFeedback >
 		);
 	}
 }
