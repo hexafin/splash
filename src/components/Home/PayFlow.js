@@ -145,21 +145,12 @@ class PayFlow extends Component {
 	handleSend() {
 
 		const amount = parseFloat(this.state.amount)
-		let relativeAmount
-		if (this.state.currency == "USD") {
-			if (this.state.exchangeRates.BTC) {
-				relativeAmount = amount * this.state.exchangeRates.BTC.USD
-			}
-			else {
-				relativeAmount = 0
-			}
-		} else {
-			relativeAmount = amount
-		}
 		const address = this.state.address
 		const userId = this.state.selectedId
 
-		if (!api.IsValidAddress(address, this.props.network)) {
+		const btcAmount = this.state.currency == "BTC" ? amount : amount / this.props.exchangeRates.BTC.USD
+
+		if (!api.IsValidAddress(address, this.props.bitcoinNetwork)) {
 			Alert.alert("Invalid bitcoin address")
 		} else if (!this.props.balance) {
 			Alert.alert("Unable to load balance")
@@ -169,18 +160,21 @@ class PayFlow extends Component {
 			Alert.alert("Please enter amount")
 		} else if (!address) {
 			Alert.alert("Please enter address")
-		} else if (parseFloat(amount) >= relativeAmount) {
+		} else if (btcAmount >= this.props.balance.BTC) {
 			Alert.alert("Not enough balance")
 		} else {
 			this.props.navigation.navigate("ApproveTransactionModal", {
 				address,
 				userId,
-				amount: parseFloat(relativeCurrency),
+				amount,
 				currency: this.state.currency,
 				exchangeRate: this.props.exchangeRates.BTC,
 				successCallback: () => {
 					this.reset()
-				}
+				},
+				dismissCallback: () => {
+					this.props.navigation.goBack(null)
+				},
 			});
 		}
 	}
@@ -217,9 +211,8 @@ class PayFlow extends Component {
 
 			case "clipboard":
 				Clipboard.getString().then(address => {
-					this.setState({address: address})
-					if (api.IsValidAddress(this.state.address, this.props.network)) {
-						this.setState({activeSection: "enterAmount"})
+					if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
+						this.setState({address, activeSection: "enterAmount"})
 						Animated.sequence([
 							// fade out choose type
 							Animated.timing(this.chooseTypeOpacity, {

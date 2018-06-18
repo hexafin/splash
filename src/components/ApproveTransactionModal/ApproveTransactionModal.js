@@ -84,8 +84,11 @@ class ApproveTransactionModal extends Component {
 			amount,
 			currency,
 		    exchangeRate,
-		    successCallback=()=>{}
+		    successCallback=()=>{},
+		    dismissCallback=()=>{},
 		} = this.props
+
+		console.log(this.props)
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
@@ -101,7 +104,7 @@ class ApproveTransactionModal extends Component {
 				easing: Easing.linear(),
 			}).start(({finished}) => {
 				if (finished) {
-					this.props.dismissCallback()
+					dismissCallback()
 					this.props.DismissTransaction()
 				}
 			})

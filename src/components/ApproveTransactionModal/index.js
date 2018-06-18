@@ -7,8 +7,9 @@ const mapStateToProps = (state) => {
     return {
       loading: state.transactions.isSendingTransaction,
       error: state.transactions.errorSendingTransaction,
-      bitcoinNetwork: state.user.bitcoinNetwork,
-      userBitcoinAddress: state.user.bitcoin.address,
+      bitcoinNetwork: state.crypto.wallets.BTC.network,
+      userBitcoinAddress: state.crypto.wallets.BTC.address,
+      exchangeRate: state.crypto.exchangeRates.BTC,
     }
 }
 
