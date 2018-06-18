@@ -155,42 +155,52 @@ class Balance extends Component {
 		}
 
 		return (
-			<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={() => {
-				if (this.props.currency == "USD") {
-					this.props.setActiveCurrency("BTC")
-				}
-				else {
-					this.props.setActiveCurrency("USD")
-				}
-			}}>
-				<Animated.View pointerEvents="box-only" style={[
-					animatedBalance,
-					styles.balance
-				]}>
-					<Text style={styles.balanceText}>{this.state.loading ? " " : relativeBalance}</Text>
-					<View style={[styles.balanceRefresh, {
-						opacity: this.state.loading ? 100 : 0
-					}]}>
-						<LoadingCircle size={30} restart={this.state.loading}/>
+			
+			<Animated.View pointerEvents="box-none" style={[
+				animatedBalance,
+				styles.balanceWrapper
+			]}>
+				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={() => {
+					if (this.props.currency == "USD") {
+						this.props.setActiveCurrency("BTC")
+					}
+					else {
+						this.props.setActiveCurrency("USD")
+					}
+				}}>
+					<View style={styles.balance}>
+						<Text style={styles.balanceText}>{this.state.loading ? " " : relativeBalance}</Text>
+						<View style={[styles.balanceRefresh, {
+							opacity: this.state.loading ? 100 : 0
+						}]}>
+							<LoadingCircle size={30} restart={this.state.loading}/>
+						</View>
+						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
+							<Image source={icons.refresh} style={styles.refreshIcon}/>
+							<Text style={styles.balanceCurrencyText}>{this.props.currency}</Text>
+						</View>
 					</View>
-					<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
-						<Image source={icons.refresh} style={styles.refreshIcon}/>
-						<Text style={styles.balanceCurrencyText}>{this.props.currency}</Text>
-					</View>
-				</Animated.View>
-			</TouchableWithoutFeedback>
+				</TouchableWithoutFeedback>
+			</Animated.View>
+			
 		)
 	}
 }
 
 const styles = StyleSheet.create({
-	balance: {
+	balanceWrapper: {
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
 		position: "absolute",
 		top: (isIphoneX()) ? 90 : 70,
 		width: SCREEN_WIDTH,
+	},
+	balance: {
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		width: 150,
 	},
 	balanceRefresh: {
 		position: "absolute",
