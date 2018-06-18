@@ -44,7 +44,8 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
-			exchangeRates: props.exchangeRates
+			exchangeRates: props.exchangeRates,
+			captureQr: false,
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -114,7 +115,8 @@ class PayFlow extends Component {
 
 		if (nextProps.qrAddress != null) {
 			const address = nextProps.qrAddress
-			if (api.IsValidAddress(address, this.props.network)) {
+			console.log(address, this.props.bitcoinNetwork)
+			if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
 
 				// just captured a qr address => move the flow along if its a real address
 				this.setState({activeSection: "enterAmount", address: address})

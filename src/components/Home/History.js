@@ -53,6 +53,9 @@ class History extends Component {
 		if (nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
 			return true
 		}
+		else if (nextProps.currency != this.props.currency) {
+			return true
+		}
 		else if (nextState.loading != this.state.loading) {
 			return true
 		}

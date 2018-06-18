@@ -43,7 +43,9 @@ const _onScroll = Animated.event(
 
 function Page(props: { children?: ReactElement<*> }) {
 	return (
-		<View style={{ flex: 1, width: SCREEN_WIDTH }}>{props.children}</View>
+		<View style={{ flex: 1, width: SCREEN_WIDTH }}>
+			{props.children}
+		</View>
 	)
 }
 

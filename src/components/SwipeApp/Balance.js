@@ -56,10 +56,12 @@ class Balance extends Component {
 			return true
 		}
 		else if (nextProps.balance.BTC != this.props.balance.BTC) {
-			console.log(nextProps, this.props)
 			return true
 		}
 		else if (nextState.loading != this.state.loading) {
+			return true
+		}
+		else if (nextProps.currency != this.props.currency) {
 			return true
 		}
 		else {
@@ -116,6 +118,17 @@ class Balance extends Component {
 			}),
 		)
 
+		const balanceScale1 = Animated.multiply(
+			this.props.xOffset.interpolate({
+				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+				outputRange: [0, 1, 0]
+			}),
+			this.props.yOffsets.home.interpolate({
+				inputRange: [-81, -80, 0, 70, 71],
+				outputRange: [1.2, 1.2, 1, 0.8, 0.8]
+			})
+		)
+
 		const balanceOpacity = this.props.xOffset.interpolate({
 			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
 			outputRange: [0, 1, 0]
@@ -143,7 +156,7 @@ class Balance extends Component {
 
 		return (
 			<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={() => {
-				if (this.state.currency == "USD") {
+				if (this.props.currency == "USD") {
 					this.props.setActiveCurrency("BTC")
 				}
 				else {
