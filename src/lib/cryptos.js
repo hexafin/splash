@@ -9,7 +9,8 @@ export const cryptoTitleDict = {
     BTC: "Bitcoin",
     ETH: "Ethereum",
     BCH: "Bitcoin cash",
-    LTC: "Litecoin"
+    LTC: "Litecoin",
+    USD: "US Dollars"
 }
 
 export const cryptoUnits = {

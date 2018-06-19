@@ -19,7 +19,7 @@ class Keypad extends Component {
 	  super(props);
 	
 	  this.state = {
-	  	value: '',
+	  	value: props.value,
 	  	decimal: false,
 	  	index: null,
 	  };
@@ -28,6 +28,12 @@ class Keypad extends Component {
 	  this.pressIn = this.pressIn.bind(this)
 	  this.pressOut = this.pressOut.bind(this)
 	  this.animation = new Animated.Value(0)
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.value != this.state.value) {
+			this.setState({value: nextProps.value})
+		}
 	}
 
 	addValue(char) {
@@ -67,7 +73,6 @@ class Keypad extends Component {
 	}
 
 	render() {
-		console.log(this.props.textColor)
 		const buttonStyle = [styles.button, {backgroundColor: this.props.primaryColor}]
 		const textStyle = [styles.numberText, {color: this.props.textColor}]
 

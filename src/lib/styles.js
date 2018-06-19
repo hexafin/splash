@@ -52,4 +52,6 @@ export const icons = {
 	at: require("../assets/icons/at.png"),
 	send: require("../assets/icons/send.png"),
 	startPay: require("../assets/icons/startPay.png"),
+	whiteSwitcher: require("../assets/icons/whiteSwitcher.png"),
+	purpleSwitcher: require("../assets/icons/purpleSwitcher.png"),
 }
