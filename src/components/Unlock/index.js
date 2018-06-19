@@ -3,15 +3,11 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 
 const mapStateToProps = (state) => {
-    return {
-      splashtag: state.user.entity.username || "yourname"
-    }
+    return {}
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-
-    }, dispatch)
+    return bindActionCreators({}, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Unlock)

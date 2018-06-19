@@ -50,6 +50,7 @@
     "react-native-iphone-x-helper": "^1.0.3",
     "react-native-keychain": "^3.0.0-rc.3",
     "react-native-level-fs": "^3.0.1",
+    "react-native-linear-gradient": "^2.4.0",
     "react-native-qrcode-scanner": "^1.0.1",
     "react-native-randombytes": "^3.2.0",
     "react-native-sentry": "^0.37.1",
