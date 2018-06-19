@@ -29,7 +29,6 @@ class ViewTransactionModal extends Component {
   constructor(props) {
     super(props)
     this.state = {dismissed: false}
-    this.dismiss = props.dismiss
     this.position = new Animated.ValueXY({x: SCREEN_WIDTH+70, y: 0})
 	this.opacityAnimation = new Animated.Value(0.0)
     this.rotate = this.position.x.interpolate({
@@ -96,15 +95,20 @@ class ViewTransactionModal extends Component {
 
     	this.position.addListener(({x, y}) => {
 	    	if (x >= SCREEN_WIDTH+80 || x <= -SCREEN_WIDTH-80 || y >= SCREEN_HEIGHT+80 || y <= -SCREEN_HEIGHT-80) {
-	    			Animated.timing(this.position).stop()
-		        	Animated.spring(this.opacityAnimation, {
-			            toValue: 0.0,
-			        }).start(() => this.setState({dismissed: true}, () => this.dismiss()))
+	    			this.setState({dismissed: true}, () => {
+		    			Animated.timing(this.position).stop()
+			        	Animated.timing(this.opacityAnimation, {
+				            toValue: 0.0,
+				            duration: 50,
+				        }).start(() => this.props.hideModal())
+		    			
+	    			})
 	    		}
     	})
   	}
 
   	handleClose()  {
+  	  console.log('here')
       Animated.spring(this.position, {
         toValue: { x: -SCREEN_WIDTH - 120, y: 0 },
         friction: 20,
@@ -157,7 +161,7 @@ class ViewTransactionModal extends Component {
 	    const infoMessage = (direction == 'from') ? 'Received from' : 'Sent to'
 
 		return (
-		<TouchableWithoutFeedback onPress={this.handleClose}>
+		<TouchableWithoutFeedback onPress={this.handleClose} disabled={this.state.dismissed} pointerEvents={this.state.dismissed ? 'none' : 'auto'}>
 			<Animated.View pointerEvents={this.state.dismissed ? 'none' : 'auto'}
 						   style={[styles.container, {backgroundColor: this.opacityAnimation.interpolate(
 																								{inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', 'rgba(67,68,167,0.32)']}
