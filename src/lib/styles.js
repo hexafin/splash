@@ -36,6 +36,8 @@ export const icons = {
 	BTC: require("../assets/images/bitcoin-logo.png"),
 	placeholder: require("../assets/images/placeholder-rectangle.png"),
 	btcLetter: require("../assets/icons/bitcoin-letter-icon.png"),
+	whiteArrow: require("../assets/icons/whiteArrow.png"),
+	purpleArrow: require("../assets/icons/purpleArrow.png"),
 	whiteSplash: require("../assets/icons/whiteSplash.png"),
 	primarySplash: require("../assets/icons/primarySplash.png"),
 	crossPrimary: require("../assets/icons/crossPrimary.png"),
