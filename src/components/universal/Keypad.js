@@ -44,6 +44,12 @@ class Keypad extends Component {
 	}
 
 	addValue(char) {
+		if (this.props.maxLength && !(this.state.value.length <= this.props.maxLength-1)) {
+			return
+		}
+		if (this.props.noLeadingZeros && this.state.value.length == 0 && char == '0') {
+			return
+		}
 		if (char != '.' && !this.props.disabled) {
 			this.setState({value: this.state.value+char})
 			this.props.onChange(this.state.value+char)

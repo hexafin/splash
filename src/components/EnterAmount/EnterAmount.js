@@ -62,8 +62,8 @@ class EnterAmount extends Component {
 			let newAmount
 			if (this.state.amount != "") {
 				newAmount = nextState.activeCurrency == "USD" 
-					? (parseFloat(this.state.amount) * this.props.exchangeRates.BTC.USD).toFixed(2)
-					: (parseFloat(this.state.amount) / this.props.exchangeRates.BTC.USD).toFixed(5)
+					? (parseFloat(this.state.amount) * this.props.exchangeRates.BTC.USD).toFixed(2).slice(0, 7)
+					: (parseFloat(this.state.amount) / this.props.exchangeRates.BTC.USD).toFixed(5).slice(0, 7)
 			}
 			else {
 				newAmount = ""
@@ -102,26 +102,23 @@ class EnterAmount extends Component {
 						onSwitch={currency => {
 							this.setState({activeCurrency: currency})
 						}}
-						style={{position: "absolute", left: 20, top: 20}}/>
+						style={{position: "absolute", left: 20, top: 40}}/>
 
-					<View style={styles.amountWrapper}>
+					<View style={styles.amountWrapper} pointerEvents="none">
 						<Animated.View style={[styles.amountTextWrapper, {
 							transform: [{scale: this.amountScale}]
 						}]}>
 							{this.state.activeCurrency == "USD" && 
-								<Text style={[
-									styles.amountSuffix, 
-									{fontSize: 32, paddingRight: 3}
-								]}>
+								<Text style={[styles.amountSuffix, {fontSize: 34, paddingRight: 3}]}>
 									$
 								</Text>}
 
-							<Text style={styles.amount}>
+							<Text style={[styles.amount, {opacity: this.state.amount == "" ? 0.8 : 1}]}>
 								{this.state.amount == "" ? 0 : this.state.amount}
 							</Text>
 
 							{this.state.activeCurrency == "BTC" && 
-								<Text style={[styles.amountSuffix, {fontSize: 26, paddingLeft: 5}]}>BTC</Text>}
+								<Text style={[styles.amountSuffix, {fontSize: 30, paddingLeft: 5}]}>BTC</Text>}
 						</Animated.View>
 						<Text style={styles.balance}>
 							Balance: {this.state.activeCurrency == "USD" && "$"}{balance[this.state.activeCurrency]} 
@@ -138,6 +135,8 @@ class EnterAmount extends Component {
 					decimal={true}
 					arrow={"purple"}
 					value={this.state.amount}
+					maxLength={7}
+					noLeadingZeros={true}
 				/>
 
 				<NextButton title="Choose recipient" onPress={() => {
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
 	title: {
 		color: colors.darkGray,
 		fontSize: 24,
-		fontWeight: "700",
+		fontWeight: "600",
 		marginBottom: 4
 	},
 	balance: {
@@ -197,17 +196,17 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		height: 48,
+		height: 80,
 	},
 	amount: {
 		color: colors.primary,
 		fontWeight: "700",
-		fontSize: 40,
+		fontSize: 54,
 	},
 	amountSuffix: {
 		color: colors.primary,
 		fontWeight: "700",
-		paddingBottom: 20,
+		paddingBottom: 15,
 	},
 });
 

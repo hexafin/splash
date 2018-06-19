@@ -57,7 +57,7 @@ class CurrencySwitcherLight extends Component {
 			onSwitch=()=>{},
 		} = this.props
 
-		const switchIcon = switcherColor == "purple" ? icons.purpleSwitcher : null
+		const switchIcon = switcherColor == "purple" ? icons.purpleSwitcherVertical : null
 
 		const wrapperAnimatedStyle = {
 			transform: [
@@ -94,7 +94,7 @@ class CurrencySwitcherLight extends Component {
 			>
 				<Animated.View style={[wrapperAnimatedStyle, styles.wrapper, style]}>
 					<Image source={switchIcon} style={styles.switchIcon} resizeMode="contain"/>
-					<Text style={styles.currencyText, {fontSize: textSize, color: textColor}}>
+					<Text style={[styles.currencyText, {fontSize: textSize, color: textColor}]}>
 						{this.state.activeCurrency == fiat ? crypto : fiat}
 					</Text>
 				</Animated.View>
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	currencyText: {
-		fontWeight: "600",
+		fontWeight: "700",
 		opacity: 0.7,
 	},
 	switchIcon: {

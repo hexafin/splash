@@ -8,7 +8,7 @@ import {
     TouchableWithoutFeedback
 } from "react-native"
 import {colors} from "../../lib/colors"
-import {defaults} from '../../lib/styles'
+import {defaults, icons} from '../../lib/styles'
 import LoadingCircle from "./LoadingCircle"
 import Checkmark from "./Checkmark"
 import PropTypes from "prop-types"
@@ -60,6 +60,7 @@ class NextButton extends Component {
                     ]}>
                         <View style={styles.button}>
                             <Text style={styles.text}>{this.props.title}</Text>
+                            <Image source={icons.rightCarrotWhite} style={styles.icon} resizeMode="contain"/>
                         </View>
                     </Animated.View>
                 </TouchableWithoutFeedback>
@@ -78,21 +79,29 @@ const styles = StyleSheet.create({
         paddingRight: 20,
     },
     button: {
-        paddingHorizontal: 40,
-        paddingVertical: 20,
+        paddingHorizontal: 30,
+        paddingVertical: 25,
         backgroundColor: colors.primary,
-        borderRadius: 10,
+        borderRadius: 40,
         shadowOffset: {
             width: 0,
             height: 5,
         },
         shadowOpacity: 0.1,
         shadowRadius: 12,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
     },
     text: {
         fontSize: 22,
         fontWeight: "700",
         color: colors.white,
+    },
+    icon: {
+        width: 8,
+        height: 16,
+        marginLeft: 20,
     },
 })
 
