@@ -15,7 +15,6 @@ import CircleButton from "./CircleButton"
 import Ring from "../universal/Ring"
 import AnimatedWaves from "../universal/AnimatedWaves"
 import { isIphoneX } from "react-native-iphone-x-helper"
-import FCM, { FCMEvent } from "react-native-fcm"
 
 class Waitlisted extends Component {
     componentWillMount() {
