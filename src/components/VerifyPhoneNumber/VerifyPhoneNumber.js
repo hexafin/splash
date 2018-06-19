@@ -14,12 +14,6 @@ import {defaults, icons} from "../../lib/styles"
 import FlatBackButton from "../universal/FlatBackButton"
 import Button from "../universal/Button"
 import NumericCodeInput from "../universal/NumericCodeInput"
-import FCM, {
-    FCMEvent,
-    RemoteNotificationResult,
-    WillPresentNotificationResult,
-    NotificationType
-} from "react-native-fcm"
 
 class VerifyPhoneNumber extends Component {
 

@@ -99,15 +99,6 @@ const PayFlowRouter = createBottomTabNavigator(
 
 const AppRouter = createStackNavigator(
 	{
-		ApproveCardModal: {
-			screen: ApproveCardModal
-		},
-		ApproveTransactionModal: {
-			screen: ApproveTransactionModal
-		},
-		ViewTransactionModal: {
-			screen: ViewTransactionModal
-		},
 		ScanQrCode: {
 			screen: ScanQrCode
 		},

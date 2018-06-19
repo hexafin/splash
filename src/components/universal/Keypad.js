@@ -12,7 +12,14 @@ import {colors} from "../../lib/colors"
 import { icons } from "../../lib/styles";
 
 // example usage
-// <Keypad primaryColor={'#484AD4'} pressColor={'#6466F6'} textColor={'#FFFFF'} onChange={(text) => console.log(text)} decimal={true} arrow={'white'} />
+// <Keypad primaryColor={'#484AD4'}
+//		pressColor={'#6466F6'}
+//		textColor={'#FFFFF'}
+//		onChange={(text) => console.log(text)}
+//		disabled={false}
+//		value={}
+//		decimal={true}
+//		arrow={'white'} />
 // arrow prop must be either 'white' or 'purple'
 class Keypad extends Component {
 	constructor(props) {
@@ -37,10 +44,10 @@ class Keypad extends Component {
 	}
 
 	addValue(char) {
-		if (char != '.') {
+		if (char != '.' && !this.props.disabled) {
 			this.setState({value: this.state.value+char})
 			this.props.onChange(this.state.value+char)
-		} else if (char == '.' && !this.state.decimal) {
+		} else if (char == '.' && !this.state.decimal && !this.props.disabled) {
 			this.setState({value: this.state.value+char, decimal: true})
 			this.props.onChange(this.state.value+char)
 		}

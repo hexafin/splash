@@ -4,137 +4,122 @@ import {
 	Text,
 	StyleSheet,
 	Image,
-	Animated,
-	Easing,
-	TouchableOpacity
+	TouchableOpacity,
+	Animated
 } from "react-native"
 import { colors } from "../../lib/colors"
 import { defaults, icons } from "../../lib/styles"
-import Ring from "../universal/Ring"
+import Keypad from '../universal/Keypad'
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import LinearGradient from 'react-native-linear-gradient';
 import TouchID from "react-native-touch-id"
+
 
 class Unlock extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			yPos: new Animated.Value(-200),
-			opacity: new Animated.Value(0)
+			value: '',
 		}
-		this.handleUnlock = this.handleUnlock.bind(this)
+		this.onChangeText = this.onChangeText.bind(this)
+		this.shakeAnimation = new Animated.Value(0)
 	}
 
 	componentDidMount() {
-		Animated.sequence([
-			Animated.spring(this.state.yPos, {
-				toValue: 0,
-				friction: 8,
-				delay: 500
-			}),
-			Animated.timing(this.state.opacity, {
-				toValue: 1,
-				easing: Easing.linear(),
-				duration: 200
-			})
-		]).start()
+		TouchID.authenticate("Login with FaceID").then(success => {
+			if (success) {
+				this.props.navigation.navigate('SwipeApp')
+			}
+		})
 	}
 
-	handleUnlock() {
-		this.props.navigation.navigate("Home")
+	onChangeText(text) {
+		if (text.length <= 4) {
+			this.setState({value: text})
+			ReactNativeHapticFeedback.trigger("impactLight", true)
+
+			// if correct passcode TODO: use real passcode
+			if (text == '1234') {
+				this.props.navigation.navigate('SwipeApp')
+			} else if (text.length == 4) {
+				// if incorrect passcode
+				Animated.spring(this.shakeAnimation, {
+					toValue: 1,
+					useNativeDriver: true,
+				}).start(() => {
+					this.shakeAnimation.setValue(0)
+					this.setState({value: ''})
+				})
+				ReactNativeHapticFeedback.trigger("impactHeavy", true)
+			}
+		}
 	}
 
 	render() {
+		const dropIcon = (index) => (this.state.value.length >= index) ? 'whiteDrop' : 'purpleDrop'
+		const shakeTransform =  {
+			transform: [
+				{
+					translateX: this.shakeAnimation.interpolate({
+						inputRange: [0, 0.25, 0.5, 0.75, 1],
+						outputRange: [0, 40, 0, -40, 0]
+					})
+				}
+			]
+		}
+
 		return (
-			<View style={styles.container}>
-				<Animated.View
-					style={[
-						styles.centerButton,
-						{ opacity: this.state.opacity }
-					]}>
-					<TouchableOpacity
-						onPress={this.handleUnlock}
-						style={{ alignItems: "center" }}>
-						<Ring
-							size={108}
-							ringSecondary={"#EFEFFD"}
-							ringRatio={0.75}>
-							<Image
-								source={require("../../assets/images/smile-splash.png")}
-								style={styles.topSplash}
-							/>
-						</Ring>
-						<Text style={styles.enterText}>Touch to enter</Text>
-					</TouchableOpacity>
+			<LinearGradient colors={['#5759D5', '#4E50E6']} style={styles.container}>
+				<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
+				<Animated.View style={[styles.drops, shakeTransform]}>
+					<Image source={icons[dropIcon(1)]} style={styles.drop} resizeMode={'contain'}/>
+					<Image source={icons[dropIcon(2)]} style={styles.drop} resizeMode={'contain'}/>
+					<Image source={icons[dropIcon(3)]} style={styles.drop} resizeMode={'contain'}/>
+					<Image source={icons[dropIcon(4)]} style={styles.drop} resizeMode={'contain'}/>
 				</Animated.View>
-				<Animated.View
-					style={[styles.footer, { bottom: this.state.yPos }]}>
-					<Image
-						source={require("../../assets/images//smile-splash-white.png")}
-						style={styles.bottomSplash}
-					/>
-					<Text style={styles.footerText}>
-						Welcome to Splash,{"\n"}@{this.props.splashtag}
-					</Text>
-				</Animated.View>
-			</View>
+				<Keypad primaryColor={'#484AD4'}
+						pressColor={'#6466F6'}
+						textColor={'#FFFFF'}
+						onChange={(text) => this.onChangeText(text)}
+						disabled={(this.state.value.length >= 4) ? true : false}
+						decimal={false}
+						value={this.state.value}
+						arrow={'white'} />
+				{/*<TouchableOpacity onPress={() => console.log('forgot')}>
+					<Text style={styles.forgotText}>Forgot?</Text>
+				</TouchableOpacity>*/}
+			</LinearGradient>
 		)
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		...defaults.container,
-		justifyContent: "space-between",
-		position: "relative"
-	},
-	centerButton: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center"
+		paddingTop: 75,
 	},
-	topSplash: {
-		width: 44,
-		height: 57
+	splashLogo: {
+		height: 34,
+		width: 26,
+		marginBottom: 76,
+		alignSelf: 'center'
 	},
-	enterText: {
-		paddingTop: 7,
-		color: colors.lightGray,
-		fontSize: 20.16,
-		backgroundColor: "rgba(0, 0, 0, 0)"
+	drops: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: 113,
+		paddingHorizontal: 105,
 	},
-	bottomSplash: {
-		position: "relative",
-		left: -20,
-		bottom: -10,
-		width: 84,
-		height: 84
+	drop: {
+		height: 15,
+		width: 12,
 	},
-	wavesImage: {
-		position: "absolute",
-		bottom: -50,
-		left: 0,
-		right: 0,
-		width: 400,
-		height: 400
-	},
-	footer: {
-		position: "absolute",
-		paddingHorizontal: 30,
-		marginBottom: 50
-	},
-	footerText: {
-		color: colors.nearBlack,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		fontWeight: "500",
-		fontSize: 27
-	},
-	newSplash: {
-		textAlign: "center",
-		backgroundColor: "rgba(0,0,0,0)",
+	forgotText: {
+		fontSize: 14,
 		color: colors.white,
-		textDecorationLine: "underline",
-		fontSize: 17,
-		paddingBottom: 15
-	}
+		paddingTop: 38,
+		alignSelf: 'center'
+	},
 })
 
 export default Unlock

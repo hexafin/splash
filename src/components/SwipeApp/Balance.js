@@ -54,7 +54,7 @@ class Balance extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (nextProps.exchangeRates.BTC && (nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD)) {
+		if (this.props.exchangeRates.BTC && nextProps.exchangeRates.BTC && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
 			return true
 		}
 		else if (nextProps.balance.BTC != this.props.balance.BTC) {
