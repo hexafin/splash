@@ -118,10 +118,9 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		position: "relative",
-		overflow: "hidden",
 		paddingTop: 210,
-		height: SCREEN_HEIGHT,
-		// backgroundColor: colors.primary
+		minHeight: SCREEN_HEIGHT,
+		// backgroundColor: colors.red
 	},
 });
 

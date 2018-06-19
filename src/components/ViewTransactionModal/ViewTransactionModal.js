@@ -188,17 +188,17 @@ class ViewTransactionModal extends Component {
 			                <View style={{flexDirection: 'row', alignItems: 'center', paddingBottom: 12}}>
 			                    <LetterCircle size={32} letter={letter} currency={currency}/>
 			                    {type == 'card' && <Text style={{color: colors.nearBlack, fontSize: 15, paddingLeft: 10}}>{domainCapitalized}</Text>}
-			                    {type == 'blockchain' && <Text style={{color: colors.nearBlack, fontSize: 10, paddingLeft: 5, fontWeight: '600'}}>{address}</Text>}
+			                    {type == 'blockchain' && <Text style={{color: colors.nearBlack, fontSize: 12, paddingLeft: 5, fontWeight: '600'}}>{address}</Text>}
 			                </View>
 			                <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
-			                <Text style={{color: colors.nearBlack, fontSize: 15, paddingBottom: 15}}>{(!!relativeCurrency) ? '$'+String(parseFloat(relativeAmount).toFixed(2))+' '+relativeCurrency+' on ': ''}{date}</Text>
+			                <Text style={{color: colors.nearBlack, fontSize: 16, paddingBottom: 15}}>{(!!relativeCurrency) ? '$'+String(parseFloat(relativeAmount).toFixed(2))+' '+relativeCurrency+' on ': ''}{date}</Text>
 			                <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Exchange rate used' : 'Current exchange rate'}</Text>
-			                <Text style={{color: colors.nearBlack, fontSize: 15, paddingBottom: 32}}>1 Bitcoin = USD ${rate}</Text>
+			                <Text style={{color: colors.nearBlack, fontSize: 16, paddingBottom: 32}}>1 Bitcoin = USD ${rate}</Text>
 			                <Button primary={true} title={'Got it'} onPress={this.handleClose} />
 						</View>    							
 					</Animated.View>}
 			</Animated.View>
-		</TouchableWithoutFeedback >
+		</TouchableWithoutFeedback>
 		);
 	}
 }
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
 	    marginHorizontal: 11,
 	},
 	subtitle: {
-		fontSize: 14,
+		fontSize: 16,
 		color: '#B1B1B1',
 		paddingBottom: 5,
 	},
