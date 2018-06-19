@@ -23,6 +23,7 @@ import Wallet from "../Wallet"
 import Home from "../Home"
 import Balance from "./Balance"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import ModalRoot from '../ModalRoot'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -307,7 +308,7 @@ class SwipeApp extends Component {
 				{Titles}
 
 				<Balance yOffsets={yOffsets} xOffset={xOffset}/>
-
+				<ModalRoot />
 			</View>
 		)
 	}

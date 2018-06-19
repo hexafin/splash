@@ -84,7 +84,6 @@ class ApproveTransactionModal extends Component {
 			currency,
 		    exchangeRate,
 		    successCallback,
-		    dismissCallback,
 		} = this.props
 
 
@@ -119,7 +118,7 @@ class ApproveTransactionModal extends Component {
 					if(success) {
 						successCallback()
 					}
-					dismissCallback()
+					this.props.hideModal()
 					this.props.DismissTransaction()
 				}
 			})

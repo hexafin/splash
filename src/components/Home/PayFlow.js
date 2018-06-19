@@ -20,12 +20,11 @@ import { defaults, icons } from "../../lib/styles";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { resetQr } from "../../redux/transactions/actions"
+import { showApproveModal } from '../../redux/modal'
 import PayButton from "./PayButton"
 import SearchBox from "./SearchBox"
 import Hits from "./Hits"
 import SplashtagButton from "./SplashtagButton"
-import Popup from "../universal/Popup"
-import ApproveTransactionModal from "../ApproveTransactionModal"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { InstantSearch } from 'react-instantsearch/native';
 import api from '../../api'
@@ -48,8 +47,6 @@ class PayFlow extends Component {
 			selectedId: null,
 			exchangeRates: props.exchangeRates,
 			captureQr: false,
-			modalVisible: false,
-			modalProps: null
 		}
 		this.handleChooseType = this.handleChooseType.bind(this)
 		this.handleSplashtagClick = this.handleSplashtagClick.bind(this)
@@ -170,23 +167,16 @@ class PayFlow extends Component {
 		} else if (btcAmount >= this.props.balance.BTC) {
 			Alert.alert("Not enough balance")
 		} else {
-			this.setState(prevState => {
-				return {
-					...prevState,
-					modalVisible: true,
-					modalProps: {
-						address,
-						userId,
-						amount,
-						currency: this.state.currency,
-						successCallback: () => {
-							this.reset()
-						},
-						dismissCallback: () => {this.setState({modalVisible: false, modalProps: null })},
-	            	}
+			this.props.showApproveModal({
+									address,
+									userId,
+									amount,
+									currency: this.state.currency,
+									successCallback: () => {
+										this.reset()
+									},
+				            	})
 	         	}
-	        })
-		}
 	}
 
 	handleSplashtagClick(user) {
@@ -352,7 +342,6 @@ class PayFlow extends Component {
 						<Hits callback={this.handleSplashtagClick}/>
 					</Animated.View>
 				</InstantSearch>
-				<Popup visible={this.state.modalVisible} {...this.state.modalProps} component={ApproveTransactionModal} />
 			</Animated.View>
 		)
 	}
@@ -487,7 +476,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
-			resetQr
+			resetQr,
+			showApproveModal
 		},
 		dispatch
 	)

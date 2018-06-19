@@ -11,7 +11,6 @@ import {
 	Linking,
 	Alert,
 	Clipboard,
-	Modal,
 	Share,
 	Dimensions,
 	TextInput
@@ -23,9 +22,8 @@ import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import TransactionLine from "../universal/TransactionLine"
-import Popup from "../universal/Popup"
-import ViewTransactionModal from "../ViewTransactionModal"
 import { cryptoUnits } from '../../lib/cryptos'
+import { showViewModal } from '../../redux/modal'
 import moment from "moment"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -36,8 +34,6 @@ class History extends Component {
 		super(props)
 		this.state = {
 			loading: false,
-			modalVisible: false,
-			modalProps: null,
 		}
 	}
 
@@ -107,25 +103,20 @@ class History extends Component {
 							}
 							currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 							onPress={() => {
-									this.setState(prevState => {
-										return {
-											...prevState,
-											modalVisible: true,
-											modalProps: {
+									this.props.showViewModal({
 											  transaction,
 											  direction,
   						                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
 						                      exchangeRate: this.props.exchangeRates.BTC["USD"],
-						                      dismiss: () => { this.setState({modalVisible: false, modalProps: null}) },
-						                	}
+						                	})
 						             	}
-						            })
-							}
+						            }
+								/>
+						        )
+							})
 						}
-						/>
 					)
 				})}
-				<Popup visible={this.state.modalVisible} {...this.state.modalProps} component={ViewTransactionModal} />
 			</View>
 		)
 	}
@@ -157,7 +148,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
-			
+			showViewModal
 		},
 		dispatch
 	)
