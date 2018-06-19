@@ -17,7 +17,7 @@ import SwipeApp from "./components/SwipeApp"
 import ApproveTransactionModal from "./components/ApproveTransactionModal"
 import ApproveCardModal from "./components/ApproveCardModal"
 import EnterAmount from "./components/EnterAmount"
-
+import SendTo from "./components/SendTo"
 
 function forVertical(props) {
 	const { layout, position, scene } = props
@@ -81,9 +81,15 @@ const PayFlowRouter = createBottomTabNavigator(
 				tabBarVisible: false
 			}
 		},
+		SendTo: {
+			screen: SendTo,
+			navigationOptions: {
+				tabBarVisible: false
+			}
+		}
 	},
 	{
-		animationEnabled: true,
+		animationEnabled: false,
 		swipeEnabled: false,
 		initialRouteName: "EnterAmount",
 		activeBackgroundColor: colors.white,
