@@ -199,10 +199,48 @@ class SwipeApp extends Component {
 		this.props.LoadBalance()
 		this.props.LoadExchangeRates()
 		this.props.LoadTransactions()
-	}
+
+		// set up notification permissions and tokens
+		firebase.messaging().hasPermission().then(async (enabled) => {
+			if (!enabled) {
+				await firebase.messaging().requestPermission()
+				const fcmToken = await firebase.messaging().getToken()
+				if (fcmToken) {
+					await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+				}
+			} else {
+			    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(async (fcmToken) => {
+			        await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+			    });
+			}
+		}).catch(e => console.log('Notification Error:', e))
+
+		// display notification if in foreground
+		this.notificationListener = firebase.notifications().onNotification((notif) => {
+			const notification = new firebase.notifications.Notification()
+			  .setNotificationId(notif.notificationId)
+			  .setTitle(notif.title)
+			  .setBody(notif.body)
+			firebase.notifications().displayNotification(notification)
+			ReactNativeHapticFeedback.trigger("impactLight", true)
+			this.props.LoadTransactions()
+  	    });
+
+  	    this.notificationOpenedListener = firebase.notifications().onNotificationOpened(() => {
+  	    	this.props.LoadTransactions()
+	    });
+
+	    firebase.notifications().getInitialNotification().then(() => {
+	    	this.props.LoadTransactions()
+	    })
+
+   	}
 
 	componentWillUnmount() {
 		xOffset.removeAllListeners()
+		this.onTokenRefreshListener();
+		this.notificationListener()
+		this.notificationOpenedListener()
 	}
 
 	render() {

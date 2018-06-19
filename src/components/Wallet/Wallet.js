@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
-import FCM, { FCMEvent } from "react-native-fcm";
 import FlatBackButton from "../universal/FlatBackButton"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 

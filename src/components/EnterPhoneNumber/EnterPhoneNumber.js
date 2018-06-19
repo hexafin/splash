@@ -16,7 +16,6 @@ import Button from "../universal/Button"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from "../../lib/styles"
 import PhoneNumberInput from "../universal/PhoneNumberInput"
-import FCM from "react-native-fcm";
 
 class EnterPhoneNumber extends Component {
 
