@@ -46,19 +46,22 @@ class NextButton extends Component {
 
         const {
             title,
+            disabled=false,
             onPress=()=>{},
         } = this.props
 
         return (
                 <TouchableWithoutFeedback
-                        onPress={ onPress }
-                        onPressIn={this.handlePressIn}
-                        onPressOut={this.handlePressOut}>
+                    disabled={ disabled }
+                    onPress={ onPress }
+                    onPressIn={this.handlePressIn}
+                    onPressOut={this.handlePressOut}
+                >
                     <Animated.View style={[
                         styles.wrapper,
                         {transform: [{scale: this.animatedValue}]}
                     ]}>
-                        <View style={styles.button}>
+                        <View style={[styles.button, (disabled ? styles.disabled : {})]}>
                             <Text style={styles.text}>{this.props.title}</Text>
                             <Image source={icons.rightCarrotWhite} style={styles.icon} resizeMode="contain"/>
                         </View>
@@ -87,11 +90,15 @@ const styles = StyleSheet.create({
             width: 0,
             height: 5,
         },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.15,
         shadowRadius: 12,
+        shadowColor: colors.primaryShadow,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+    },
+    disabled: {
+        backgroundColor: colors.primaryGray,
     },
     text: {
         fontSize: 22,
@@ -99,8 +106,8 @@ const styles = StyleSheet.create({
         color: colors.white,
     },
     icon: {
-        width: 8,
-        height: 16,
+        width: 10,
+        height: 20,
         marginLeft: 20,
     },
 })

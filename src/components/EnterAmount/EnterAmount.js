@@ -85,6 +85,9 @@ class EnterAmount extends Component {
 			BTC: btcBalance.toFixed(5),
 			USD: (btcBalance * (this.props.exchangeRates.BTC ? this.props.exchangeRates.BTC.USD : 0)).toFixed(2)
 		}
+		const amountOverBalance = (this.state.activeCurrency == "USD" 
+			? balance.USD < parseFloat(this.state.amount)
+			: balance.BTC < parseFloat(this.state.amount))
 		return (
 			<View style={styles.wrapper}>
 
@@ -109,18 +112,31 @@ class EnterAmount extends Component {
 							transform: [{scale: this.amountScale}]
 						}]}>
 							{this.state.activeCurrency == "USD" && 
-								<Text style={[styles.amountSuffix, {fontSize: 34, paddingRight: 3}]}>
+								<Text style={[styles.amountSuffix, {
+									fontSize: 34, 
+									paddingRight: 3,
+									color: amountOverBalance ? colors.red : colors.primary,
+								}]}>
 									$
 								</Text>}
 
-							<Text style={[styles.amount, {opacity: this.state.amount == "" ? 0.8 : 1}]}>
+							<Text style={[styles.amount, {
+								opacity: this.state.amount == "" ? 0.8 : 1.0,
+								color: amountOverBalance ? colors.red : colors.primary,
+							}]}>
 								{this.state.amount == "" ? 0 : this.state.amount}
 							</Text>
 
 							{this.state.activeCurrency == "BTC" && 
-								<Text style={[styles.amountSuffix, {fontSize: 30, paddingLeft: 5}]}>BTC</Text>}
+								<Text style={[styles.amountSuffix, {
+									fontSize: 30, 
+									paddingLeft: 5,
+									color: amountOverBalance ? colors.red : colors.primary,
+								}]}>BTC</Text>}
 						</Animated.View>
-						<Text style={styles.balance}>
+						<Text style={[styles.balance, {
+							color: amountOverBalance ? colors.red : colors.gray,
+						}]}>
 							Balance: {this.state.activeCurrency == "USD" && "$"}{balance[this.state.activeCurrency]} 
 							{this.state.activeCurrency == "BTC" && " BTC"}
 						</Text>
@@ -139,9 +155,14 @@ class EnterAmount extends Component {
 					noLeadingZeros={true}
 				/>
 
-				<NextButton title="Choose recipient" onPress={() => {
-					this.props.navigation.navigate("SendTo")
-				}}/>
+				<NextButton
+					title="Choose recipient"
+					disabled={
+						this.state.amount.length == 0 
+						|| amountOverBalance}
+					onPress={() => {
+						this.props.navigation.navigate("SendTo")
+					}}/>
 
 				<CloseButton
 					color="primary"
@@ -175,7 +196,6 @@ const styles = StyleSheet.create({
 		marginBottom: 4
 	},
 	balance: {
-		color: colors.gray,
 		fontSize: 18,
 	},
 	bodyWrapper: {
@@ -199,12 +219,10 @@ const styles = StyleSheet.create({
 		height: 80,
 	},
 	amount: {
-		color: colors.primary,
 		fontWeight: "700",
 		fontSize: 54,
 	},
 	amountSuffix: {
-		color: colors.primary,
 		fontWeight: "700",
 		paddingBottom: 15,
 	},
