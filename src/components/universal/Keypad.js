@@ -26,7 +26,7 @@ class Keypad extends Component {
 	  super(props);
 	
 	  this.state = {
-	  	value: '',
+	  	value: props.value,
 	  	decimal: false,
 	  	index: null,
 	  };
@@ -38,12 +38,18 @@ class Keypad extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if(nextProps.value != this.state.value) {
+		if (nextProps.value != this.state.value) {
 			this.setState({value: nextProps.value})
 		}
 	}
 
 	addValue(char) {
+		if (this.props.maxLength && !(this.state.value.length <= this.props.maxLength-1)) {
+			return
+		}
+		if (this.props.noLeadingZeros && this.state.value.length == 0 && char == '0') {
+			return
+		}
 		if (char != '.' && !this.props.disabled) {
 			this.setState({value: this.state.value+char})
 			this.props.onChange(this.state.value+char)
@@ -101,62 +107,62 @@ class Keypad extends Component {
 	    	<View style={styles.row}>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(1)} onPressIn={() => this.pressIn(1)} onPressOut={() => this.pressOut(1)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(1)]}>
-		    			<Text style={styles.numberText}>1</Text>
+		    			<Text style={textStyle}>1</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 				<TouchableWithoutFeedback onPress={() => this.addValue(2)} onPressIn={() => this.pressIn(2)} onPressOut={() => this.pressOut(2)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(2)]}>
-		    			<Text style={styles.numberText}>2</Text>
+		    			<Text style={textStyle}>2</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(3)} onPressIn={() => this.pressIn(3)} onPressOut={() => this.pressOut(3)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(3)]}>
-		    			<Text style={styles.numberText}>3</Text>
+		    			<Text style={textStyle}>3</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    	</View>
 	    	<View style={styles.row}>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(4)} onPressIn={() => this.pressIn(4)} onPressOut={() => this.pressOut(4)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(4)]}>
-		    			<Text style={styles.numberText}>4</Text>
+		    			<Text style={textStyle}>4</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(5)} onPressIn={() => this.pressIn(5)} onPressOut={() => this.pressOut(5)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(5)]}>
-		    			<Text style={styles.numberText}>5</Text>
+		    			<Text style={textStyle}>5</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(6)} onPressIn={() => this.pressIn(6)} onPressOut={() => this.pressOut(6)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(6)]}>
-		    			<Text style={styles.numberText}>6</Text>
+		    			<Text style={textStyle}>6</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    	</View>
 	    	<View style={styles.row}>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(7)} onPressIn={() => this.pressIn(7)} onPressOut={() => this.pressOut(7)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(7)]}>
-		    			<Text style={styles.numberText}>7</Text>
+		    			<Text style={textStyle}>7</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(8)} onPressIn={() => this.pressIn(8)} onPressOut={() => this.pressOut(8)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(8)]}>
-		    			<Text style={styles.numberText}>8</Text>
+		    			<Text style={textStyle}>8</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(9)} onPressIn={() => this.pressIn(9)} onPressOut={() => this.pressOut(9)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(9)]}>
-		    			<Text style={styles.numberText}>9</Text>
+		    			<Text style={textStyle}>9</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    	</View>
 	    	<View style={styles.row}>
 	    		{this.props.decimal && <TouchableOpacity style={[buttonStyle, {backgroundColor: 'rgba(0,0,0,0)'}]} onPress={() => this.addValue('.')}>
-	    			<Text style={styles.numberText}>.</Text>
+	    			<Text style={textStyle}>.</Text>
 	    		</TouchableOpacity>}
 	    		{!this.props.decimal && <View style={[buttonStyle, {backgroundColor: 'rgba(0,0,0,0)'}]} />}
 	    		<TouchableWithoutFeedback onPress={() => this.addValue(0)} onPressIn={() => this.pressIn(0)} onPressOut={() => this.pressOut(0)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(0)]}>
-		    			<Text style={styles.numberText}>0</Text>
+		    			<Text style={textStyle}>0</Text>
 	    			</Animated.View>
 	    		</TouchableWithoutFeedback>
 	    		<TouchableOpacity style={styles.deleteButton} onPress={this.deleteValue}>
@@ -198,7 +204,6 @@ const styles = StyleSheet.create({
 	},
 	numberText: {
 		fontSize: 32,
-		color: 'white'
 	},
 	bottomRow: {
 		flexDirection: 'row',

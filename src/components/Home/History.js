@@ -125,7 +125,8 @@ class History extends Component {
 const styles = StyleSheet.create({
 	history: {
 		padding: 20,
-		// backgroundColor: colors.white
+		flex: 1,
+		// backgroundColor: colors.primary
 	},
 	sectionTitle: {
 		color: colors.primaryDarkText,

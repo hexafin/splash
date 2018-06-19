@@ -53,6 +53,8 @@ class CloseButton extends Component {
             case "gray":
                 icon = icons.crossGray
                 break;
+            case "primary":
+                icon = icons.crossPrimary
         }
 
         return (

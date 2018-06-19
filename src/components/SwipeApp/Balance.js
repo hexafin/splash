@@ -24,6 +24,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import api from '../../api'
 import firebase from "react-native-firebase"
 import LoadingCircle from "../universal/LoadingCircle"
+import CurrencySwitcher from "../universal/CurrencySwitcher"
 import { setActiveCurrency } from "../../redux/crypto/actions"
 let firestore = firebase.firestore();
 
@@ -40,6 +41,7 @@ class Balance extends Component {
 
 	componentWillMount() {
 		this.yOffset = new Animated.Value(0)
+		this.animatedBalanceScale = new Animated.Value(1)
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -118,17 +120,6 @@ class Balance extends Component {
 			}),
 		)
 
-		const balanceScale1 = Animated.multiply(
-			this.props.xOffset.interpolate({
-				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
-				outputRange: [0, 1, 0]
-			}),
-			this.props.yOffsets.home.interpolate({
-				inputRange: [-81, -80, 0, 70, 71],
-				outputRange: [1.2, 1.2, 1, 0.8, 0.8]
-			})
-		)
-
 		const balanceOpacity = this.props.xOffset.interpolate({
 			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
 			outputRange: [0, 1, 0]
@@ -154,33 +145,48 @@ class Balance extends Component {
 			opacity: balanceOpacity,
 		}
 
+		const animatedBalanceView = {
+			transform: [
+				{scale: this.animatedBalanceScale}
+			]
+		}
+
 		return (
 			
 			<Animated.View pointerEvents="box-none" style={[
 				animatedBalance,
 				styles.balanceWrapper
 			]}>
-				<TouchableWithoutFeedback keyboardShouldPersistTaps={"always"} onPress={() => {
-					if (this.props.currency == "USD") {
-						this.props.setActiveCurrency("BTC")
-					}
-					else {
-						this.props.setActiveCurrency("USD")
-					}
-				}}>
-					<View style={styles.balance}>
-						<Text style={styles.balanceText}>{this.state.loading ? " " : relativeBalance}</Text>
-						<View style={[styles.balanceRefresh, {
-							opacity: this.state.loading ? 100 : 0
-						}]}>
-							<LoadingCircle size={30} restart={this.state.loading}/>
-						</View>
-						<View pointerEvents="none" style={styles.balanceCurrencyWrapper}>
-							<Image source={icons.refresh} style={styles.refreshIcon}/>
-							<Text style={styles.balanceCurrencyText}>{this.props.currency}</Text>
-						</View>
+				<Animated.View style={[styles.balance, animatedBalanceView]} pointerEvents="box-none">
+					<Text style={styles.balanceText}>{this.state.loading ? " " : relativeBalance}</Text>
+					<View style={[styles.balanceRefresh, {
+						opacity: this.state.loading ? 100 : 0
+					}]}>
+						<LoadingCircle size={30} restart={this.state.loading}/>
 					</View>
-				</TouchableWithoutFeedback>
+					<CurrencySwitcher
+						fiat="USD"
+						crypto="BTC"
+						textColor={"rgba(255, 255, 255, 0.7)"}
+						switcherColor={"white"}
+						activeCurrencySize={24}
+						switcherBottom={32}
+						style={{marginTop: -30}}
+						onPressIn={() => {
+							Animated.spring(this.animatedBalanceScale, {
+								toValue: 0.8,
+								bounciness: 6,
+								speed: 8,
+							}).start()
+						}}
+						onPressOut={() => {
+							Animated.spring(this.animatedBalanceScale, {
+								toValue: 1,
+								bounciness: 6,
+								speed: 8,
+							}).start()
+						}}/>
+				</Animated.View>
 			</Animated.View>
 			
 		)
