@@ -104,17 +104,12 @@ class History extends Component {
 							currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 							onPress={() => {
 									this.props.showViewModal({
-											  transaction,
-											  direction,
-  						                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-						                      exchangeRate: this.props.exchangeRates.BTC["USD"],
-						                	})
-						             	}
-						            }
-								/>
-						        )
-							})
-						}
+									  transaction,
+									  direction,
+					                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+				                      exchangeRate: this.props.exchangeRates.BTC["USD"],
+				                	})
+			             	}}/>
 					)
 				})}
 			</View>
@@ -125,7 +120,8 @@ class History extends Component {
 const styles = StyleSheet.create({
 	history: {
 		padding: 20,
-		flex: 1,
+		paddingBottom: isIphoneX() ? 140 : 120,
+		minHeight: SCREEN_HEIGHT,
 		// backgroundColor: colors.primary
 	},
 	sectionTitle: {
