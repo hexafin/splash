@@ -105,6 +105,9 @@ const AppRouter = createStackNavigator(
 		UpdateUsername: {
 			screen: UpdateUsername
 		},
+		Unlock: {
+			screen: Unlock
+		},
 		PayFlow: ({navigation}) => <PayFlowRouter screenProps={{rootNavigation: navigation}}/>,
 		SwipeApp: {
 			screen: SwipeApp

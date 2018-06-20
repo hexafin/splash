@@ -33,15 +33,21 @@ class Unlock extends Component {
 		})
 	}
 
-	onChangeText(text) {
-		if (text.length <= 4) {
-			this.setState({value: text})
+	onChangeText(char) {
+		if (this.state.value.length < 4 && char != 'delete') {
+
+			const newValue = (this.state.value+char)
+			this.setState({value: newValue})
 			ReactNativeHapticFeedback.trigger("impactLight", true)
 
 			// if correct passcode TODO: use real passcode
-			if (text == '1234') {
+			if (newValue == '1234') {
+
+				//reset lockout timer and move to app
+				this.props.resetLockoutClock()
 				this.props.navigation.navigate('SwipeApp')
-			} else if (text.length == 4) {
+
+			} else if (newValue.length == 4) {
 				// if incorrect passcode
 				Animated.spring(this.shakeAnimation, {
 					toValue: 1,
@@ -52,11 +58,15 @@ class Unlock extends Component {
 				})
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			}
+		} else if (char == 'delete') {
+			this.setState({value: this.state.value.slice(0, -1)})
 		}
 	}
 
 	render() {
-		const dropIcon = (index) => (this.state.value.length >= index) ? 'whiteDrop' : 'purpleDrop'
+		
+		const dropIcon = (index) => (this.state.value.length >= index) ? <Image source={icons['whiteDrop']} style={styles.drop} resizeMode={'contain'}/>
+																	   : <Image source={icons['purpleDrop']} style={styles.drop} resizeMode={'contain'}/>
 		const shakeTransform =  {
 			transform: [
 				{
@@ -72,18 +82,18 @@ class Unlock extends Component {
 			<LinearGradient colors={['#5759D5', '#4E50E6']} style={styles.container}>
 				<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
 				<Animated.View style={[styles.drops, shakeTransform]}>
-					<Image source={icons[dropIcon(1)]} style={styles.drop} resizeMode={'contain'}/>
-					<Image source={icons[dropIcon(2)]} style={styles.drop} resizeMode={'contain'}/>
-					<Image source={icons[dropIcon(3)]} style={styles.drop} resizeMode={'contain'}/>
-					<Image source={icons[dropIcon(4)]} style={styles.drop} resizeMode={'contain'}/>
+					{dropIcon(1)}
+					{dropIcon(2)}
+					{dropIcon(3)}
+					{dropIcon(4)}
 				</Animated.View>
 				<Keypad primaryColor={'#484AD4'}
 						pressColor={'#6466F6'}
-						textColor={'#FFFFF'}
-						onChange={(text) => this.onChangeText(text)}
+						textColor={'white'}
+						onChange={(char) => this.onChangeText(char)}
 						disabled={(this.state.value.length >= 4) ? true : false}
 						decimal={false}
-						value={this.state.value}
+						delete={true}
 						arrow={'white'} />
 				{/*<TouchableOpacity onPress={() => console.log('forgot')}>
 					<Text style={styles.forgotText}>Forgot?</Text>

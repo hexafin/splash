@@ -25,7 +25,9 @@ export const ActionTypes = {
 	UPDATE_USERNAME_INIT: "UPDATE_USERNAME_INIT",
 	UPDATE_USERNAME_SUCCESS: "UPDATE_USERNAME_SUCCESS",
 	UPDATE_USERNAME_FAILURE: "UPDATE_USERNAME_FAILURE",
-	RESET_USER: "RESET_USER"
+	RESET_USER: "RESET_USER",
+	START_LOCKOUT_CLOCK: 'START_LOCKOUT_CLOCK',
+	RESET_LOCKOUT_CLOCK: 'RESET_LOCKOUT_CLOCK'
 }
 
 export function logInInit() {
@@ -58,6 +60,14 @@ export function updateUsernameFailure(error) {
 
 export function resetUser() {
 	return { type: ActionTypes.RESET_USER, }
+}
+
+export function startLockoutClock() {
+	return {type: ActionTypes.START_LOCKOUT_CLOCK, }
+}
+
+export function resetLockoutClock() {
+	return {type: ActionTypes.RESET_LOCKOUT_CLOCK, }
 }
 
 export const LogIn = (userId) => {
