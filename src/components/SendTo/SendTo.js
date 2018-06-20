@@ -20,7 +20,6 @@ const SCREEN_HEIGHT = Dimensions.get("window").height
 class SendTo extends Component {
 
 	render() {
-		console.log(this.props)
 		return (
 			<View style={styles.wrapper}>
 				<CloseButton color="primary" onPress={() => {

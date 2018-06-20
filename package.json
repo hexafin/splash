@@ -19,6 +19,7 @@
     "bundle": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ./ios",
     "test": "jest",
     "codepush": "rm -r codepush;mkdir codepush;react-native bundle --entry-file index.js --platform ios --dev false --bundle-output codepush/main.jsbundle --assets-dest codepush;code-push release lukas.burger/Splash-iOS codepush $npm_package_version",
+    "codepushm": "rm -r codepush;mkdir codepush;react-native bundle --entry-file index.js --platform ios --dev false --bundle-output codepush/main.jsbundle --assets-dest codepush;code-push release lukas.burger/Splash-iOS codepush $npm_package_version -m",
     "postinstall": "./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto --hack"
   },
   "jest": {
