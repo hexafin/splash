@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "rgba(0,0,0,0)",
 		justifyContent: "center",
-		alignItems: 'center'
+		alignItems: 'center',
+		paddingHorizontal: 18,
+		paddingVertical: 160,
 	},
 	popup: {
 		position: 'absolute',
 		backgroundColor: colors.white,
-		width: 338,
-		height: 481,
 		borderRadius: 10,
 		shadowOffset: {
 			width: 0,
