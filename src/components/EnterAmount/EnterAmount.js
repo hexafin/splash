@@ -202,7 +202,7 @@ class EnterAmount extends Component {
 					}}/>
 
 				<CloseButton
-					color="primary"
+					color="dark"
 					onPress={() => {
 						this.props.screenProps.rootNavigation.goBack(null);
 					}}

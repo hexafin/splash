@@ -29,7 +29,7 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, sel
 		          <SendLineItem
 		            title={`@${item.splashtag}`}
 		            selected={item.objectID == selectedId}
-		            subtitle={item.phoneNumber}
+		            subtitle={"Valid Address"}
 		            onPress={() => callback(item)}/>
 		        )
 	      	}

@@ -23,7 +23,7 @@ const SearchBox = connectSearchBox(({ refine, currentRefinement, onChange }) => 
 			    }}
 			    value={currentRefinement}
    				autoCapitalize={"none"}
-				placeholder={"yourfriend"}
+				placeholder={"Splashtag, Phone or Address"}
 				style={styles.input}
 		        autoCorrect={false}
 	        />
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		fontSize: 20,
 		fontWeight: "500",
-		color: colors.primary,
+		color: colors.darkGray,
 	},
 	inputWrapper: {
 		shadowOffset: {

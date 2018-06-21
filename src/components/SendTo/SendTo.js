@@ -38,7 +38,7 @@ const SCREEN_HEIGHT = Dimensions.get("window").height
 class SendTo extends Component {
 
 	static navigationOptions = {
-		swipeEnabled: true
+		gesturesEnabled: true
 	}
 
 	constructor(props) {
@@ -155,7 +155,7 @@ class SendTo extends Component {
 		return (
 			<View style={styles.wrapper}>
 
-				<CloseButton color="primary" onPress={() => {
+				<CloseButton color="dark" onPress={() => {
 					Keyboard.dismiss()
 					this.props.screenProps.rootNavigation.goBack(null)
 				}}/>
@@ -176,7 +176,7 @@ class SendTo extends Component {
 				<InstantSearch {...algoliaKeys}>
 
 					{(!this.state.pastedAddress && !this.state.capturedQr) && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>ADDRESS OR SPLASHTAG</Text>
+						<Text style={styles.sectionLabel}>SEARCH</Text>
 						<SearchBox onChange={value => {
 							this.setState({value, selectedId: null})
 						}}/>
@@ -226,7 +226,7 @@ class SendTo extends Component {
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={this.state.userFromAddress ? `${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
+							subtitle={"Valid Address"}
 							address={this.state.value}
 							circleText={this.state.userFromAddress ? null : "B"}
 							extraContent="From QR-Code Scan"/>
@@ -237,10 +237,10 @@ class SendTo extends Component {
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={this.state.userFromAddress ? `${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
+							subtitle={"Valid Address"}
 							address={this.state.value}
 							circleText={this.state.userFromAddress ? null : "B"}
-							extraContent="From Pasted Address"/>
+							extraContent="From Clipboard"/>
 					</View>}
 
 					{(!this.state.pastedAddress && !this.state.capturedQr) && <View style={styles.section}>

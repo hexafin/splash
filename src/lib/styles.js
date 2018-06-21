@@ -52,6 +52,7 @@ export const icons = {
 	refresh: require("../assets/icons/refreshCircle.png"),
 	crossWhite: require("../assets/icons/crossWhite.png"),
 	crossGray: require("../assets/icons/crossGray.png"),
+	crossDark: require("../assets/icons/crossDark.png"),
 	at: require("../assets/icons/at.png"),
 	send: require("../assets/icons/send.png"),
 	startPay: require("../assets/icons/startPay.png"),
