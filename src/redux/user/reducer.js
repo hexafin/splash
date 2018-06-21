@@ -13,6 +13,7 @@ const initialState = {
 	isUpdatingUsername: false,
 	errorUpdatingUsername: null,
 	entity: {},
+	lockoutEnabled: false,
 	lockoutDuration: 5,
 	lockoutTime: null,
 	id: null
@@ -76,6 +77,12 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				lockoutTime: moment().add(state.lockoutDuration,'minutes').unix(),
+			}
+
+		case ActionTypes.TOGGLE_LOCKOUT:
+			return {
+				...state,
+				lockoutEnabled: action.toggle,
 			}
 
 		case ActionTypes.RESET_USER:

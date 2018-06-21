@@ -12,7 +12,6 @@ import { defaults, icons } from "../../lib/styles"
 import Keypad from '../universal/Keypad'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import LinearGradient from 'react-native-linear-gradient';
-import api from '../../api'
 
 class SetPasscode extends Component {
 	constructor(props) {
@@ -36,9 +35,7 @@ class SetPasscode extends Component {
 				this.setState({confirmValue: newValue, value: ''})
 			} else if (newValue.length == 4 && newValue == this.state.confirmValue) {
 
-				api.AddToKeychain(this.props.userId, 'passcode', newValue).then(() => {
-					this.props.navigation.navigate('SwipeApp')					
-				}).catch(e => console.log(e))
+				this.props.navigation.state.params.successCallback(newValue)
 
 			} else if (newValue.length == 4 && newValue != this.state.confirmValue) {
 				Animated.spring(this.shakeAnimation, {

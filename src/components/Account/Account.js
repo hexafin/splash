@@ -13,8 +13,10 @@ import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
 import {Input} from "../universal/Input"
+import Setting from "../universal/Setting"
+import api from '../../api'
 
-const Account = ({splashtag, userId, logout, navigation}) => {
+const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutEnabled}) => {
 
 		const handleLogout = () => {
 			Alert.alert(
@@ -25,6 +27,34 @@ const Account = ({splashtag, userId, logout, navigation}) => {
 			    {text: 'Yes', onPress: () => logout(userId)},
 			  ],
 			)
+		}
+
+		const handleLockoutSwitch = (enabled) => {
+			console.log(enabled)
+			if (enabled) {
+				navigation.navigate('SetPasscode', {
+					successCallback: (newCode) => {
+
+						api.AddToKeychain(userId, 'passcode', newCode).then(() => {
+							navigation.navigate('SwipeApp')	
+							toggleLockout(enabled)
+						}).catch(e => console.log(e))
+
+					}
+				})
+			} else {
+				navigation.navigate("Unlock", {
+					successCallback: () => {
+
+						api.AddToKeychain(userId, 'passcode', '').then(() => {
+							console.log('made it', toggleLockout, enabled)
+							navigation.navigate('SwipeApp')	
+							toggleLockout(enabled)
+						}).catch(e => console.log(e))
+
+					}
+				})
+			}
 		}
 
 		return (
@@ -40,6 +70,8 @@ const Account = ({splashtag, userId, logout, navigation}) => {
 							<Input editable={false} input={{value: splashtag}} />
 						</View>
 					</TouchableOpacity>
+					<Text style={styles.sectionText}>Settings</Text>
+					<Setting toggleCallback={handleLockoutSwitch} toggleState={lockoutEnabled} help={true}/>
 					<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
 						<Text style={styles.logoutText}>Delete Account</Text>
 					</TouchableOpacity>
@@ -74,7 +106,7 @@ const styles = StyleSheet.create({
 	accountText: {
 		paddingBottom: 22,
 		fontSize: 18,
-		fontWeight: "700",
+		fontWeight: "500",
 		color: colors.nearBlack
 	},
 	splashtagText: {
@@ -82,6 +114,12 @@ const styles = StyleSheet.create({
 		fontWeight: "700",
 		color: "#B3B3B3",
 		paddingBottom: 6
+	},
+	sectionText: {
+		fontSize: 18,
+		fontWeight: '600',
+		color: colors.nearBlack, 
+		paddingTop: 36,
 	},
 	logoutText: {
 		fontSize: 17,

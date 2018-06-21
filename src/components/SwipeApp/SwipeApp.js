@@ -203,8 +203,13 @@ class SwipeApp extends Component {
 		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
 
 		  // if time is past lockout
-		  if (this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
-			  this.props.navigation.navigate("Unlock")
+		  if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
+			this.props.navigation.navigate("Unlock", {
+				successCallback: () => {
+					this.props.resetLockoutClock()
+					this.props.navigation.navigate('SwipeApp')
+				}
+			})
 		  } else {
 			  this.props.resetLockoutClock()
 		  }
@@ -217,8 +222,13 @@ class SwipeApp extends Component {
 
 	componentDidMount() {
 		// if timeis past lockout
-		if (this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
-			this.props.navigation.navigate("Unlock")
+		if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
+			this.props.navigation.navigate("Unlock", {
+				successCallback: () => {
+					this.props.resetLockoutClock()
+					this.props.navigation.navigate('SwipeApp')
+				}
+			})
 		}
 
 		this.goToPageByIndex(this.scrollView, 1)
@@ -264,16 +274,15 @@ class SwipeApp extends Component {
 	    	this.props.LoadTransactions()
 	    })
 
-	    AppState.addEventListener('change', this.handleAppStateChange);
-
+	    AppState.addEventListener('change', this.handleAppStateChange);	    	
    	}
 
 	componentWillUnmount() {
 		xOffset.removeAllListeners()
 		this.onTokenRefreshListener();
 		this.notificationListener()
-		this.notificationOpenedListener()
-		AppState.removeEventListener('change', this.handleAppStateChange);
+		this.notificationOpenedListener()	    
+		AppState.removeEventListener('change', this.handleAppStateChange);			
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -469,6 +478,7 @@ const mapStateToProps = state => {
         successLoadingBalance: state.crypto.successLoadingBalance,
     	errorLoadingBalance: state.crypto.errorLoadingBalance,
     	lockoutTime: state.user.lockoutTime,
+    	lockoutEnabled: state.user.lockoutEnabled,
 	}
 }
 

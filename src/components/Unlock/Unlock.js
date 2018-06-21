@@ -30,7 +30,7 @@ class Unlock extends Component {
 	componentDidMount() {
 		TouchID.authenticate("Login with FaceID").then(success => {
 			if (success) {
-				this.props.navigation.navigate('SwipeApp')
+				this.props.navigation.state.params.successCallback()
 			}
 		})
 
@@ -50,9 +50,7 @@ class Unlock extends Component {
 			// if correct passcode 
 			if (this.state.passcode && newValue == this.state.passcode) {
 
-				//reset lockout timer and move to app
-				this.props.resetLockoutClock()
-				this.props.navigation.navigate('SwipeApp')
+				this.props.navigation.state.params.successCallback()
 
 			} else if (newValue.length == 4) {
 				// if incorrect passcode
