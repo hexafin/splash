@@ -23,7 +23,11 @@ export default function configureStore () {
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-    const middleware = [createRavenMiddleware(Sentry), loggerMiddleware, thunkMiddleware]
+    const middleware = [createRavenMiddleware(Sentry), thunkMiddleware]
+
+    if (__DEV__) {
+        middleware.push(loggerMiddleware)
+    }
 
     let store = composeEnhancers(
         applyMiddleware(...middleware)

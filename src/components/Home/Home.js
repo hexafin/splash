@@ -19,7 +19,6 @@ import api from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
-import PayFlow from "./PayFlow"
 import History from "./History"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import StartPayButton from "./StartPayButton"

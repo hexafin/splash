@@ -26,7 +26,7 @@ const Setting = ({toggleCallback, toggleState, help}) => {
 
 const styles = StyleSheet.create({
 	container: {
-		paddingTop: 13,
+		paddingVertical: 5,
 		backgroundColor: colors.white,
 	},
 	topRow: {

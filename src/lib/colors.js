@@ -3,6 +3,7 @@ export const colors = {
     primaryDark: "#3F41C9",
     primaryDarkText: "#292342",
     primaryLight: "#EFEFFD",
+    primaryLight2: "#6163F4",
     primaryGray: "#DCDCE2",
     primaryShadow: "#454558",
     white: '#FFFFFF',

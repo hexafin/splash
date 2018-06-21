@@ -120,39 +120,33 @@ class ApproveTransactionModal extends Component {
 
 		return (
 				<View style={styles.content}>
-                <View style={styles.header}>
-                  <Text style={styles.title}>Confirm transaction</Text>
-                  <TouchableOpacity onPress={this.props.dismiss}>
-                    <Image style={styles.closeButton} source={require('../../assets/icons/Xbutton.png')}/>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.information}>
-                  <Text style={styles.exchangeText}>1 BTC = ${rate} USD</Text>
-                  <View style={styles.amountBox}>
-                    <Text style={styles.relativeText}>USD ${totalRelativeAmount}</Text>
-                    <Text style={styles.amountText}>{totalBtcAmount} BTC</Text>
-                  </View>
-                </View>
-                <View style={styles.feeBox}>
-                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
-                    <Text style={styles.description}>They receive —— {(btcAmount.toFixed(5))} BTC</Text>
-                </View>
-                <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
-                <View style={styles.footer}>
-                  <Button
-                  	onPress={confirm}
-                  	style={styles.button} 
-                  	loading={this.props.loading && !this.state.success}
-                  	checkmark={this.state.success && !this.props.loading && !this.props.error}
-                  	checkmarkPersist={true}
-					checkmarkCallback={this.props.dismiss}
-					disabled={(this.props.error != null) ? true : false}
-					title={"Send Transaction"} primary={true}/>
-                  <View style={styles.footer}>
-                    <Image style={styles.lockIcon} source={require('../../assets/icons/lockIcon.png')}/>
-                    <Text style={styles.securedText}>Payment secured by Splash</Text>
-                  </View>
-                </View>
+	                <View style={styles.header}>
+	                  <Text style={styles.title}>Confirm transaction</Text>
+	                  <TouchableOpacity onPress={() => this.props.dismiss(false)}>
+	                    <Image style={styles.closeButton} source={require('../../assets/icons/Xbutton.png')}/>
+	                  </TouchableOpacity>
+	                </View>
+	                <View style={styles.information}>
+	                  <Text style={styles.exchangeText}>1 BTC = ${rate} USD</Text>
+	                  <View style={styles.amountBox}>
+	                    <Text style={styles.relativeText}>USD ${totalRelativeAmount}</Text>
+	                    <Text style={styles.amountText}>{totalBtcAmount} BTC</Text>
+	                  </View>
+	                </View>
+	                <View style={styles.feeBox}>
+	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
+	                    <Text style={styles.description}>They receive —— {(btcAmount.toFixed(5))} BTC</Text>
+	                </View>
+	                <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
+	                  <Button
+	                  	onPress={confirm}
+	                  	style={styles.button} 
+	                  	loading={this.props.loading && !this.state.success}
+	                  	checkmark={this.state.success && !this.props.loading}
+	                  	checkmarkPersist={true}
+						checkmarkCallback={this.props.dismiss}
+						disabled={(this.props.error != null) ? true : false}
+						title={"Send Transaction"} primary={true}/>
 				</View>
 		)
 	}

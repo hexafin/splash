@@ -140,7 +140,7 @@ const CardModal = Child => {
 
 						</Animated.View>}
 				</Animated.View>
-			</TouchableWithoutFeedback >
+			</TouchableWithoutFeedback>
 			)
 		}
 	}

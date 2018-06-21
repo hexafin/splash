@@ -14,7 +14,7 @@ import { defaults, icons } from "../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
-import { captureQr } from "../redux/transactions/actions"
+import { captureQr } from "../redux/payFlow"
 import QRCodeScanner from 'react-native-qrcode-scanner'
 import CloseButton from "./universal/CloseButton"
 import Button from "./universal/Button"

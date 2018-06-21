@@ -44,6 +44,7 @@ export const icons = {
 	primarySplash: require("../assets/icons/primarySplash.png"),
 	crossPrimary: require("../assets/icons/crossPrimary.png"),
 	qrIcon: require("../assets/icons/qrIcon.png"),
+	copyPaste: require("../assets/icons/copyPaste.png"),
 	arrow: {
 		to: require("../assets/icons/primaryRightArrow.png"),
 		from: require("../assets/icons/greenLeftArrow.png")
@@ -51,6 +52,7 @@ export const icons = {
 	refresh: require("../assets/icons/refreshCircle.png"),
 	crossWhite: require("../assets/icons/crossWhite.png"),
 	crossGray: require("../assets/icons/crossGray.png"),
+	crossDark: require("../assets/icons/crossDark.png"),
 	at: require("../assets/icons/at.png"),
 	send: require("../assets/icons/send.png"),
 	startPay: require("../assets/icons/startPay.png"),
