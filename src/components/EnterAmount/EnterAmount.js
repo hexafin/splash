@@ -28,6 +28,7 @@ class EnterAmount extends Component {
 		super(props)
 		this.state = {
 			amount: "",
+			decimal: false,
 			activeCurrency: props.activeCurrency,
 		}
 	}
@@ -147,12 +148,44 @@ class EnterAmount extends Component {
 					primaryColor={"#EEEEFC"}
 					pressColor={"#CFCFFF"}
 					textColor={"#3F41FA"}
-					onChange={text => this.setState({amount: text})}
+					onChange={char => {
+						if (char == "delete") {
+							this.setState(prevState => {
+								const deletedChar = prevState.amount[prevState.amount.length-1]
+								return {
+									...prevState,
+									amount: prevState.amount.length > 0 
+										? prevState.amount.slice(0, prevState.amount.length-1) : "",
+									decimal: deletedChar == "." ? false : prevState.decimal,
+								}
+							})
+						}
+						else if (this.state.amount.length >= 7) {
+							return
+						}
+						else if (char == ".") {
+							this.setState(prevState => {
+								return {
+									...prevState,
+									decimal: true,
+									amount: prevState.decimal ? prevState.amount : prevState.amount + char
+								}
+							})
+						}
+						else {
+							this.setState(prevState => {
+								return {
+									...prevState,
+									amount: prevState.amount.length > 0 || char != "0"
+										? prevState.amount + char : prevState.amount
+								}
+							})
+						}
+					}}
 					decimal={true}
 					arrow={"purple"}
 					value={this.state.amount}
-					maxLength={7}
-					noLeadingZeros={true}
+					delete={true}
 				/>
 
 				<NextButton

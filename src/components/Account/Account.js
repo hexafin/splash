@@ -63,18 +63,22 @@ const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutE
 					<Text style={styles.title}>@{splashtag}</Text>
 				</View>
 				<View style={styles.body}>
-					<Text style={styles.accountText}>Your account</Text>
-					<Text style={styles.splashtagText}>Splashtag</Text>
-					<TouchableOpacity onPress={() => navigation.navigate("UpdateUsername")}>
-						<View pointerEvents='none'>
-							<Input editable={false} input={{value: splashtag}} />
-						</View>
-					</TouchableOpacity>
-					<Text style={styles.sectionText}>Settings</Text>
-					<Setting toggleCallback={handleLockoutSwitch} toggleState={lockoutEnabled} help={true}/>
-					<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
-						<Text style={styles.logoutText}>Delete Account</Text>
-					</TouchableOpacity>
+					<View style={styles.section}>
+						<Text style={styles.sectionText}>Your account</Text>
+						<Text style={styles.splashtagText}>Splashtag</Text>
+						<TouchableOpacity onPress={() => navigation.navigate("UpdateUsername")}>
+							<View pointerEvents='none'>
+								<Input editable={false} input={{value: splashtag}} />
+							</View>
+						</TouchableOpacity>
+					</View>
+					<View style={styles.section}>
+						<Text style={styles.sectionText}>Settings</Text>
+						<Setting toggleCallback={handleLockoutSwitch} toggleState={lockoutEnabled} help={true}/>
+						<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
+							<Text style={styles.logoutText}>Delete Account</Text>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</View>
 		);
@@ -97,6 +101,9 @@ const styles = StyleSheet.create({
 		fontSize: 27,
 		fontWeight: "700"
 	},
+	section: {
+		paddingBottom: 40
+	},
 	body: {
 		flex: 1,
 		padding: 24,
@@ -104,22 +111,21 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white
 	},
 	accountText: {
-		paddingBottom: 22,
 		fontSize: 18,
 		fontWeight: "500",
 		color: colors.nearBlack
 	},
 	splashtagText: {
-		fontSize: 15,
+		fontSize: 16,
 		fontWeight: "700",
 		color: "#B3B3B3",
-		paddingBottom: 6
+		paddingVertical: 6,
 	},
 	sectionText: {
 		fontSize: 18,
 		fontWeight: '600',
+		paddingBottom: 10,
 		color: colors.nearBlack, 
-		paddingTop: 36,
 	},
 	logoutText: {
 		fontSize: 17,
