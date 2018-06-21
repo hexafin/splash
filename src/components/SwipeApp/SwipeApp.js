@@ -8,7 +8,8 @@ import {
 	Keyboard,
 	Animated,
 	StyleSheet,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	AppState
 } from "react-native"
 import firebase from "react-native-firebase"
 import { colors } from "../../lib/colors"
@@ -17,12 +18,14 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { LoadExchangeRates, LoadBalance } from "../../redux/crypto/actions"
+import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions"
 import PropTypes from "prop-types"
 import Account from "../Account"
 import Wallet from "../Wallet"
 import Home from "../Home"
 import Balance from "./Balance"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import moment from "moment"
 import ModalRoot from '../ModalRoot'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -159,6 +162,9 @@ class SwipeApp extends Component {
 				title: "You splash wallet"
 			}
 		]
+		this.state = {
+			appState: AppState.currentState
+		}
 		this.pageIndices = {}
 		for (let i = 0; i < this.pages.length; i++) {
 			const page = this.pages[i]
@@ -166,6 +172,7 @@ class SwipeApp extends Component {
 		}
 		this.goToPage = this.goToPage.bind(this)
 		this.goToPageByIndex = this.goToPageByIndex.bind(this)
+		this.handleAppStateChange = this.handleAppStateChange.bind(this)
 	}
 
 	goToPage = (scrollView, pageName) => {
@@ -191,7 +198,39 @@ class SwipeApp extends Component {
 		}
 	}
 
+	handleAppStateChange = (nextAppState) => {
+		// if app opens to foreground
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+
+		  // if time is past lockout
+		  if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
+			this.props.navigation.navigate("Unlock", {
+				successCallback: () => {
+					this.props.resetLockoutClock()
+					this.props.navigation.navigate('SwipeApp')
+				}
+			})
+		  } else {
+			  this.props.resetLockoutClock()
+		  }
+		//if app goes to background
+		} else if (this.state.appState.match(/active/) && (nextAppState === 'background' || nextAppState === 'inactive')) {
+		  this.props.startLockoutClock()
+		}
+		this.setState({appState: nextAppState});
+	}
+
 	componentDidMount() {
+		// if timeis past lockout
+		if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
+			this.props.navigation.navigate("Unlock", {
+				successCallback: () => {
+					this.props.resetLockoutClock()
+					this.props.navigation.navigate('SwipeApp')
+				}
+			})
+		}
+
 		this.goToPageByIndex(this.scrollView, 1)
 		// initialize swipe app to center page
 		xOffset.setValue(SCREEN_WIDTH)
@@ -231,13 +270,30 @@ class SwipeApp extends Component {
   	    	this.props.LoadTransactions()
 	    });
 
+	    firebase.notifications().getInitialNotification().then(() => {
+	    	this.props.LoadTransactions()
+	    })
+
+	    AppState.addEventListener('change', this.handleAppStateChange);	    	
    	}
 
 	componentWillUnmount() {
 		xOffset.removeAllListeners()
 		this.onTokenRefreshListener();
 		this.notificationListener()
-		this.notificationOpenedListener()
+		this.notificationOpenedListener()	    
+		AppState.removeEventListener('change', this.handleAppStateChange);			
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextState.appState != this.state.appState) {
+			return true
+		} else if (nextProps.lockoutTime != this.props.lockoutTime) {
+			return true
+		}
+		else {
+			return false
+		}
 	}
 
 	render() {
@@ -420,6 +476,8 @@ const mapStateToProps = state => {
         loadingBalanceCurrency: state.crypto.loadingBalanceCurrency,
         successLoadingBalance: state.crypto.successLoadingBalance,
     	errorLoadingBalance: state.crypto.errorLoadingBalance,
+    	lockoutTime: state.user.lockoutTime,
+    	lockoutEnabled: state.user.lockoutEnabled,
 	}
 }
 
@@ -427,7 +485,9 @@ const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
 			LoadBalance,
-			LoadExchangeRates
+			LoadExchangeRates,
+			resetLockoutClock,
+			startLockoutClock
 		},
 		dispatch
 	)

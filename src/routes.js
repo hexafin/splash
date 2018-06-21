@@ -18,6 +18,7 @@ import ApproveTransactionModal from "./components/ApproveTransactionModal"
 import ApproveCardModal from "./components/ApproveCardModal"
 import EnterAmount from "./components/EnterAmount"
 import SendTo from "./components/SendTo"
+import SetPasscode from "./components/SetPasscode"
 
 function forVertical(props) {
 	const { layout, position, scene } = props
@@ -104,6 +105,12 @@ const AppRouter = createStackNavigator(
 		},
 		UpdateUsername: {
 			screen: UpdateUsername
+		},
+		Unlock: {
+			screen: Unlock
+		},
+		SetPasscode: {
+			screen: SetPasscode
 		},
 		PayFlow: ({navigation}) => <PayFlowRouter screenProps={{rootNavigation: navigation}}/>,
 		SwipeApp: {

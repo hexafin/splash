@@ -1,7 +1,7 @@
 import Account from "./Account"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import {resetUser} from "../../redux/user/actions"
+import {resetUser, toggleLockout} from "../../redux/user/actions"
 import {resetTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
 import NavigatorService from "../../redux/navigator"
@@ -12,19 +12,23 @@ const mapStateToProps = state => {
 	return {
 		splashtag: state.user.entity.splashtag,
 		userId: state.user.id,
+		lockoutEnabled: state.user.lockoutEnabled,
 	}
 }
 
 const mapDispatchToProps = dispatch => {
-	return {
+    return bindActionCreators({
 		logout: (userId) => {
-			dispatch(resetUser())
-			dispatch(resetTransactions())
-			dispatch(resetOnboarding())
-			NavigatorService.navigate("Landing")
-			api.DeleteAccount(userId)
-		}
-	}
+			return (dispatch, getState) => {
+				dispatch(resetUser())
+				dispatch(resetTransactions())
+				dispatch(resetOnboarding())
+				NavigatorService.navigate("Landing")
+				api.DeleteAccount(userId)
+			}		
+		},
+    	toggleLockout
+    }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account)
