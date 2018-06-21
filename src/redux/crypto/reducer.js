@@ -103,6 +103,9 @@ export default function cryptoReducer(state = initialState, action) {
           errorLoadingExchangeRates: action.error
         }
 
+      case ActionTypes.RESET_CRYPTO:
+        return initialState
+
       default:
           return state
     }

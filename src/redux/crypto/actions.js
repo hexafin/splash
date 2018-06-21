@@ -25,6 +25,7 @@ export const ActionTypes = {
 	OPEN_WALLET_INIT: "OPEN_WALLET_INIT",
 	OPEN_WALLET_SUCCESS: "OPEN_WALLET_SUCCESS",
 	OPEN_WALLET_FAILURE: "OPEN_WALLET_FAILURE",
+	RESET_CRYPTO: "RESET_CRYPTO",
 }
 
 export function setActiveCurrency(currency) {
@@ -65,6 +66,10 @@ export function openWalletSuccess(wallet) {
 
 export function openWalletFailure(error) {
 	return { type: ActionTypes.OPEN_WALLET_FAILURE, error };
+}
+
+export function resetCrypto() {
+	return { type: ActionTypes.RESET_CRYPTO };
 }
 
 export const LoadBalance = (currency="BTC") => {
@@ -131,7 +136,6 @@ export const OpenWallet = (currency, network="testnet") => {
 				let keychainData = JSON.parse(data.password)
 				let publicWalletData
 				let newKeychainData
-
 				if (!!keychainData[currency]) {
 					
 					// already have a wallet for this currency => load address to redux
@@ -178,7 +182,10 @@ export const OpenWallet = (currency, network="testnet") => {
 							reject(error)
 					}
 
-					keychainData[currency] = newKeychainData
+					if (typeof keychainData !== 'object') {
+						keychainData = {}
+					}
+					keychainData[currency] = newKeychainData						
 
 					// add wallet to keychain
 					Keychain.setGenericPassword(userId, JSON.stringify(keychainData)).then(() => {
@@ -205,6 +212,7 @@ export const OpenWallet = (currency, network="testnet") => {
 				}
 
 			}).catch(error => {
+				console.log('keychain error', error)
 				Sentry.messageCapture(error)
 				dispatch(openWalletFailure(error))
 				reject(error)
