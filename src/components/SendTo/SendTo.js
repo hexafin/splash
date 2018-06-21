@@ -47,12 +47,14 @@ class SendTo extends Component {
 			userFromAddress: null,
 			pastedAddress: false,
 			selectedId: null,
+			selectedAddress: null,
 		}
 		this.getUserFromAddress = this.getUserFromAddress.bind(this)
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (nextProps.address != this.props.address) {
+			// new address coming from captured qr
 			this.setState({
 				value: nextProps.address, 
 				capturedQr: nextProps.capturedQr,
@@ -61,6 +63,7 @@ class SendTo extends Component {
 			})
 		}
 		else if (nextProps.sendCurrency != this.props.sendCurrency || nextProps.sendAmount != this.props.sendAmount) {
+			// change in enter amount page
 			this.setState({
 				value: nextProps.address, 
 				capturedQr: nextProps.capturedQr,
@@ -99,8 +102,15 @@ class SendTo extends Component {
 	getUserFromAddress(address) {
 		firestore.collection("users").where("wallets.BTC.address", "==", address).get().then(query => {
 			if (!query.empty) {
-				const userDoc = query.docs[0].data()
-				this.setState({userFromAddress: userDoc})
+				const userData = {
+					id: query.docs[0].id,
+					...query.docs[0].data()
+				}
+				this.setState({
+					userFromAddress: userData, 
+					selectedId: userData.id, 
+					selectedAddress: userData.wallets.BTC.address
+				})
 			}
 			else {
 				// could not find a user for this address
@@ -118,6 +128,7 @@ class SendTo extends Component {
 			sendTo,
 			userId,
 			bitcoinAddress,
+			showApproveModal,
 		} = this.props
 
 		const animatedHeader = {
@@ -210,9 +221,9 @@ class SendTo extends Component {
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle="Valid Address"
+							subtitle={this.state.userFromAddress ? `@${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
 							address={this.state.value}
-							circleText={this.state.userFromAddress ? this.state.userFromAddress.splashtag.slice(0,2).toUpperCase() : "B"}
+							circleText={this.state.userFromAddress ? null : "B"}
 							extraContent="From QR-Code Scan"/>
 					</View>}
 
@@ -221,9 +232,9 @@ class SendTo extends Component {
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle="Valid Address"
+							subtitle={this.state.userFromAddress ? `@${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
 							address={this.state.value}
-							circleText={this.state.userFromAddress ? this.state.userFromAddress.splashtag.slice(0,2).toUpperCase() : "B"}
+							circleText={this.state.userFromAddress ? null : "B"}
 							extraContent="From Pasted Address"/>
 					</View>}
 
@@ -235,11 +246,12 @@ class SendTo extends Component {
 						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
 							const selectedId = item.objectID
+							const selectedAddress = item.wallets.BTC.address
 							if (selectedId != this.state.selectedId) {
-								this.setState({selectedId})
+								this.setState({selectedId, selectedAddress})
 							}
 							else {
-								this.setState({selectedId: null})
+								this.setState({selectedId: null, selectedAddress: null})
 							}
 						}}/>
 					</View>}
@@ -250,7 +262,16 @@ class SendTo extends Component {
 					title="Preview Send"
 					disabled={!(this.state.pastedAddress || this.state.capturedQr || this.state.selectedId)}
 					onPress={() => {
-						Alert.alert("send modal")
+						showApproveModal({
+							address: this.state.selectedId ? this.state.selectedAddress : this.state.value,
+							userId: this.state.selectedId,
+							amount: this.state.sendAmount,
+							currency: this.state.sendCurrency,
+							successCallback: () => {
+								this.props.screenProps.rootNavigation.goBack(null)
+							},
+							dismissCallback: () => {},
+						})
 					}}/>
 
 			</View>

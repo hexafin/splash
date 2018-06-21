@@ -231,10 +231,6 @@ class SwipeApp extends Component {
   	    	this.props.LoadTransactions()
 	    });
 
-	    firebase.notifications().getInitialNotification().then(() => {
-	    	this.props.LoadTransactions()
-	    })
-
    	}
 
 	componentWillUnmount() {

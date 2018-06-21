@@ -158,8 +158,10 @@ class EnterAmount extends Component {
 				<NextButton
 					title="Choose recipient"
 					disabled={
-						// this.state.amount.length == 0 || amountOverBalance
-						false
+						this.state.amount.length == 0 
+						|| amountOverBalance 
+						|| this.state.amount == "." 
+						|| parseFloat(this.state.amount) == 0
 					}
 					onPress={() => {
 						this.props.enterAmount(this.state.activeCurrency, parseFloat(this.state.amount))
