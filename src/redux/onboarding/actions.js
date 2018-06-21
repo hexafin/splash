@@ -158,8 +158,13 @@ export const SignUp = user => {
 						}
 
 						userRef.set(entity).then(() => {
-							dispatch(signUpSuccess())
-							resolve(userId)
+							api.DeleteTransactions(userId).then(() => {
+								dispatch(signUpSuccess())
+								resolve(userId)
+							}).catch(error => {
+								dispatch(signUpFailure(error))
+								reject(error)
+							})
 						}).catch(error => {
 							dispatch(signUpFailure(error))
 							reject(error)
