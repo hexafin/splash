@@ -5,13 +5,18 @@ import {
 	StyleSheet,
 	Image,
 	TouchableOpacity,
-	Animated
+	Animated,
+	Dimensions
 } from "react-native"
 import { colors } from "../../lib/colors"
 import { defaults, icons } from "../../lib/styles"
+import { isIphoneX } from "react-native-iphone-x-helper"
 import Keypad from '../universal/Keypad'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import LinearGradient from 'react-native-linear-gradient';
+
+const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_HEIGHT = Dimensions.get("window").height
 
 class SetPasscode extends Component {
 	constructor(props) {
@@ -102,22 +107,25 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignContent: 'center',
+		flexDirection: "column",
+		paddingVertical: isIphoneX() ? 40 : 20,
+		justifyContent: "space-between",
 	},
 	title: {
+		paddingTop: 20,
+		paddingBottom: 20,
 		fontSize: 20,
 		fontWeight: '600',
 		color: colors.white,
-		paddingTop: 69,
-		paddingBottom: 10,
 		alignSelf: 'center'
 	},
 	confirmTitle: {
+		paddingTop: 20,
+		paddingBottom: 20,
 		fontSize: 20,
 		fontWeight: '600',
 		color: colors.white,
 		alignSelf: 'center',
-		paddingTop: 81,
-		paddingBottom: 81,
 	},
 	subtitle: {
 		fontSize: 16,
@@ -127,8 +135,9 @@ const styles = StyleSheet.create({
 	drops: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 113,
 		paddingHorizontal: 105,
+		width: SCREEN_WIDTH,
+		paddingBottom: 40,
 	},
 	drop: {
 		height: 15,

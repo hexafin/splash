@@ -171,7 +171,7 @@ class Balance extends Component {
 						switcherColor={"white"}
 						activeCurrencySize={24}
 						switcherBottom={32}
-						style={{marginTop: -30}}
+						style={{marginTop: -25}}
 						onPressIn={() => {
 							Animated.spring(this.animatedBalanceScale, {
 								toValue: 0.8,

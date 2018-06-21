@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		position: "relative",
-		paddingTop: 210,
+		paddingTop: isIphoneX() ? 210 : 190,
 		minHeight: SCREEN_HEIGHT,
 		// backgroundColor: colors.red
 	},

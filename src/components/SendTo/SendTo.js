@@ -48,6 +48,7 @@ class SendTo extends Component {
 			pastedAddress: false,
 			selectedId: null,
 			selectedAddress: null,
+			typedAddress: null,
 		}
 		this.getUserFromAddress = this.getUserFromAddress.bind(this)
 	}
@@ -75,13 +76,19 @@ class SendTo extends Component {
 
 	shouldComponentUpdate(nextProps, nextState) {
 
-		if ((nextState.capturedQr != this.state.capturedQr && nextState.capturedQr == true)
-			|| (nextState.pastedAddress != this.state.pastedAddress && nextState.pastedAddress == true)) {
+		if ((nextState.capturedQr != this.state.capturedQr && nextState.capturedQr)
+			|| (nextState.pastedAddress != this.state.pastedAddress && nextState.pastedAddress)) {
 			// just captured a QR or pasted an address, look for a user with this address
 			this.getUserFromAddress(nextState.value)
 		}
 
 		if (nextState.value != this.state.value) {
+			const isAddress = api.IsValidAddress(nextState.value, nextProps.bitcoinNetwork)
+			this.setState({typedAddress: isAddress})
+			this.getUserFromAddress(nextState.value)
+			return true
+		}
+		else if (nextState.typedAddress != this.state.typedAddress) {
 			return true
 		}
 		else if (nextState.userFromAddress != this.state.userFromAddress && nextState.userFromAddress != null) {
@@ -116,7 +123,7 @@ class SendTo extends Component {
 				// could not find a user for this address
 			}
 		}).catch(error => {
-			Sentry.captureMessage(error)
+			Sentry.messageCapture(error)
 		})
 	}
 
@@ -239,7 +246,18 @@ class SendTo extends Component {
 							extraContent="From Clipboard"/>
 					</View>}
 
-					{(!this.state.pastedAddress && !this.state.capturedQr) && <View style={styles.section}>
+					{this.state.typedAddress && <View style={styles.section}>
+						<Text style={styles.sectionLabel}>TYPED ADDRESS</Text>
+						<SendLineItem
+							selected={true}
+							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+							subtitle={"Valid Address"}
+							address={this.state.value}
+							circleText={this.state.userFromAddress ? null : "B"}
+							extraContent="From Clipboard"/>
+					</View>}
+
+					{(!this.state.pastedAddress && !this.state.capturedQr && !this.state.typedAddress) && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
 					</View>}
 
@@ -261,7 +279,7 @@ class SendTo extends Component {
 
 				<NextButton
 					title="Preview Send"
-					disabled={!(this.state.pastedAddress || this.state.capturedQr || this.state.selectedId)}
+					disabled={!(this.state.pastedAddress || this.state.typedAddress || this.state.capturedQr || this.state.selectedId)}
 					onPress={() => {
 						showApproveModal({
 							address: this.state.selectedId ? this.state.selectedAddress : this.state.value,

@@ -64,7 +64,7 @@ export function openWalletSuccess(wallet) {
 }
 
 export function openWalletFailure(error) {
-	return { type: ActionTypes.OPEN_WALLET_SUCCESS, error };
+	return { type: ActionTypes.OPEN_WALLET_FAILURE, error };
 }
 
 export const LoadBalance = (currency="BTC") => {
@@ -128,14 +128,13 @@ export const OpenWallet = (currency, network="testnet") => {
 			Keychain.getGenericPassword().then(data => {
 
 				const keychainUserId = data.username
-				const keychainData = JSON.parse(data.password)
+				let keychainData = JSON.parse(data.password)
 				let publicWalletData
-				let keychainWalletData
+				let newKeychainData
 
 				if (!!keychainData[currency]) {
 					
 					// already have a wallet for this currency => load address to redux
-					console.log(currency, 'Address found in Keychain')
 					const publicWalletData = {
 						address: keychainData[currency].address,
 						network: keychainData[currency].network,
@@ -166,7 +165,7 @@ export const OpenWallet = (currency, network="testnet") => {
 								address: bitcoinData.address,
 								network,
 							}
-							keychainWalletData = {
+							newKeychainData = {
 								address: bitcoinData.address,
 								network,
 								wif: bitcoinData.wif
@@ -179,15 +178,10 @@ export const OpenWallet = (currency, network="testnet") => {
 							reject(error)
 					}
 
-					const updatedKeychainData = {
-						...keychainData,
-						[currency]: keychainWalletData
-					}
-
-					console.log(updatedKeychainData)
+					keychainData[currency] = newKeychainData
 
 					// add wallet to keychain
-					Keychain.setGenericPassword(userId, JSON.stringify(updatedKeychainData)).then(() => {
+					Keychain.setGenericPassword(userId, JSON.stringify(keychainData)).then(() => {
 
 						// update user with public wallet data for currency
 						firestore.collection("users").doc(userId).update({
