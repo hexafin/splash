@@ -40,6 +40,7 @@ class Wallet extends Component {
 		})
 		
 		Clipboard.setString(this.props.address)
+		ReactNativeHapticFeedback.trigger("impactLight", true)
 
 		setTimeout(() => {
 			this.setState(prevState => {
@@ -66,21 +67,7 @@ class Wallet extends Component {
 						<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
 					</View>
 					<TouchableWithoutFeedback
-						onPress={this.handleCopy}
-						onPressIn={() => {
-							ReactNativeHapticFeedback.trigger("impactLight", true)
-							Animated.spring(this.animatedAddressCopy, {
-								toValue: .8
-							}).start()
-						}}
-						onPressOut={() => {
-							ReactNativeHapticFeedback.trigger("impactLight", true)
-							Animated.spring(this.animatedAddressCopy, {
-								toValue: 1,
-								friction: 3,
-								tension: 40
-							}).start()
-						}}>
+						onPress={this.handleCopy}>
 						<Animated.View style={[styles.addressCopyWrapper, {
 							transform: [{scale: this.animatedAddressCopy}]
 						}]}>
