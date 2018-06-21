@@ -276,7 +276,9 @@ class SendTo extends Component {
 								this.props.screenProps.rootNavigation.goBack(null)
 								LoadTransactions()
 							},
-							dismissCallback: () => {},
+							dismissCallback: () => {
+								this.props.DismissTransaction()
+							},
 						})
 					}}/>
 
