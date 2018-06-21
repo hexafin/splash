@@ -17,7 +17,6 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import api from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
-import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
 import History from "./History"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
