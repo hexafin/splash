@@ -116,7 +116,7 @@ class SendTo extends Component {
 				// could not find a user for this address
 			}
 		}).catch(error => {
-			Sentry.captureMessage(error)
+			Sentry.messageCapture(error)
 		})
 	}
 
