@@ -129,6 +129,7 @@ class SendTo extends Component {
 			userId,
 			bitcoinAddress,
 			showApproveModal,
+			LoadTransactions,
 		} = this.props
 
 		const animatedHeader = {
@@ -269,6 +270,7 @@ class SendTo extends Component {
 							currency: this.state.sendCurrency,
 							successCallback: () => {
 								this.props.screenProps.rootNavigation.goBack(null)
+								LoadTransactions()
 							},
 							dismissCallback: () => {},
 						})

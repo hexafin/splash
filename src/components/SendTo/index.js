@@ -2,6 +2,7 @@ import SendTo from "./SendTo"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {showApproveModal} from "../../redux/modal"
+import {LoadTransactions} from "../../redux/transactions/actions"
 
 const mapStateToProps = (state) => {
     return {
@@ -17,7 +18,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-    	showApproveModal
+    	showApproveModal,
+        LoadTransactions,
     }, dispatch)
 }
 
