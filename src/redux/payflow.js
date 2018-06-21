@@ -28,10 +28,12 @@ export default function payFlow(state = initialState, action) {
 				capturedQr: true,
 				address: action.address,
 			}
+			
 		case "RESET":
 			return initialState
+
 		default:
-			return initialState
+			return state
 	}
 }
 

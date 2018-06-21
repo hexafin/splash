@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
     	bitcoinAddress: state.crypto.wallets.BTC.address,
     	address: state.payFlow.address,
     	capturedQr: state.payFlow.capturedQr,
-        userSplashtag: state.user.entity.splashtag,
+        userId: state.user.id,
     }
 }
 

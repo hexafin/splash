@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import SendLineItem from "./SendLineItem"
 
-const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userSplashtag }) => {
+const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, selectedId }) => {
 
   /* if there are still results, you can
   call the refine function to load more */
@@ -24,11 +24,11 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userSplasht
 	      onEndReached={onEndReached}
 	      keyExtractor={(item, index) => item.objectID}
 	      renderItem={({ item }) => {
-	      	console.log(item)
-	      	if (item.splashtag != userSplashtag) {
+	      	if (item.objectID != userId) {
 	      		return (
 		          <SendLineItem
 		            title={`@${item.splashtag}`}
+		            selected={item.objectID == selectedId}
 		            subtitle={item.phoneNumber}
 		            circleText={item.splashtag.slice(0,2).toUpperCase()}
 		            onPress={() => callback(item)}/>

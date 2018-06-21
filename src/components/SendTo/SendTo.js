@@ -23,11 +23,14 @@ import NavigatorService from "../../redux/navigator";
 import SendButton from "./SendButton"
 import Hits from "./Hits"
 import SendLineItem from "./SendLineItem"
+import { Sentry } from "react-native-sentry"
 import NextButton from "../universal/NextButton";
 import { algoliaKeys } from '../../../env/keys.json'
 import { InstantSearch } from 'react-instantsearch/native';
 import SearchBox from "./SearchBox"
 import api from "../../api"
+import firebase from "react-native-firebase";
+let firestore = firebase.firestore();
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -41,9 +44,11 @@ class SendTo extends Component {
 			sendCurrency: props.sendCurrency,
 			sendAmount: props.sendAmount,
 			capturedQr: false,
+			userFromAddress: null,
 			pastedAddress: false,
 			selectedId: null,
 		}
+		this.getUserFromAddress = this.getUserFromAddress.bind(this)
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -66,7 +71,20 @@ class SendTo extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+
+		if ((nextState.capturedQr != this.state.capturedQr && nextState.capturedQr == true)
+			|| (nextState.pastedAddress != this.state.pastedAddress && nextState.pastedAddress == true)) {
+			// just captured a QR or pasted an address, look for a user with this address
+			this.getUserFromAddress(nextState.value)
+		}
+
 		if (nextState.value != this.state.value) {
+			return true
+		}
+		else if (nextState.userFromAddress != this.state.userFromAddress && nextState.userFromAddress != null) {
+			return true
+		}
+		else if (nextState.selectedId != this.state.selectedId) {
 			return true
 		}
 		else {
@@ -78,13 +96,28 @@ class SendTo extends Component {
 		this.yOffset = new Animated.Value(0)
 	}
 
+	getUserFromAddress(address) {
+		firestore.collection("users").where("wallets.BTC.address", "==", address).get().then(query => {
+			if (!query.empty) {
+				const userDoc = query.docs[0].data()
+				this.setState({userFromAddress: userDoc})
+			}
+			else {
+				// could not find a user for this address
+			}
+		}).catch(error => {
+			Sentry.captureMessage(error)
+		})
+	}
+
 	render() {
 
 		const {
 			sendCurrency,
 			sendAmount,
 			sendTo,
-			userSplashtag,
+			userId,
+			bitcoinAddress,
 		} = this.props
 
 		const animatedHeader = {
@@ -129,7 +162,7 @@ class SendTo extends Component {
 					{(!this.state.pastedAddress && !this.state.capturedQr) && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>ADDRESS OR SPLASHTAG</Text>
 						<SearchBox onChange={value => {
-							this.setState({value})
+							this.setState({value, selectedId: null})
 						}}/>
 					</View>}
 
@@ -138,7 +171,7 @@ class SendTo extends Component {
 						<View style={styles.inputWrapper}>
 							<TextInput
 								onChangeText={value => {
-									this.setState({value: "", pastedAddress: false, capturedQr: false})
+									this.setState({value: "", pastedAddress: false, capturedQr: false, userFromAddress: null})
 								}}
 							    value={this.state.value}
 								style={styles.input}/>
@@ -150,8 +183,11 @@ class SendTo extends Component {
 							image={icons.copyPaste} 
 							title={"Paste\naddress"}
 							onPress={() => {
-								console.log("trying to paste")
 								Clipboard.getString().then(address => {
+									if (bitcoinAddress == address) {
+										Alert.alert("You cannot send money to yourself")
+										return
+									}
 									if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
 										this.setState({value: address, pastedAddress: true})
 									} else {
@@ -173,10 +209,10 @@ class SendTo extends Component {
 						<Text style={styles.sectionLabel}>CAPTURED QR CODE</Text>
 						<SendLineItem
 							selected={true}
-							title="A bitcoin wallet"
+							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
 							subtitle="Valid Address"
 							address={this.state.value}
-							circleText="B"
+							circleText={this.state.userFromAddress ? this.state.userFromAddress.splashtag.slice(0,2).toUpperCase() : "B"}
 							extraContent="From QR-Code Scan"/>
 					</View>}
 
@@ -184,11 +220,11 @@ class SendTo extends Component {
 						<Text style={styles.sectionLabel}>SENDING TO</Text>
 						<SendLineItem
 							selected={true}
-							title="A bitcoin wallet"
+							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
 							subtitle="Valid Address"
 							address={this.state.value}
-							circleText="B"
-							extraContent="From pasted address"/>
+							circleText={this.state.userFromAddress ? this.state.userFromAddress.splashtag.slice(0,2).toUpperCase() : "B"}
+							extraContent="From Pasted Address"/>
 					</View>}
 
 					{(!this.state.pastedAddress && !this.state.capturedQr) && <View style={styles.section}>
@@ -196,8 +232,15 @@ class SendTo extends Component {
 					</View>}
 
 					{(!this.state.pastedAddress && !this.state.capturedQr && this.state.value != "") && <View style={styles.hits}>
-						<Hits userSplashtag={userSplashtag} callback={() => {
+						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
+							const selectedId = item.objectID
+							if (selectedId != this.state.selectedId) {
+								this.setState({selectedId})
+							}
+							else {
+								this.setState({selectedId: null})
+							}
 						}}/>
 					</View>}
 
