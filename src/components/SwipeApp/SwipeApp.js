@@ -159,7 +159,7 @@ class SwipeApp extends Component {
 				name: "wallet",
 				component: Wallet,
 				image: icons.qrIcon,
-				title: "You splash wallet"
+				title: "Your splash wallet"
 			}
 		]
 		this.state = {

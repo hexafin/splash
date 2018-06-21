@@ -90,8 +90,6 @@ const PayFlowRouter = createBottomTabNavigator(
 		}
 	},
 	{
-		animationEnabled: true,
-		swipeEnabled: false,
 		initialRouteName: "EnterAmount",
 		activeBackgroundColor: colors.white,
 		inactiveBackgroundColor: colors.white

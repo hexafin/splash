@@ -37,6 +37,10 @@ const SCREEN_HEIGHT = Dimensions.get("window").height
 
 class SendTo extends Component {
 
+	static navigationOptions = {
+		swipeEnabled: true
+	}
+
 	constructor(props) {
 		super(props)
 		this.state = {
