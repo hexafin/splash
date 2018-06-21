@@ -4,14 +4,14 @@ const initialState = {
 	splashtag: null,
 	address: null,
 	userId: null,
-	scannedQr: false,
+	capturedQr: false,
 }
 
 export default function payFlow(state = initialState, action) {
 	switch (action.type) {
 		case "ENTER_AMOUNT":
 			return {
-				...state,
+				...initialState,
 				currency: action.currency,
 				amount: action.amount,
 			}
@@ -22,7 +22,15 @@ export default function payFlow(state = initialState, action) {
 				address: action.address,
 				userId: action.userId,
 			}
+		case "CAPTURE_QR":
+			return {
+				...state,
+				capturedQr: true,
+				address: action.address,
+			}
 		case "RESET":
+			return initialState
+		default:
 			return initialState
 	}
 }
@@ -31,6 +39,10 @@ export function enterAmount(currency, amount) {
 	return {type: "ENTER_AMOUNT", currency, amount}
 }
 
+export function captureQr(address) {
+	return {type: "CAPTURE_QR", address}
+}
+
 export function sendTo(address, splashtag=null, userId=null) {
-	return {type: "ENTER_AMOUNT", address, splashtag, userId}
+	return {type: "SEND_TO", address, splashtag, userId}
 }

@@ -339,7 +339,6 @@ class SwipeApp extends Component {
 					source={require("../../assets/images/headerWave.png")}
 					resizeMode="contain"
 					style={[headerTransform(), styles.headerImage]}/>
-				<View style={styles.header}/>
 				
 				{Icons}
 
@@ -381,9 +380,9 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.primary
 	},
 	headerImage: {
-		top: (isIphoneX()) ? -30 : -50,
+		top: (isIphoneX()) ? -80 : -100,
 		width: SCREEN_WIDTH,
-		height: 240,
+		height: 300,
 		position: "absolute",
 		shadowOffset: {
 			width: 0,

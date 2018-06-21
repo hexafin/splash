@@ -6,6 +6,7 @@ import {
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
+import { isIphoneX } from "react-native-iphone-x-helper"
 import {defaults} from '../../lib/styles'
 
 const FlatBackButton = ({onPress, color="gray", absolute=true, direction="left"}) => {
@@ -32,7 +33,7 @@ const FlatBackButton = ({onPress, color="gray", absolute=true, direction="left"}
 
 const styles = StyleSheet.create({
     wrapper: {
-        padding: 10,
+        padding: 27,
         flexDirection: "column",
         justifyContent: 'center',
         alignItems: 'center',
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     absoluteLeft: {
         position: 'absolute',
         left: 0,
-        top: 30,
+        top: (isIphoneX()) ? 30 : 10,
     },
     absoluteRight: {
         position: 'absolute',
@@ -48,9 +49,8 @@ const styles = StyleSheet.create({
         top: 30,
     },
     carrot: {
-        height: 20,
-        width: 10,
-        margin: 5
+        height: 22,
+        width: 11,
     }
 })
 

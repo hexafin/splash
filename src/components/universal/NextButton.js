@@ -9,6 +9,7 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 import {defaults, icons} from '../../lib/styles'
+import {isIphoneX} from "react-native-iphone-x-helper"
 import LoadingCircle from "./LoadingCircle"
 import Checkmark from "./Checkmark"
 import PropTypes from "prop-types"
@@ -76,10 +77,9 @@ class NextButton extends Component {
 
 const styles = StyleSheet.create({
     wrapper: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        paddingRight: 20,
+        position: "absolute",
+        bottom: isIphoneX() ? 40 : 20,
+        right: 20,
     },
     button: {
         paddingHorizontal: 30,

@@ -212,29 +212,12 @@ class PayFlow extends Component {
 			case "clipboard":
 				Clipboard.getString().then(address => {
 					if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
-						this.setState({address, activeSection: "enterAmount"})
-						Animated.sequence([
-							// fade out choose type
-							Animated.timing(this.chooseTypeOpacity, {
-								toValue: 0,
-								duration: 500
-							}),
-							Animated.parallel([
-								Animated.timing(this.enterAmountOpacity, {
-									toValue: 1,
-									duration: 500
-								}),
-								Animated.timing(this.wrapperHeight, {
-									toValue: this.state.enterAmountHeight,
-									duration: 500
-								}).start()
-							])
-						]).start()
+						this.setState({address})
 					} else {
 						Alert.alert("Invalid bitcoin address")
 					}
 				}).catch(error => {
-					this.reset()
+					Alert.alert("Could not get copied address")
 				})
 				
 				break

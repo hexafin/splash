@@ -44,6 +44,7 @@ export const icons = {
 	primarySplash: require("../assets/icons/primarySplash.png"),
 	crossPrimary: require("../assets/icons/crossPrimary.png"),
 	qrIcon: require("../assets/icons/qrIcon.png"),
+	copyPaste: require("../assets/icons/copyPaste.png"),
 	arrow: {
 		to: require("../assets/icons/primaryRightArrow.png"),
 		from: require("../assets/icons/greenLeftArrow.png")

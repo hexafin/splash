@@ -145,7 +145,7 @@ class EnterAmount extends Component {
 
 				<Keypad
 					primaryColor={"#EEEEFC"}
-					pressColor={"#6466F6"}
+					pressColor={"#CFCFFF"}
 					textColor={"#3F41FA"}
 					onChange={text => this.setState({amount: text})}
 					decimal={true}
@@ -161,6 +161,7 @@ class EnterAmount extends Component {
 						this.state.amount.length == 0 
 						|| amountOverBalance}
 					onPress={() => {
+						this.props.enterAmount(this.state.activeCurrency, parseFloat(this.state.amount))
 						this.props.navigation.navigate("SendTo")
 					}}/>
 
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 		flexDirection: "column",
 		justifyContent: "space-between",
-		paddingBottom: isIphoneX() ? 40 : 20,
+		paddingBottom: isIphoneX() ? 140 : 120,
 	},
 	header: {
 		flexDirection: "column",
