@@ -568,6 +568,17 @@ function LoadFriends(facebook_id, access_token) {
     })
 }
 
+async function AddToKeychain(userId, key, value) {
+  try {
+    let data = JSON.parse((await Keychain.getGenericPassword()).password)
+    data[key] = value
+    await Keychain.setGenericPassword(userId, JSON.stringify(data))
+    Promise.resolve()
+  } catch (e) {
+    Promise.reject(e)
+  }
+}
+
 async function DeleteAccount(userId) {
   try {
     await Keychain.resetGenericPassword()
@@ -623,6 +634,7 @@ export default api = {
     UpdateTransaction,
     GetExchangeRate,
     GenerateCard,
+    AddToKeychain,
     DeleteAccount,
     AddBlockchainTransactions,
     IsValidAddress,

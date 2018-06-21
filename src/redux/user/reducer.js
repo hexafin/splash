@@ -1,5 +1,6 @@
 import firebase from "react-native-firebase"
 import { Sentry } from "react-native-sentry"
+import moment from "moment"
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
@@ -12,6 +13,9 @@ const initialState = {
 	isUpdatingUsername: false,
 	errorUpdatingUsername: null,
 	entity: {},
+	lockoutEnabled: false,
+	lockoutDuration: 5,
+	lockoutTime: null,
 	id: null
 }
 
@@ -61,6 +65,24 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isUpdatingUsername: false,
 				errorUpdatingUsername: action.error,
+			}
+
+		case ActionTypes.RESET_LOCKOUT_CLOCK:
+			return {
+				...state,
+				lockoutTime: null,
+			}
+
+		case ActionTypes.START_LOCKOUT_CLOCK:
+			return {
+				...state,
+				lockoutTime: moment().add(state.lockoutDuration,'minutes').unix(),
+			}
+
+		case ActionTypes.TOGGLE_LOCKOUT:
+			return {
+				...state,
+				lockoutEnabled: action.toggle,
 			}
 
 		case ActionTypes.RESET_USER:
