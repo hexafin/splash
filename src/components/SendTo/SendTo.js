@@ -222,7 +222,7 @@ class SendTo extends Component {
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={this.state.userFromAddress ? `@${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
+							subtitle={this.state.userFromAddress ? `${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
 							address={this.state.value}
 							circleText={this.state.userFromAddress ? null : "B"}
 							extraContent="From QR-Code Scan"/>
@@ -233,7 +233,7 @@ class SendTo extends Component {
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={this.state.userFromAddress ? `@${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
+							subtitle={this.state.userFromAddress ? `${this.state.userFromAddress.phoneNumber}` : "Valid Address"}
 							address={this.state.value}
 							circleText={this.state.userFromAddress ? null : "B"}
 							extraContent="From Pasted Address"/>
