@@ -73,7 +73,7 @@ function iconTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [200, 0, -200]
+					outputRange: [SCREEN_WIDTH*0.55, 0, -0.55*SCREEN_WIDTH]
 				})
 			}
 		]
@@ -100,7 +100,7 @@ function titleTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [380, 0, -380]
+					outputRange: [SCREEN_WIDTH*1.2, 0, -1.2 * SCREEN_WIDTH]
 				})
 			}
 		]
