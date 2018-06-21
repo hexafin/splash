@@ -3,17 +3,22 @@ import {
 	View,
 	Text,
 	StyleSheet,
+	Dimensions,
 	Image,
 	TouchableOpacity,
 	Animated
 } from "react-native"
 import { colors } from "../../lib/colors"
+import { isIphoneX } from "react-native-iphone-x-helper"
 import { defaults, icons } from "../../lib/styles"
 import Keypad from '../universal/Keypad'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchID from "react-native-touch-id"
 import * as Keychain from 'react-native-keychain';
+
+const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_HEIGHT = Dimensions.get("window").height
 
 
 class Unlock extends Component {
@@ -111,19 +116,21 @@ class Unlock extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 75,
+		paddingVertical: isIphoneX() ? 40 : 20,
+		flexDirection: "column",
+		justifyContent: "space-between",
+		paddingTop: isIphoneX() ? 75 : 55,
 	},
 	splashLogo: {
 		height: 34,
 		width: 26,
-		marginBottom: 76,
 		alignSelf: 'center'
 	},
 	drops: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 113,
 		paddingHorizontal: 105,
+		width: SCREEN_WIDTH
 	},
 	drop: {
 		height: 15,
