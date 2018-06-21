@@ -143,7 +143,7 @@ class ApproveTransactionModal extends Component {
                   	onPress={confirm}
                   	style={styles.button} 
                   	loading={this.props.loading && !this.state.success}
-                  	checkmark={this.state.success && !this.props.loading}
+                  	checkmark={this.state.success && !this.props.loading && !this.props.error}
                   	checkmarkPersist={true}
 					checkmarkCallback={this.props.dismiss}
 					disabled={(this.props.error != null) ? true : false}
