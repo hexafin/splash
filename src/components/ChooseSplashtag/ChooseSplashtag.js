@@ -27,7 +27,7 @@ class ChooseSplashtag extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            splashtagAvailable: {available: null, availableWaitlist: null, availableUser: null, validSplashtag: null},
+            splashtagAvailable: {available: null, validSplashtag: null},
             errorCheckingSplashtag: null,
             checkingSplashtag: false
         }
@@ -42,11 +42,11 @@ class ChooseSplashtag extends Component {
                 checkingSplashtag: true
             }
         })
-        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+splashtag).then(response => {
+        api.UsernameExists(splashtag).then(data => {
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    splashtagAvailable: response.data,
+                    splashtagAvailable: data,
                     checkingSplashtag: false,
                     errorCheckingSplashtag: false
                 }
