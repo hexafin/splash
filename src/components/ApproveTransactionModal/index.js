@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-      SendTransaction, DismissTransaction
+      SendTransaction,
     }, dispatch)
 }
 
