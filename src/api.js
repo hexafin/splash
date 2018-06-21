@@ -581,10 +581,18 @@ async function AddToKeychain(userId, key, value) {
 
 async function DeleteAccount(userId) {
   try {
-  	await Keychain.resetGenericPassword()
+    await Keychain.resetGenericPassword()
+    await DeleteTransactions(userId)
+    await firestore.collection('users').doc(userId).delete()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+async function DeleteTransactions(userId) {
+  try {
     const query1 = await firestore.collection("transactions").where("fromId", '==', userId).get()
     query1.forEach(async (doc) => {
-      console.log(doc.id)
       try {
         await doc.ref.delete()
       } catch(e) {
@@ -593,14 +601,12 @@ async function DeleteAccount(userId) {
     })
     const query2 = await firestore.collection("transactions").where("toId", '==', userId).get()
     query2.forEach(async (doc) => {
-      console.log(doc.id)
       try {
         await doc.ref.delete()
       } catch(e) {
           console.log(e)
       }
     })
-    await firestore.collection('users').doc(userId).delete()
   } catch (e) {
     console.log(e)
   }
@@ -632,6 +638,7 @@ export default api = {
     DeleteAccount,
     AddBlockchainTransactions,
     IsValidAddress,
+    DeleteTransactions,
     UpdateRequest: UpdateRequest,
     RemoveRequest: RemoveRequest,
     UsernameExists: UsernameExists,

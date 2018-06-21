@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Animated, Easing, View, Text, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Image, Alert } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Image, Alert } from "react-native"
 import { colors } from "../../lib/colors"
 import LoadingCircle from "../universal/LoadingCircle"
 import Checkmark from "../universal/Checkmark"
@@ -17,11 +17,6 @@ class ApproveTransactionModal extends Component {
 			wasLoading: false,
 			feeSatoshi: null,
 		}
-		this.animation = new Animated.Value(0.0)
-	}
-
-	componentWillMount() {
-		this.backgroundOpacity = new Animated.Value(0)
 	}
 
 	componentDidMount() {
@@ -32,14 +27,6 @@ class ApproveTransactionModal extends Component {
 			currency,
 		    exchangeRate
 		} = this.props
-
-		Animated.sequence([
-			Animated.delay(10),
-	        Animated.spring(this.animation, {
-	            toValue: 1.0,
-	        }),
-		]).start();
-
 
 	    const rate = parseFloat(exchangeRate).toFixed(2)
 	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : amount
@@ -83,7 +70,6 @@ class ApproveTransactionModal extends Component {
 			amount,
 			currency,
 		    exchangeRate,
-		    successCallback,
 		} = this.props
 
 
@@ -94,60 +80,30 @@ class ApproveTransactionModal extends Component {
 		const totalBtcAmount = (parseFloat(btcAmount)+parseFloat(fee)).toFixed(5)
 		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
 
-		const modalTransform = () => {
-			return {
-				transform: [
-					{
-						translateY: this.animation.interpolate({
-							inputRange: [0, 1],
-							outputRange: [400, 0]
-						})
-					}
-				]
-			}
-		}
-
-
-		const dismiss = (success=false) => {
-			Animated.timing(this.animation, {
-				toValue: 0,
-				duration: 200,
-				easing: Easing.linear(),
-			}).start(({finished}) => {
-				if (finished) {
-					if(success) {
-						successCallback()
-					}
-					this.props.hideModal()
-					this.props.DismissTransaction()
-				}
-			})
-		}
-
 		const confirm = () => {
 			if (totalBtcAmount) {
 				const relativeAmount = (1.0*btcAmount*parseFloat(rate)).toFixed(2)
 				TouchID.authenticate("Confirm Transaction").then(success => {
 					if (success) {
 						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount, userId)
-							.then(() => dismiss(true))
+							.then(() => this.props.dismiss(true))
 							.catch(error => {
 								if (error == BITCOIN_ERRORS.BALANCE) {
 									Alert.alert("Insufficient balance", null, [
 													{text: "Dismiss", onPress: () => {
-														dismiss()
+														this.props.dismiss()
 													}}
 												])
 								} else if (error == BITCOIN_ERRORS.UTXOS) {
 									Alert.alert("Insufficient available balance. Please wait for your transactions to be confirmed before sending more.", null, [
 													{text: "Dismiss", onPress: () => {
-														dismiss()
+														this.props.dismiss()
 													}}
 												])
 								} else if (error == BITCOIN_ERRORS.FEE) {
 									Alert.alert("Bitcoin fee is greater than balance. Try lowering the fee in settings.", null, [
 													{text: "Dismiss", onPress: () => {
-														dismiss()
+														this.props.dismiss()
 													}}
 												])
 								}
@@ -163,52 +119,41 @@ class ApproveTransactionModal extends Component {
 		}
 
 		return (
-			<TouchableWithoutFeedback onPress={() => dismiss()}>
-			<Animated.View style={[styles.container, {backgroundColor: this.animation.interpolate({inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', 'rgba(67,68,167,0.32)']})}]}>
-				<View style={{ flexDirection: "row" }}>
-					<TouchableWithoutFeedback onPress={() => {}}>
-					<Animated.View style={[styles.popup, modalTransform()]}>
-					<View style={styles.content}>
-	                <View style={styles.header}>
-	                  <Text style={styles.title}>Confirm transaction</Text>
-	                  <TouchableOpacity onPress={dismiss}>
-	                    <Image style={{height: 20, width: 20}} source={require('../../assets/icons/Xbutton.png')}/>
-	                  </TouchableOpacity>
-	                </View>
-	                <View style={styles.information}>
-	                  <Text style={styles.exchangeText}>1 BTC = ${rate} USD</Text>
-	                  <View style={styles.amountBox}>
-	                    <Text style={{fontSize: 28, color: colors.white, fontWeight: '600'}}>USD ${totalRelativeAmount}</Text>
-	                    <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{totalBtcAmount} BTC</Text>
-	                  </View>
-	                </View>
-	                <View style={{padding: 10}}>
-	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
-	                    <Text style={styles.description}>They receive —— {(btcAmount.toFixed(5))} BTC</Text>
-	                </View>
-                    <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
-	                <View style={styles.footer}>
-	                  <Button
-	                  	onPress={confirm}
-	                  	style={styles.button} 
-	                  	loading={this.props.loading && !this.state.success}
-	                  	checkmark={this.state.success && !this.props.loading}
-	                  	checkmarkPersist={true}
-						checkmarkCallback={dismiss}
-						disabled={(this.props.error != null) ? true : false}
-						title={"Send Transaction"} primary={true}/>
-	                  <View style={{flexDirection: 'row', paddingTop: 10, alignSelf: 'center', alignItems: 'center'}}>
-	                    <Image style={{height: 13, width: 10}} source={require('../../assets/icons/lockIcon.png')}/>
-	                    <Text style={{paddingLeft: 10, backgroundColor: 'rgba(0,0,0,0)', color: colors.lightGray, fontSize: 15, fontWeight: '600'}}>Payment secured by Splash</Text>
-	                  </View>
-	                </View>
-					</View>
-					</Animated.View>
-					</TouchableWithoutFeedback>
+				<View style={styles.content}>
+                <View style={styles.header}>
+                  <Text style={styles.title}>Confirm transaction</Text>
+                  <TouchableOpacity onPress={this.props.dismiss}>
+                    <Image style={styles.closeButton} source={require('../../assets/icons/Xbutton.png')}/>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.information}>
+                  <Text style={styles.exchangeText}>1 BTC = ${rate} USD</Text>
+                  <View style={styles.amountBox}>
+                    <Text style={styles.relativeText}>USD ${totalRelativeAmount}</Text>
+                    <Text style={styles.amountText}>{totalBtcAmount} BTC</Text>
+                  </View>
+                </View>
+                <View style={styles.feeBox}>
+                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
+                    <Text style={styles.description}>They receive —— {(btcAmount.toFixed(5))} BTC</Text>
+                </View>
+                <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
+                <View style={styles.footer}>
+                  <Button
+                  	onPress={confirm}
+                  	style={styles.button} 
+                  	loading={this.props.loading && !this.state.success}
+                  	checkmark={this.state.success && !this.props.loading}
+                  	checkmarkPersist={true}
+					checkmarkCallback={this.props.dismiss}
+					disabled={(this.props.error != null) ? true : false}
+					title={"Send Transaction"} primary={true}/>
+                  <View style={styles.footer}>
+                    <Image style={styles.lockIcon} source={require('../../assets/icons/lockIcon.png')}/>
+                    <Text style={styles.securedText}>Payment secured by Splash</Text>
+                  </View>
+                </View>
 				</View>
-			</Animated.View>
-			</TouchableWithoutFeedback>
-
 		)
 	}
 }
@@ -216,20 +161,6 @@ class ApproveTransactionModal extends Component {
 export default ApproveTransactionModal
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "rgba(0,0,0,0)",
-    justifyContent: 'flex-end'
-	},
-  popup: {
-    flex: 1,
-    flexDirection: "column",
-    height: 400,
-    alignItems: "center",
-    borderTopLeftRadius: 15,
-		borderTopRightRadius: 15,
-    backgroundColor: colors.white
-  },
   content: {
     flex: 1,
     paddingTop: 25,
@@ -243,6 +174,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: 10,
+  },
+  closeButton: {
+	height: 20,
+	width: 20
   },
   title: {
     fontSize: 20,
@@ -269,10 +204,41 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#6364F1',
   },
+  relativeText: {
+  	fontSize: 28,
+  	color: colors.white,
+  	fontWeight: '600'
+  },
+  amountText: {
+  	fontSize: 18,
+  	opacity: 0.77,
+  	color: colors.white,
+  	fontWeight: '600'
+  },
+  feeBox: {
+  	padding: 10
+  },
   description: {
     textAlign: 'center',
     fontSize: 12,
     color: colors.gray,
     fontWeight: '500',
   },
+  footer: {
+  	flexDirection: 'row',
+  	paddingTop: 10,
+  	alignSelf: 'center',
+  	alignItems: 'center'
+  },
+  lockIcon: {
+  	height: 13,
+  	width: 10
+  },
+  securedText: {
+  	paddingLeft: 10,
+  	backgroundColor: 'rgba(0,0,0,0)',
+  	color: colors.lightGray,
+  	fontSize: 15,
+  	fontWeight: '600'
+  }
 })

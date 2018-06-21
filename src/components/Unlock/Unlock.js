@@ -28,7 +28,7 @@ class Unlock extends Component {
 	}
 
 	componentDidMount() {
-		TouchID.authenticate("Login with FaceID").then(success => {
+		TouchID.authenticate("Login with biometric").then(success => {
 			if (success) {
 				this.props.navigation.state.params.successCallback()
 			}

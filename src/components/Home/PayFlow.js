@@ -19,7 +19,7 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
-import { resetQr } from "../../redux/transactions/actions"
+import { resetQr, DismissTransaction } from "../../redux/transactions/actions"
 import { showApproveModal } from '../../redux/modal'
 import PayButton from "./PayButton"
 import SearchBox from "./SearchBox"
@@ -75,8 +75,6 @@ class PayFlow extends Component {
 			splashtagSearchResults: [],
 			splashtag: null,
 			selectedId: null,
-			modalVisible: false,
-			modalProps: null
 		})
 		Animated.sequence([
 			Animated.parallel([
@@ -175,6 +173,7 @@ class PayFlow extends Component {
 									successCallback: () => {
 										this.reset()
 									},
+									dismissCallback: () => this.props.DismissTransaction(),
 				            	})
 	         	}
 	}
@@ -477,7 +476,8 @@ const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
 			resetQr,
-			showApproveModal
+			showApproveModal,
+			DismissTransaction,
 		},
 		dispatch
 	)
