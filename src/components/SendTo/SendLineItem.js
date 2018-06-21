@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		borderRadius: 5,
 		backgroundColor: colors.white,
+		borderWidth: 1,
+		borderColor: colors.white,
 	},
 	wrapperSelected: {
 		borderWidth: 1,
