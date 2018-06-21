@@ -1,5 +1,4 @@
 import firebase from "react-native-firebase"
-import { Sentry } from "react-native-sentry"
 import moment from "moment"
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)

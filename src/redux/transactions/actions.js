@@ -5,6 +5,7 @@ let firestore = firebase.firestore();
 let analytics = firebase.analytics();
 import { NavigationActions } from "react-navigation";
 import * as Keychain from 'react-native-keychain';
+import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits } from '../../lib/cryptos'
@@ -118,6 +119,7 @@ export const LoadTransactions = () => {
 					dispatch(loadTransactionsSuccess(transactions))
 				}
 			}, error => {
+				Sentry.messageCapture(error)
 				dispatch(loadTransactionsFailure(error))
 			})
 
@@ -136,10 +138,12 @@ export const LoadTransactions = () => {
 					dispatch(loadTransactionsSuccess(transactions))
 				}
 			}, error => {
+				Sentry.messageCapture(error)
 				dispatch(loadTransactionsFailure(error))
 			})
 
 		}).catch(error => {
+			Sentry.messageCapture(error)
 			dispatch(loadTransactionsFailure(error))			
 		})
 	}
@@ -185,6 +189,7 @@ export const ApproveTransaction = (transaction) => {
 		approveTransaction(transaction).then(transaction => {
 			dispatch(successApprovingTransaction())
 		}).catch(error => {
+			Sentry.messageCapture(error)
 			dispatch(approveTransactionFailure(error))
 		})
 	}
@@ -237,10 +242,12 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
             dispatch(sendTransactionSuccess())
             resolve()
           }).catch(error => {
+          	Sentry.messageCapture(error)
             dispatch(sendTransactionFailure(error))	
             reject(error)
           })
         }).catch(error => {
+          Sentry.messageCapture(error)
           dispatch(sendTransactionFailure(error))
           reject(error)
         })

@@ -100,6 +100,7 @@ export const SmsAuthenticate = (phoneNumber, countryName) => {
 					resolve(confirmResult)
 				})
 				.catch(error => {
+					Sentry.messageCapture(error)
 					dispatch(smsAuthFailure(error));
 					reject(error)
 				});
@@ -119,6 +120,7 @@ export const SmsConfirm = (confirmResult, confirmationCode) => {
 					resolve(user)
 				})
 				.catch(error => {
+					Sentry.messageCapture(error)
 					dispatch(smsConfirmFailure(error));
 					reject(error)
 				});
@@ -149,10 +151,10 @@ export const SignUp = user => {
 			userRef.get().then(userDoc => {
 				api.UsernameExists(splashtag).then(data => {
 
-					if (data.availableUser) {
+					if (data.available) {
 
 						const entity = {
-							splashtag: splashtag,
+							splashtag: splashtag.toLowerCase(),
 							phoneNumber,
 				            defaultCurrency: "USD"
 						}
@@ -162,10 +164,12 @@ export const SignUp = user => {
 								dispatch(signUpSuccess())
 								resolve(userId)
 							}).catch(error => {
+								Sentry.messageCapture(error)
 								dispatch(signUpFailure(error))
 								reject(error)
 							})
 						}).catch(error => {
+							Sentry.messageCapture(error)
 							dispatch(signUpFailure(error))
 							reject(error)
 						})
@@ -174,11 +178,13 @@ export const SignUp = user => {
 					else {
 						// username already taken
 						const error = "Username already taken"
+						Sentry.messageCapture(error)
 						dispatch(signUpFailure(error))
 						reject(error)
 					}
 				})
 			}).catch(error => {
+				Sentry.messageCapture(error)
 				dispatch(signUpFailure(error))
 				reject(error)
 			})

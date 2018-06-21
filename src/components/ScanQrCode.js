@@ -73,13 +73,16 @@ class ScanQrCode extends Component {
 					}
 				}}
 				cameraStyle={styles.camera}
+				containerStyle={{backgroundColor: colors.white}}
 				bottomViewStyle={{position: 'absolute'}}
 				bottomContent={
 					<View>
-						<Image
-						source={require("../assets/images/headerWave.png")}
-						resizeMode="contain"
-						style={styles.headerImage}/>
+						<View style={{overflow: 'hidden', width: SCREEN_WIDTH}}>
+							<Image
+							source={require("../assets/images/headerWave.png")}
+							resizeMode="contain"
+							style={styles.headerImage}/>
+						</View>
 						<View style={styles.topContent}>
 							<Text style={styles.title}>Point at QR Code</Text>
 							<Image source={icons.qrIcon} style={styles.qrIcon} resizeMode={'contain'}/>
@@ -122,15 +125,15 @@ const styles = StyleSheet.create({
 	},
 	headerImage: {
 		top: (isIphoneX()) ? -102 : -122,
+		top: (isIphoneX()) ? -285 : -305,
 		width: SCREEN_WIDTH,
-		height: 240,
 		shadowOffset: {
 			width: 0,
 			height: 5
 		},
 		shadowOpacity: 0.12,
 		shadowRadius: 12,
-		overflow: "visible",
+		overflow: "hidden",
 	},
 	topContent: {
 		opacity: 0.75,
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
 		width: 30,
 	},
 	box: {
-		top: (isIphoneX()) ? 30 : 10,
+		top: (isIphoneX()) ? -275 : -255,
 		height: 270,
 		width: 270,
 		justifyContent: 'space-between',
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
 		height: 98,
 		width: 98,
 		borderRadius: 49,
-		top: (isIphoneX()) ? SCREEN_HEIGHT-675 : SCREEN_HEIGHT-695,
+		top: (isIphoneX()) ? SCREEN_HEIGHT-975 : SCREEN_HEIGHT-995,
 		backgroundColor: colors.white,
 		alignSelf: 'center',
 		justifyContent: 'center',

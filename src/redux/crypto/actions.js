@@ -5,6 +5,7 @@ let firestore = firebase.firestore();
 let analytics = firebase.analytics();
 import { NavigationActions } from "react-navigation";
 import * as Keychain from 'react-native-keychain';
+import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits } from '../../lib/cryptos'
@@ -148,6 +149,7 @@ export const OpenWallet = (currency, network="testnet") => {
 						resolve()
 
 					}).catch(error => {
+						Sentry.messageCapture(error)
 						dispatch(openWalletFailure(error))
 						reject(error)
 					})
@@ -190,10 +192,12 @@ export const OpenWallet = (currency, network="testnet") => {
 							resolve()
 
 						}).catch(error => {
+							Sentry.messageCapture(error)
 							dispatch(openWalletFailure(error))
 							reject(error)
 						})
 				  	}).catch(error => {
+				  		Sentry.messageCapture(error)
 				  		dispatch(openWalletFailure(error))
 						reject(error)
 				  	})
@@ -201,6 +205,7 @@ export const OpenWallet = (currency, network="testnet") => {
 				}
 
 			}).catch(error => {
+				Sentry.messageCapture(error)
 				dispatch(openWalletFailure(error))
 				reject(error)
 			})
