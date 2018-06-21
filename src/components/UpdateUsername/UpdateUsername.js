@@ -16,7 +16,7 @@ import {Input} from "../universal/Input"
 import Button from "../universal/Button"
 import { Field, reduxForm } from 'redux-form'
 import debounce from 'lodash/debounce';
-import axios from "axios"
+import api from "../../api"
 import CloseButton from "../universal/CloseButton"
 
 class UpdateUsername extends Component {
@@ -38,11 +38,11 @@ class UpdateUsername extends Component {
                 checkingSplashtag: true
             }
         })
-        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+splashtag).then(response => {
+        api.UsernameExists(splashtag).then(data => {
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    splashtagAvailable: response.data.available,
+                    splashtagAvailable: data.available,
                     checkingSplashtag: false,
                 }
             })

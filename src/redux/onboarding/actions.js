@@ -149,10 +149,10 @@ export const SignUp = user => {
 			userRef.get().then(userDoc => {
 				api.UsernameExists(splashtag).then(data => {
 
-					if (data.availableUser) {
+					if (data.available) {
 
 						const entity = {
-							splashtag: splashtag,
+							splashtag: splashtag.toLowerCase(),
 							phoneNumber,
 				            defaultCurrency: "USD"
 						}

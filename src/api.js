@@ -14,14 +14,30 @@ let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
 import * as Keychain from 'react-native-keychain';
 
-function UsernameExists(username) {
+function UsernameExists(splashtag) {
     return new Promise((resolve, reject) => {
-        // check if a person (signed up or waitlisted) already has the username
-        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+username).then(response => {
-          resolve(response.data)
+      // check if a person  already has the username
+
+      let output = {
+        available: false,
+        validSplashtag: false
+      };
+
+      splashtag = splashtag.toLowerCase();
+      if (/^[a-z0-9_-]{3,15}$/.test(splashtag)) {
+        output.validSplashtag = true;
+
+        firestore.collection("users").where("splashtag", "==", splashtag).get().then(users => {
+            if (users.empty) {
+              output.available = true;
+            }
+            resolve(output)
         }).catch(error => {
           reject(error)
         })
+      } else {
+        resolve(output)
+      }
     })
 }
 
