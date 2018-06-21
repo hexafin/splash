@@ -168,15 +168,15 @@ class PayFlow extends Component {
 			Alert.alert("Not enough balance")
 		} else {
 			this.props.showApproveModal({
-									address,
-									userId,
-									amount,
-									currency: this.state.currency,
-									successCallback: () => {
-										this.reset()
-									},
-				            	})
-	         	}
+				address,
+				userId,
+				amount,
+				currency: this.state.currency,
+				successCallback: () => {
+					this.reset()
+				},
+        	})
+     	}
 	}
 
 	handleSplashtagClick(user) {

@@ -143,7 +143,7 @@ class SendTo extends Component {
 					Keyboard.dismiss()
 					this.props.screenProps.rootNavigation.goBack(null)
 				}}/>
-				<FlatBackButton color="purple" onPress={() => {
+				<FlatBackButton color="dark" onPress={() => {
 					Keyboard.dismiss()
 					this.props.navigation.goBack(null)
 				}}/>

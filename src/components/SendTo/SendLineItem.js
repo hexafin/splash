@@ -20,7 +20,7 @@ class SendLineItem extends Component {
 			selected=false,
 			title,
 			subtitle,
-			circleText,
+			circleText=null,
 			address=null,
 			extraContent=null,
 			verified=true,
@@ -49,11 +49,20 @@ class SendLineItem extends Component {
 
 					<View style={styles.row}>
 						<View style={styles.circle}>
-							<Text style={styles.circleText}>{circleText}</Text>
+							{circleText && <Text style={styles.circleText}>{circleText}</Text>}
+							{!circleText &&
+								<Image
+									style={styles.circleSplash} 
+									resizeMode="contain" 
+									source={require("../../assets/icons/primarySplash.png")}/>}
 						</View>
 						<View style={styles.column}>
 							<View style={styles.row}>
 								<Text style={styles.title}>{title}</Text>
+								{verified && <Image
+									style={styles.verified}
+									resizeMode="contain"
+									source={require("../../assets/icons/checkmarkGreen.png")}/>}
 							</View>
 							<Text style={styles.subtitle}>{subtitle}</Text>
 						</View>
@@ -104,6 +113,15 @@ const styles = StyleSheet.create({
 		color: colors.primary,
 		fontSize: 18,
 		fontWeight: "600",
+	},
+	circleSplash: {
+		width: 25,
+		height: 25,
+	},
+	verified: {
+		width: 18,
+		height: 18,
+		marginLeft: 5,
 	},
 	row: {
 		flexDirection: "row",

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		fontSize: 20,
 		fontWeight: "500",
-		color: colors.gray,
+		color: colors.primary,
 	},
 	inputWrapper: {
 		shadowOffset: {

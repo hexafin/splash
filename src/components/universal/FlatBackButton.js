@@ -13,7 +13,20 @@ const FlatBackButton = ({onPress, color="gray", absolute=true, direction="left"}
 
     let source
     if (direction == "left") {
-        source = color == "gray" ? require("../../assets/icons/leftCarrotGray.png") : require("../../assets/icons/leftCarrotWhite.png")
+        switch (color) {
+            case "gray":
+                source = require("../../assets/icons/leftCarrotGray.png")
+                break
+            case "dark":
+                source = require("../../assets/icons/leftCarrotDark.png")
+                break
+            case "white":
+                source = require("../../assets/icons/leftCarrotWhite.png")
+                break
+            default:
+                source = require("../../assets/icons/leftCarrotWhite.png")
+                break
+        }
     } 
     if (direction == "right") {
         source = require("../../assets/icons/rightCarrotWhite.png")

@@ -30,7 +30,6 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, sel
 		            title={`@${item.splashtag}`}
 		            selected={item.objectID == selectedId}
 		            subtitle={item.phoneNumber}
-		            circleText={item.splashtag.slice(0,2).toUpperCase()}
 		            onPress={() => callback(item)}/>
 		        )
 	      	}
