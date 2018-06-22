@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
-		// backgroundColor: colors.primary
+		// flex: 1,
 	},
 	scrollContainer: {
 		position: "relative",

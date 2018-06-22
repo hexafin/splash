@@ -6,6 +6,7 @@ import {
 	View,
 	Text,
 	Keyboard,
+	Alert,
 	Animated,
 	StyleSheet,
 	TouchableWithoutFeedback,
@@ -24,6 +25,7 @@ import Account from "../Account"
 import Wallet from "../Wallet"
 import Home from "../Home"
 import Balance from "./Balance"
+import ReturnToHome from "./ReturnToHome"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import moment from "moment"
 import ModalRoot from '../ModalRoot'
@@ -311,28 +313,30 @@ class SwipeApp extends Component {
 					})}
 				</Page>
 			)
-			Icons.push(
-				<TouchableWithoutFeedback
-					key={"page-icon-" + i}
-					onPressIn={() => {
-						ReactNativeHapticFeedback.trigger("impactLight", true)
-						this.goToPageByIndex(this.scrollView, i)
-					}}>
-					<Animated.Image
-						source={page.image}
-						resizeMode="contain"
-						style={[
-							styles.icon,
-							iconTransform(i),
-							{
-								height: (page.name == "wallet") ? 37 : 45,
-								width: (page.name == "wallet") ? 37 : 45,
-							},
-							(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
-						]}
-					/>
-				</TouchableWithoutFeedback>
-			)
+			if (page.image) {
+				Icons.push(
+					<TouchableWithoutFeedback
+						key={"page-icon-" + i}
+						onPressIn={() => {
+							ReactNativeHapticFeedback.trigger("impactLight", true)
+							this.goToPageByIndex(this.scrollView, i)
+						}}>
+						<Animated.Image
+							source={page.image}
+							resizeMode="contain"
+							style={[
+								styles.icon,
+								iconTransform(i),
+								{
+									height: (page.name == "wallet") ? 37 : 45,
+									width: (page.name == "wallet") ? 37 : 45,
+								},
+								(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
+							]}
+						/>
+					</TouchableWithoutFeedback>
+				)
+			}
 			if (page.title) {
 				Titles.push(
 					<Animated.View
@@ -396,6 +400,9 @@ class SwipeApp extends Component {
 
 				{Titles}
 
+				<ReturnToHome yOffsets={yOffsets} xOffset={xOffset} onPress={() => {
+					this.goToPageByIndex(this.scrollView, 1)
+				}}/>
 				<Balance yOffsets={yOffsets} xOffset={xOffset}/>
 				<ModalRoot />
 			</View>
