@@ -392,6 +392,7 @@ class SwipeApp extends Component {
 				</Animated.ScrollView>
 
 				<Animated.Image
+					pointerEvents={"none"}
 					source={require("../../assets/images/headerWave.png")}
 					resizeMode="contain"
 					style={[headerTransform(), styles.headerImage]}/>
