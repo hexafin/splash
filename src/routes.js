@@ -74,25 +74,23 @@ const OnboardingRouter = createBottomTabNavigator(
 	}
 )
 
-const PayFlowRouter = createBottomTabNavigator(
+const PayFlowRouter = createStackNavigator(
 	{
 		EnterAmount: {
 			screen: EnterAmount,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+			
 		},
 		SendTo: {
 			screen: SendTo,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+			
 		}
 	},
 	{
 		initialRouteName: "EnterAmount",
 		activeBackgroundColor: colors.white,
-		inactiveBackgroundColor: colors.white
+		inactiveBackgroundColor: colors.white,
+		headerMode: "none",
+		lazy: true,
 	}
 )
 

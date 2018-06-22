@@ -30,7 +30,8 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			historyHeight: null,
 		}
 	}
 

@@ -146,6 +146,7 @@ export const LoadTransactions = () => {
 			Sentry.messageCapture(error)
 			dispatch(loadTransactionsFailure(error))			
 		})
+
 	}
 }
 

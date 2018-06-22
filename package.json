@@ -56,6 +56,8 @@
     "react-native-randombytes": "^3.2.0",
     "react-native-sentry": "^0.37.1",
     "react-native-shimmer": "^0.3.2",
+    "react-native-svg": "^6.3.1",
+    "react-native-svg-uri": "^1.2.3",
     "react-native-touch-id": "^4.0.2",
     "react-navigation": "^2.3.1",
     "react-navigation-redux-helpers": "^1.1.2",
