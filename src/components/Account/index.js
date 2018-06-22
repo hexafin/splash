@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux"
 import {resetUser, toggleLockout} from "../../redux/user/actions"
 import {resetTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
+import {resetCrypto} from "../../redux/crypto/actions"
 import NavigatorService from "../../redux/navigator"
 import api from '../../api'
 
@@ -23,6 +24,7 @@ const mapDispatchToProps = dispatch => {
 				dispatch(resetUser())
 				dispatch(resetTransactions())
 				dispatch(resetOnboarding())
+				dispatch(resetCrypto())
 				NavigatorService.navigate("Landing")
 				api.DeleteAccount(userId)
 			}		

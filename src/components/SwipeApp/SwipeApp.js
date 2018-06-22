@@ -439,9 +439,8 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.primary
 	},
 	headerImage: {
-		top: (isIphoneX()) ? -80 : -100,
+		top: (isIphoneX()) ? SCREEN_HEIGHT-1020 : SCREEN_HEIGHT-992,
 		width: SCREEN_WIDTH,
-		height: 300,
 		position: "absolute",
 		shadowOffset: {
 			width: 0,

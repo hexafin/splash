@@ -10,7 +10,8 @@ import { sentryDSN } from '../../env/keys.json'
 
 const config = {
     key: 'root',
-    storage
+    storage,
+    blacklist: ['onboarding', 'payFlow', 'modal', 'form']
 }
 
 const persistReducers = persistCombineReducers(config, reducers)
