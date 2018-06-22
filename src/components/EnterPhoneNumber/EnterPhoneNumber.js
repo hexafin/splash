@@ -21,7 +21,7 @@ class EnterPhoneNumber extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
+        this.initialState = {
             phoneNumber: {
                 countryName: "",
                 countryFlag: "",
@@ -30,6 +30,7 @@ class EnterPhoneNumber extends Component {
             },
             isLoading: false
         }
+        this.state = this.initialState
     }
 
     componentWillMount () {
@@ -98,6 +99,7 @@ class EnterPhoneNumber extends Component {
 
                         // intitiate authentication process
                         this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName).then(confirmResult => {
+                            this.setState(this.initialState)
                             this.props.navigation.navigate("VerifyPhoneNumber", {confirmResult})
                         }).catch(error => {
                             console.log(error)
@@ -115,6 +117,7 @@ class EnterPhoneNumber extends Component {
 
             <FlatBackButton onPress={() => {
                     // Keyboard.dismiss()
+                    this.setState(this.initialState)
                     this.props.navigation.navigate("ChooseSplashtag")
                 }}/>
         </KeyboardAvoidingView>)

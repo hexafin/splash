@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
 		height: SCREEN_HEIGHT,
 	},
 	headerImage: {
-		top: (isIphoneX()) ? -102 : -122,
 		top: (isIphoneX()) ? -285 : -305,
 		width: SCREEN_WIDTH,
 		shadowOffset: {
@@ -153,7 +152,7 @@ const styles = StyleSheet.create({
 		width: 30,
 	},
 	box: {
-		top: (isIphoneX()) ? -275 : -255,
+		top: (isIphoneX()) ? -275 : -325,
 		height: 270,
 		width: 270,
 		justifyContent: 'space-between',
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
 		height: 98,
 		width: 98,
 		borderRadius: 49,
-		top: (isIphoneX()) ? SCREEN_HEIGHT-975 : SCREEN_HEIGHT-995,
+		top: (isIphoneX()) ? SCREEN_HEIGHT-975 : SCREEN_HEIGHT-975,
 		backgroundColor: colors.white,
 		alignSelf: 'center',
 		justifyContent: 'center',
