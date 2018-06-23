@@ -25,7 +25,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const xOffset = new Animated.Value(0)
 
-class Landing extends Component {
+class LandingSwipeView extends Component {
     constructor(props) {
         super(props)
     }
@@ -65,7 +65,7 @@ class Landing extends Component {
         return (
             <Animated.View style={[styles.container]}>
                 <LottieView
-                    source={require('../../assets/animations/gradientLanding.json')}
+                    source={require('../../assets/animations/landingGradient.json')}
                     style={{
                         height: SCREEN_HEIGHT,
                         width: SCREEN_WIDTH,
@@ -80,6 +80,7 @@ class Landing extends Component {
                 />
                 <Animated.ScrollView
                     scrollEventThrottle={16}
+                    showsHorizontalScrollIndicator={false}
                     onScroll={Animated.event(
                         [
                             {
@@ -192,4 +193,4 @@ const Screenstyles = StyleSheet.create({
     }
 })
 
-export default Landing
+export default LandingSwipeView
