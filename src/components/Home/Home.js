@@ -30,7 +30,8 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			historyHeight: null,
 		}
 	}
 
@@ -112,7 +113,8 @@ const styles = StyleSheet.create({
 	wrapper: {
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
-		// backgroundColor: colors.primary
+		// flex: 1,
+		// backgroundColor: colors.red,
 	},
 	scrollContainer: {
 		position: "relative",

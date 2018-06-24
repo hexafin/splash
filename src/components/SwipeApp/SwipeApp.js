@@ -6,6 +6,7 @@ import {
 	View,
 	Text,
 	Keyboard,
+	Alert,
 	Animated,
 	StyleSheet,
 	TouchableWithoutFeedback,
@@ -24,6 +25,7 @@ import Account from "../Account"
 import Wallet from "../Wallet"
 import Home from "../Home"
 import Balance from "./Balance"
+import ReturnToHome from "./ReturnToHome"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import moment from "moment"
 import ModalRoot from '../ModalRoot'
@@ -73,7 +75,7 @@ function iconTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [200, 0, -200]
+					outputRange: [SCREEN_WIDTH*0.55, 0, -0.55*SCREEN_WIDTH]
 				})
 			}
 		]
@@ -100,7 +102,7 @@ function titleTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [380, 0, -380]
+					outputRange: [SCREEN_WIDTH*1.2, 0, -1.2 * SCREEN_WIDTH]
 				})
 			}
 		]
@@ -311,28 +313,30 @@ class SwipeApp extends Component {
 					})}
 				</Page>
 			)
-			Icons.push(
-				<TouchableWithoutFeedback
-					key={"page-icon-" + i}
-					onPressIn={() => {
-						ReactNativeHapticFeedback.trigger("impactLight", true)
-						this.goToPageByIndex(this.scrollView, i)
-					}}>
-					<Animated.Image
-						source={page.image}
-						resizeMode="contain"
-						style={[
-							styles.icon,
-							iconTransform(i),
-							{
-								height: (page.name == "wallet") ? 37 : 45,
-								width: (page.name == "wallet") ? 37 : 45,
-							},
-							(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
-						]}
-					/>
-				</TouchableWithoutFeedback>
-			)
+			if (page.image) {
+				Icons.push(
+					<TouchableWithoutFeedback
+						key={"page-icon-" + i}
+						onPressIn={() => {
+							ReactNativeHapticFeedback.trigger("impactLight", true)
+							this.goToPageByIndex(this.scrollView, i)
+						}}>
+						<Animated.Image
+							source={page.image}
+							resizeMode="contain"
+							style={[
+								styles.icon,
+								iconTransform(i),
+								{
+									height: (page.name == "wallet") ? 37 : 45,
+									width: (page.name == "wallet") ? 37 : 45,
+								},
+								(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
+							]}
+						/>
+					</TouchableWithoutFeedback>
+				)
+			}
 			if (page.title) {
 				Titles.push(
 					<Animated.View
@@ -388,6 +392,7 @@ class SwipeApp extends Component {
 				</Animated.ScrollView>
 
 				<Animated.Image
+					pointerEvents={"none"}
 					source={require("../../assets/images/headerWave.png")}
 					resizeMode="contain"
 					style={[headerTransform(), styles.headerImage]}/>
@@ -396,6 +401,9 @@ class SwipeApp extends Component {
 
 				{Titles}
 
+				<ReturnToHome yOffsets={yOffsets} xOffset={xOffset} onPress={() => {
+					this.goToPageByIndex(this.scrollView, 1)
+				}}/>
 				<Balance yOffsets={yOffsets} xOffset={xOffset}/>
 				<ModalRoot />
 			</View>
@@ -432,7 +440,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.primary
 	},
 	headerImage: {
-		top: (isIphoneX()) ? SCREEN_HEIGHT-1020 : SCREEN_HEIGHT-992,
+		top: SCREEN_WIDTH*-0.6,
 		width: SCREEN_WIDTH,
 		position: "absolute",
 		shadowOffset: {

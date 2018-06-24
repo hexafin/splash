@@ -65,8 +65,8 @@ class EnterPhoneNumber extends Component {
                 </Text>
 
                 <Text style={styles.subtitle}>
-                    Verify your number to claim{"\n"}
-                    your splashtag
+                    Verify your number to create{"\n"}
+                    your wallet
                 </Text>
 
                 <PhoneNumberInput autoFocus={true} callback={(phoneNumber) => {

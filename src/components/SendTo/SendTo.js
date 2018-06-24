@@ -61,6 +61,8 @@ class SendTo extends Component {
 				capturedQr: nextProps.capturedQr,
 				sendCurrency: nextProps.sendCurrency,
 				sendAmount: nextProps.sendAmount,
+				typedAddress: false,
+				pastedAddress: false,
 			})
 		}
 		else if (nextProps.sendCurrency != this.props.sendCurrency || nextProps.sendAmount != this.props.sendAmount) {
@@ -82,10 +84,13 @@ class SendTo extends Component {
 			this.getUserFromAddress(nextState.value)
 		}
 
-		if (nextState.value != this.state.value) {
+		if (nextState.value != this.state.value && !nextState.pastedAddress && !nextState.capturedQr) {
 			const isAddress = api.IsValidAddress(nextState.value, nextProps.bitcoinNetwork)
 			this.setState({typedAddress: isAddress})
 			this.getUserFromAddress(nextState.value)
+		}
+
+		if (nextState.value != this.state.value) {
 			return true
 		}
 		else if (nextState.typedAddress != this.state.typedAddress) {
@@ -178,14 +183,14 @@ class SendTo extends Component {
 
 				<InstantSearch {...algoliaKeys}>
 
-					{(!this.state.pastedAddress && !this.state.capturedQr) && <View style={styles.section}>
+					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress) && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>SEARCH</Text>
 						<SearchBox onChange={value => {
 							this.setState({value, selectedId: null})
 						}}/>
 					</View>}
 
-					{(this.state.pastedAddress || this.state.capturedQr) && <View style={styles.section}>
+					{(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress) && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>ADDRESS</Text>
 						<View style={styles.inputWrapper}>
 							<TextInput
@@ -208,7 +213,13 @@ class SendTo extends Component {
 										return
 									}
 									if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
-										this.setState({value: address, pastedAddress: true})
+										console.log(address, this.props.bitcoinNetwork, true)
+										this.setState({
+											value: address, 
+											pastedAddress: true, 
+											typedAddress: false, 
+											capturedQr: false,
+										})
 									} else {
 										Alert.alert("Invalid bitcoin address")
 									}
@@ -247,21 +258,21 @@ class SendTo extends Component {
 					</View>}
 
 					{this.state.typedAddress && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>TYPED ADDRESS</Text>
+						<Text style={styles.sectionLabel}>FROM ENTRY</Text>
 						<SendLineItem
 							selected={true}
 							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
 							subtitle={"Valid Address"}
 							address={this.state.value}
 							circleText={this.state.userFromAddress ? null : "B"}
-							extraContent="From Clipboard"/>
+							extraContent="From Text Entry"/>
 					</View>}
 
 					{(!this.state.pastedAddress && !this.state.capturedQr && !this.state.typedAddress) && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
 					</View>}
 
-					{(!this.state.pastedAddress && !this.state.capturedQr && this.state.value != "") && <View style={styles.hits}>
+					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value != "") && <View style={styles.hits}>
 						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
 							const selectedId = item.objectID

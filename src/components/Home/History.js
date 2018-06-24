@@ -34,6 +34,7 @@ class History extends Component {
 		super(props)
 		this.state = {
 			loading: false,
+			height: 400,
 		}
 	}
 
@@ -63,6 +64,10 @@ class History extends Component {
 			return false
 		}
 	}
+
+	dynamicHeight(event, stateProp) {
+		this.setState({[stateProp]: event.nativeEvent.layout.height})
+	}
   
 	render() {
 
@@ -72,7 +77,9 @@ class History extends Component {
 		}
 
 		return (
-			<View style={styles.history}>
+			<View style={[styles.history, {
+				minHeight: this.state.height
+			}]} onLayout={event => this.dynamicHeight(event, "height")}>
 				<Text style={styles.sectionTitle}>Your history</Text>
 				{this.props.transactions.map(transaction => {
 					const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC

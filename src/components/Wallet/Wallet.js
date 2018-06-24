@@ -67,7 +67,19 @@ class Wallet extends Component {
 						<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
 					</View>
 					<TouchableWithoutFeedback
-						onPress={this.handleCopy}>
+						onPress={this.handleCopy}
+						onPressIn={() => {
+							Animated.spring(this.animatedAddressCopy, {
+								toValue: .8
+							}).start()
+						}}
+						onPressOut={() => {
+							Animated.spring(this.animatedAddressCopy, {
+								toValue: 1,
+								friction: 3,
+								tension: 40
+							}).start()
+						}}>
 						<Animated.View style={[styles.addressCopyWrapper, {
 							transform: [{scale: this.animatedAddressCopy}]
 						}]}>

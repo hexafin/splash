@@ -6,7 +6,9 @@ import {LoadBalance, LoadExchangeRates} from "../../redux/crypto/actions"
 
 const mapStateToProps = (state) => {
     return {
-    	
+    	isLoadingTransactions: state.transactions.isLoadingTransactions,
+    	isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
+    	isLoadingBalance: state.crypto.isLoadingBalance,
     }
 }
 
