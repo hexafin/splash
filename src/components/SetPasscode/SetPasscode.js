@@ -26,6 +26,7 @@ class SetPasscode extends Component {
 			confirmValue: null,
 		}
 		this.onChangeText = this.onChangeText.bind(this)
+		this.close = this.close.bind(this)
 		this.shakeAnimation = new Animated.Value(0)
 	}
 
@@ -57,6 +58,14 @@ class SetPasscode extends Component {
 		}
 	}
 
+	close() {
+		this.props.navigation.goBack()
+		this.setState({
+			value: '',
+			confirmValue: null,
+		})
+	}
+
 	render() {
 		
 		const dropIcon = (index) => (this.state.value.length >= index) ? <Image source={icons['whiteDrop']} style={styles.drop} resizeMode={'contain'}/>
@@ -74,19 +83,25 @@ class SetPasscode extends Component {
 
 		return (
 			<LinearGradient colors={['#5759D5', '#4E50E6']} style={styles.container}>
-				{!this.state.confirmValue && 
 				<View>
-					<Text style={styles.title}>Type your new passcode</Text>
-					<Text style={styles.subtitle}>Splash will lock when you leave</Text>
-					<Text style={[styles.subtitle, {marginBottom: 49}]}>for more than 5 minutes.</Text>
-				</View>}
-				{this.state.confirmValue && <Text style={styles.confirmTitle}>Confirm your passcode</Text>}
-				<Animated.View style={[styles.drops, shakeTransform]}>
-					{dropIcon(1)}
-					{dropIcon(2)}
-					{dropIcon(3)}
-					{dropIcon(4)}
-				</Animated.View>
+					<TouchableOpacity style={styles.closeButton} onPress={this.close}>
+			          <Image style={styles.closeIcon} source={require('../../assets/icons/Xbutton.png')}/>
+			        </TouchableOpacity>
+					{!this.state.confirmValue &&
+						<View>
+							<Text style={styles.title}>Type your new passcode</Text>
+							<Text style={styles.subtitle}>Splash will lock when you leave</Text>
+							<Text style={[styles.subtitle, {marginBottom: 49}]}>for more than 5 minutes.</Text>
+						</View>}
+					{this.state.confirmValue && 
+						<Text style={[styles.title, {marginBottom: 88}]}>Confirm your passcode</Text>}
+					<Animated.View style={[styles.drops, shakeTransform]}>
+						{dropIcon(1)}
+						{dropIcon(2)}
+						{dropIcon(3)}
+						{dropIcon(4)}
+					</Animated.View>
+				</View>
 				<Keypad primaryColor={'#484AD4'}
 						pressColor={'#6466F6'}
 						textColor={'white'}
@@ -108,8 +123,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignContent: 'center',
 		flexDirection: "column",
-		paddingVertical: isIphoneX() ? 40 : 20,
+		paddingVertical: isIphoneX() ? 50 : 30,
 		justifyContent: "space-between",
+	},
+	closeButton: {
+		paddingHorizontal: 43,
+		alignSelf: 'flex-end'
+	},
+	closeIcon: {
+		height: 20,
+		width: 20
 	},
 	title: {
 		paddingTop: 20,
@@ -118,14 +141,6 @@ const styles = StyleSheet.create({
 		fontWeight: '600',
 		color: colors.white,
 		alignSelf: 'center'
-	},
-	confirmTitle: {
-		paddingTop: 20,
-		paddingBottom: 20,
-		fontSize: 20,
-		fontWeight: '600',
-		color: colors.white,
-		alignSelf: 'center',
 	},
 	subtitle: {
 		fontSize: 16,

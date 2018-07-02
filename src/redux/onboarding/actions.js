@@ -100,7 +100,7 @@ export const SmsAuthenticate = (phoneNumber, countryName) => {
 					resolve(confirmResult)
 				})
 				.catch(error => {
-					Sentry.messageCapture(error)
+					Sentry.captureMessage(error)
 					dispatch(smsAuthFailure(error));
 					reject(error)
 				});
@@ -120,7 +120,7 @@ export const SmsConfirm = (confirmResult, confirmationCode) => {
 					resolve(user)
 				})
 				.catch(error => {
-					Sentry.messageCapture(error)
+					Sentry.captureMessage(error)
 					dispatch(smsConfirmFailure(error));
 					reject(error)
 				});
@@ -158,18 +158,17 @@ export const SignUp = user => {
 							phoneNumber,
 				            defaultCurrency: "USD"
 						}
-
 						userRef.set(entity).then(() => {
 							api.DeleteTransactions(userId).then(() => {
 								dispatch(signUpSuccess())
 								resolve(userId)
 							}).catch(error => {
-								Sentry.messageCapture(error)
+								Sentry.captureMessage(error)
 								dispatch(signUpFailure(error))
 								reject(error)
 							})
 						}).catch(error => {
-							Sentry.messageCapture(error)
+							Sentry.captureMessage(error)
 							dispatch(signUpFailure(error))
 							reject(error)
 						})
@@ -178,13 +177,13 @@ export const SignUp = user => {
 					else {
 						// username already taken
 						const error = "Username already taken"
-						Sentry.messageCapture(error)
+						Sentry.captureMessage(error)
 						dispatch(signUpFailure(error))
 						reject(error)
 					}
 				})
 			}).catch(error => {
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(signUpFailure(error))
 				reject(error)
 			})

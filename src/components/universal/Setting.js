@@ -4,18 +4,19 @@ import {
     View,
     Text,
     Switch,
+    TouchableOpacity,
 } from "react-native"
 import {colors} from "../../lib/colors"
 
-const Setting = ({toggleCallback, toggleState, help}) => {
+const Setting = ({toggleCallback, toggleState, infoCallback, help}) => {
 	return (
 	    <View style={styles.container}>
 	    	<View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
 		    	<View style={styles.topRow}>
 			    	<Text style={styles.title}>Lock your account</Text>
-			    	{help && <View style={styles.helpCircle}>
+			    	{help && <TouchableOpacity style={styles.helpCircle} onPress={infoCallback}>
 			    		<Text style={styles.questionMark}>?</Text>
-			    	</View>}
+			    	</TouchableOpacity>}
 		    	</View>
 		    	<Switch onTintColor={'#5153E9'} onValueChange={toggleCallback} value={toggleState}/>
 	    	</View>

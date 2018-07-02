@@ -94,7 +94,7 @@ export const LogIn = (userId) => {
 				resolve()
 
 			}).catch(error => {
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(logInFailure(error))
 				reject(error)
 			})
@@ -114,7 +114,7 @@ export const ChangeUsername = () => {
 				resolve()
 				dispatch(reset('updateSplashtag'))
 			}).catch(error => {
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(updateUsernameFailure(error))
 				dispatch(reset('updateSplashtag'))
 				reject(error)

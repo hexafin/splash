@@ -53,7 +53,7 @@ const RaiseModal = Child => {
 					easing: Easing.linear(),
 				}).start(({finished}) => {
 					if (finished) {
-						if(success) {
+						if(success && this.props.successCallback) {
 							this.props.successCallback()
 						}
 						this.props.hideModal()

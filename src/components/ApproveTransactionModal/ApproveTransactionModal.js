@@ -144,7 +144,7 @@ class ApproveTransactionModal extends Component {
 	                  	loading={this.props.loading && !this.state.success}
 	                  	checkmark={this.state.success && !this.props.loading}
 	                  	checkmarkPersist={true}
-						checkmarkCallback={this.props.dismiss}
+						checkmarkCallback={() => this.props.dismiss(true)}
 						disabled={(this.props.error != null) ? true : false}
 						title={"Send Transaction"} primary={true}/>
 				</View>
