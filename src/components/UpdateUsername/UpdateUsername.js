@@ -65,7 +65,7 @@ class UpdateUsername extends Component {
 					</View>
 					<Text style={styles.splashtagText}>Splashtag</Text>
 	                <Field
-	                    name='updateUsername' defaultValue={this.props.splashtag} component={Input}
+	                    name='updateUsername' placeholder={this.props.splashtag} component={Input}
 	                    autoCapitalize="none" autoCorrect={false} spellCheck={false}
 	                    autoFocus={true}
 	                    checkmark={this.state.splashtagAvailable && !this.state.checkingSplashtag && this.props.usernameValue.length > 0}
@@ -76,7 +76,7 @@ class UpdateUsername extends Component {
                 	onPress={() => {
                 		Keyboard.dismiss()
                 		this.props.ChangeUsername().then(() => {
-                			this.props.navigation.navigate("Account")
+                			this.props.navigation.goBack()
                 		}).catch(error => {
                 			Alert.alert("An error occurred while updating your splashtag. Please try again later")
                 		})

@@ -108,6 +108,13 @@ class ApproveTransactionModal extends Component {
 												])
 								}
 							})
+
+						// 5 second timeout	
+						setTimeout(() => {
+							if (this.props.loading) {
+								this.props.showTimeoutModal()								
+							}
+						}, 5000)
 					}
 				})
 				.catch(error => {

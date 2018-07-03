@@ -272,7 +272,7 @@ class SendTo extends Component {
 						<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
 					</View>}
 
-					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value != "") && <View style={styles.hits}>
+					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "") && <View style={styles.hits}>
 						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
 							const selectedId = item.objectID
