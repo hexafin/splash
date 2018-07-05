@@ -292,6 +292,9 @@ class SwipeApp extends Component {
 			return true
 		} else if (nextProps.lockoutTime != this.props.lockoutTime) {
 			return true
+		} else if (nextProps.splashtag != this.props.splashtag) {
+			this.pages[0].title = `@${nextProps.splashtag}`
+			return true
 		}
 		else {
 			return false

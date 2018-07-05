@@ -70,6 +70,12 @@ class Home extends Component {
 				this.props.LoadExchangeRates("BTC")
 				this.props.LoadTransactions()
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
+				// 5 second timeout	
+				setTimeout(() => {
+					if (this.state.loading) {
+						this.props.showTimeoutModal()
+					}
+				}, 5000)
 			}
 		})
 	}

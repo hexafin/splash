@@ -16,7 +16,7 @@ import {Input} from "../universal/Input"
 import Setting from "../universal/Setting"
 import api from '../../api'
 
-const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutEnabled}) => {
+const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutEnabled, showLockInfo}) => {
 
 		const handleLogout = () => {
 			Alert.alert(
@@ -44,6 +44,7 @@ const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutE
 				})
 			} else {
 				navigation.navigate("Unlock", {
+					closable: true,
 					successCallback: () => {
 
 						api.AddToKeychain(userId, 'passcode', '').then(() => {
@@ -74,7 +75,7 @@ const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutE
 					</View>
 					<View style={styles.section}>
 						<Text style={styles.sectionText}>Settings</Text>
-						<Setting toggleCallback={handleLockoutSwitch} toggleState={lockoutEnabled} help={true}/>
+						<Setting toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
 						<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
 							<Text style={styles.logoutText}>Delete Account</Text>
 						</TouchableOpacity>

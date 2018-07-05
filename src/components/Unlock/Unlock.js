@@ -33,11 +33,13 @@ class Unlock extends Component {
 	}
 
 	componentDidMount() {
-		TouchID.authenticate("Login with biometric").then(success => {
-			if (success) {
-				this.props.navigation.state.params.successCallback()
-			}
-		})
+		setTimeout(() => {
+			TouchID.authenticate("Login with biometric").then(success => {
+				if (success) {
+					this.props.navigation.state.params.successCallback()
+				}
+			})
+		}, 1250)
 
 		Keychain.getGenericPassword().then(data => {
 			const passcode = JSON.parse(data.password).passcode
@@ -74,7 +76,7 @@ class Unlock extends Component {
 	}
 
 	render() {
-		
+		const closable = this.props.navigation.state.params.closable
 		const dropIcon = (index) => (this.state.value.length >= index) ? <Image source={icons['whiteDrop']} style={styles.drop} resizeMode={'contain'}/>
 																	   : <Image source={icons['purpleDrop']} style={styles.drop} resizeMode={'contain'}/>
 		const shakeTransform =  {
@@ -90,7 +92,12 @@ class Unlock extends Component {
 
 		return (
 			<LinearGradient colors={['#5759D5', '#4E50E6']} style={styles.container}>
-				<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
+		        <View> 
+			        {closable && <TouchableOpacity style={styles.closeButton} onPress={() => this.props.navigation.goBack()}>
+			          <Image style={styles.closeIcon} source={require('../../assets/icons/Xbutton.png')}/>
+			        </TouchableOpacity>}
+					<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
+		        </View>
 				<Animated.View style={[styles.drops, shakeTransform]}>
 					{dropIcon(1)}
 					{dropIcon(2)}
@@ -120,6 +127,15 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "space-between",
 		paddingTop: isIphoneX() ? 75 : 55,
+	},
+	closeButton: {
+		paddingHorizontal: 43,
+		paddingBottom: 10,
+		alignSelf: 'flex-end'
+	},
+	closeIcon: {
+		height: 20,
+		width: 20
 	},
 	splashLogo: {
 		height: 34,

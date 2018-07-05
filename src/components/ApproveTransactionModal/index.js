@@ -3,6 +3,18 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {SendTransaction, DismissTransaction} from "../../redux/transactions/actions"
 
+
+const showTimeoutModal = () => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+      title: 'Sending timeout',
+      body: 'Please connect to the internet and try again.',
+    },   
+  }
+}
+
 const mapStateToProps = (state) => {
     return {
       loading: state.transactions.isSendingTransaction,
@@ -15,7 +27,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-      SendTransaction,
+      SendTransaction, showTimeoutModal
     }, dispatch)
 }
 

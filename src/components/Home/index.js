@@ -4,6 +4,18 @@ import {bindActionCreators} from "redux"
 import {LoadTransactions} from "../../redux/transactions/actions"
 import {LoadBalance, LoadExchangeRates} from "../../redux/crypto/actions"
 
+
+const showTimeoutModal = () => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+    	title: 'Loading timeout',
+    	body: 'Please connect to the internet and try again.',
+    },   
+  }
+}
+
 const mapStateToProps = (state) => {
     return {
     	isLoadingTransactions: state.transactions.isLoadingTransactions,
@@ -14,7 +26,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-    	LoadTransactions, LoadExchangeRates, LoadBalance
+    	LoadTransactions, LoadExchangeRates, LoadBalance, showTimeoutModal
     }, dispatch)
 }
 

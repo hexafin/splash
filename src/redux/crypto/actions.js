@@ -86,13 +86,13 @@ export const LoadBalance = (currency="BTC") => {
 				api.GetBitcoinAddressBalance(address, network).then(balance => {
 					dispatch(loadBalanceSuccess(balance))
 				}).catch(error => {
-					Sentry.messageCapture(error)
+					Sentry.captureMessage(error)
 					dispatch(loadBalanceFailure(error))
 				})
 				break
 			default:
 				const error = `Load balance: unsupported currency: ${currency}`
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(loadBalanceFailure(error))
 				break
 		}
@@ -107,7 +107,7 @@ export const LoadExchangeRates = (currency="BTC") => {
 
 		if (currency != "BTC") {
 			const error = `Load exchange rates: unsupported currency: ${currency}`
-			Sentry.messageCapture(error)
+			Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
 			return
 		}
@@ -115,7 +115,7 @@ export const LoadExchangeRates = (currency="BTC") => {
 		api.GetExchangeRate(currency).then(exchangeRate => {
 			dispatch(loadExchangeRatesSuccess(exchangeRate))
 		}).catch(error => {
-			Sentry.messageCapture(error)
+			Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
 		})
 	}
@@ -153,7 +153,7 @@ export const OpenWallet = (currency, network="testnet") => {
 						resolve()
 
 					}).catch(error => {
-						Sentry.messageCapture(error)
+						Sentry.captureMessage(error)
 						dispatch(openWalletFailure(error))
 						reject(error)
 					})
@@ -177,7 +177,7 @@ export const OpenWallet = (currency, network="testnet") => {
 							break
 						default:
 							const error = `Open wallet: unsupported currency: ${currency}`
-							Sentry.messageCapture(error)
+							Sentry.captureMessage(error)
 							dispatch(openWalletFailure(error))
 							reject(error)
 					}
@@ -199,12 +199,12 @@ export const OpenWallet = (currency, network="testnet") => {
 							resolve()
 
 						}).catch(error => {
-							Sentry.messageCapture(error)
+							Sentry.captureMessage(error)
 							dispatch(openWalletFailure(error))
 							reject(error)
 						})
 				  	}).catch(error => {
-				  		Sentry.messageCapture(error)
+				  		Sentry.captureMessage(error)
 				  		dispatch(openWalletFailure(error))
 						reject(error)
 				  	})
@@ -213,7 +213,7 @@ export const OpenWallet = (currency, network="testnet") => {
 
 			}).catch(error => {
 				console.log('keychain error', error)
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(openWalletFailure(error))
 				reject(error)
 			})

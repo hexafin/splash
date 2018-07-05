@@ -9,6 +9,17 @@ import NavigatorService from "../../redux/navigator"
 import api from '../../api'
 
 
+const showLockInfo = () => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+    	title: 'Set a Passcode',
+    	body: 'Set a four digit passcode to secure your Splash wallet. After closing the app for 5 minutes you will be asked to authenticate using the passcode or biometrics.',
+    },   
+  }
+}
+
 const mapStateToProps = state => {
 	return {
 		splashtag: state.user.entity.splashtag,
@@ -29,7 +40,8 @@ const mapDispatchToProps = dispatch => {
 				api.DeleteAccount(userId)
 			}		
 		},
-    	toggleLockout
+    	toggleLockout,
+    	showLockInfo
     }, dispatch)
 }
 

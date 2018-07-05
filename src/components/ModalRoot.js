@@ -7,6 +7,7 @@ import { bindActionCreators } from "redux"
 import ViewTransactionModal from './ViewTransactionModal'
 import ApproveTransactionModal from './ApproveTransactionModal'
 import { hideModal } from '../redux/modal'
+import InfoModal from "./universal/InfoModal"
 import CardModal from "./universal/CardModal"
 import RaiseModal from "./universal/RaiseModal"
 
@@ -14,6 +15,7 @@ import RaiseModal from "./universal/RaiseModal"
 const MODAL_COMPONENTS = {
   'VIEW_TRANSACTION': CardModal(ViewTransactionModal),
   'APPROVE_TRANSACTION': RaiseModal(ApproveTransactionModal),
+  'INFO': CardModal(InfoModal)
 }
 
 const ModalRoot = ({modalType, modalProps, hideModal}) => {

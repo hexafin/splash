@@ -119,7 +119,7 @@ export const LoadTransactions = () => {
 					dispatch(loadTransactionsSuccess(transactions))
 				}
 			}, error => {
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(loadTransactionsFailure(error))
 			})
 
@@ -138,12 +138,12 @@ export const LoadTransactions = () => {
 					dispatch(loadTransactionsSuccess(transactions))
 				}
 			}, error => {
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(loadTransactionsFailure(error))
 			})
 
 		}).catch(error => {
-			Sentry.messageCapture(error)
+			Sentry.captureMessage(error)
 			dispatch(loadTransactionsFailure(error))			
 		})
 
@@ -190,7 +190,7 @@ export const ApproveTransaction = (transaction) => {
 		approveTransaction(transaction).then(transaction => {
 			dispatch(successApprovingTransaction())
 		}).catch(error => {
-			Sentry.messageCapture(error)
+			Sentry.captureMessage(error)
 			dispatch(approveTransactionFailure(error))
 		})
 	}
@@ -204,7 +204,7 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
 
     	if (currency != "BTC") {
     		const error = `Send transaction: unsupported currency: ${currency}`
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
     		dispatch(sendTransactionFailure(error))	
         reject(error)
     	}
@@ -243,12 +243,12 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
             dispatch(sendTransactionSuccess())
             resolve()
           }).catch(error => {
-          	Sentry.messageCapture(error)
+          	Sentry.captureMessage(error)
             dispatch(sendTransactionFailure(error))	
             reject(error)
           })
         }).catch(error => {
-          Sentry.messageCapture(error)
+          Sentry.captureMessage(error)
           dispatch(sendTransactionFailure(error))
           reject(error)
         })
