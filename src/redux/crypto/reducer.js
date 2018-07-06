@@ -57,6 +57,7 @@ export default function cryptoReducer(state = initialState, action) {
         return {
           ...state,
           isLoadingBalance: true,
+          errorLoadingBalance: null,
           loadingBalanceCurrency: action.currency
         }
 
@@ -82,6 +83,7 @@ export default function cryptoReducer(state = initialState, action) {
         return {
           ...state,
           isLoadingBalance: true,
+          errorLoadingExchangeRates: null,
           loadingExchangeRatesCurrency: action.currency
         }
 
