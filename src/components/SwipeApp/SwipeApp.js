@@ -13,6 +13,7 @@ import {
 	AppState
 } from "react-native"
 import firebase from "react-native-firebase"
+import { Sentry } from "react-native-sentry";
 import { colors } from "../../lib/colors"
 import { defaults, icons } from "../../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
@@ -223,6 +224,12 @@ class SwipeApp extends Component {
 	}
 
 	componentDidMount() {
+
+		Sentry.setUserContext({
+			userId: this.props.userId,
+			username: this.props.splashtag
+		})
+
 		// if timeis past lockout
 		if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
 			this.props.navigation.navigate("Unlock", {
