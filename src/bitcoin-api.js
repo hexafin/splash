@@ -1,4 +1,6 @@
 let axios = require('axios');
+import { Sentry } from "react-native-sentry";
+import bitcoin from 'bitcoinjs-lib'
 
 var BITCOIN_DIGITS = 8;
 var BITCOIN_SAT_MULT = Math.pow(10, BITCOIN_DIGITS);
@@ -137,7 +139,6 @@ export function getFees (feeName, provider=providers.fees.mainnet.earn) {
 
 export function sendTransaction (options) {
 	//Required
-	let bitcoin = require('bitcoinjs-lib')
 	if (options == null || typeof options !== 'object') throw BITCOIN_ERRORS.USAGE
 	if (options.from == null) throw BITCOIN_ERRORS.USAGE
 	if (options.to == null) throw BITCOIN_ERRORS.USAGE
@@ -158,55 +159,57 @@ export function sendTransaction (options) {
 	var amtSatoshi = Math.floor(amount*BITCOIN_SAT_MULT);
 	var bitcoinNetwork = options.network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
 
-	return Promise.all([
-		getFees(options.fee, options.feesProvider),
-		options.utxoProvider(from)
-	]).then(function (res) {
-		var feePerByte = res[0];
-		var utxos = res[1];
+	return new Promise((resolve, reject) => {
+		return Promise.all([
+			getFees(options.fee, options.feesProvider),
+			options.utxoProvider(from)
+		]).then(function (res) {
+			var feePerByte = res[0];
+			var utxos = res[1];
 
-		//Setup inputs from utxos
-		var tx = new bitcoin.TransactionBuilder(bitcoinNetwork);
-		var ninputs = 0;
-		var availableSat = 0;
-		for (var i = 0; i < utxos.length; i++) {
-			var utxo = utxos[i];
-			if (utxo.confirmations >= 6) {
-				tx.addInput(utxo.txid, utxo.vout);
-				availableSat += utxo.satoshis;
-				ninputs++;
+			//Setup inputs from utxos
+			var tx = new bitcoin.TransactionBuilder(bitcoinNetwork);
+			var ninputs = 0;
+			var availableSat = 0;
+			for (var i = 0; i < utxos.length; i++) {
+				var utxo = utxos[i];
+				if (utxo.confirmations >= 6) {
+					tx.addInput(utxo.txid, utxo.vout);
+					availableSat += utxo.satoshis;
+					ninputs++;
 
-				if (availableSat >= amtSatoshi) break;
+					if (availableSat >= amtSatoshi) break;
+				}
 			}
-		}
 
-		if (availableSat < amtSatoshi) throw BITCOIN_ERRORS.UTXOS
+			if (availableSat < amtSatoshi) throw BITCOIN_ERRORS.UTXOS
 
-		var change = availableSat - amtSatoshi;
-		var fee = getTransactionSize(ninputs, change > 0 ? 2 : 1)*feePerByte;
-		if (typeof options.fee === 'number') {
-			fee = options.fee
-		}
+			var change = availableSat - amtSatoshi;
+			var fee = getTransactionSize(ninputs, change > 0 ? 2 : 1)*feePerByte;
+			if (typeof options.fee === 'number') {
+				fee = options.fee
+			}
 
-		if (fee > amtSatoshi) throw BITCOIN_ERRORS.FEE
-		tx.addOutput(to, amtSatoshi - fee);
-		if (change > 0) tx.addOutput(from, change);
-		var keyPair = bitcoin.ECPair.fromWIF(options.privKeyWIF, bitcoinNetwork);
-		for (var i = 0; i < ninputs; i++) {
-			tx.sign(i, keyPair);
-		}
-		var txhex = tx.build().toHex();
-		const txid = bitcoin.Transaction.fromHex(txhex).getId();
-		if (options.dryrun) {
-			return {txid, txhex};
-		} else {
-			return new Promise((resolve, reject) => {
-				options.pushtxProvider(txhex).then(() => {
-					resolve({txid, txhex})
-				}).catch(error => {
-					reject(error)
-				})
-			})
-		}
-	});
+			if (fee > amtSatoshi) throw BITCOIN_ERRORS.FEE
+			tx.addOutput(to, amtSatoshi - fee);
+			if (change > 0) tx.addOutput(from, change);
+			var keyPair = bitcoin.ECPair.fromWIF(options.privKeyWIF, bitcoinNetwork);
+			for (var i = 0; i < ninputs; i++) {
+				tx.sign(i, keyPair);
+			}
+			var txhex = tx.build().toHex();
+			const txid = bitcoin.Transaction.fromHex(txhex).getId();
+			if (options.dryrun) {
+				return {txid, txhex};
+			} else {
+					options.pushtxProvider(txhex).then(() => {
+						resolve({txid, txhex})
+					}).catch(error => {
+						reject(error)
+					})
+			}
+		}).catch(error => {
+			reject(error)
+		})
+	})
 }
