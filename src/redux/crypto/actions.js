@@ -1,4 +1,4 @@
-import api from "../../api";
+import api, { Errors } from "../../api";
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -41,7 +41,7 @@ export function loadBalanceSuccess(balance) {
 }
 
 export function loadBalanceFailure(error) {
-	return { type: ActionTypes.LOAD_BALANCE_SUCCESS, error };
+	return { type: ActionTypes.LOAD_BALANCE_FAILURE, error };
 }
 
 export function loadExchangeRatesInit(currency) {
@@ -53,7 +53,7 @@ export function loadExchangeRatesSuccess(exchangeRates) {
 }
 
 export function loadExchangeRatesFailure(error) {
-	return { type: ActionTypes.LOAD_EXCHANGE_RATES_SUCCESS, error };
+	return { type: ActionTypes.LOAD_EXCHANGE_RATES_FAILURE, error };
 }
 
 export function openWalletInit(currency) {
@@ -86,7 +86,7 @@ export const LoadBalance = (currency="BTC") => {
 				api.GetBitcoinAddressBalance(address, network).then(balance => {
 					dispatch(loadBalanceSuccess(balance))
 				}).catch(error => {
-					Sentry.captureMessage(error)
+					if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 					dispatch(loadBalanceFailure(error))
 				})
 				break
@@ -115,7 +115,7 @@ export const LoadExchangeRates = (currency="BTC") => {
 		api.GetExchangeRate(currency).then(exchangeRate => {
 			dispatch(loadExchangeRatesSuccess(exchangeRate))
 		}).catch(error => {
-			Sentry.captureMessage(error)
+			if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
 		})
 	}
