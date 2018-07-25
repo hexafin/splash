@@ -33,7 +33,15 @@ class ViewTransactionModal extends Component {
 			amount,
 			type,
 			timestamp,
+			toSplashtag,
+			fromSplashtag
 		} = transaction
+
+		let splashtag = null
+		if (direction == 'to' && toSplashtag) splashtag = toSplashtag
+		if (direction == 'from' && fromSplashtag) splashtag = fromSplashtag
+		const isSplashtag = (direction == 'to' && transaction.toSplashtag) || (direction == 'from' && transaction.fromSplashtag)
+
 	    const letter = (type == 'card') ? domain[0].toUpperCase() : null
 	    const domainCapitalized = (type == 'card') ? domain[0].toUpperCase() + domain.slice(1) : null
 	    const date = moment.unix(timestamp).format('LLL')
@@ -59,9 +67,30 @@ class ViewTransactionModal extends Component {
                 {type == 'card' && <Text style={styles.subtitle}>Created on</Text>}
                 {type == 'blockchain' && <Text style={styles.subtitle}>{infoMessage}</Text>}
                 <View style={styles.information}>
-                    <LetterCircle size={32} letter={letter} currency={currency}/>
+                    {!isSplashtag && 
+                    	<View style={styles.letterCircle}>
+	                    	<LetterCircle size={32} letter={letter} currency={currency}/>
+                    	</View>}
+					{isSplashtag && 
+						<View style={styles.letterPreview}>
+							<Image
+							style={styles.circleSplash} 
+							resizeMode="contain" 
+							source={require("../../assets/icons/primarySplash.png")}/>
+						</View>}
                     {type == 'card' && <Text style={styles.domainText}>{domainCapitalized}</Text>}
-                    {type == 'blockchain' && <Text style={styles.addressText}>{address}</Text>}
+                    {type == 'blockchain' && !isSplashtag && <Text style={styles.addressText}>{address}</Text>}
+                    {type == 'blockchain' && isSplashtag && 
+                    	<View style={styles.column}>
+                    		<View style={styles.row}>
+	                    		<Text style={styles.splashtagText}>{splashtag}</Text>
+								<Image
+									style={styles.verified}
+									resizeMode="contain"
+									source={require("../../assets/icons/checkmarkGreen.png")}/>
+							</View>
+	                    	<Text style={styles.addressText}>{address}</Text>
+                    	</View>}
                 </View>
                 <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
                 <Text style={styles.dateText}>{(!!relativeCurrency) ? '$'+String(parseFloat(relativeAmount).toFixed(2))+' '+relativeCurrency+' on ': ''}{date}</Text>
@@ -79,6 +108,14 @@ const styles = StyleSheet.create({
 	content: {
 		flex: 1,
 		padding: 30,
+	},
+	column: {
+		flexDirection: 'column',
+		justifyContent: 'space-between'
+	},
+	row: {
+		flexDirection: 'row',
+		alignItems: 'center'
 	},
 	header: {
 	    flexDirection: 'row',
@@ -147,10 +184,36 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		paddingBottom: 15
 	},
+	letterCircle: {
+		paddingRight: 10,
+	},
+	letterPreview: {
+		width: 32,
+		height: 32,
+		borderRadius: 16,
+		backgroundColor: colors.primaryLight,
+		justifyContent: "center",
+		alignItems: "center",
+		marginRight: 10
+	},
+	circleSplash: {
+		width: 20,
+		height: 20,
+	},
+	splashtagText: {
+		color: colors.primaryDarkText,
+		fontSize: 16,
+		fontWeight: "600",
+		marginBottom: 3
+	},
+	verified: {
+		width: 18,
+		height: 18,
+		marginLeft: 5,
+	},
 	addressText: {
 		color: colors.nearBlack,
 		fontSize: 12,
-		paddingLeft: 5,
 		fontWeight: '600'
 	},
 	rateText: {

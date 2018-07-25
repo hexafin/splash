@@ -24,7 +24,6 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import TransactionLine from "../universal/TransactionLine"
 import { cryptoUnits } from '../../lib/cryptos'
 import { showViewModal } from '../../redux/modal'
-import moment from "moment"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -92,23 +91,15 @@ class History extends Component {
 					else {
 						amount = 0
 					}
-						
 					const direction = (transaction.type == "card" || transaction.fromAddress == this.props.bitcoinAddress) ? "to" : "from"
 
 					return (
 						<TransactionLine
 							key={"transactionLine"+transaction.id}
+							transaction={transaction}
 							direction={direction}
 							amount={currencyPrefix[this.props.currency] + amount}
-							date={moment.unix(transaction.timestamp).fromNow()}
 							loading={this.state.loading}
-							pending={transaction.pending}
-							title={
-								(transaction.type == "card")
-								? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
-								: "A bitcoin wallet"
-							}
-							currency={(transaction.type == 'blockchain' ? transaction.currency : null)}
 							onPress={() => {
 									this.props.showViewModal({
 									  transaction,

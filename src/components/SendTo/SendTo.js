@@ -48,6 +48,7 @@ class SendTo extends Component {
 			pastedAddress: false,
 			selectedId: null,
 			selectedAddress: null,
+			selectedSplashtag: null,
 			typedAddress: null,
 		}
 		this.getUserFromAddress = this.getUserFromAddress.bind(this)
@@ -121,6 +122,7 @@ class SendTo extends Component {
 				this.setState({
 					userFromAddress: userData, 
 					selectedId: userData.id, 
+					selectedSplashtag: userData.splashtag, 
 					selectedAddress: userData.wallets.BTC.address
 				})
 			}
@@ -276,12 +278,13 @@ class SendTo extends Component {
 						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
 							const selectedId = item.objectID
+							const selectedSplashtag = item.splashtag
 							const selectedAddress = item.wallets.BTC.address
 							if (selectedId != this.state.selectedId) {
-								this.setState({selectedId, selectedAddress})
+								this.setState({selectedId, selectedAddress, selectedSplashtag})
 							}
 							else {
-								this.setState({selectedId: null, selectedAddress: null})
+								this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
 							}
 						}}/>
 					</View>}
@@ -294,7 +297,8 @@ class SendTo extends Component {
 					onPress={() => {
 						showApproveModal({
 							address: this.state.selectedId ? this.state.selectedAddress : this.state.value,
-							userId: this.state.selectedId,
+							toId: this.state.selectedId ? this.state.selectedId : null,
+							toSplashtag: this.state.selectedSplashtag ? this.state.selectedSplashtag : null,
 							amount: this.state.sendAmount,
 							currency: this.state.sendCurrency,
 							successCallback: () => {
