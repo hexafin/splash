@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
-import api from '../../api'
+import api, { Errors } from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
 import LoadingCircle from "../universal/LoadingCircle"
 import History from "./History"
@@ -41,6 +41,12 @@ class Home extends Component {
 		}
 		else {
 			this.setState({loading: false})
+		}
+
+		if ((nextProps.errorLoadingTransactions == Errors.NETWORK_ERROR && nextProps.errorLoadingTransactions != this.props.errorLoadingTransactions)
+			|| (nextProps.errorLoadingBalance == Errors.NETWORK_ERROR && nextProps.errorLoadingBalance != this.props.errorLoadingBalance)
+			|| (nextProps.errorLoadingExchangeRates == Errors.NETWORK_ERROR && nextProps.errorLoadingExchangeRates != this.props.errorLoadingExchangeRates)) {
+			this.props.showTimeoutModal()
 		}
 	}
 
@@ -70,12 +76,6 @@ class Home extends Component {
 				this.props.LoadExchangeRates("BTC")
 				this.props.LoadTransactions()
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
-				// 5 second timeout	
-				setTimeout(() => {
-					if (this.state.loading) {
-						this.props.showTimeoutModal()
-					}
-				}, 5000)
 			}
 		})
 	}

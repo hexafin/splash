@@ -10,7 +10,7 @@ const showTimeoutModal = () => {
     type: 'SHOW_MODAL',
     modalType: 'INFO',
     modalProps: {
-    	title: 'Loading timeout',
+    	title: 'Network error',
     	body: 'Please connect to the internet and try again.',
     },   
   }
@@ -18,9 +18,12 @@ const showTimeoutModal = () => {
 
 const mapStateToProps = (state) => {
     return {
-    	isLoadingTransactions: state.transactions.isLoadingTransactions,
-    	isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
-    	isLoadingBalance: state.crypto.isLoadingBalance,
+        isLoadingTransactions: state.transactions.isLoadingTransactions,
+        isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
+        isLoadingBalance: state.crypto.isLoadingBalance,
+        errorLoadingTransactions: state.transactions.errorLoadingTransactions,
+        errorLoadingExchangeRates: state.crypto.errorLoadingExchangeRates,
+        errorLoadingBalance: state.crypto.errorLoadingBalance,
     }
 }
 

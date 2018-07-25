@@ -14,6 +14,10 @@ let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
 import * as Keychain from 'react-native-keychain';
 
+export const Errors = {
+  NETWORK_ERROR: 'NETWORK_ERROR'
+}
+
 function UsernameExists(splashtag) {
     return new Promise((resolve, reject) => {
       axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+splashtag).then(response => {
@@ -63,48 +67,52 @@ function GetBitcoinAddressBalance(address, network='mainnet') {
       }
     })
     .catch(error => {
-      reject(error);
+      if (!error.status) {
+        reject(Errors.NETWORK_ERROR)
+      } else {
+        reject(error);
+      }
     });
   });
 }
 
 async function AddBlockchainTransactions(address, userId, splashtag, network='mainnet') {
+    try {
+      const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
+      const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
+      const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
+      const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
 
-    const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
-    const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
-    const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
-    const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
+      // get list of txs on firebase
+      const query1 = await firestore.collection("transactions").where("fromId", "==", userId).where("type", "==", "blockchain").get()
+      const query2 = await firestore.collection("transactions").where("toId", "==", userId).where("type", "==", "blockchain").get()
 
-    // get list of txs on firebase
-    const query1 = await firestore.collection("transactions").where("fromId", "==", userId).where("type", "==", "blockchain").get()
-    const query2 = await firestore.collection("transactions").where("toId", "==", userId).where("type", "==", "blockchain").get()
+      let firebaseTxIds = []
+      let firebaseTxs = []
+      if(query1.size > 0 || query2.size > 0) {
+        query1.forEach(doc => {
+          firebaseTxIds.push(doc.data().txId)
+          firebaseTxs.push(doc.data())
+        })
+        query2.forEach(doc => {
+          firebaseTxIds.push(doc.data().txId)
+          firebaseTxs.push(doc.data())
+        })
+      }
 
-    let firebaseTxIds = []
-    let firebaseTxs = []
-    if(query1.size > 0 || query2.size > 0) {
-      query1.forEach(doc => {
-        firebaseTxIds.push(doc.data().txId)
-        firebaseTxs.push(doc.data())
-      })
-      query2.forEach(doc => {
-        firebaseTxIds.push(doc.data().txId)
-        firebaseTxs.push(doc.data())
-      })
-    }
-
-    // load txs from blockchain
-    const blockHeight = (await axios.get(blockHeightAPI)).data
-    const txs = (await axios.get(addressAPI)).data.txs
-    const txsLength = txs.length
-    for(var j=0; j < txsLength; j++) {
-      
-      const index = firebaseTxIds.indexOf(txs[j].hash)
-      // if the txId is not on firebase and the transaction is important (ie not both from and to the user) or if the transaction is pending
-      if ((index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
-          let pending = false
-          if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
-            pending = true
-          }
+      // load txs from blockchain
+      const blockHeight = (await axios.get(blockHeightAPI)).data
+      const txs = (await axios.get(addressAPI)).data.txs
+      const txsLength = txs.length
+      for(var j=0; j < txsLength; j++) {
+        
+        const index = firebaseTxIds.indexOf(txs[j].hash)
+        // if the txId is not on firebase and the transaction is important (ie not both from and to the user) or if the transaction is pending
+        if ((index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+            let pending = false
+            if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
+              pending = true
+            }
 
           let newTransaction = {
             amount: {},
@@ -131,21 +139,27 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
             newTransaction.amount.subtotal = total
           }
 
-          if (index !== -1 && firebaseTxs[index].amount) {
-            newTransaction.amount = {}
-          } else {
-            // load fees and calculate subtotal
-            newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash)).data
-            newTransaction.amount.total = newTransaction.amount.subtotal + newTransaction.amount.fee            
-          }
+            if (index !== -1 && firebaseTxs[index].amount) {
+              newTransaction.amount = {}
+            } else {
+              // load fees and calculate subtotal
+              newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash)).data
+              newTransaction.amount.total = newTransaction.amount.subtotal + newTransaction.amount.fee            
+            }
 
-          // if has total add to firebase so that it can be loaded on Home
-          if (newTransaction.amount.total > 0 || firebaseTxs[index].amount.total > 0) {
-            await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
-          }
-       }
+            // if has total add to firebase so that it can be loaded on Home
+            if (newTransaction.amount.total > 0 || firebaseTxs[index].amount.total > 0) {
+              await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
+            }
+         }
+      }
+    } catch (error) {
+      if (!error.status) {
+        throw Errors.NETWORK_ERROR
+      } else {
+        throw error;
+      }
     }
-
 }
 
 // feenames: "fastest", "halfHour", "hour"
@@ -381,7 +395,11 @@ function GetExchangeRate(currency = 'BTC') {
         axios.get(APIaddress).then(response => {
             resolve(response.data.data.rates)
         }).catch(error => {
-            reject(error)
+            if (!error.status) {
+              reject(Errors.NETWORK_ERROR)
+            } else {
+              reject(error);
+            }
         })
     })
 }

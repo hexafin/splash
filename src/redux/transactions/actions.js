@@ -1,4 +1,4 @@
-import api from "../../api";
+import api, { Errors } from "../../api";
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -143,7 +143,7 @@ export const LoadTransactions = () => {
 				dispatch(loadTransactionsFailure(error))			
 			})
 		} catch (error) {
-			Sentry.captureMessage(error)
+			if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 			dispatch(loadTransactionsFailure(error))			
 		}
 	}
@@ -249,7 +249,7 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
             reject(error)
           })
         }).catch(error => {
-          Sentry.captureMessage(error)
+		  if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
           dispatch(sendTransactionFailure(error))
           reject(error)
         })

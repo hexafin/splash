@@ -101,7 +101,8 @@ export default function transactionReducer(state = initialState, action) {
         case LOAD_TRANSACTIONS_INIT:
             return {
                 ...state,
-                isLoadingTransactions: true
+                isLoadingTransactions: true,
+                errorLoadingTransactions: null,
             }
 
         case LOAD_TRANSACTIONS_SUCCESS:
