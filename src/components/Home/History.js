@@ -59,6 +59,9 @@ class History extends Component {
 		else if (nextState.modalVisible != this.state.modalVisible || nextState.modalProps != this.state.modalProps) {
 			return true
 		}
+		else if (nextProps.transactions.length != this.props.transactions.length) {
+			return true
+		}
 		else {
 			return false
 		}

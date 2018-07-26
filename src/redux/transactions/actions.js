@@ -107,15 +107,16 @@ export const LoadTransactions = () => {
 
 			// two listeners for each firebase property
 			// after one listener finds changes merges in the documents found from the other
-			let unsub1 = firestore.collection("transactions").where("toId", "==", state.user.id).onSnapshot(async querySnapshot => {
+			let unsub1 = firestore.collection("transactions").where("toAddress", "==", state.crypto.wallets.BTC.address).onSnapshot(async querySnapshot => {
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					const query = await firestore.collection("transactions").where("fromId", "==", state.user.id).get()
+					const query = await firestore.collection("transactions").where("fromAddress", "==", state.crypto.wallets.BTC.address).get()
 					transactions = loadQuery(query, transactions)
 					transactions = loadQuery(querySnapshot, transactions)
 					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
 					dispatch(loadTransactionsSuccess(transactions))
+
 				} else {
 					unsub1()
 					dispatch(loadTransactionsSuccess(transactions))
@@ -125,11 +126,11 @@ export const LoadTransactions = () => {
 				dispatch(loadTransactionsFailure(error))			
 			})
 
-			let unsub2 = firestore.collection("transactions").where("fromId", "==", state.user.id).onSnapshot(async querySnapshot => {
+			let unsub2 = firestore.collection("transactions").where("fromAddress", "==", state.crypto.wallets.BTC.address).onSnapshot(async querySnapshot => {
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					const query = await firestore.collection("transactions").where("toId", "==", state.user.id).get()
+					const query = await firestore.collection("transactions").where("toAddress", "==", state.crypto.wallets.BTC.address).get()
 					transactions = loadQuery(query, transactions)
 					transactions = loadQuery(querySnapshot, transactions)
 					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
@@ -161,9 +162,9 @@ export const ApproveTransaction = (transaction) => {
 
 		const approveTransaction = async (transaction) => {
 			const state = getState()
-			const privateKey = JSON.parse(await Keychain.getGenericPassword().password).wif
+			const network = state.crypto.wallets.BTC.network
+			const privateKey = JSON.parse(await Keychain.getGenericPassword().password)[network].wif
 			const userBtcAddress = state.user.bitcoin.address
-			const network = state.user.bitcoinNetwork
 			dispatch(approveTransactionInit(transaction))
 			try {
 				// commented for demo
@@ -235,7 +236,7 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
 
       dispatch(sendTransactionInit())
       Keychain.getGenericPassword().then(data => {
-        const privateKey = JSON.parse(data.password)[currency].wif
+        const privateKey = JSON.parse(data.password)[currency][network].wif
         api.BuildBitcoinTransaction({from: userBtcAddress, to:toAddress, privateKey, amtBTC: totalBtcAmount, fee: feeSatoshi, network}).then(response => {
           const {txid, txhex} = response
           transaction.txId = txid

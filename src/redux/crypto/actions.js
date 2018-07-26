@@ -26,6 +26,7 @@ export const ActionTypes = {
 	OPEN_WALLET_SUCCESS: "OPEN_WALLET_SUCCESS",
 	OPEN_WALLET_FAILURE: "OPEN_WALLET_FAILURE",
 	RESET_CRYPTO: "RESET_CRYPTO",
+	SWITCH_WALLETS: 'SWITCH_WALLETS',
 }
 
 export function setActiveCurrency(currency) {
@@ -66,6 +67,10 @@ export function openWalletSuccess(wallet) {
 
 export function openWalletFailure(error) {
 	return { type: ActionTypes.OPEN_WALLET_FAILURE, error };
+}
+
+export function switchWallets(wallet) {
+	return { type: ActionTypes.SWITCH_WALLETS, wallet };
 }
 
 export function resetCrypto() {
@@ -121,7 +126,7 @@ export const LoadExchangeRates = (currency="BTC") => {
 	}
 }
 
-export const OpenWallet = (currency, network="testnet") => {
+export const OpenWallet = (currency) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(openWalletInit(currency))
@@ -134,19 +139,34 @@ export const OpenWallet = (currency, network="testnet") => {
 
 				const keychainUserId = data.username
 				let keychainData = JSON.parse(data.password)
-				let publicWalletData
-				let newKeychainData
-				if (!!keychainData[currency]) {
+				let newKeychainData = {}
+				let publicWalletData = {}
+
+				let updateWallets = []
+				let createWallets = []
+				if (!!keychainData[currency].testnet) {
+					updateWallets.push('testnet')
+				} else {
+					createWallets.push('testnet')
+				}
+				if (!!keychainData[currency].mainnet) {
+					updateWallets.push('mainnet')
+				} else {
+					createWallets.push('mainnet')
+				}
+
+				for (var i = 0, len = updateWallets.length; i < len; i++) {
 					
+					const network = updateWallets[i]
 					// already have a wallet for this currency => load address to redux
-					const publicWalletData = {
-						address: keychainData[currency].address,
-						network: keychainData[currency].network,
+					publicWalletData = {
+						address: keychainData[currency][network].address,
+						network: network,
 					}
 
 					// update user with public wallet data for currency
 					firestore.collection("users").doc(userId).update({
-						[`wallets.${currency}`]: publicWalletData
+						[`wallets.${currency}.${network}`]: publicWalletData
 					}).then(() => {
 
 						dispatch(openWalletSuccess(publicWalletData))
@@ -159,7 +179,11 @@ export const OpenWallet = (currency, network="testnet") => {
 					})
 
 
-				} else {
+				} 
+
+				for (var j = 0, len = createWallets.length; j < len; j++) {
+
+					const network = createWallets[j]
 
 					// generate wallet for currency
 					switch(currency) {
@@ -185,14 +209,14 @@ export const OpenWallet = (currency, network="testnet") => {
 					if (typeof keychainData !== 'object') {
 						keychainData = {}
 					}
-					keychainData[currency] = newKeychainData						
+					keychainData[currency][network] = newKeychainData						
 
 					// add wallet to keychain
 					Keychain.setGenericPassword(userId, JSON.stringify(keychainData)).then(() => {
 
 						// update user with public wallet data for currency
 						firestore.collection("users").doc(userId).update({
-							[`wallets.${currency}`]: publicWalletData
+							[`wallets.${currency}.${network}`]: publicWalletData
 						}).then(() => {
 
 							dispatch(openWalletSuccess(publicWalletData))
@@ -220,3 +244,21 @@ export const OpenWallet = (currency, network="testnet") => {
 		})
 	}
 }
+
+export const ToggleNetwork = () => {
+	return (dispatch, getState) => {
+		const state = getState()
+		const currentNetwork = state.crypto.wallets.BTC.network
+		let newNetwork = 'testnet'
+		if (currentNetwork == 'testnet') newNetwork = 'mainnet'
+
+		Keychain.getGenericPassword().then(data => {
+
+			const keychainData = JSON.parse(data.password)
+			const newWallet = keychainData.BTC[newNetwork]
+			dispatch(switchWallets({address: newWallet.address, network: newWallet.network}))
+
+		})
+	}
+}
+

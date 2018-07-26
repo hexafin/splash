@@ -136,7 +136,6 @@ export const SignUp = user => {
 
 			const state = getState()
 			const userId = user.uid
-			const network = state.user.bitcoinNetwork
 
 			// user does not already exist, full signup
 			let splashtag = state.onboarding.splashtagOnHold
