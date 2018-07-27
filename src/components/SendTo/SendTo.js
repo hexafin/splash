@@ -48,6 +48,7 @@ class SendTo extends Component {
 			pastedAddress: false,
 			selectedId: null,
 			selectedAddress: null,
+			selectedSplashtag: null,
 			typedAddress: null,
 		}
 		this.getUserFromAddress = this.getUserFromAddress.bind(this)
@@ -112,7 +113,8 @@ class SendTo extends Component {
 	}
 
 	getUserFromAddress(address) {
-		firestore.collection("users").where("wallets.BTC.address", "==", address).get().then(query => {
+		const query = "wallets.BTC." + this.props.bitcoinNetwork + '.address'
+		firestore.collection("users").where(query, "==", address).get().then(query => {
 			if (!query.empty) {
 				const userData = {
 					id: query.docs[0].id,
@@ -121,7 +123,8 @@ class SendTo extends Component {
 				this.setState({
 					userFromAddress: userData, 
 					selectedId: userData.id, 
-					selectedAddress: userData.wallets.BTC.address
+					selectedSplashtag: userData.splashtag, 
+					selectedAddress: userData.wallets.BTC[this.props.bitcoinNetwork].address
 				})
 			}
 			else {
@@ -276,12 +279,13 @@ class SendTo extends Component {
 						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
 							const selectedId = item.objectID
-							const selectedAddress = item.wallets.BTC.address
+							const selectedSplashtag = item.splashtag
+							const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
 							if (selectedId != this.state.selectedId) {
-								this.setState({selectedId, selectedAddress})
+								this.setState({selectedId, selectedAddress, selectedSplashtag})
 							}
 							else {
-								this.setState({selectedId: null, selectedAddress: null})
+								this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
 							}
 						}}/>
 					</View>}
@@ -294,7 +298,8 @@ class SendTo extends Component {
 					onPress={() => {
 						showApproveModal({
 							address: this.state.selectedId ? this.state.selectedAddress : this.state.value,
-							userId: this.state.selectedId,
+							toId: this.state.selectedId ? this.state.selectedId : null,
+							toSplashtag: this.state.selectedSplashtag ? this.state.selectedSplashtag : null,
 							amount: this.state.sendAmount,
 							currency: this.state.sendCurrency,
 							successCallback: () => {

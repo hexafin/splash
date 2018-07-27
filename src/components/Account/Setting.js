@@ -8,19 +8,19 @@ import {
 } from "react-native"
 import {colors} from "../../lib/colors"
 
-const Setting = ({toggleCallback, toggleState, infoCallback, help}) => {
+const Setting = ({title, description, toggleCallback, toggleState, infoCallback, help}) => {
 	return (
 	    <View style={styles.container}>
 	    	<View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
 		    	<View style={styles.topRow}>
-			    	<Text style={styles.title}>Lock your account</Text>
+			    	<Text style={styles.title}>{title}</Text>
 			    	{help && <TouchableOpacity style={styles.helpCircle} onPress={infoCallback}>
 			    		<Text style={styles.questionMark}>?</Text>
 			    	</TouchableOpacity>}
 		    	</View>
 		    	<Switch onTintColor={'#5153E9'} onValueChange={toggleCallback} value={toggleState}/>
 	    	</View>
-	    	<Text style={styles.description}>Set a four digit passcode to secure your Splash wallet.</Text>
+	    	<Text style={styles.description}>{description}</Text>
 	    </View>
 	)
 }

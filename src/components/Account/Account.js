@@ -13,10 +13,10 @@ import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
 import {Input} from "../universal/Input"
-import Setting from "../universal/Setting"
+import Setting from "./Setting"
 import api from '../../api'
 
-const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutEnabled, showLockInfo}) => {
+const Account = ({splashtag, userId, logout, navigation, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, bitcoinNetwork}) => {
 
 		const handleLogout = () => {
 			Alert.alert(
@@ -58,6 +58,16 @@ const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutE
 			}
 		}
 
+		const handleNetworkSwitch = () => {
+			resetTransactions()
+			ToggleNetwork()
+		}
+
+		const passcodeTitle = 'Lock your account'
+		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
+		const networkTitle = 'Use bitcoin mainnet'
+		const networkDescription = 'On the mainnet your coins hold real value. If unselected your app will use testnet tokens.'
+
 		return (
 			<View style={styles.container}>
 				<View style={styles.header}>
@@ -75,7 +85,8 @@ const Account = ({splashtag, userId, logout, navigation, toggleLockout, lockoutE
 					</View>
 					<View style={styles.section}>
 						<Text style={styles.sectionText}>Settings</Text>
-						<Setting toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
+						<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
+						<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(bitcoinNetwork == 'mainnet')}/>
 						<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
 							<Text style={styles.logoutText}>Delete Account</Text>
 						</TouchableOpacity>

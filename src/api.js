@@ -76,7 +76,7 @@ function GetBitcoinAddressBalance(address, network='mainnet') {
   });
 }
 
-async function AddBlockchainTransactions(address, userId, network='mainnet') {
+async function AddBlockchainTransactions(address, userId, splashtag, network='mainnet') {
     try {
       const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
       const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
@@ -114,30 +114,30 @@ async function AddBlockchainTransactions(address, userId, network='mainnet') {
               pending = true
             }
 
-            let newTransaction = {
-              amount: {},
-              fromId: null,
-              toId: null,
-              timestamp: txs[j].time,
-              currency: 'BTC',
-              txId: txs[j].hash,
-              pending: pending,
-              type: 'blockchain'
-            }
+          let newTransaction = {
+            amount: {},
+            timestamp: txs[j].time,
+            currency: 'BTC',
+            txId: txs[j].hash,
+            pending: pending,
+            type: 'blockchain'
+          }
 
-            // load total tx amount
-            const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
-            if (total < 0) {
-              newTransaction.fromId = userId
-              newTransaction.fromAddress = address
-              newTransaction.toAddress = txs[j].out[0].addr
-              newTransaction.amount.subtotal = -1*total
-            } else  {
-              newTransaction.toId = userId
-              newTransaction.toAddress = address
-              newTransaction.fromAddress = txs[j].inputs[0].prev_out.addr
-              newTransaction.amount.subtotal = total
-            }
+          // load total tx amount
+          const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
+          if (total < 0) {
+            newTransaction.fromId = userId
+            newTransaction.fromSplashtag = splashtag
+            newTransaction.fromAddress = address
+            newTransaction.toAddress = txs[j].out[0].addr
+            newTransaction.amount.subtotal = -1*total
+          } else  {
+            newTransaction.toId = userId
+            newTransaction.toSplashtag = splashtag
+            newTransaction.toAddress = address
+            newTransaction.fromAddress = txs[j].inputs[0].prev_out.addr
+            newTransaction.amount.subtotal = total
+          }
 
             if (index !== -1 && firebaseTxs[index].amount) {
               newTransaction.amount = {}

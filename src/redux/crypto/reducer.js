@@ -105,6 +105,15 @@ export default function cryptoReducer(state = initialState, action) {
           errorLoadingExchangeRates: action.error
         }
 
+      case ActionTypes.SWITCH_WALLETS:
+        return {
+          ...state,
+          wallets: {
+            ...state.wallets,
+            [state.openingWalletCurrency]: action.wallet
+          }
+        }
+
       case ActionTypes.RESET_CRYPTO:
         return initialState
 

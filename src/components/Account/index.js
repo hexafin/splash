@@ -2,6 +2,7 @@ import Account from "./Account"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import {resetUser, toggleLockout} from "../../redux/user/actions"
+import { ToggleNetwork } from '../../redux/crypto/actions'
 import {resetTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
 import {resetCrypto} from "../../redux/crypto/actions"
@@ -25,6 +26,7 @@ const mapStateToProps = state => {
 		splashtag: state.user.entity.splashtag,
 		userId: state.user.id,
 		lockoutEnabled: state.user.lockoutEnabled,
+		bitcoinNetwork: state.crypto.wallets.BTC.network,
 	}
 }
 
@@ -41,7 +43,9 @@ const mapDispatchToProps = dispatch => {
 			}		
 		},
     	toggleLockout,
-    	showLockInfo
+    	showLockInfo,
+    	resetTransactions,
+    	ToggleNetwork,
     }, dispatch)
 }
 
