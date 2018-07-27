@@ -29,7 +29,7 @@ class App extends Component {
 	componentDidMount() {
 		codePush.sync({
 			updateDialog: false,
-			installMode: codePush.InstallMode.IMMEDIATE
+			installMode: codePush.InstallMode.ON_NEXT_SUSPEND
 		});
 	}
 
