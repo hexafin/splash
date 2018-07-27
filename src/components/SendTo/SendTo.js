@@ -113,7 +113,8 @@ class SendTo extends Component {
 	}
 
 	getUserFromAddress(address) {
-		firestore.collection("users").where("wallets.BTC.address", "==", address).get().then(query => {
+		const query = "wallets.BTC." + this.props.bitcoinNetwork + '.address'
+		firestore.collection("users").where(query, "==", address).get().then(query => {
 			if (!query.empty) {
 				const userData = {
 					id: query.docs[0].id,
@@ -123,7 +124,7 @@ class SendTo extends Component {
 					userFromAddress: userData, 
 					selectedId: userData.id, 
 					selectedSplashtag: userData.splashtag, 
-					selectedAddress: userData.wallets.BTC.address
+					selectedAddress: userData.wallets.BTC[this.props.bitcoinNetwork].address
 				})
 			}
 			else {
@@ -279,7 +280,7 @@ class SendTo extends Component {
 							// user selected contact from algolia query
 							const selectedId = item.objectID
 							const selectedSplashtag = item.splashtag
-							const selectedAddress = item.wallets.BTC.address
+							const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
 							if (selectedId != this.state.selectedId) {
 								this.setState({selectedId, selectedAddress, selectedSplashtag})
 							}
