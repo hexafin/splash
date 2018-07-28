@@ -80,7 +80,8 @@ class History extends Component {
 
 		return (
 			<View style={[styles.history, {
-				minHeight: this.state.height
+				minHeight: this.state.height,
+				paddingBottom: this.props.transactions.length == 0 ? 20 : isIphoneX() ? 140 : 120,
 			}]} onLayout={event => this.dynamicHeight(event, "height")}>
 				<Text style={styles.sectionTitle}>Your history</Text>
 				{this.props.transactions.map(transaction => {
@@ -107,21 +108,61 @@ class History extends Component {
 									this.props.showViewModal({
 									  transaction,
 									  direction,
-					                      address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
+					                  address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
 				                      exchangeRate: this.props.exchangeRates.BTC["USD"],
 				                	})
 			             	}}/>
 					)
 				})}
+				{this.props.transactions.length == 0 && <View style={styles.noTransactions}>
+					<Text style={styles.noTransactionsText}>
+						Send or receive some bitcoin and it{"'"}ll show up here.
+					</Text>
+					<View style={styles.noTransactionsBottom}>
+						<Text style={styles.noTransactionsBottomText}>
+							Send some bitcoin!
+						</Text>
+						<Image resizeMode="contain" style={styles.noTransactionsBottomImage} source={require("../../assets/images/downArrow.png")}/>
+					</View>
+				</View>}
 			</View>
 		)
 	}
 }
 
 const styles = StyleSheet.create({
+	noTransactions: {
+		flexDirection: "column",
+		justifyContent: "space-between",
+		alignItems: "center",
+		// backgroundColor: colors.gray,
+		flex: 1,
+	},
+	noTransactionsText: {
+		color: colors.gray,
+		fontSize: 18,
+		fontWeight: "400",
+		textAlign: "center",
+		width: 200,
+		marginTop: 40,
+	},
+	noTransactionsBottom: {
+		flexDirection: "column",
+		alignItems: "center",
+	},
+	noTransactionsBottomText: {
+		color: colors.gray,
+		fontSize: 18,
+		fontWeight: "400",
+		textAlign: "center",
+	},
+	noTransactionsBottomImage: {
+		width: 15,
+		height: 30,
+		margin: 15,
+	},
 	history: {
 		padding: 20,
-		paddingBottom: isIphoneX() ? 140 : 120,
 		minHeight: SCREEN_HEIGHT,
 		// backgroundColor: colors.primary
 	},
