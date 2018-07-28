@@ -49,24 +49,36 @@ const CardModal = Child => {
 		            toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy },
 					useNativeDriver: true,
 		          }).start()
+				  Animated.spring(this.opacityAnimation, {
+			        toValue: 0.0,
+			      }).start(() => this.props.hideModal())
 		        }
 		        else if (gestureState.dx < -120) {
 		          Animated.spring(this.position, {
 		            toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy },
 					useNativeDriver: true,
 		          }).start()
+				  Animated.spring(this.opacityAnimation, {
+			        toValue: 0.0,
+			      }).start(() => this.props.hideModal())
 		        }
 		        else if (gestureState.dy > 120) {
 		          Animated.spring(this.position, {
 		            toValue: { x: gestureState.dx, y: SCREEN_HEIGHT + 100 },
 					useNativeDriver: true,
 		          }).start()
+				  Animated.spring(this.opacityAnimation, {
+			        toValue: 0.0,
+			      }).start(() => this.props.hideModal())
 		        }
 		        else if (gestureState.dy < -120) {
 		          Animated.spring(this.position, {
 		            toValue: { x: gestureState.dx, y: -SCREEN_HEIGHT - 100 },
 					useNativeDriver: true,
 		          }).start()
+				  Animated.spring(this.opacityAnimation, {
+			        toValue: 0.0,
+			      }).start(() => this.props.hideModal())
 		        }
 		        else {
 		          Animated.spring(this.position, {
@@ -86,11 +98,6 @@ const CardModal = Child => {
 		    	if (x >= SCREEN_WIDTH+80 || x <= -SCREEN_WIDTH-80 || y >= SCREEN_HEIGHT+80 || y <= -SCREEN_HEIGHT-80) {
 		    			this.setState({dismissed: true}, () => {
 			    			Animated.timing(this.position).stop()
-				        	Animated.timing(this.opacityAnimation, {
-					            toValue: 0.0,
-					            duration: 50,
-					        }).start(() => this.props.hideModal())
-			    			
 		    			})
 		    		}
 	    	})
@@ -122,6 +129,9 @@ const CardModal = Child => {
 	        friction: 20,
 			useNativeDriver: true,
 	      }).start()
+		  Animated.spring(this.opacityAnimation, {
+	        toValue: 0.0,
+	      }).start(() => this.props.hideModal())
 	  	}
 
 		render() {

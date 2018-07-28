@@ -29,7 +29,7 @@ import Balance from "./Balance"
 import ReturnToHome from "./ReturnToHome"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import moment from "moment"
-import ModalRoot from '../ModalRoot'
+import ModalRoot from '../Modals/ModalRoot'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
