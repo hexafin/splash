@@ -6,7 +6,12 @@ import {ActionTypes} from "./actions.js"
 
 const initialState = {
   activeCurrency: "USD",
-  wallets: {},
+  wallets: {
+    BTC: {
+      address: '',
+      network: '',
+    }
+  },
   balance: {},
   loadingBalanceCurrency: null,
   isLoadingBalance: false,

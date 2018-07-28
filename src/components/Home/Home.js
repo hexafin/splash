@@ -60,9 +60,6 @@ class Home extends Component {
 	}
 
 	componentWillMount() {
-        if (!this.props.loggedIn) {
-            this.props.navigation.navigate("Landing")
-        }
 
         this.animatedPayScale = new Animated.Value(1)
 	}

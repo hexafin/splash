@@ -24,7 +24,10 @@ const Account = ({splashtag, userId, logout, navigation, resetTransactions, togg
 			  'Are you sure you want to delete your account? Your funds will be irretrievable.',
 			  [
 			    {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-			    {text: 'Yes', onPress: () => logout(userId)},
+			    {text: 'Yes', onPress: () => {
+			    	navigation.navigate("Landing")
+			    	logout(userId)
+			    }},
 			  ],
 			)
 		}
