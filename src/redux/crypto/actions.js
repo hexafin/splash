@@ -138,7 +138,15 @@ export const OpenWallet = (currency) => {
 			Keychain.getGenericPassword().then(data => {
 
 				const keychainUserId = data.username
-				let keychainData = JSON.parse(data.password)
+				let keychainData
+				try {
+					keychainData = JSON.parse(data.password)
+				} catch (e) {
+					keychainData = {
+						BTC: {}
+					}
+				}
+
 				let newKeychainData = {}
 				let publicWalletData = {}
 
@@ -159,26 +167,10 @@ export const OpenWallet = (currency) => {
 					
 					const network = updateWallets[i]
 					// already have a wallet for this currency => load address to redux
-					publicWalletData = {
+					publicWalletData[network] = {
 						address: keychainData[currency][network].address,
 						network: network,
 					}
-
-					// update user with public wallet data for currency
-					firestore.collection("users").doc(userId).update({
-						[`wallets.${currency}.${network}`]: publicWalletData
-					}).then(() => {
-
-						dispatch(openWalletSuccess(publicWalletData))
-						resolve()
-
-					}).catch(error => {
-						Sentry.captureMessage(error)
-						dispatch(openWalletFailure(error))
-						reject(error)
-					})
-
-
 				} 
 
 				for (var j = 0, len = createWallets.length; j < len; j++) {
@@ -189,7 +181,7 @@ export const OpenWallet = (currency) => {
 					switch(currency) {
 						case "BTC":
 							const bitcoinData = api.NewBitcoinWallet(network)
-							publicWalletData = {
+							publicWalletData[network] = {
 								address: bitcoinData.address,
 								network,
 							}
@@ -206,34 +198,29 @@ export const OpenWallet = (currency) => {
 							reject(error)
 					}
 
-					if (typeof keychainData !== 'object') {
-						keychainData = {}
-					}
 					keychainData[currency][network] = newKeychainData						
-
-					// add wallet to keychain
-					Keychain.setGenericPassword(userId, JSON.stringify(keychainData)).then(() => {
-
-						// update user with public wallet data for currency
-						firestore.collection("users").doc(userId).update({
-							[`wallets.${currency}.${network}`]: publicWalletData
-						}).then(() => {
-
-							dispatch(openWalletSuccess(publicWalletData))
-							resolve()
-
-						}).catch(error => {
-							Sentry.captureMessage(error)
-							dispatch(openWalletFailure(error))
-							reject(error)
-						})
-				  	}).catch(error => {
-				  		Sentry.captureMessage(error)
-				  		dispatch(openWalletFailure(error))
-						reject(error)
-				  	})
-
 				}
+				// add wallet to keychain
+				Keychain.setGenericPassword(userId, JSON.stringify(keychainData)).then(() => {
+
+					// update user with public wallet data for currency
+					firestore.collection("users").doc(userId).update({
+						[`wallets.${currency}`]: publicWalletData
+					}).then(() => {
+						// load testnet wallet first on default
+						dispatch(openWalletSuccess(publicWalletData.testnet))
+						resolve()
+
+					}).catch(error => {
+						Sentry.captureMessage(error)
+						dispatch(openWalletFailure(error))
+						reject(error)
+					})
+			  	}).catch(error => {
+			  		Sentry.captureMessage(error)
+			  		dispatch(openWalletFailure(error))
+					reject(error)
+			  	})
 
 			}).catch(error => {
 				console.log('keychain error', error)
