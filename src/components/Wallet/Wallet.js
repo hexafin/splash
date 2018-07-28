@@ -4,6 +4,7 @@ import {
 	Text,
 	StyleSheet,
 	Image,
+	Share,
 	Animated,
 	Clipboard,
 	TouchableWithoutFeedback,
@@ -57,7 +58,7 @@ class Wallet extends Component {
 	}
 
 	render() {
-		const { address } = this.props
+		const { address, splashtag } = this.props
 
 		const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+address
 
@@ -98,7 +99,10 @@ class Wallet extends Component {
 						</Animated.View>
 					</TouchableWithoutFeedback>
 					<Button primary small title="Share" onPress={() => {
-
+						Share.share({
+							title: `@${splashtag} bitcoin wallet`,
+							message: address
+						})
 					}} style={{
 						marginTop: 30,
 						width: SCREEN_WIDTH-80
