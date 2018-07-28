@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
 		fontWeight: "400",
 		textAlign: "center",
 		width: 200,
-		marginTop: 40,
+		marginTop: 36,
 	},
 	noTransactionsBottom: {
 		flexDirection: "column",
@@ -157,9 +157,9 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	noTransactionsBottomImage: {
-		width: 15,
-		height: 30,
-		margin: 15,
+		width: 12,
+		height: 24,
+		margin: 12,
 	},
 	history: {
 		padding: 20,
