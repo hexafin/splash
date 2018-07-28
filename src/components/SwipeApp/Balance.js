@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		width: 150,
 	},
 	balanceRefresh: {
 		position: "absolute",
