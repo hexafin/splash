@@ -4,6 +4,7 @@ import {
 	Text,
 	StyleSheet,
 	Image,
+	Share,
 	Animated,
 	Clipboard,
 	TouchableWithoutFeedback,
@@ -12,7 +13,11 @@ import {
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import FlatBackButton from "../universal/FlatBackButton"
+import Button from "../universal/Button"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+
+const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_HEIGHT = Dimensions.get("window").height
 
 class Wallet extends Component {
 
@@ -53,7 +58,7 @@ class Wallet extends Component {
 	}
 
 	render() {
-		const { address } = this.props
+		const { address, splashtag } = this.props
 
 		const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+address
 
@@ -93,6 +98,15 @@ class Wallet extends Component {
 							</Text>
 						</Animated.View>
 					</TouchableWithoutFeedback>
+					<Button primary small title="Share" onPress={() => {
+						Share.share({
+							title: `@${splashtag} bitcoin wallet`,
+							message: address
+						})
+					}} style={{
+						marginTop: 30,
+						width: SCREEN_WIDTH-80
+					}}/>
 				</View>
 			</View>
 		);
@@ -120,7 +134,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		padding: 20,
 		flexDirection: "column",
-		alignItems: "center"
+		alignItems: "center",
+		justifyContent: "space-between",
 	},
 	bodyTitleWrapper: {
 		width: "100%",
