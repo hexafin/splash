@@ -197,7 +197,7 @@ export const ApproveTransaction = (transaction) => {
 }
 
 
-export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount, toId, toSplashtag, currency="BTC") => {
+export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAmount, toId, toSplashtag, currency="BTC") => {
 	return (dispatch, getState) => {
     
     return new Promise((resolve, reject) => {
@@ -212,12 +212,12 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
       const state = getState()
       const userBtcAddress = state.crypto.wallets[currency].address
       const network = state.crypto.wallets[currency].network
-      const totalBtcAmount = parseFloat(btcAmount)+parseFloat(feeSatoshi/cryptoUnits.BTC)
+      const totalSatoshiAmount = satoshiAmount+feeSatoshi
 
       let transaction = {
         amount: {
-          subtotal: Math.floor(btcAmount*cryptoUnits.BTC),
-          total: Math.floor(totalBtcAmount*cryptoUnits.BTC),
+          subtotal: satoshiAmount,
+          total: totalSatoshiAmount,
           fee: feeSatoshi,
         },
         currency: 'BTC',
@@ -237,7 +237,7 @@ export const SendTransaction = (toAddress, btcAmount, feeSatoshi, relativeAmount
       dispatch(sendTransactionInit())
       Keychain.getGenericPassword().then(data => {
         const privateKey = JSON.parse(data.password)[currency][network].wif
-        api.BuildBitcoinTransaction({from: userBtcAddress, to:toAddress, privateKey, amtBTC: totalBtcAmount, fee: feeSatoshi, network}).then(response => {
+        api.BuildBitcoinTransaction({from: userBtcAddress, to:toAddress, privateKey, amtSatoshi: totalSatoshiAmount, fee: feeSatoshi, network}).then(response => {
           const {txid, txhex} = response
           transaction.txId = txid
 

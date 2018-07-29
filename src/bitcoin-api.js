@@ -142,7 +142,7 @@ export function sendTransaction (options) {
 	if (options == null || typeof options !== 'object') throw BITCOIN_ERRORS.USAGE
 	if (options.from == null) throw BITCOIN_ERRORS.USAGE
 	if (options.to == null) throw BITCOIN_ERRORS.USAGE
-	if (options.btc == null) throw BITCOIN_ERRORS.USAGE
+	if (options.satoshis == null) throw BITCOIN_ERRORS.USAGE
 	if (options.privKeyWIF == null) throw BITCOIN_ERRORS.USAGE
 
 	//Optionals
@@ -155,8 +155,7 @@ export function sendTransaction (options) {
 
 	var from = options.from;
 	var to = options.to;
-	var amount = options.btc;
-	var amtSatoshi = Math.floor(amount*BITCOIN_SAT_MULT);
+	var amtSatoshi = options.satoshis
 	var bitcoinNetwork = options.network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
 
 	return new Promise((resolve, reject) => {

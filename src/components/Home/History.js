@@ -22,7 +22,7 @@ import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import TransactionLine from "../universal/TransactionLine"
-import { cryptoUnits } from '../../lib/cryptos'
+import { cryptoUnits, decimalToUnits, unitsToDecimal } from '../../lib/cryptos'
 import { showViewModal } from '../../redux/modal'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -85,12 +85,13 @@ class History extends Component {
 			}]} onLayout={event => this.dynamicHeight(event, "height")}>
 				<Text style={styles.sectionTitle}>Your history</Text>
 				{this.props.transactions.map(transaction => {
-					const cryptoAmount = transaction.type == 'card' ? transaction.amount/cryptoUnits.BTC : transaction.amount.subtotal/cryptoUnits.BTC
+					const satoshiAmount = transaction.type == 'card' ? transaction.amount : transaction.amount.subtotal
 					let amount
 					if (this.props.exchangeRates.BTC) {
+						const rate = decimalToUnits(this.props.exchangeRates.BTC.USD, 'USD')
 						amount = this.props.currency == "BTC"
-							? parseFloat(cryptoAmount).toFixed(5)
-							: parseFloat(cryptoAmount*this.props.exchangeRates.BTC[this.props.currency]).toFixed(2)
+							? unitsToDecimal(satoshiAmount, 'BTC')
+							: unitsToDecimal( Math.round((satoshiAmount/cryptoUnits.BTC) * rate), 'USD')
 					}
 					else {
 						amount = 0

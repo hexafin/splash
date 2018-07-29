@@ -9,9 +9,6 @@ import {
 } from "react-native"
 import {icons} from "../../lib/styles"
 import {colors} from "../../lib/colors"
-import {connect} from "react-redux"
-import {bindActionCreators} from "redux"
-import {setActiveCurrency} from "../../redux/crypto/actions"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 /*
@@ -50,7 +47,6 @@ class CurrencySwitcherLight extends Component {
 			textColor,
 			textSize=24,
 			switcherColor,
-			setActiveCurrency,
 			style,
 			onPressIn=()=>{},
 			onPressOut=()=>{},
@@ -88,7 +84,6 @@ class CurrencySwitcherLight extends Component {
 				onPress={() => {
 					const nextCurrency = this.state.activeCurrency == crypto ? fiat : crypto
 					this.setState({activeCurrency: nextCurrency})
-					setActiveCurrency(nextCurrency)
 					onSwitch(nextCurrency)
 				}}
 			>
@@ -122,16 +117,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-const mapStateToProps = (state) => {
-    return {
-    	activeCurrency: state.crypto.activeCurrency
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-    	setActiveCurrency
-    }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CurrencySwitcherLight)
+export default CurrencySwitcherLight
