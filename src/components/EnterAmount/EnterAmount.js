@@ -29,18 +29,12 @@ class EnterAmount extends Component {
 		this.state = {
 			amount: "",
 			decimal: false,
-			activeCurrency: props.activeCurrency,
+			activeCurrency: 'USD',
 		}
 	}
 
 	componentWillMount() {
 		this.amountScale = new Animated.Value(1)
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.activeCurrency != this.state.activeCurrency) {
-			this.setState({activeCurrency: nextProps.activeCurrency})
-		}
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
