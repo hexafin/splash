@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
 	},
 	bodyTitle: {
 		color: colors.primaryDarkText,
-		fontSize: 18,
+		fontSize: 20,
 		fontWeight: "700",
 		textAlign: "left"
 	},

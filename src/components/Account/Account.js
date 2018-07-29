@@ -78,7 +78,7 @@ const Account = ({splashtag, userId, logout, navigation, resetTransactions, togg
 				</View>
 				<View style={styles.body}>
 					<View style={styles.section}>
-						<Text style={styles.sectionText}>Your account</Text>
+						<Text style={styles.accountText}>Your account</Text>
 						<Text style={styles.splashtagText}>Splashtag</Text>
 						<TouchableOpacity onPress={() => navigation.navigate("UpdateUsername")}>
 							<View pointerEvents='none'>
@@ -121,20 +121,20 @@ const styles = StyleSheet.create({
 	},
 	body: {
 		flex: 1,
-		padding: 24,
+		padding: 20,
 		flexDirection: "column",
 		backgroundColor: colors.white
 	},
 	accountText: {
-		fontSize: 18,
-		fontWeight: "500",
-		color: colors.nearBlack
+		color: colors.primaryDarkText,
+		fontSize: 20,
+		fontWeight: "700"
 	},
 	splashtagText: {
 		fontSize: 16,
 		fontWeight: "700",
 		color: "#B3B3B3",
-		paddingVertical: 6,
+		paddingVertical: 10,
 	},
 	sectionText: {
 		fontSize: 18,
