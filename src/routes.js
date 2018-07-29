@@ -18,6 +18,7 @@ import ApproveTransactionModal from "./components/ApproveTransactionModal"
 import ApproveCardModal from "./components/ApproveCardModal"
 import EnterAmount from "./components/EnterAmount"
 import SendTo from "./components/SendTo"
+import SetPasscode from "./components/SetPasscode"
 
 function forVertical(props) {
 	const { layout, position, scene } = props
@@ -30,9 +31,12 @@ function forVertical(props) {
 		inputRange: ([index - 1, index, index + 1]: Array<number>),
 		outputRange: ([height, 0, 0]: Array<number>)
 	})
-
-	return {
-		transform: [{ translateX }, { translateY }]
+	if (scene.route.routeName == 'Unlock') {
+		return null
+	} else {
+		return {
+			transform: [{ translateX }, { translateY }]
+		}
 	}
 }
 
@@ -73,27 +77,23 @@ const OnboardingRouter = createBottomTabNavigator(
 	}
 )
 
-const PayFlowRouter = createBottomTabNavigator(
+const PayFlowRouter = createStackNavigator(
 	{
 		EnterAmount: {
 			screen: EnterAmount,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+			
 		},
 		SendTo: {
 			screen: SendTo,
-			navigationOptions: {
-				tabBarVisible: false
-			}
+			
 		}
 	},
 	{
-		animationEnabled: true,
-		swipeEnabled: false,
 		initialRouteName: "EnterAmount",
 		activeBackgroundColor: colors.white,
-		inactiveBackgroundColor: colors.white
+		inactiveBackgroundColor: colors.white,
+		headerMode: "none",
+		lazy: true,
 	}
 )
 
@@ -104,6 +104,12 @@ const AppRouter = createStackNavigator(
 		},
 		UpdateUsername: {
 			screen: UpdateUsername
+		},
+		Unlock: {
+			screen: Unlock
+		},
+		SetPasscode: {
+			screen: SetPasscode
 		},
 		PayFlow: ({navigation}) => <PayFlowRouter screenProps={{rootNavigation: navigation}}/>,
 		SwipeApp: {

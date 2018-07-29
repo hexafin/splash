@@ -1,10 +1,11 @@
-import api from "../../api";
+import api, { Errors } from "../../api";
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
 let analytics = firebase.analytics();
 import { NavigationActions } from "react-navigation";
 import * as Keychain from 'react-native-keychain';
+import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits } from '../../lib/cryptos'
@@ -24,6 +25,8 @@ export const ActionTypes = {
 	OPEN_WALLET_INIT: "OPEN_WALLET_INIT",
 	OPEN_WALLET_SUCCESS: "OPEN_WALLET_SUCCESS",
 	OPEN_WALLET_FAILURE: "OPEN_WALLET_FAILURE",
+	RESET_CRYPTO: "RESET_CRYPTO",
+	SWITCH_WALLETS: 'SWITCH_WALLETS',
 }
 
 export function setActiveCurrency(currency) {
@@ -39,7 +42,7 @@ export function loadBalanceSuccess(balance) {
 }
 
 export function loadBalanceFailure(error) {
-	return { type: ActionTypes.LOAD_BALANCE_SUCCESS, error };
+	return { type: ActionTypes.LOAD_BALANCE_FAILURE, error };
 }
 
 export function loadExchangeRatesInit(currency) {
@@ -51,7 +54,7 @@ export function loadExchangeRatesSuccess(exchangeRates) {
 }
 
 export function loadExchangeRatesFailure(error) {
-	return { type: ActionTypes.LOAD_EXCHANGE_RATES_SUCCESS, error };
+	return { type: ActionTypes.LOAD_EXCHANGE_RATES_FAILURE, error };
 }
 
 export function openWalletInit(currency) {
@@ -63,7 +66,15 @@ export function openWalletSuccess(wallet) {
 }
 
 export function openWalletFailure(error) {
-	return { type: ActionTypes.OPEN_WALLET_SUCCESS, error };
+	return { type: ActionTypes.OPEN_WALLET_FAILURE, error };
+}
+
+export function switchWallets(wallet) {
+	return { type: ActionTypes.SWITCH_WALLETS, wallet };
+}
+
+export function resetCrypto() {
+	return { type: ActionTypes.RESET_CRYPTO };
 }
 
 export const LoadBalance = (currency="BTC") => {
@@ -80,13 +91,13 @@ export const LoadBalance = (currency="BTC") => {
 				api.GetBitcoinAddressBalance(address, network).then(balance => {
 					dispatch(loadBalanceSuccess(balance))
 				}).catch(error => {
-					Sentry.messageCapture(error)
+					if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 					dispatch(loadBalanceFailure(error))
 				})
 				break
 			default:
 				const error = `Load balance: unsupported currency: ${currency}`
-				Sentry.messageCapture(error)
+				Sentry.captureMessage(error)
 				dispatch(loadBalanceFailure(error))
 				break
 		}
@@ -101,7 +112,7 @@ export const LoadExchangeRates = (currency="BTC") => {
 
 		if (currency != "BTC") {
 			const error = `Load exchange rates: unsupported currency: ${currency}`
-			Sentry.messageCapture(error)
+			Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
 			return
 		}
@@ -109,13 +120,13 @@ export const LoadExchangeRates = (currency="BTC") => {
 		api.GetExchangeRate(currency).then(exchangeRate => {
 			dispatch(loadExchangeRatesSuccess(exchangeRate))
 		}).catch(error => {
-			Sentry.messageCapture(error)
+			if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
 		})
 	}
 }
 
-export const OpenWallet = (currency, network="testnet") => {
+export const OpenWallet = (currency) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
 			dispatch(openWalletInit(currency))
@@ -127,44 +138,54 @@ export const OpenWallet = (currency, network="testnet") => {
 			Keychain.getGenericPassword().then(data => {
 
 				const keychainUserId = data.username
-				const keychainData = JSON.parse(data.password)
-				let publicWalletData
-				let keychainWalletData
-
-				if (!!keychainData[currency]) {
-					
-					// already have a wallet for this currency => load address to redux
-					console.log(currency, 'Address found in Keychain')
-					const publicWalletData = {
-						address: keychainData[currency].address,
-						network: keychainData[currency].network,
+				let keychainData
+				try {
+					keychainData = JSON.parse(data.password)
+				} catch (e) {
+					keychainData = {
+						BTC: {}
 					}
+				}
 
-					// update user with public wallet data for currency
-					firestore.collection("users").doc(userId).update({
-						[`wallets.${currency}`]: publicWalletData
-					}).then(() => {
+				let newKeychainData = {}
+				let publicWalletData = {}
 
-						dispatch(openWalletSuccess(publicWalletData))
-						resolve()
-
-					}).catch(error => {
-						dispatch(openWalletFailure(error))
-						reject(error)
-					})
-
-
+				let updateWallets = []
+				let createWallets = []
+				if (!!keychainData[currency].testnet) {
+					updateWallets.push('testnet')
 				} else {
+					createWallets.push('testnet')
+				}
+				if (!!keychainData[currency].mainnet) {
+					updateWallets.push('mainnet')
+				} else {
+					createWallets.push('mainnet')
+				}
+
+				for (var i = 0, len = updateWallets.length; i < len; i++) {
+					
+					const network = updateWallets[i]
+					// already have a wallet for this currency => load address to redux
+					publicWalletData[network] = {
+						address: keychainData[currency][network].address,
+						network: network,
+					}
+				} 
+
+				for (var j = 0, len = createWallets.length; j < len; j++) {
+
+					const network = createWallets[j]
 
 					// generate wallet for currency
 					switch(currency) {
 						case "BTC":
 							const bitcoinData = api.NewBitcoinWallet(network)
-							publicWalletData = {
+							publicWalletData[network] = {
 								address: bitcoinData.address,
 								network,
 							}
-							keychainWalletData = {
+							newKeychainData = {
 								address: bitcoinData.address,
 								network,
 								wif: bitcoinData.wif
@@ -172,44 +193,59 @@ export const OpenWallet = (currency, network="testnet") => {
 							break
 						default:
 							const error = `Open wallet: unsupported currency: ${currency}`
-							Sentry.messageCapture(error)
+							Sentry.captureMessage(error)
 							dispatch(openWalletFailure(error))
 							reject(error)
 					}
 
-					const updatedKeychainData = {
-						...keychainData,
-						[currency]: keychainWalletData
-					}
-
-					console.log(updatedKeychainData)
-
-					// add wallet to keychain
-					Keychain.setGenericPassword(userId, JSON.stringify(updatedKeychainData)).then(() => {
-
-						// update user with public wallet data for currency
-						firestore.collection("users").doc(userId).update({
-							[`wallets.${currency}`]: publicWalletData
-						}).then(() => {
-
-							dispatch(openWalletSuccess(publicWalletData))
-							resolve()
-
-						}).catch(error => {
-							dispatch(openWalletFailure(error))
-							reject(error)
-						})
-				  	}).catch(error => {
-				  		dispatch(openWalletFailure(error))
-						reject(error)
-				  	})
-
+					keychainData[currency][network] = newKeychainData						
 				}
+				// add wallet to keychain
+				Keychain.setGenericPassword(userId, JSON.stringify(keychainData)).then(() => {
+
+					// update user with public wallet data for currency
+					firestore.collection("users").doc(userId).update({
+						[`wallets.${currency}`]: publicWalletData
+					}).then(() => {
+						// load testnet wallet first on default
+						dispatch(openWalletSuccess(publicWalletData.testnet))
+						resolve()
+
+					}).catch(error => {
+						Sentry.captureMessage(error)
+						dispatch(openWalletFailure(error))
+						reject(error)
+					})
+			  	}).catch(error => {
+			  		Sentry.captureMessage(error)
+			  		dispatch(openWalletFailure(error))
+					reject(error)
+			  	})
 
 			}).catch(error => {
+				console.log('keychain error', error)
+				Sentry.captureMessage(error)
 				dispatch(openWalletFailure(error))
 				reject(error)
 			})
 		})
 	}
 }
+
+export const ToggleNetwork = () => {
+	return (dispatch, getState) => {
+		const state = getState()
+		const currentNetwork = state.crypto.wallets.BTC.network
+		let newNetwork = 'testnet'
+		if (currentNetwork == 'testnet') newNetwork = 'mainnet'
+
+		Keychain.getGenericPassword().then(data => {
+
+			const keychainData = JSON.parse(data.password)
+			const newWallet = keychainData.BTC[newNetwork]
+			dispatch(switchWallets({address: newWallet.address, network: newWallet.network}))
+
+		})
+	}
+}
+

@@ -6,13 +6,27 @@ import {
     TouchableOpacity
 } from "react-native"
 import {colors} from "../../lib/colors"
+import { isIphoneX } from "react-native-iphone-x-helper"
 import {defaults} from '../../lib/styles'
 
 const FlatBackButton = ({onPress, color="gray", absolute=true, direction="left"}) => {
 
     let source
     if (direction == "left") {
-        source = color == "gray" ? require("../../assets/icons/leftCarrotGray.png") : require("../../assets/icons/leftCarrotWhite.png")
+        switch (color) {
+            case "gray":
+                source = require("../../assets/icons/leftCarrotGray.png")
+                break
+            case "dark":
+                source = require("../../assets/icons/leftCarrotDark.png")
+                break
+            case "white":
+                source = require("../../assets/icons/leftCarrotWhite.png")
+                break
+            default:
+                source = require("../../assets/icons/leftCarrotWhite.png")
+                break
+        }
     } 
     if (direction == "right") {
         source = require("../../assets/icons/rightCarrotWhite.png")
@@ -32,7 +46,7 @@ const FlatBackButton = ({onPress, color="gray", absolute=true, direction="left"}
 
 const styles = StyleSheet.create({
     wrapper: {
-        padding: 10,
+        padding: 27,
         flexDirection: "column",
         justifyContent: 'center',
         alignItems: 'center',
@@ -40,7 +54,7 @@ const styles = StyleSheet.create({
     absoluteLeft: {
         position: 'absolute',
         left: 0,
-        top: 30,
+        top: (isIphoneX()) ? 30 : 10,
     },
     absoluteRight: {
         position: 'absolute',
@@ -48,9 +62,8 @@ const styles = StyleSheet.create({
         top: 30,
     },
     carrot: {
-        height: 20,
-        width: 10,
-        margin: 5
+        height: 22,
+        width: 11,
     }
 })
 

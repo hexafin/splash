@@ -3,16 +3,22 @@ import {
 	View,
 	Text,
 	StyleSheet,
+	Dimensions,
 	Image,
 	TouchableOpacity,
 	Animated
 } from "react-native"
 import { colors } from "../../lib/colors"
+import { isIphoneX } from "react-native-iphone-x-helper"
 import { defaults, icons } from "../../lib/styles"
 import Keypad from '../universal/Keypad'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import LinearGradient from 'react-native-linear-gradient';
 import TouchID from "react-native-touch-id"
+import * as Keychain from 'react-native-keychain';
+
+const SCREEN_WIDTH = Dimensions.get("window").width
+const SCREEN_HEIGHT = Dimensions.get("window").height
 
 
 class Unlock extends Component {
@@ -20,28 +26,40 @@ class Unlock extends Component {
 		super(props)
 		this.state = {
 			value: '',
+			passcode: null,
 		}
 		this.onChangeText = this.onChangeText.bind(this)
 		this.shakeAnimation = new Animated.Value(0)
 	}
 
 	componentDidMount() {
-		TouchID.authenticate("Login with FaceID").then(success => {
-			if (success) {
-				this.props.navigation.navigate('SwipeApp')
-			}
+		setTimeout(() => {
+			TouchID.authenticate("Login with biometric").then(success => {
+				if (success) {
+					this.props.navigation.state.params.successCallback()
+				}
+			})
+		}, 1250)
+
+		Keychain.getGenericPassword().then(data => {
+			const passcode = JSON.parse(data.password).passcode
+			this.setState({passcode})
 		})
 	}
 
-	onChangeText(text) {
-		if (text.length <= 4) {
-			this.setState({value: text})
+	onChangeText(char) {
+		if (this.state.value.length < 4 && char != 'delete') {
+
+			const newValue = (this.state.value+char)
+			this.setState({value: newValue})
 			ReactNativeHapticFeedback.trigger("impactLight", true)
 
-			// if correct passcode TODO: use real passcode
-			if (text == '1234') {
-				this.props.navigation.navigate('SwipeApp')
-			} else if (text.length == 4) {
+			// if correct passcode 
+			if (this.state.passcode && newValue == this.state.passcode) {
+
+				this.props.navigation.state.params.successCallback()
+
+			} else if (newValue.length == 4) {
 				// if incorrect passcode
 				Animated.spring(this.shakeAnimation, {
 					toValue: 1,
@@ -52,11 +70,15 @@ class Unlock extends Component {
 				})
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			}
+		} else if (char == 'delete') {
+			this.setState({value: this.state.value.slice(0, -1)})
 		}
 	}
 
 	render() {
-		const dropIcon = (index) => (this.state.value.length >= index) ? 'whiteDrop' : 'purpleDrop'
+		const closable = this.props.navigation.state.params.closable
+		const dropIcon = (index) => (this.state.value.length >= index) ? <Image source={icons['whiteDrop']} style={styles.drop} resizeMode={'contain'}/>
+																	   : <Image source={icons['purpleDrop']} style={styles.drop} resizeMode={'contain'}/>
 		const shakeTransform =  {
 			transform: [
 				{
@@ -70,20 +92,25 @@ class Unlock extends Component {
 
 		return (
 			<LinearGradient colors={['#5759D5', '#4E50E6']} style={styles.container}>
-				<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
+		        <View> 
+			        {closable && <TouchableOpacity style={styles.closeButton} onPress={() => this.props.navigation.goBack()}>
+			          <Image style={styles.closeIcon} source={require('../../assets/icons/Xbutton.png')}/>
+			        </TouchableOpacity>}
+					<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
+		        </View>
 				<Animated.View style={[styles.drops, shakeTransform]}>
-					<Image source={icons[dropIcon(1)]} style={styles.drop} resizeMode={'contain'}/>
-					<Image source={icons[dropIcon(2)]} style={styles.drop} resizeMode={'contain'}/>
-					<Image source={icons[dropIcon(3)]} style={styles.drop} resizeMode={'contain'}/>
-					<Image source={icons[dropIcon(4)]} style={styles.drop} resizeMode={'contain'}/>
+					{dropIcon(1)}
+					{dropIcon(2)}
+					{dropIcon(3)}
+					{dropIcon(4)}
 				</Animated.View>
 				<Keypad primaryColor={'#484AD4'}
 						pressColor={'#6466F6'}
-						textColor={'#FFFFF'}
-						onChange={(text) => this.onChangeText(text)}
+						textColor={'white'}
+						onChange={(char) => this.onChangeText(char)}
 						disabled={(this.state.value.length >= 4) ? true : false}
 						decimal={false}
-						value={this.state.value}
+						delete={true}
 						arrow={'white'} />
 				{/*<TouchableOpacity onPress={() => console.log('forgot')}>
 					<Text style={styles.forgotText}>Forgot?</Text>
@@ -96,19 +123,30 @@ class Unlock extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 75,
+		paddingVertical: isIphoneX() ? 40 : 20,
+		flexDirection: "column",
+		justifyContent: "space-between",
+		paddingTop: isIphoneX() ? 75 : 55,
+	},
+	closeButton: {
+		paddingHorizontal: 43,
+		paddingBottom: 10,
+		alignSelf: 'flex-end'
+	},
+	closeIcon: {
+		height: 20,
+		width: 20
 	},
 	splashLogo: {
 		height: 34,
 		width: 26,
-		marginBottom: 76,
 		alignSelf: 'center'
 	},
 	drops: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: 113,
 		paddingHorizontal: 105,
+		width: SCREEN_WIDTH
 	},
 	drop: {
 		height: 15,

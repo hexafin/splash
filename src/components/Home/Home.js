@@ -15,11 +15,9 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
-import api from '../../api'
+import api, { Errors } from '../../api'
 import { isIphoneX } from "react-native-iphone-x-helper"
-import { Sentry } from "react-native-sentry";
 import LoadingCircle from "../universal/LoadingCircle"
-import PayFlow from "./PayFlow"
 import History from "./History"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import StartPayButton from "./StartPayButton"
@@ -32,7 +30,8 @@ class Home extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			historyHeight: null,
 		}
 	}
 
@@ -42,6 +41,12 @@ class Home extends Component {
 		}
 		else {
 			this.setState({loading: false})
+		}
+
+		if ((nextProps.errorLoadingTransactions == Errors.NETWORK_ERROR && nextProps.errorLoadingTransactions != this.props.errorLoadingTransactions)
+			|| (nextProps.errorLoadingBalance == Errors.NETWORK_ERROR && nextProps.errorLoadingBalance != this.props.errorLoadingBalance)
+			|| (nextProps.errorLoadingExchangeRates == Errors.NETWORK_ERROR && nextProps.errorLoadingExchangeRates != this.props.errorLoadingExchangeRates)) {
+			this.props.showTimeoutModal()
 		}
 	}
 
@@ -55,9 +60,6 @@ class Home extends Component {
 	}
 
 	componentWillMount() {
-        if (!this.props.loggedIn) {
-            this.props.navigation.navigate("Landing")
-        }
 
         this.animatedPayScale = new Animated.Value(1)
 	}
@@ -114,11 +116,12 @@ const styles = StyleSheet.create({
 	wrapper: {
 		width: SCREEN_WIDTH,
 		height: SCREEN_HEIGHT,
-		// backgroundColor: colors.primary
+		// flex: 1,
+		// backgroundColor: colors.red,
 	},
 	scrollContainer: {
 		position: "relative",
-		paddingTop: 210,
+		paddingTop: isIphoneX() ? 210 : 190,
 		minHeight: SCREEN_HEIGHT,
 		// backgroundColor: colors.red
 	},

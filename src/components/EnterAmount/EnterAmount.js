@@ -28,18 +28,13 @@ class EnterAmount extends Component {
 		super(props)
 		this.state = {
 			amount: "",
-			activeCurrency: props.activeCurrency,
+			decimal: false,
+			activeCurrency: 'USD',
 		}
 	}
 
 	componentWillMount() {
 		this.amountScale = new Animated.Value(1)
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.activeCurrency != this.state.activeCurrency) {
-			this.setState({activeCurrency: nextProps.activeCurrency})
-		}
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -145,27 +140,63 @@ class EnterAmount extends Component {
 
 				<Keypad
 					primaryColor={"#EEEEFC"}
-					pressColor={"#6466F6"}
+					pressColor={"#CFCFFF"}
 					textColor={"#3F41FA"}
-					onChange={text => this.setState({amount: text})}
+					onChange={char => {
+						if (char == "delete") {
+							this.setState(prevState => {
+								const deletedChar = prevState.amount[prevState.amount.length-1]
+								return {
+									...prevState,
+									amount: prevState.amount.length > 0 
+										? prevState.amount.slice(0, prevState.amount.length-1) : "",
+									decimal: deletedChar == "." ? false : prevState.decimal,
+								}
+							})
+						}
+						else if (this.state.amount.length >= 7) {
+							return
+						}
+						else if (char == ".") {
+							this.setState(prevState => {
+								return {
+									...prevState,
+									decimal: true,
+									amount: prevState.decimal ? prevState.amount : prevState.amount + char
+								}
+							})
+						}
+						else {
+							this.setState(prevState => {
+								return {
+									...prevState,
+									amount: prevState.amount.length > 0 || char != "0"
+										? prevState.amount + char : prevState.amount
+								}
+							})
+						}
+					}}
 					decimal={true}
 					arrow={"purple"}
 					value={this.state.amount}
-					maxLength={7}
-					noLeadingZeros={true}
+					delete={true}
 				/>
 
 				<NextButton
 					title="Choose recipient"
 					disabled={
 						this.state.amount.length == 0 
-						|| amountOverBalance}
+						|| amountOverBalance 
+						|| this.state.amount == "." 
+						|| parseFloat(this.state.amount) == 0
+					}
 					onPress={() => {
+						this.props.enterAmount(this.state.activeCurrency, parseFloat(this.state.amount))
 						this.props.navigation.navigate("SendTo")
 					}}/>
 
 				<CloseButton
-					color="primary"
+					color="dark"
 					onPress={() => {
 						this.props.screenProps.rootNavigation.goBack(null);
 					}}
@@ -182,7 +213,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 		flexDirection: "column",
 		justifyContent: "space-between",
-		paddingBottom: isIphoneX() ? 40 : 20,
+		paddingBottom: isIphoneX() ? 140 : 120,
 	},
 	header: {
 		flexDirection: "column",

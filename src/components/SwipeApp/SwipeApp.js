@@ -6,24 +6,30 @@ import {
 	View,
 	Text,
 	Keyboard,
+	Alert,
 	Animated,
 	StyleSheet,
-	TouchableWithoutFeedback
+	TouchableWithoutFeedback,
+	AppState
 } from "react-native"
 import firebase from "react-native-firebase"
+import { Sentry } from "react-native-sentry";
 import { colors } from "../../lib/colors"
 import { defaults, icons } from "../../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { LoadExchangeRates, LoadBalance } from "../../redux/crypto/actions"
+import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions"
 import PropTypes from "prop-types"
 import Account from "../Account"
 import Wallet from "../Wallet"
 import Home from "../Home"
 import Balance from "./Balance"
+import ReturnToHome from "./ReturnToHome"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import ModalRoot from '../ModalRoot'
+import moment from "moment"
+import ModalRoot from '../Modals/ModalRoot'
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -70,7 +76,7 @@ function iconTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [200, 0, -200]
+					outputRange: [SCREEN_WIDTH*0.55, 0, -0.55*SCREEN_WIDTH]
 				})
 			}
 		]
@@ -97,7 +103,7 @@ function titleTransform(index: number) {
 						index * SCREEN_WIDTH,
 						(index + 1) * SCREEN_WIDTH
 					],
-					outputRange: [380, 0, -380]
+					outputRange: [SCREEN_WIDTH*1.2, 0, -1.2 * SCREEN_WIDTH]
 				})
 			}
 		]
@@ -156,9 +162,12 @@ class SwipeApp extends Component {
 				name: "wallet",
 				component: Wallet,
 				image: icons.qrIcon,
-				title: "You splash wallet"
+				title: "Your splash wallet"
 			}
 		]
+		this.state = {
+			appState: AppState.currentState
+		}
 		this.pageIndices = {}
 		for (let i = 0; i < this.pages.length; i++) {
 			const page = this.pages[i]
@@ -166,6 +175,7 @@ class SwipeApp extends Component {
 		}
 		this.goToPage = this.goToPage.bind(this)
 		this.goToPageByIndex = this.goToPageByIndex.bind(this)
+		this.handleAppStateChange = this.handleAppStateChange.bind(this)
 	}
 
 	goToPage = (scrollView, pageName) => {
@@ -191,7 +201,45 @@ class SwipeApp extends Component {
 		}
 	}
 
+	handleAppStateChange = (nextAppState) => {
+		// if app opens to foreground
+		if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+
+		  // if time is past lockout
+		  if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
+			this.props.navigation.navigate("Unlock", {
+				successCallback: () => {
+					this.props.resetLockoutClock()
+					this.props.navigation.navigate('SwipeApp')
+				}
+			})
+		  } else {
+			  this.props.resetLockoutClock()
+		  }
+		//if app goes to background
+		} else if (this.state.appState.match(/active/) && (nextAppState === 'background' || nextAppState === 'inactive')) {
+		  this.props.startLockoutClock()
+		}
+		this.setState({appState: nextAppState});
+	}
+
 	componentDidMount() {
+
+		Sentry.setUserContext({
+			userId: this.props.userId,
+			username: this.props.splashtag
+		})
+
+		// if timeis past lockout
+		if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
+			this.props.navigation.navigate("Unlock", {
+				successCallback: () => {
+					this.props.resetLockoutClock()
+					this.props.navigation.navigate('SwipeApp')
+				}
+			})
+		}
+
 		this.goToPageByIndex(this.scrollView, 1)
 		// initialize swipe app to center page
 		xOffset.setValue(SCREEN_WIDTH)
@@ -235,13 +283,29 @@ class SwipeApp extends Component {
 	    	this.props.LoadTransactions()
 	    })
 
+	    AppState.addEventListener('change', this.handleAppStateChange);	    	
    	}
 
 	componentWillUnmount() {
 		xOffset.removeAllListeners()
 		this.onTokenRefreshListener();
 		this.notificationListener()
-		this.notificationOpenedListener()
+		this.notificationOpenedListener()	    
+		AppState.removeEventListener('change', this.handleAppStateChange);			
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		if (nextState.appState != this.state.appState) {
+			return true
+		} else if (nextProps.lockoutTime != this.props.lockoutTime) {
+			return true
+		} else if (nextProps.splashtag != this.props.splashtag) {
+			this.pages[0].title = `@${nextProps.splashtag}`
+			return true
+		}
+		else {
+			return false
+		}
 	}
 
 	render() {
@@ -259,28 +323,30 @@ class SwipeApp extends Component {
 					})}
 				</Page>
 			)
-			Icons.push(
-				<TouchableWithoutFeedback
-					key={"page-icon-" + i}
-					onPressIn={() => {
-						ReactNativeHapticFeedback.trigger("impactLight", true)
-						this.goToPageByIndex(this.scrollView, i)
-					}}>
-					<Animated.Image
-						source={page.image}
-						resizeMode="contain"
-						style={[
-							styles.icon,
-							iconTransform(i),
-							{
-								height: (page.name == "wallet") ? 37 : 45,
-								width: (page.name == "wallet") ? 37 : 45,
-							},
-							(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
-						]}
-					/>
-				</TouchableWithoutFeedback>
-			)
+			if (page.image) {
+				Icons.push(
+					<TouchableWithoutFeedback
+						key={"page-icon-" + i}
+						onPressIn={() => {
+							ReactNativeHapticFeedback.trigger("impactLight", true)
+							this.goToPageByIndex(this.scrollView, i)
+						}}>
+						<Animated.Image
+							source={page.image}
+							resizeMode="contain"
+							style={[
+								styles.icon,
+								iconTransform(i),
+								{
+									height: (page.name == "wallet") ? 37 : 45,
+									width: (page.name == "wallet") ? 37 : 45,
+								},
+								(page.name == "wallet") ? {top: isIphoneX() ? 59 : 39} : {}
+							]}
+						/>
+					</TouchableWithoutFeedback>
+				)
+			}
 			if (page.title) {
 				Titles.push(
 					<Animated.View
@@ -336,15 +402,18 @@ class SwipeApp extends Component {
 				</Animated.ScrollView>
 
 				<Animated.Image
+					pointerEvents={"none"}
 					source={require("../../assets/images/headerWave.png")}
 					resizeMode="contain"
 					style={[headerTransform(), styles.headerImage]}/>
-				<View style={styles.header}/>
 				
 				{Icons}
 
 				{Titles}
 
+				<ReturnToHome yOffsets={yOffsets} xOffset={xOffset} onPress={() => {
+					this.goToPageByIndex(this.scrollView, 1)
+				}}/>
 				<Balance yOffsets={yOffsets} xOffset={xOffset}/>
 				<ModalRoot />
 			</View>
@@ -381,9 +450,8 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.primary
 	},
 	headerImage: {
-		top: (isIphoneX()) ? -30 : -50,
+		top: SCREEN_WIDTH*-0.6,
 		width: SCREEN_WIDTH,
-		height: 240,
 		position: "absolute",
 		shadowOffset: {
 			width: 0,
@@ -425,6 +493,8 @@ const mapStateToProps = state => {
         loadingBalanceCurrency: state.crypto.loadingBalanceCurrency,
         successLoadingBalance: state.crypto.successLoadingBalance,
     	errorLoadingBalance: state.crypto.errorLoadingBalance,
+    	lockoutTime: state.user.lockoutTime,
+    	lockoutEnabled: state.user.lockoutEnabled,
 	}
 }
 
@@ -432,7 +502,9 @@ const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
 			LoadBalance,
-			LoadExchangeRates
+			LoadExchangeRates,
+			resetLockoutClock,
+			startLockoutClock
 		},
 		dispatch
 	)

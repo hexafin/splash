@@ -26,11 +26,12 @@ class ChooseSplashtag extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            splashtagAvailable: {available: null, availableWaitlist: null, availableUser: null, validSplashtag: null},
+        this.initialState = {
+            splashtagAvailable: {available: null, validSplashtag: null},
             errorCheckingSplashtag: null,
             checkingSplashtag: false
         }
+        this.state = this.initialState
         this.checkSplashtag = this.checkSplashtag.bind(this);
         this.debouncedOnChange = debounce(this.checkSplashtag, 250);
     }
@@ -42,11 +43,11 @@ class ChooseSplashtag extends Component {
                 checkingSplashtag: true
             }
         })
-        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+splashtag).then(response => {
+        api.UsernameExists(splashtag).then(data => {
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    splashtagAvailable: response.data,
+                    splashtagAvailable: data,
                     checkingSplashtag: false,
                     errorCheckingSplashtag: false
                 }
@@ -121,6 +122,7 @@ class ChooseSplashtag extends Component {
                         onPress={() => {
                             Keyboard.dismiss()
                             if (splashtagWorks) {
+                              this.setState(this.initialState)
                               this.props.navigation.navigate("EnterPhoneNumber")
                             }
                         }}
@@ -141,6 +143,8 @@ class ChooseSplashtag extends Component {
 
                 <FlatBackButton onPress={() => {
                     Keyboard.dismiss()
+                    this.setState(this.initialState)
+                    this.props.reset('chooseSplashtag')
                     this.props.navigation.navigate("Landing")
                 }}/>
             </KeyboardAvoidingView>

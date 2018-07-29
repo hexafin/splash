@@ -116,18 +116,18 @@ class Balance extends Component {
 			),
 			this.props.xOffset.interpolate({
 				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
-				outputRange: [0.5, 1, 0.5]
+				outputRange: [0.8, 1, 0.8]
 			}),
 		)
 
 		const balanceOpacity = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+			inputRange: [SCREEN_WIDTH*0.7, SCREEN_WIDTH, SCREEN_WIDTH*1.3],
 			outputRange: [0, 1, 0]
 		})
 
 		const balanceTranslateX = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
-			outputRange: [220, 0, -220]
+			inputRange: [0, SCREEN_WIDTH*0.6, SCREEN_WIDTH, SCREEN_WIDTH*1.4, SCREEN_WIDTH*2],
+			outputRange: [SCREEN_WIDTH*1.2, SCREEN_WIDTH*0.3, 0, -0.3*SCREEN_WIDTH, -1.2*SCREEN_WIDTH]
 		})
 
 		const animatedBalance = {
@@ -171,7 +171,7 @@ class Balance extends Component {
 						switcherColor={"white"}
 						activeCurrencySize={24}
 						switcherBottom={32}
-						style={{marginTop: -30}}
+						style={{marginTop: -25}}
 						onPressIn={() => {
 							Animated.spring(this.animatedBalanceScale, {
 								toValue: 0.8,
@@ -201,12 +201,12 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		top: (isIphoneX()) ? 90 : 70,
 		width: SCREEN_WIDTH,
+		// backgroundColor: colors.gray,
 	},
 	balance: {
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		width: 150,
 	},
 	balanceRefresh: {
 		position: "absolute",

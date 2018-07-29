@@ -1,5 +1,4 @@
 import firebase from 'react-native-firebase'
-import {Sentry} from 'react-native-sentry'
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
@@ -7,7 +6,12 @@ import {ActionTypes} from "./actions.js"
 
 const initialState = {
   activeCurrency: "USD",
-  wallets: {},
+  wallets: {
+    BTC: {
+      address: '',
+      network: '',
+    }
+  },
   balance: {},
   loadingBalanceCurrency: null,
   isLoadingBalance: false,
@@ -58,6 +62,7 @@ export default function cryptoReducer(state = initialState, action) {
         return {
           ...state,
           isLoadingBalance: true,
+          errorLoadingBalance: null,
           loadingBalanceCurrency: action.currency
         }
 
@@ -83,6 +88,7 @@ export default function cryptoReducer(state = initialState, action) {
         return {
           ...state,
           isLoadingBalance: true,
+          errorLoadingExchangeRates: null,
           loadingExchangeRatesCurrency: action.currency
         }
 
@@ -103,6 +109,18 @@ export default function cryptoReducer(state = initialState, action) {
           isLoadingExchangeRates: false,
           errorLoadingExchangeRates: action.error
         }
+
+      case ActionTypes.SWITCH_WALLETS:
+        return {
+          ...state,
+          wallets: {
+            ...state.wallets,
+            [state.openingWalletCurrency]: action.wallet
+          }
+        }
+
+      case ActionTypes.RESET_CRYPTO:
+        return initialState
 
       default:
           return state

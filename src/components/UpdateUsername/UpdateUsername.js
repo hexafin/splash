@@ -16,7 +16,7 @@ import {Input} from "../universal/Input"
 import Button from "../universal/Button"
 import { Field, reduxForm } from 'redux-form'
 import debounce from 'lodash/debounce';
-import axios from "axios"
+import api from "../../api"
 import CloseButton from "../universal/CloseButton"
 
 class UpdateUsername extends Component {
@@ -38,11 +38,11 @@ class UpdateUsername extends Component {
                 checkingSplashtag: true
             }
         })
-        axios.get("https://us-central1-hexa-splash.cloudfunctions.net/splashtagAvailable?splashtag="+splashtag).then(response => {
+        api.UsernameExists(splashtag).then(data => {
             this.setState((prevState) => {
                 return {
                     ...prevState,
-                    splashtagAvailable: response.data.available,
+                    splashtagAvailable: data.available,
                     checkingSplashtag: false,
                 }
             })
@@ -65,7 +65,7 @@ class UpdateUsername extends Component {
 					</View>
 					<Text style={styles.splashtagText}>Splashtag</Text>
 	                <Field
-	                    name='updateUsername' defaultValue={this.props.splashtag} component={Input}
+	                    name='updateUsername' placeholder={this.props.splashtag} component={Input}
 	                    autoCapitalize="none" autoCorrect={false} spellCheck={false}
 	                    autoFocus={true}
 	                    checkmark={this.state.splashtagAvailable && !this.state.checkingSplashtag && this.props.usernameValue.length > 0}
@@ -76,7 +76,7 @@ class UpdateUsername extends Component {
                 	onPress={() => {
                 		Keyboard.dismiss()
                 		this.props.ChangeUsername().then(() => {
-                			this.props.navigation.navigate("Account")
+                			this.props.navigation.goBack()
                 		}).catch(error => {
                 			Alert.alert("An error occurred while updating your splashtag. Please try again later")
                 		})

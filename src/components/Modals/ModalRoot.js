@@ -4,13 +4,18 @@ import {
 } from "react-native"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
-import ViewTransactionModal from './ViewTransactionModal'
-import ApproveTransactionModal from './ApproveTransactionModal'
-import { hideModal } from '../redux/modal'
+import ViewTransactionModal from '../ViewTransactionModal'
+import ApproveTransactionModal from '../ApproveTransactionModal'
+import { hideModal } from '../../redux/modal'
+import InfoModal from "./InfoModal"
+import CardModal from "./CardModal"
+import RaiseModal from "./RaiseModal"
+
 
 const MODAL_COMPONENTS = {
-  'VIEW_TRANSACTION': ViewTransactionModal,
-  'APPROVE_TRANSACTION': ApproveTransactionModal,
+  'VIEW_TRANSACTION': CardModal(ViewTransactionModal),
+  'APPROVE_TRANSACTION': RaiseModal(ApproveTransactionModal),
+  'INFO': CardModal(InfoModal)
 }
 
 const ModalRoot = ({modalType, modalProps, hideModal}) => {

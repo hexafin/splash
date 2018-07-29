@@ -12,17 +12,19 @@ import {
 } from 'react-instantsearch/connectors';
 
 
-const SearchBox = connectSearchBox(({ refine, currentRefinement }) => {
+const SearchBox = connectSearchBox(({ refine, currentRefinement, onChange }) => {
 
     return (
-		<View style={styles.splashtagInputWrapper}>
-			<Text style={styles.inputPrefix}>@</Text>
+		<View style={styles.inputWrapper}>
 			<TextInput
-			    onChangeText={text => refine(text)}
+			    onChangeText={text => {
+			    	refine(text)
+			    	onChange(text)
+			    }}
 			    value={currentRefinement}
    				autoCapitalize={"none"}
-				placeholder={"yourfriend"}
-				style={styles.splashtagInput}
+				placeholder={"Splashtag, Phone or Address"}
+				style={styles.input}
 		        autoCorrect={false}
 	        />
         </View>
@@ -30,20 +32,13 @@ const SearchBox = connectSearchBox(({ refine, currentRefinement }) => {
 })
 
 const styles = StyleSheet.create({
-	inputPrefix: {
-		fontSize: 22,
-		fontWeight: "600",
-		color: colors.gray,
-		position: "absolute",
-		left: 20,
-		top: 20
-	},
-	splashtagInput: {
+	input: {
 		padding: 20,
-		fontSize: 22,
-		fontWeight: "600"
+		fontSize: 20,
+		fontWeight: "500",
+		color: colors.darkGray,
 	},
-	splashtagInputWrapper: {
+	inputWrapper: {
 		shadowOffset: {
             width: 0,
             height: 5,
@@ -53,10 +48,9 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 15,
         borderRadius: 5,
-        paddingLeft: 30,
-        paddingRight: 30,
+        // paddingLeft: 50,
         backgroundColor: colors.white
-	}
+	},
 })
 
 export default SearchBox

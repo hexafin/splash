@@ -100,6 +100,7 @@ export const SmsAuthenticate = (phoneNumber, countryName) => {
 					resolve(confirmResult)
 				})
 				.catch(error => {
+					Sentry.captureMessage(error)
 					dispatch(smsAuthFailure(error));
 					reject(error)
 				});
@@ -119,6 +120,7 @@ export const SmsConfirm = (confirmResult, confirmationCode) => {
 					resolve(user)
 				})
 				.catch(error => {
+					Sentry.captureMessage(error)
 					dispatch(smsConfirmFailure(error));
 					reject(error)
 				});
@@ -134,7 +136,6 @@ export const SignUp = user => {
 
 			const state = getState()
 			const userId = user.uid
-			const network = state.user.bitcoinNetwork
 
 			// user does not already exist, full signup
 			let splashtag = state.onboarding.splashtagOnHold
@@ -149,18 +150,24 @@ export const SignUp = user => {
 			userRef.get().then(userDoc => {
 				api.UsernameExists(splashtag).then(data => {
 
-					if (data.availableUser) {
+					if (data.available) {
 
 						const entity = {
-							splashtag: splashtag,
+							splashtag: splashtag.toLowerCase(),
 							phoneNumber,
 				            defaultCurrency: "USD"
 						}
-
 						userRef.set(entity).then(() => {
-							dispatch(signUpSuccess())
-							resolve(userId)
+							api.DeleteTransactions(userId).then(() => {
+								dispatch(signUpSuccess())
+								resolve(userId)
+							}).catch(error => {
+								Sentry.captureMessage(error)
+								dispatch(signUpFailure(error))
+								reject(error)
+							})
 						}).catch(error => {
+							Sentry.captureMessage(error)
 							dispatch(signUpFailure(error))
 							reject(error)
 						})
@@ -169,11 +176,13 @@ export const SignUp = user => {
 					else {
 						// username already taken
 						const error = "Username already taken"
+						Sentry.captureMessage(error)
 						dispatch(signUpFailure(error))
 						reject(error)
 					}
 				})
 			}).catch(error => {
+				Sentry.captureMessage(error)
 				dispatch(signUpFailure(error))
 				reject(error)
 			})

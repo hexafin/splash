@@ -19,9 +19,10 @@ class VerifyPhoneNumber extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {
+        this.initialState =  {
             code: "",
         }
+        this.state = this.initialState
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -41,20 +42,25 @@ class VerifyPhoneNumber extends Component {
             this.props.SignUp(user).then(userId => {
                 this.props.LogIn(userId).then(() => {
                     this.props.OpenWallet("BTC").then(() => {
+                        this.setState(this.initialState)
                         this.props.navigation.navigate("SwipeApp")
                     }).catch(error => {
                         console.log(error)
+                        this.setState(this.initialState)
                         Alert.alert("An error occurred while opening bitcoin wallet. Please try again later")
                     })
                 }).catch(error => {
                     console.log(error)
+                    this.setState(this.initialState)
                     Alert.alert("An error occurred while logging in. Please try again later")
                 })
             }).catch(error => {
                 console.log(error)
+                this.setState(this.initialState)
                 Alert.alert("An error occurred while signing up. Please try again later")
             })
         }).catch(error => {
+            this.setState(this.initialState)
             Alert.alert("An error occurred while confirming SMS. Please try again later")
         })
     }
@@ -100,6 +106,7 @@ class VerifyPhoneNumber extends Component {
 
             <FlatBackButton onPress={() => {
                 Keyboard.dismiss()
+                this.setState(this.initialState)
                 this.props.navigation.navigate("EnterPhoneNumber")
             }}/>
         </KeyboardAvoidingView>)

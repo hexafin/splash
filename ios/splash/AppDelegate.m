@@ -39,13 +39,52 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
 
   [RNSentry installWithRootView:rootView];
 
-  rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
+  // Add launch image to background view so that there is no visual break when starting up
+  // Create the backround UIView, allocate it in memory and initialise it
+  UIView *backgroundView = [[UIView alloc] init];
+  
+  // Create an array with all the png image resources
+  NSArray *allPngImageNames = [[NSBundle mainBundle]
+                               pathsForResourcesOfType:@"png" inDirectory:nil];
+  
+  // Loop through the images
+  for (NSString *imgName in allPngImageNames) {
+    
+    // Find the launch images
+    if ([imgName containsString:@"LaunchImage"]) {
+      
+      UIImage *img = [UIImage imageNamed:imgName];
+      
+      // Check for scale and dimensions as current device
+      if (img.scale == [UIScreen mainScreen].scale &&
+          CGSizeEqualToSize(img.size,[UIScreen mainScreen].bounds.size)) {
+        
+        // Create an image view, allocate it in memory and initialise it with
+        // the image that we have found
+        UIImageView *imageView = [[UIImageView alloc]
+                                  initWithImage:[UIImage imageNamed:imgName]];
+        // Add the image view to the top of the stack of subviews
+        [backgroundView addSubview:imageView];
+      }
+    }
+  }
 
-  self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+  // Make sure there is no colour blocking the image
+  rootView.backgroundColor = [UIColor clearColor];
+  rootView.loadingViewFadeDelay = 0.0;
+  rootView.loadingViewFadeDuration = 0.15;
+  
+  self.window = [[UIWindow alloc]
+                 initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
-  rootViewController.view = rootView;
+
+  rootViewController.view = backgroundView;
+  
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [backgroundView addSubview:rootView];
+  rootView.frame = backgroundView.frame;
+
   return YES;
 }
 

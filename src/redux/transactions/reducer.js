@@ -1,5 +1,4 @@
 import firebase from 'react-native-firebase'
-import {Sentry} from 'react-native-sentry'
 let analytics = firebase.analytics()
 analytics.setAnalyticsCollectionEnabled(true)
 
@@ -34,18 +33,6 @@ const initialState = {
 
 export default function transactionReducer(state = initialState, action) {
     switch (action.type) {
-
-      case RESET_QR:
-          return {
-            ...state,
-            qrAddress: null
-          }
-
-      case CAPTURE_QR:
-          return {
-            ...state,
-            qrAddress: action.address,
-          }
 
       case UPDATE_EXCHANGE_RATE:
           return {
@@ -114,11 +101,11 @@ export default function transactionReducer(state = initialState, action) {
         case LOAD_TRANSACTIONS_INIT:
             return {
                 ...state,
-                isLoadingTransactions: true
+                isLoadingTransactions: true,
+                errorLoadingTransactions: null,
             }
 
         case LOAD_TRANSACTIONS_SUCCESS:
-            console.log(action.transactions)
             return {
                 ...state,
                 isLoadingTransactions: false,
