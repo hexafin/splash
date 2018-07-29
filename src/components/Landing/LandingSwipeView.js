@@ -18,7 +18,7 @@ import TouchID from 'react-native-touch-id'
 import Button from '../universal/Button'
 import LottieView from 'lottie-react-native'
 import NextButton from '../universal/NextButton'
-
+import { isIphoneX } from 'react-native-iphone-x-helper'
 import LinearGradient from 'react-native-linear-gradient'
 const image1 = require('../../assets/images/screen-view1.png')
 const image2 = require('../../assets/images/screen-view2.png')
@@ -131,7 +131,7 @@ class LandingSwipeView extends Component {
                         index={1}
                     />
                     <Screen
-                        text="Say goodbye to big banks. Hello Splash."
+                        text="Bye, bye big banks. Hello Splash."
                         index={2}
                     />
                 </Animated.ScrollView>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     dotContainer: {
         position: 'absolute',
         zIndex: 2,
-        top: SCREEN_HEIGHT * 0.2,
+        top: isIphoneX() ? SCREEN_HEIGHT * 0.2 : SCREEN_HEIGHT * 0.18,
         left: 50,
         flexDirection: 'row'
     },
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     imageStyle: {
         height: SCREEN_HEIGHT - SCREEN_HEIGHT * 0.211,
         width: SCREEN_WIDTH,
-        bottom: 0,
+        bottom: isIphoneX() ? 0 : -20,
         right: 0
     },
     headerContainer: {
@@ -194,12 +194,9 @@ const styles = StyleSheet.create({
         left: 50
     },
     button: {
-        marginBottom: SCREEN_HEIGHT * 0.1,
-        // display: 'flex',
-        // justifyContent: 'center',
+        marginBottom: isIphoneX() ? SCREEN_HEIGHT * 0.1 : SCREEN_HEIGHT * 0.05,
         alignItems: 'center'
     },
-
     dot: {
         backgroundColor: 'white',
         height: 15,
@@ -208,21 +205,6 @@ const styles = StyleSheet.create({
         marginRight: 15
     }
 })
-
-// <LottieView
-//                     source={require('../../assets/animations/landingGradient.json')}
-//                     style={{
-//                         height: SCREEN_HEIGHT,
-//                         width: SCREEN_WIDTH,
-//                         position: 'absolute'
-//                     }}
-//                     ref={animation => {
-//                         this.animation = animation
-//                     }}
-//                     progress={progress}
-//                     loop={true}
-//                     autoplay={true}
-//                 />
 
 const Screen = props => {
     return (
@@ -243,7 +225,7 @@ const Screenstyles = StyleSheet.create({
     },
     screen: {
         margin: 50,
-        top: SCREEN_HEIGHT * 0.05,
+        top: isIphoneX() ? SCREEN_HEIGHT * 0.05 : 0,
         position: 'absolute',
         width: '70%'
     },
