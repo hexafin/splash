@@ -20,7 +20,9 @@ import LottieView from 'lottie-react-native'
 import NextButton from '../universal/NextButton'
 
 import LinearGradient from 'react-native-linear-gradient'
-
+const image1 = require('../../assets/images/screen-view1.png')
+const image2 = require('../../assets/images/screen-view2.png')
+const image3 = require('../../assets/images/screen-view3.png')
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 const xOffset = new Animated.Value(0)
@@ -62,22 +64,48 @@ class LandingSwipeView extends Component {
             dots.push(thisDot)
         }
 
+        let images = []
+        for (let i = 0; i < 3; i++) {
+            const dotOpacity = xOffset.interpolate({
+                inputRange: [
+                    (i - 1) * SCREEN_WIDTH,
+                    i * SCREEN_WIDTH,
+                    (i + 1) * SCREEN_WIDTH
+                ],
+                outputRange: [0, 1, 0],
+                extrapolate: 'clamp'
+            })
+
+            const thisImage = (
+                <Animated.View
+                    key={`${i}-dot`}
+                    style={[
+                        styles.image,
+                        {
+                            opacity: dotOpacity
+                        }
+                    ]}
+                >
+                    {i == 0 && (
+                        <Image source={image1} style={styles.imageStyle} />
+                    )}
+                    {i == 1 && (
+                        <Image source={image2} style={styles.imageStyle} />
+                    )}
+                    {i == 2 && (
+                        <Image source={image3} style={styles.imageStyle} />
+                    )}
+                </Animated.View>
+            )
+            images.push(thisImage)
+        }
+
         return (
             <Animated.View style={[styles.container]}>
-                <LottieView
-                    source={require('../../assets/animations/landingGradient.json')}
-                    style={{
-                        height: SCREEN_HEIGHT,
-                        width: SCREEN_WIDTH,
-                        position: 'absolute'
-                    }}
-                    ref={animation => {
-                        this.animation = animation
-                    }}
-                    progress={progress}
-                    loop={true}
-                    autoplay={true}
-                />
+                <View style={styles.imageContainer}>{images}</View>
+
+                <View style={styles.dotContainer}>{dots}</View>
+
                 <Animated.ScrollView
                     scrollEventThrottle={16}
                     showsHorizontalScrollIndicator={false}
@@ -95,19 +123,28 @@ class LandingSwipeView extends Component {
                     pagingEnabled
                 >
                     <Screen
-                        text="Splash is your cryptocurrency Wallet"
+                        text="Splash is your cryptocurrency wallet."
                         index={0}
                     />
                     <Screen
-                        text="Spend, send, receive Crypto - anywhere."
+                        text="Send money to anyone. Buy anything."
                         index={1}
                     />
-                    <Screen text="Just sign up already." index={2} />
+                    <Screen
+                        text="Say goodbye to big banks. Hello Splash."
+                        index={2}
+                    />
                 </Animated.ScrollView>
 
-                <View style={styles.dotContainer}>{dots}</View>
                 <View style={styles.button}>
-                    <Button title="Create your wallet" />
+                    <Button
+                        onPress={() =>
+                            this.props.navigation.navigate('ChooseSplashtag')
+                        }
+                        round
+                        large
+                        title="Get your wallet"
+                    />
                 </View>
             </Animated.View>
         )
@@ -116,7 +153,8 @@ class LandingSwipeView extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: colors.primary
     },
     scrollView: {
         flexDirection: 'row',
@@ -129,9 +167,26 @@ const styles = StyleSheet.create({
     dotContainer: {
         position: 'absolute',
         zIndex: 2,
-        bottom: SCREEN_HEIGHT / 3,
+        top: SCREEN_HEIGHT * 0.2,
         left: 50,
         flexDirection: 'row'
+    },
+    imageContainer: {
+        position: 'absolute',
+        zIndex: 0,
+        bottom: 0,
+        flex: 1,
+        backgroundColor: 'yellow'
+    },
+    image: {
+        position: 'absolute',
+        bottom: 0
+    },
+    imageStyle: {
+        height: SCREEN_HEIGHT - SCREEN_HEIGHT * 0.211,
+        width: SCREEN_WIDTH,
+        bottom: 0,
+        right: 0
     },
     headerContainer: {
         position: 'absolute',
@@ -139,26 +194,35 @@ const styles = StyleSheet.create({
         left: 50
     },
     button: {
-        marginBottom: 50,
+        marginBottom: SCREEN_HEIGHT * 0.1,
         // display: 'flex',
         // justifyContent: 'center',
         alignItems: 'center'
     },
+
     dot: {
         backgroundColor: 'white',
         height: 15,
         width: 15,
         borderRadius: 100,
         marginRight: 15
-    },
-    screen: {
-        height: 600,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 25,
-        backgroundColor: 'white'
     }
 })
+
+// <LottieView
+//                     source={require('../../assets/animations/landingGradient.json')}
+//                     style={{
+//                         height: SCREEN_HEIGHT,
+//                         width: SCREEN_WIDTH,
+//                         position: 'absolute'
+//                     }}
+//                     ref={animation => {
+//                         this.animation = animation
+//                     }}
+//                     progress={progress}
+//                     loop={true}
+//                     autoplay={true}
+//                 />
 
 const Screen = props => {
     return (
@@ -166,6 +230,7 @@ const Screen = props => {
             <View style={Screenstyles.screen}>
                 <Text style={Screenstyles.text}>{props.text}</Text>
             </View>
+            {props.children}
         </View>
     )
 }
@@ -177,8 +242,8 @@ const Screenstyles = StyleSheet.create({
         justifyContent: 'center'
     },
     screen: {
-        marginLeft: 50,
-        bottom: SCREEN_HEIGHT / 3,
+        margin: 50,
+        top: SCREEN_HEIGHT * 0.05,
         position: 'absolute',
         width: '70%'
     },
