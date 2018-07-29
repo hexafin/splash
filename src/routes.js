@@ -31,9 +31,12 @@ function forVertical(props) {
 		inputRange: ([index - 1, index, index + 1]: Array<number>),
 		outputRange: ([height, 0, 0]: Array<number>)
 	})
-
-	return {
-		transform: [{ translateX }, { translateY }]
+	if (scene.route.routeName == 'Unlock') {
+		return null
+	} else {
+		return {
+			transform: [{ translateX }, { translateY }]
+		}
 	}
 }
 

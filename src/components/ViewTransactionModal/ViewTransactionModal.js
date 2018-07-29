@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
 	},
 	closeButton: {
 		height: 20,
-		width: 20
+		width: 20,
+		margin: 8,
 	},
 	arrow: {
 		width: 48,

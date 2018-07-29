@@ -271,7 +271,7 @@ class SendTo extends Component {
 							extraContent="From Text Entry"/>
 					</View>}
 
-					{(!this.state.pastedAddress && !this.state.capturedQr && !this.state.typedAddress) && <View style={styles.section}>
+					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "") && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
 					</View>}
 

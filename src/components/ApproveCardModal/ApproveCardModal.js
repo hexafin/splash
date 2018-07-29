@@ -112,7 +112,7 @@ class ApproveCardModal extends Component {
 	                <View style={styles.header}>
 	                  <Text style={styles.title}>Transaction request</Text>
 	                  <TouchableOpacity onPress={() => dismiss()}>
-	                    <Image style={{height: 20, width: 20}} source={require('../../assets/icons/Xbutton.png')}/>
+	                    <Image style={styles.closeButton} source={require('../../assets/icons/Xbutton.png')}/>
 	                  </TouchableOpacity>
 	                </View>
 	                <View style={styles.information}>
@@ -202,6 +202,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: 10,
+  },
+  closeButton: {
+  	height: 20,
+  	width: 20,
+  	margin: 8,
   },
   title: {
     fontSize: 20,
