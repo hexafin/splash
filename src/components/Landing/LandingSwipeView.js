@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
     },
     dot: {
         backgroundColor: 'white',
-        height: 10,
-        width: 10,
+        height: 15,
+        width: 15,
         borderRadius: 100,
         marginRight: 15
     },
