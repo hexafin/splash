@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
     Text,
     View,
@@ -6,16 +6,15 @@ import {
     StyleSheet,
     Animated,
     TouchableWithoutFeedback
-} from "react-native"
-import {colors} from "../../lib/colors"
-import {defaults} from '../../lib/styles'
-import LoadingCircle from "./LoadingCircle"
-import Checkmark from "./Checkmark"
-import PropTypes from "prop-types"
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+} from 'react-native'
+import { colors } from '../../lib/colors'
+import { defaults } from '../../lib/styles'
+import LoadingCircle from './LoadingCircle'
+import Checkmark from './Checkmark'
+import PropTypes from 'prop-types'
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 
 class Button extends Component {
-
     constructor(props) {
         super(props)
         this.handlePressIn = this.handlePressIn.bind(this)
@@ -27,14 +26,14 @@ class Button extends Component {
     }
 
     handlePressIn() {
-        ReactNativeHapticFeedback.trigger("impactLight", true)
+        ReactNativeHapticFeedback.trigger('impactLight', true)
         Animated.spring(this.animatedValue, {
-            toValue: .8
+            toValue: 0.8
         }).start()
     }
 
     handlePressOut() {
-        ReactNativeHapticFeedback.trigger("impactLight", true)
+        ReactNativeHapticFeedback.trigger('impactLight', true)
         Animated.spring(this.animatedValue, {
             toValue: 1,
             friction: 3,
@@ -43,56 +42,82 @@ class Button extends Component {
     }
 
     render() {
-
-        const {primary, onPress=()=>{}, title, disabled=false, loading=false, checkmark=false, checkmarkPersist=false, checkmarkCallback=null, small=false, style={}} = this.props
+        const {
+            primary,
+            onPress = () => {},
+            title,
+            disabled = false,
+            loading = false,
+            checkmark = false,
+            checkmarkPersist = false,
+            checkmarkCallback = null,
+            small = false,
+            round = false,
+            large = false,
+            style = {}
+        } = this.props
 
         const loadingView = (
-            <LoadingCircle color={primary ? null : colors.primary} size={small ? 17 : 28}/>
+            <LoadingCircle
+                color={primary ? null : colors.primary}
+                size={small ? 17 : 28}
+            />
         )
 
         const checkmarkView = (
-            <Checkmark color={primary ? 'white' : 'primary'} size={10} callback={checkmarkCallback} persist={checkmarkPersist}/>
+            <Checkmark
+                color={primary ? 'white' : 'primary'}
+                size={10}
+                callback={checkmarkCallback}
+                persist={checkmarkPersist}
+            />
         )
 
         const normalView = (
-            <Text style={[
-                styles.text,
-                small ? styles.textSmall : {},
-                primary ? styles.textPrimary : styles.textSecondary,
-                disabled ? styles.textDisabled : {}
-            ]}>
+            <Text
+                style={[
+                    styles.text,
+                    small ? styles.textSmall : {},
+                    primary ? styles.textPrimary : styles.textSecondary,
+                    disabled ? styles.textDisabled : {}
+                ]}
+            >
                 {title}
             </Text>
         )
 
         return (
-                <TouchableWithoutFeedback disabled={ disabled || loading }
-                        onPress={ onPress }
-                        onPressIn={this.handlePressIn}
-                        onPressOut={this.handlePressOut}>
-                    <Animated.View style={[
+            <TouchableWithoutFeedback
+                disabled={disabled || loading}
+                onPress={onPress}
+                onPressIn={this.handlePressIn}
+                onPressOut={this.handlePressOut}
+            >
+                <Animated.View
+                    style={[
                         styles.base,
                         small ? styles.baseSmall : {},
                         primary ? styles.buttonPrimary : styles.buttonSecondary,
                         disabled ? styles.buttonDisabled : {},
                         loading ? styles.buttonLoading : {},
                         checkmark ? styles.buttonCheckmark : {},
+                        round ? styles.buttonRound : {},
+                        large ? styles.buttonLarge : {},
                         style,
                         {
-                            transform: [{scale: this.animatedValue}]
+                            transform: [{ scale: this.animatedValue }]
                         }
-                    ]}>
-                        <View style={styles.wrapper}>
-                            {loading && loadingView}
-                            {!loading && !checkmark && normalView}
-                            {checkmark && !loading && checkmarkView}
-                        </View>
-                    </Animated.View>
-                </TouchableWithoutFeedback>
-            )
-
+                    ]}
+                >
+                    <View style={styles.wrapper}>
+                        {loading && loadingView}
+                        {!loading && !checkmark && normalView}
+                        {checkmark && !loading && checkmarkView}
+                    </View>
+                </Animated.View>
+            </TouchableWithoutFeedback>
+        )
     }
-
 }
 
 Button.propTypes = {
@@ -105,7 +130,6 @@ Button.propTypes = {
     style: PropTypes.any
 }
 
-
 const styles = StyleSheet.create({
     base: {
         shadowColor: colors.lightShadow,
@@ -114,7 +138,7 @@ const styles = StyleSheet.create({
         shadowRadius: defaults.shadowRadius,
         borderRadius: 5,
         padding: 20,
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     baseSmall: {
         padding: 10
@@ -128,25 +152,31 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         textAlign: 'center',
-        fontWeight: '600',
+        fontWeight: '600'
     },
     textSmall: {
         fontSize: 18
     },
     textSecondary: {
-        color: colors.primary,
+        color: colors.primary
     },
     textPrimary: {
-        color: colors.white,
+        color: colors.white
     },
     buttonPrimary: {
-        backgroundColor: colors.primary,
+        backgroundColor: colors.primary
     },
     buttonSecondary: {
         backgroundColor: colors.white
     },
     buttonDisabled: {
-        backgroundColor: colors.lighterGray,
+        backgroundColor: colors.lighterGray
+    },
+    buttonRound: {
+        borderRadius: 100
+    },
+    buttonLarge: {
+        paddingHorizontal: 55
     },
     textDisabled: {
         color: colors.white
