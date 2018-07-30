@@ -33,7 +33,7 @@ class History extends Component {
 		super(props)
 		this.state = {
 			loading: false,
-			height: SCREEN_HEIGHT*3/5,
+			height: SCREEN_HEIGHT-280,
 		}
 	}
 
@@ -117,14 +117,12 @@ class History extends Component {
 				})}
 				{this.props.transactions.length == 0 && <View style={styles.noTransactions}>
 					<Text style={styles.noTransactionsText}>
-						Send or receive some bitcoin and it{"'"}ll show up here.
+						No transactions yet.{"\n"}
+						Here{"'"}s what it could look like...
 					</Text>
-					<View style={styles.noTransactionsBottom}>
-						<Text style={styles.noTransactionsBottomText}>
-							Send some bitcoin!
-						</Text>
-						<Image resizeMode="contain" style={styles.noTransactionsBottomImage} source={require("../../assets/images/downArrow.png")}/>
-					</View>
+					
+					<Image resizeMode="contain" style={styles.noTransactionsImage} source={require("../../assets/images/empty_state.png")}/>
+					
 				</View>}
 			</View>
 		)
@@ -134,33 +132,23 @@ class History extends Component {
 const styles = StyleSheet.create({
 	noTransactions: {
 		flexDirection: "column",
-		justifyContent: "space-between",
+		justifyContent: "flex-start",
 		alignItems: "center",
 		// backgroundColor: colors.gray,
 		flex: 1,
 	},
 	noTransactionsText: {
-		color: colors.gray,
+		color: colors.lightGray,
 		fontSize: 18,
 		fontWeight: "400",
+		lineHeight: 30,
 		textAlign: "center",
-		width: 200,
 		marginTop: 36,
 	},
-	noTransactionsBottom: {
-		flexDirection: "column",
-		alignItems: "center",
-	},
-	noTransactionsBottomText: {
-		color: colors.gray,
-		fontSize: 18,
-		fontWeight: "400",
-		textAlign: "center",
-	},
-	noTransactionsBottomImage: {
-		width: 12,
-		height: 24,
-		margin: 12,
+	noTransactionsImage: {
+		width: SCREEN_WIDTH - 40,
+		height: 200,
+		marginTop: 5,
 	},
 	history: {
 		padding: 20,

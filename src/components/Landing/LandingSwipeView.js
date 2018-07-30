@@ -127,11 +127,11 @@ class LandingSwipeView extends Component {
                         index={0}
                     />
                     <Screen
-                        text="Send money to anyone. Buy anything."
+                        text={`Send money to anyone.\nBuy anything.`}
                         index={1}
                     />
                     <Screen
-                        text="Bye, bye big banks. Hello Splash."
+                        text={`Bye, bye big banks.\nHello Splash.`}
                         index={2}
                     />
                 </Animated.ScrollView>

@@ -98,14 +98,14 @@ class Wallet extends Component {
 							</Text>
 						</Animated.View>
 					</TouchableWithoutFeedback>
-					<Button primary small title="Share" onPress={() => {
+					<Button small title="Share" onPress={() => {
 						Share.share({
 							title: `@${splashtag} bitcoin wallet`,
 							message: address
 						})
 					}} style={{
 						marginTop: 30,
-						width: SCREEN_WIDTH-80
+						width: 200
 					}}/>
 				</View>
 			</View>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		flexDirection: "column",
 		alignItems: "center",
-		justifyContent: "space-between",
+		justifyContent: "flex-start",
 	},
 	bodyTitleWrapper: {
 		width: "100%",
