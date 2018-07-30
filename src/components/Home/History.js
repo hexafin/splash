@@ -33,7 +33,7 @@ class History extends Component {
 		super(props)
 		this.state = {
 			loading: false,
-			height: 400,
+			height: SCREEN_HEIGHT*3/5,
 		}
 	}
 
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
 	},
 	history: {
 		padding: 20,
-		minHeight: SCREEN_HEIGHT,
 		// backgroundColor: colors.primary
 	},
 	sectionTitle: {
