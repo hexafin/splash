@@ -5,7 +5,7 @@ import LoadingCircle from "../universal/LoadingCircle"
 import Checkmark from "../universal/Checkmark"
 import TouchID from "react-native-touch-id"
 import Button from "../universal/Button"
-import { cryptoUnits } from '../../lib/cryptos'
+import { cryptoUnits, decimalToUnits, unitsToDecimal } from "../../lib/cryptos"
 import { BITCOIN_ERRORS } from '../../bitcoin-api'
 
 class ApproveTransactionModal extends Component {
@@ -28,10 +28,10 @@ class ApproveTransactionModal extends Component {
 		    exchangeRate
 		} = this.props
 
-	    const rate = parseFloat(exchangeRate).toFixed(2)
-	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : amount
-	
-		api.GetBitcoinFees({network: this.props.bitcoinNetwork, from: this.props.userBitcoinAddress, amtSatoshi: btcAmount*cryptoUnits.BTC}).then(feeSatoshi => {
+	    const rate = decimalToUnits(exchangeRate, 'USD')
+	    const satoshiAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits.BTC) : amount
+
+		api.GetBitcoinFees({network: this.props.bitcoinNetwork, from: this.props.userBitcoinAddress, amtSatoshi: satoshiAmount}).then(feeSatoshi => {
 			this.setState(prevState => {
 				return {
 					...prevState,
@@ -73,20 +73,22 @@ class ApproveTransactionModal extends Component {
 		    exchangeRate,
 		} = this.props
 
+	    const rate = decimalToUnits(exchangeRate, 'USD')
+	    const satoshiAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits.BTC) : amount
+	    const relativeAmount = (currency == 'USD') ? amount : Math.round((amount/cryptoUnits.BTC) * rate)
 
-	    const rate = parseFloat(exchangeRate).toFixed(2)
-	    const btcAmount = (currency == 'USD') ? (1.0*amount/parseFloat(exchangeRate)) : parseFloat(amount)
-
-		const fee = (1.0*this.state.feeSatoshi/cryptoUnits.BTC).toFixed(5)
-		const totalBtcAmount = (parseFloat(btcAmount)+parseFloat(fee)).toFixed(5)
-		const totalRelativeAmount = (1.0*totalBtcAmount*parseFloat(rate)).toFixed(2)
+	    let fee = 0
+	    if (this.state.feeSatoshi) {
+			fee = unitsToDecimal(this.state.feeSatoshi, 'BTC')
+	    }
+		const totalSatoshiAmount = satoshiAmount+this.state.feeSatoshi
+		const totalRelativeAmount = Math.round((totalSatoshiAmount/cryptoUnits.BTC) * rate)
 
 		const confirm = () => {
-			if (totalBtcAmount) {
-				const relativeAmount = (1.0*btcAmount*parseFloat(rate)).toFixed(2)
+			if (totalSatoshiAmount) {
 				TouchID.authenticate("Confirm Transaction").then(success => {
 					if (success) {
-						this.props.SendTransaction(address, btcAmount, this.state.feeSatoshi, relativeAmount, toId, toSplashtag)
+						this.props.SendTransaction(address, satoshiAmount, this.state.feeSatoshi, relativeAmount, toId, toSplashtag)
 							.then(() => this.props.dismiss(true))
 							.catch(error => {
 								if (error == BITCOIN_ERRORS.BALANCE) {
@@ -135,15 +137,15 @@ class ApproveTransactionModal extends Component {
 	                  </TouchableOpacity>
 	                </View>
 	                <View style={styles.information}>
-	                  <Text style={styles.exchangeText}>1 BTC = ${rate} USD</Text>
+	                  <Text style={styles.exchangeText}>1 BTC = ${unitsToDecimal(rate, 'USD')} USD</Text>
 	                  <View style={styles.amountBox}>
-	                    <Text style={styles.relativeText}>USD ${totalRelativeAmount}</Text>
-	                    <Text style={styles.amountText}>{totalBtcAmount} BTC</Text>
+	                    <Text style={styles.relativeText}>USD ${unitsToDecimal(totalRelativeAmount, 'USD')}</Text>
+	                    <Text style={styles.amountText}>{unitsToDecimal(totalSatoshiAmount, 'BTC')} BTC</Text>
 	                  </View>
 	                </View>
 	                <View style={styles.feeBox}>
 	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
-	                    <Text style={styles.description}>They receive —— {(btcAmount.toFixed(5))} BTC</Text>
+	                    <Text style={styles.description}>They receive —— {unitsToDecimal(satoshiAmount, 'BTC')} BTC</Text>
 	                </View>
 	                <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
 	                  <Button
@@ -179,7 +181,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
 	height: 20,
-	width: 20
+	width: 20,
+	margin: 8,
   },
   title: {
     fontSize: 20,

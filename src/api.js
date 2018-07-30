@@ -1,6 +1,6 @@
 import firebase from 'react-native-firebase'
 import moment from "moment"
-import {cryptoNames} from "./lib/cryptos"
+import {cryptoNames, cryptoUnits} from "./lib/cryptos"
 import { sendTransaction,
          getTransactionSize,
          BITCOIN_ERRORS,
@@ -203,15 +203,15 @@ function GetBitcoinFees({feeName="fastest", network="mainnet", from=null, amtSat
   })
 }
 
-function BuildBitcoinTransaction({from, to, privateKey, amtBTC, fee=null, network="testnet"}) {
+function BuildBitcoinTransaction({from, to, privateKey, amtSatoshi, fee=null, network="testnet"}) {
     return new Promise((resolve, reject) => {
       GetBitcoinAddressBalance(from, network).then((balanceBtc) => {
-          if (amtBTC < balanceBtc) {
+          if ((amtSatoshi/cryptoUnits.BTC) < balanceBtc) {
               sendTransaction({
                   from: from,
                   to: to,
                   privKeyWIF: privateKey,
-                  btc: amtBTC,
+                  satoshis: amtSatoshi,
                   fee: fee,
                   dryrun: false,
                   network: network,

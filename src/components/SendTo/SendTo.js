@@ -15,6 +15,7 @@ import {
 } from "react-native"
 import { defaults, icons } from "../../lib/styles"
 import { colors } from "../../lib/colors"
+import { unitsToDecimal } from "../../lib/cryptos"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import CloseButton from "../universal/CloseButton"
@@ -181,7 +182,7 @@ class SendTo extends Component {
 
 				<View style={styles.section}>
 					<Text style={styles.sectionLabel}>AMOUNT</Text>
-					<Text style={styles.amount}>{sendCurrency} {sendCurrency == "USD" && "$"}{sendAmount}{sendCurrency == "BTC"}</Text>
+					<Text style={styles.amount}>{sendCurrency} {sendCurrency == "USD" && "$"}{unitsToDecimal(sendAmount, sendCurrency)}</Text>
 				</View>
 
 				<InstantSearch {...algoliaKeys}>

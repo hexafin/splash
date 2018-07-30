@@ -18,7 +18,7 @@ import CloseButton from "../universal/CloseButton";
 import NextButton from "../universal/NextButton";
 import CurrencySwitcherLight from "../universal/CurrencySwitcherLight";
 import NavigatorService from "../../redux/navigator";
-import { cryptoTitleDict } from "../../lib/cryptos"
+import { cryptoTitleDict, cryptoUnits, decimalToUnits, unitsToDecimal } from "../../lib/cryptos"
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -27,7 +27,8 @@ class EnterAmount extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			amount: "",
+			value: "",
+			amount: 0,
 			decimal: false,
 			activeCurrency: 'USD',
 		}
@@ -39,13 +40,13 @@ class EnterAmount extends Component {
 
 	shouldComponentUpdate(nextProps, nextState) {
 
-		if (nextState.amount.length > 5) {
+		if (nextState.value.length > 5) {
 			Animated.timing(this.amountScale, {
-				toValue: 1 - (nextState.amount.length-5)*0.1,
+				toValue: 1 - (nextState.value.length-5)*0.1,
 				duration: 100,
 			}).start()
 		}
-		else if (nextState.amount.length <= 5 && this.state.amount.length > 5) {
+		else if (nextState.value.length <= 5 && this.state.value.length > 5) {
 			Animated.timing(this.amountScale, {
 				toValue: 1,
 				duration: 100,
@@ -55,15 +56,23 @@ class EnterAmount extends Component {
 		if (nextState.activeCurrency != this.state.activeCurrency) {
 			// update amount with exchange rate
 			let newAmount
-			if (this.state.amount != "") {
+			let newValue
+			if (typeof this.state.amount == "number" && this.state.amount > 0) {
+				const exchangeRate = decimalToUnits(this.props.exchangeRates.BTC.USD, 'USD')
 				newAmount = nextState.activeCurrency == "USD" 
-					? (parseFloat(this.state.amount) * this.props.exchangeRates.BTC.USD).toFixed(2).slice(0, 7)
-					: (parseFloat(this.state.amount) / this.props.exchangeRates.BTC.USD).toFixed(5).slice(0, 7)
+					? Math.round((this.state.amount/cryptoUnits.BTC) * exchangeRate)
+					: Math.round((this.state.amount/exchangeRate)*cryptoUnits.BTC)
+				newValue = unitsToDecimal(newAmount, nextState.activeCurrency)
+
 			}
 			else {
-				newAmount = ""
+				newAmount = 0
+				newValue = ""
 			}
-			this.setState({amount: newAmount.toString() })
+			this.setState({amount: newAmount, value: newValue })
+			return true
+		}
+		else if (nextState.value != this.state.value) {
 			return true
 		}
 		else if (nextState.amount != this.state.amount) {
@@ -80,9 +89,9 @@ class EnterAmount extends Component {
 			BTC: btcBalance.toFixed(5),
 			USD: (btcBalance * (this.props.exchangeRates.BTC ? this.props.exchangeRates.BTC.USD : 0)).toFixed(2)
 		}
-		const amountOverBalance = (this.state.activeCurrency == "USD" 
-			? balance.USD < parseFloat(this.state.amount)
-			: balance.BTC < parseFloat(this.state.amount))
+		const amountOverBalance = (this.state.activeCurrency == "USD") 
+			? balance.USD*cryptoUnits.USD <= this.state.amount
+			: balance.BTC*cryptoUnits.BTC <= this.state.amount
 		return (
 			<View style={styles.wrapper}>
 
@@ -93,7 +102,8 @@ class EnterAmount extends Component {
 				<View style={styles.bodyWrapper}>
 					<CurrencySwitcherLight
 						fiat="USD" 
-						crypto="BTC" 
+						crypto="BTC"
+						activeCurrency={this.state.activeCurrency}
 						textColor={colors.primary} 
 						switcherColor={"purple"}
 						textSize={16}
@@ -116,10 +126,10 @@ class EnterAmount extends Component {
 								</Text>}
 
 							<Text style={[styles.amount, {
-								opacity: this.state.amount == "" ? 0.8 : 1.0,
+								opacity: this.state.value == "" ? 0.8 : 1.0,
 								color: amountOverBalance ? colors.red : colors.primary,
 							}]}>
-								{this.state.amount == "" ? 0 : this.state.amount}
+								{this.state.value == "" ? 0 : this.state.value}
 							</Text>
 
 							{this.state.activeCurrency == "BTC" && 
@@ -145,53 +155,59 @@ class EnterAmount extends Component {
 					onChange={char => {
 						if (char == "delete") {
 							this.setState(prevState => {
-								const deletedChar = prevState.amount[prevState.amount.length-1]
+								const deletedChar = prevState.value[prevState.value.length-1]
+								const newValue = prevState.value.length > 0 ? prevState.value.slice(0, prevState.value.length-1) : ""
 								return {
 									...prevState,
-									amount: prevState.amount.length > 0 
-										? prevState.amount.slice(0, prevState.amount.length-1) : "",
+									value: newValue,
 									decimal: deletedChar == "." ? false : prevState.decimal,
+									amount: decimalToUnits(newValue, this.state.activeCurrency),
 								}
 							})
 						}
-						else if (this.state.amount.length >= 7) {
+						else if (this.state.value.length >= 8) {
 							return
 						}
 						else if (char == ".") {
 							this.setState(prevState => {
+								const newValue = prevState.decimal ? prevState.value : prevState.value + char
 								return {
 									...prevState,
 									decimal: true,
-									amount: prevState.decimal ? prevState.amount : prevState.amount + char
+									value: newValue,
+									amount: decimalToUnits(newValue, this.state.activeCurrency),
 								}
 							})
 						}
 						else {
 							this.setState(prevState => {
+								const newValue = prevState.value.length > 0 || char != "0"
+										? prevState.value + char : prevState.value
 								return {
 									...prevState,
-									amount: prevState.amount.length > 0 || char != "0"
-										? prevState.amount + char : prevState.amount
+									value: newValue,
+									amount: decimalToUnits(newValue, this.state.activeCurrency),
 								}
 							})
 						}
 					}}
 					decimal={true}
 					arrow={"purple"}
-					value={this.state.amount}
+					value={this.state.value}
 					delete={true}
 				/>
 
 				<NextButton
 					title="Choose recipient"
 					disabled={
-						this.state.amount.length == 0 
+						this.state.value.length == 0 
 						|| amountOverBalance 
-						|| this.state.amount == "." 
-						|| parseFloat(this.state.amount) == 0
+						|| this.state.value == "." 
+						|| parseFloat(this.state.value) == 0
+						|| (this.state.amount) == 0
 					}
 					onPress={() => {
-						this.props.enterAmount(this.state.activeCurrency, parseFloat(this.state.amount))
+						this.props.enterAmount(this.state.activeCurrency, this.state.amount)
 						this.props.navigation.navigate("SendTo")
 					}}/>
 

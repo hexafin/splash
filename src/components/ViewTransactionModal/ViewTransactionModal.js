@@ -13,7 +13,7 @@ import LoadingCircle from "../universal/LoadingCircle"
 import LetterCircle from "../universal/LetterCircle"
 import Button from "../universal/Button"
 import moment from "moment"
-import { cryptoUnits } from '../../lib/cryptos'
+import { cryptoUnits, decimalToUnits, unitsToDecimal } from '../../lib/cryptos'
 
 class ViewTransactionModal extends Component {
 
@@ -45,8 +45,11 @@ class ViewTransactionModal extends Component {
 	    const letter = (type == 'card') ? domain[0].toUpperCase() : null
 	    const domainCapitalized = (type == 'card') ? domain[0].toUpperCase() + domain.slice(1) : null
 	    const date = moment.unix(timestamp).format('LLL')
-	    const cryptoAmount = (type == 'card') ? amount/cryptoUnits.BTC : amount.subtotal/cryptoUnits.BTC
-	    const rate = (relativeCurrency !== null && typeof relativeCurrency !== 'undefined') ? parseFloat(1.0*relativeAmount/cryptoAmount).toFixed(2) : parseFloat(exchangeRate)
+	    const rate = decimalToUnits(exchangeRate, 'USD')
+	    const cryptoAmount = (type == 'card') ? amount/cryptoUnits.BTC : unitsToDecimal(amount.subtotal, 'BTC')
+	    let oldRelativeAmount = ''
+	    if (!!relativeCurrency) oldRelativeAmount =  unitsToDecimal(relativeAmount, 'USD')
+	    const currentRelativeAmount = unitsToDecimal(Math.round((amount.subtotal/cryptoUnits.BTC) * rate), 'USD')
 	    const infoMessage = (direction == 'from') ? 'Received from' : 'Sent to'
 
 		return (
@@ -61,8 +64,8 @@ class ViewTransactionModal extends Component {
                   </TouchableOpacity>
                 </View>
                 <View style={styles.amountBox}>
-                  <Text style={styles.relativeText}>USD ${parseFloat(rate*cryptoAmount).toFixed(2)}</Text>
-                  <Text style={styles.amountText}>{parseFloat(cryptoAmount).toFixed(5)} BTC</Text>
+                  <Text style={styles.relativeText}>USD ${currentRelativeAmount}</Text>
+                  <Text style={styles.amountText}>{cryptoAmount} BTC</Text>
                 </View>
                 {type == 'card' && <Text style={styles.subtitle}>Created on</Text>}
                 {type == 'blockchain' && <Text style={styles.subtitle}>{infoMessage}</Text>}
@@ -93,9 +96,9 @@ class ViewTransactionModal extends Component {
                     	</View>}
                 </View>
                 <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
-                <Text style={styles.dateText}>{(!!relativeCurrency) ? '$'+String(parseFloat(relativeAmount).toFixed(2))+' '+relativeCurrency+' on ': ''}{date}</Text>
+                <Text style={styles.dateText}>{(!!relativeCurrency) ? '$'+ oldRelativeAmount +' '+relativeCurrency+' on ': ''}{date}</Text>
                 <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Exchange rate used' : 'Current exchange rate'}</Text>
-                <Text style={styles.rateText}>1 Bitcoin = USD ${rate}</Text>
+                <Text style={styles.rateText}>1 Bitcoin = USD ${parseFloat(exchangeRate).toFixed(2)}</Text>
                 <Button primary={true} title={'Got it'} onPress={this.props.handleClose} />
 			</View>    							
 		);
