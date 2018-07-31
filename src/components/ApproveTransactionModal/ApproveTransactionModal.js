@@ -79,8 +79,10 @@ class ApproveTransactionModal extends Component {
 	    const relativeAmount = (currency == 'USD') ? amount : Math.round((amount/cryptoUnits.BTC) * rate)
 
 	    let fee = 0
+	    let relativeFee = 0
 	    if (this.state.feeSatoshi) {
 			fee = unitsToDecimal(this.state.feeSatoshi, 'BTC')
+			relativeFee = unitsToDecimal(Math.round((this.state.feeSatoshi/cryptoUnits.BTC) * rate), 'USD')
 	    }
 		const totalSatoshiAmount = satoshiAmount+this.state.feeSatoshi
 		const totalRelativeAmount = Math.round((totalSatoshiAmount/cryptoUnits.BTC) * rate)
@@ -151,8 +153,8 @@ class ApproveTransactionModal extends Component {
 	                  </View>
 	                </View>
 	                <View style={styles.feeBox}>
-	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC</Text>
-	                    <Text style={styles.description}>They receive —— {unitsToDecimal(satoshiAmount, 'BTC')} BTC</Text>
+	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC (${relativeFee})</Text>
+	                    <Text style={styles.description}>They receive —— {unitsToDecimal(satoshiAmount, 'BTC')} BTC (${unitsToDecimal(relativeAmount, 'USD')})</Text>
 	                </View>
 	                <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
 	                  <Button
