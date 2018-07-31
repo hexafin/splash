@@ -5,6 +5,7 @@ import {
 	Text,
 	StyleSheet,
 	Image,
+	ScrollView,
 	TouchableOpacity,
 	Dimensions
 } from "react-native";
@@ -91,7 +92,7 @@ const Account = ({splashtag, userId, logout, navigation, setBiometric, biometric
 					})
 				}
 				else {
-					Alert.alert("You must enable lockout for biometric security")
+					Alert.alert("You must set a PIN to enable biometric security")
 					setBiometric(false)
 				}
 			}
@@ -106,7 +107,7 @@ const Account = ({splashtag, userId, logout, navigation, setBiometric, biometric
 			}
 		}
 
-		const passcodeTitle = 'Lock your account'
+		const passcodeTitle = 'Set a PIN'
 		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
 		const networkTitle = 'Use bitcoin mainnet'
 		const networkDescription = 'On the mainnet your coins hold real value. If unselected your app will use testnet tokens.'
@@ -115,29 +116,31 @@ const Account = ({splashtag, userId, logout, navigation, setBiometric, biometric
 
 		return (
 			<View style={styles.container}>
-				<View style={styles.header}>
-					<Text style={styles.title}>@{splashtag}</Text>
-				</View>
-				<View style={styles.body}>
-					<View style={styles.section}>
-						<Text style={styles.accountText}>Your account</Text>
-						<Text style={styles.splashtagText}>Splashtag</Text>
-						<TouchableOpacity onPress={() => navigation.navigate("UpdateUsername")}>
-							<View pointerEvents='none'>
-								<Input editable={false} input={{value: splashtag}} />
-							</View>
-						</TouchableOpacity>
+				<ScrollView>
+					<View style={styles.header}>
+						<Text style={styles.title}>@{splashtag}</Text>
 					</View>
-					<View style={styles.section}>
-						<Text style={styles.sectionText}>Settings</Text>
-						<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(bitcoinNetwork == 'mainnet')}/>
-						<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
-						<Setting title={biometricTitle} description={biometricDescription} toggleCallback={handleBiometricSwitch} toggleState={biometricEnabled}/>
-						<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
-							<Text style={styles.logoutText}>Delete Account</Text>
-						</TouchableOpacity>
+					<View style={styles.body}>
+						<View style={styles.section}>
+							<Text style={styles.accountText}>Your account</Text>
+							<Text style={styles.splashtagText}>Splashtag</Text>
+							<TouchableOpacity onPress={() => navigation.navigate("UpdateUsername")}>
+								<View pointerEvents='none'>
+									<Input editable={false} input={{value: splashtag}} />
+								</View>
+							</TouchableOpacity>
+						</View>
+						<View style={styles.section}>
+							<Text style={styles.sectionText}>Settings</Text>
+							<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(bitcoinNetwork == 'mainnet')}/>
+							<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
+							<Setting title={biometricTitle} description={biometricDescription} toggleCallback={handleBiometricSwitch} toggleState={biometricEnabled}/>
+							<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
+								<Text style={styles.logoutText}>Delete Account</Text>
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
+				</ScrollView>
 			</View>
 		);
 }

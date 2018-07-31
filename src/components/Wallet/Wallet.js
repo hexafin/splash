@@ -5,6 +5,7 @@ import {
 	StyleSheet,
 	Image,
 	Share,
+	ScrollView,
 	Animated,
 	Clipboard,
 	TouchableWithoutFeedback,
@@ -64,50 +65,52 @@ class Wallet extends Component {
 
 		return (
 			<View style={styles.container}>
-				<View style={styles.header}>
-					<Text style={styles.title}>Your splash wallet</Text>
-				</View>
-				<View style={styles.body}>
-					<View style={styles.bodyTitleWrapper}>
-						<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
+				<ScrollView>
+					<View style={styles.header}>
+						<Text style={styles.title}>Your splash wallet</Text>
 					</View>
-					<TouchableWithoutFeedback
-						onPress={this.handleCopy}
-						onPressIn={() => {
-							Animated.spring(this.animatedAddressCopy, {
-								toValue: .8
-							}).start()
-						}}
-						onPressOut={() => {
-							Animated.spring(this.animatedAddressCopy, {
-								toValue: 1,
-								friction: 3,
-								tension: 40
-							}).start()
-						}}>
-						<Animated.View style={[styles.addressCopyWrapper, {
-							transform: [{scale: this.animatedAddressCopy}]
-						}]}>
-							<Image source={{uri: qrCode}} style={styles.qr}/>
-							<View style={styles.addressWrapper}>
-								<Text style={styles.addressText}>{address}</Text>
-							</View>
-							<Text style={styles.addressCopyText}>
-								{this.state.isCopying && "Copied!"}
-								{!this.state.isCopying && "Tap to copy"}
-							</Text>
-						</Animated.View>
-					</TouchableWithoutFeedback>
-					<Button small title="Share" onPress={() => {
-						Share.share({
-							title: `@${splashtag} bitcoin wallet`,
-							message: address
-						})
-					}} style={{
-						marginTop: 30,
-						width: 200
-					}}/>
-				</View>
+					<View style={styles.body}>
+						<View style={styles.bodyTitleWrapper}>
+							<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
+						</View>
+						<TouchableWithoutFeedback
+							onPress={this.handleCopy}
+							onPressIn={() => {
+								Animated.spring(this.animatedAddressCopy, {
+									toValue: .8
+								}).start()
+							}}
+							onPressOut={() => {
+								Animated.spring(this.animatedAddressCopy, {
+									toValue: 1,
+									friction: 3,
+									tension: 40
+								}).start()
+							}}>
+							<Animated.View style={[styles.addressCopyWrapper, {
+								transform: [{scale: this.animatedAddressCopy}]
+							}]}>
+								<Image source={{uri: qrCode}} style={styles.qr}/>
+								<View style={styles.addressWrapper}>
+									<Text style={styles.addressText}>{address}</Text>
+								</View>
+								<Text style={styles.addressCopyText}>
+									{this.state.isCopying && "Copied!"}
+									{!this.state.isCopying && "Tap to copy"}
+								</Text>
+							</Animated.View>
+						</TouchableWithoutFeedback>
+						<Button small title="Share" onPress={() => {
+							Share.share({
+								title: `@${splashtag} bitcoin wallet`,
+								message: address
+							})
+						}} style={{
+							marginTop: 30,
+							width: 200
+						}}/>
+					</View>
+				</ScrollView>
 			</View>
 		);
 	}
