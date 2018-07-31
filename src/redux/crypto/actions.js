@@ -141,6 +141,11 @@ export const OpenWallet = (currency) => {
 				let keychainData
 				try {
 					keychainData = JSON.parse(data.password)
+					if (typeof keychainData != 'object') {
+						keychainData = {
+							BTC: {}
+						}
+					}
 				} catch (e) {
 					keychainData = {
 						BTC: {}
