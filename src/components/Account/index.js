@@ -16,7 +16,7 @@ const showLockInfo = () => {
     modalType: 'INFO',
     modalProps: {
     	title: 'Set a Passcode',
-    	body: 'Set a four digit passcode to secure your Splash wallet. After closing the app for 5 minutes you will be asked to authenticate using the passcode or biometrics.',
+    	body: 'Set a four-digit passcode to secure your Splash wallet. After closing the app for 5 minutes you will be asked to authenticate using the passcode or biometrics.',
     },   
   }
 }
