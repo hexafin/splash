@@ -258,6 +258,13 @@ class SwipeApp extends Component {
 					await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
 				}
 			} else {
+				const doc = await firebase.firestore().collection('users').doc(this.props.userId).get()
+				if (!doc.data().pushToken) {
+					const fcmToken = await firebase.messaging().getToken()
+					if (fcmToken) {
+						await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+					}
+				}
 			    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(async (fcmToken) => {
 			        await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
 			    });
