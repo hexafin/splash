@@ -2,6 +2,7 @@ import EnterPhoneNumber from "./EnterPhoneNumber"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {SmsAuthenticate} from "../../redux/onboarding/actions"
+import {reset} from "redux-form"
 
 const mapStateToProps = (state) => {
 
@@ -24,7 +25,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        SmsAuthenticate
+        SmsAuthenticate,
+        reset,
     }, dispatch)
 }
 

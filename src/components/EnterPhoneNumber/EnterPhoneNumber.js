@@ -69,7 +69,7 @@ class EnterPhoneNumber extends Component {
                     your wallet
                 </Text>
 
-                <PhoneNumberInput autoFocus={true} callback={(phoneNumber) => {
+                <PhoneNumberInput number={this.state.phoneNumber.number} autoFocus={true} callback={(phoneNumber) => {
                         this.setState((prevState) => {
                             return {
                                 ...prevState,
@@ -118,6 +118,7 @@ class EnterPhoneNumber extends Component {
             <FlatBackButton onPress={() => {
                     // Keyboard.dismiss()
                     this.setState(this.initialState)
+                    this.props.reset("chooseSplashtag")
                     this.props.navigation.navigate("ChooseSplashtag")
                 }}/>
         </KeyboardAvoidingView>)
