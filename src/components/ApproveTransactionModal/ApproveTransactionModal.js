@@ -92,19 +92,19 @@ class ApproveTransactionModal extends Component {
 					if (error == BITCOIN_ERRORS.BALANCE) {
 						Alert.alert("Insufficient balance", null, [
 										{text: "Dismiss", onPress: () => {
-											this.props.dismiss()
+											this.props.dismiss(false)
 										}}
 									])
 					} else if (error == BITCOIN_ERRORS.UTXOS) {
 						Alert.alert("Insufficient available balance. Please wait for your transactions to be confirmed before sending more.", null, [
 										{text: "Dismiss", onPress: () => {
-											this.props.dismiss()
+											this.props.dismiss(false)
 										}}
 									])
 					} else if (error == BITCOIN_ERRORS.FEE) {
 						Alert.alert("Bitcoin fee is greater than balance. Try lowering the fee in settings.", null, [
 										{text: "Dismiss", onPress: () => {
-											this.props.dismiss()
+											this.props.dismiss(false)
 										}}
 									])
 					}
@@ -124,7 +124,7 @@ class ApproveTransactionModal extends Component {
 					TouchID.authenticate("Sign transaction biometrically").then(() => {
 						runTransaction()
 					}).catch(error => {
-						this.props.dismiss()
+						this.props.dismiss(false)
 					})
 				}
 				else {
