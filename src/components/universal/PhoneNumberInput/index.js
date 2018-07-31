@@ -543,6 +543,12 @@ class PhoneNumberInput extends Component {
         this.handleCountryClick = this.handleCountryClick.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.number != this.state.number) {
+            this.setState({number: nextProps.number})
+        }
+    }
+
     handleCountryChange(countryIndex) {
         const country = countryList[countryIndex];
 

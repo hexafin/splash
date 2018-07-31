@@ -71,6 +71,7 @@ class ApproveTransactionModal extends Component {
 			amount,
 			currency,
 		    exchangeRate,
+		    biometricEnabled,
 		} = this.props
 
 	    const rate = decimalToUnits(exchangeRate, 'USD')
@@ -84,45 +85,51 @@ class ApproveTransactionModal extends Component {
 		const totalSatoshiAmount = satoshiAmount+this.state.feeSatoshi
 		const totalRelativeAmount = Math.round((totalSatoshiAmount/cryptoUnits.BTC) * rate)
 
-		const confirm = () => {
-			if (totalSatoshiAmount) {
-				TouchID.authenticate("Confirm Transaction").then(success => {
-					if (success) {
-						this.props.SendTransaction(address, satoshiAmount, this.state.feeSatoshi, relativeAmount, toId, toSplashtag)
-							.then(() => this.props.dismiss(true))
-							.catch(error => {
-								if (error == BITCOIN_ERRORS.BALANCE) {
-									Alert.alert("Insufficient balance", null, [
-													{text: "Dismiss", onPress: () => {
-														this.props.dismiss()
-													}}
-												])
-								} else if (error == BITCOIN_ERRORS.UTXOS) {
-									Alert.alert("Insufficient available balance. Please wait for your transactions to be confirmed before sending more.", null, [
-													{text: "Dismiss", onPress: () => {
-														this.props.dismiss()
-													}}
-												])
-								} else if (error == BITCOIN_ERRORS.FEE) {
-									Alert.alert("Bitcoin fee is greater than balance. Try lowering the fee in settings.", null, [
-													{text: "Dismiss", onPress: () => {
-														this.props.dismiss()
-													}}
-												])
-								}
-							})
-
-						// 5 second timeout	
-						setTimeout(() => {
-							if (this.props.loading) {
-								this.props.showTimeoutModal()								
-							}
-						}, 5000)
+		const runTransaction = () => {
+			this.props.SendTransaction(address, satoshiAmount, this.state.feeSatoshi, relativeAmount, toId, toSplashtag)
+				.then(() => this.props.dismiss(true))
+				.catch(error => {
+					if (error == BITCOIN_ERRORS.BALANCE) {
+						Alert.alert("Insufficient balance", null, [
+										{text: "Dismiss", onPress: () => {
+											this.props.dismiss(false)
+										}}
+									])
+					} else if (error == BITCOIN_ERRORS.UTXOS) {
+						Alert.alert("Insufficient available balance. Please wait for your transactions to be confirmed before sending more.", null, [
+										{text: "Dismiss", onPress: () => {
+											this.props.dismiss(false)
+										}}
+									])
+					} else if (error == BITCOIN_ERRORS.FEE) {
+						Alert.alert("Bitcoin fee is greater than balance. Try lowering the fee in settings.", null, [
+										{text: "Dismiss", onPress: () => {
+											this.props.dismiss(false)
+										}}
+									])
 					}
 				})
-				.catch(error => {
-					console.log("TouchID Error:", error)
-				})
+
+			// 5 second timeout	
+			setTimeout(() => {
+				if (this.props.loading) {
+					this.props.showTimeoutModal()								
+				}
+			}, 5000)
+		}
+
+		const confirm = () => {
+			if (totalSatoshiAmount) {
+				if (biometricEnabled) {
+					TouchID.authenticate("Sign transaction biometrically").then(() => {
+						runTransaction()
+					}).catch(error => {
+						this.props.dismiss(false)
+					})
+				}
+				else {
+					runTransaction()
+				}
 			} else {
 				Alert.alert("Unable to calculate fee. Please try again")
 			}

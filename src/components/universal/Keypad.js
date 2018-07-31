@@ -27,7 +27,7 @@ class Keypad extends Component {
 	
 	  this.state = {
 	  	index: null,
-	  };
+	  }
 	  this.pressIn = this.pressIn.bind(this)
 	  this.pressOut = this.pressOut.bind(this)
 	  this.changeValue = this.changeValue.bind(this)
@@ -57,6 +57,9 @@ class Keypad extends Component {
 	}
 
 	render() {
+
+		const { style={} } = this.props
+
 		const buttonStyle = [styles.button, {backgroundColor: this.props.primaryColor}]
 		const textStyle = [styles.numberText, {color: this.props.textColor}]
 
@@ -74,7 +77,7 @@ class Keypad extends Component {
 		}
 
 		return (
-	    <View style={styles.container}>
+	    <View style={[styles.container, style]}>
 	    	<View style={styles.row}>
 	    		<TouchableWithoutFeedback onPress={() => this.changeValue('1')} onPressIn={() => this.pressIn(1)} onPressOut={() => this.pressOut(1)}>
 	    			<Animated.View style={[buttonStyle, buttonTransform(1)]}>

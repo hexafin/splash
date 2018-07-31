@@ -22,6 +22,7 @@ const mapStateToProps = (state) => {
       bitcoinNetwork: state.crypto.wallets.BTC.network,
       userBitcoinAddress: state.crypto.wallets.BTC.address,
       exchangeRate: state.crypto.exchangeRates.BTC.USD,
+      biometricEnabled: state.user.biometric,
     }
 }
 

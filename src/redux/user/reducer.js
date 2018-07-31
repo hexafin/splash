@@ -15,11 +15,18 @@ const initialState = {
 	lockoutEnabled: false,
 	lockoutDuration: 5,
 	lockoutTime: null,
-	id: null
+	id: null,
+	biometric: false,
 }
 
 export default function reducer(state = initialState, action) {
 	switch (action.type) {
+
+		case ActionTypes.SET_BIOMETRIC:
+			return {
+				...state,
+				biometric: action.enabled
+			}
 		
 		case ActionTypes.LOG_IN_INIT:
 			return {

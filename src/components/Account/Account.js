@@ -12,11 +12,13 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
+import { Sentry } from "react-native-sentry"
 import {Input} from "../universal/Input"
 import Setting from "./Setting"
+import TouchID from "react-native-touch-id"
 import api from '../../api'
 
-const Account = ({splashtag, userId, logout, navigation, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, bitcoinNetwork}) => {
+const Account = ({splashtag, userId, logout, navigation, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, bitcoinNetwork}) => {
 
 		const handleLogout = () => {
 			Alert.alert(
@@ -33,29 +35,30 @@ const Account = ({splashtag, userId, logout, navigation, resetTransactions, togg
 		}
 
 		const handleLockoutSwitch = (enabled) => {
-			console.log(enabled)
 			if (enabled) {
 				navigation.navigate('SetPasscode', {
 					successCallback: (newCode) => {
-
 						api.AddToKeychain(userId, 'passcode', newCode).then(() => {
 							navigation.navigate('SwipeApp')	
 							toggleLockout(enabled)
-						}).catch(e => console.log(e))
-
+						}).catch(e => {
+							Sentry.captureException(e)
+							Alert.alert("An error occurred. Please try again later.")
+						})
 					}
 				})
 			} else {
 				navigation.navigate("Unlock", {
 					closable: true,
 					successCallback: () => {
-
 						api.AddToKeychain(userId, 'passcode', '').then(() => {
-							console.log('made it', toggleLockout, enabled)
+							setBiometric(false)
 							navigation.navigate('SwipeApp')	
 							toggleLockout(enabled)
-						}).catch(e => console.log(e))
-
+						}).catch(e => {
+							Sentry.captureException(e)
+							Alert.alert("An error occurred. Please try again later.")
+						})
 					}
 				})
 			}
@@ -66,10 +69,49 @@ const Account = ({splashtag, userId, logout, navigation, resetTransactions, togg
 			ToggleNetwork()
 		}
 
+		const handleBiometricSwitch = (enabled) => {
+			if (enabled) {
+				if (lockoutEnabled) {
+					TouchID.authenticate("Secure account with biometric").then(success => {
+						if (success) {
+							navigation.navigate("Unlock", {
+								closable: true,
+								successCallback: () => {
+									setBiometric(true)
+									navigation.navigate("SwipeApp")
+								},
+								cancelCallback: () => {
+									setBiometric(false)
+								},
+							})
+						}
+						else {
+							setBiometric(false)
+						}
+					})
+				}
+				else {
+					Alert.alert("You must enable lockout for biometric security")
+					setBiometric(false)
+				}
+			}
+			else {
+				navigation.navigate("Unlock", {
+					closable: true,
+					successCallback: () => {
+						navigation.navigate("SwipeApp")
+						setBiometric(false)
+					}
+				})
+			}
+		}
+
 		const passcodeTitle = 'Lock your account'
 		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
 		const networkTitle = 'Use bitcoin mainnet'
 		const networkDescription = 'On the mainnet your coins hold real value. If unselected your app will use testnet tokens.'
+		const biometricTitle = "Use biometric security"
+		const biometricDescription = "Secure your account with Touch ID or Face ID."
 
 		return (
 			<View style={styles.container}>
@@ -88,8 +130,9 @@ const Account = ({splashtag, userId, logout, navigation, resetTransactions, togg
 					</View>
 					<View style={styles.section}>
 						<Text style={styles.sectionText}>Settings</Text>
-						<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
 						<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(bitcoinNetwork == 'mainnet')}/>
+						<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
+						<Setting title={biometricTitle} description={biometricDescription} toggleCallback={handleBiometricSwitch} toggleState={biometricEnabled}/>
 						<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
 							<Text style={styles.logoutText}>Delete Account</Text>
 						</TouchableOpacity>

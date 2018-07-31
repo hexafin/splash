@@ -27,19 +27,23 @@ class Unlock extends Component {
 		this.state = {
 			value: '',
 			passcode: null,
+			usePasscode: !this.props.biometricEnabled,
 		}
 		this.onChangeText = this.onChangeText.bind(this)
 		this.shakeAnimation = new Animated.Value(0)
 	}
 
 	componentDidMount() {
-		setTimeout(() => {
+		if (this.props.biometricEnabled) {
 			TouchID.authenticate("Login with biometric").then(success => {
 				if (success) {
 					this.props.navigation.state.params.successCallback()
 				}
+				else {
+					this.setState({usePasscode: true})
+				}
 			})
-		}, 1250)
+		}
 
 		Keychain.getGenericPassword().then(data => {
 			const passcode = JSON.parse(data.password).passcode
@@ -93,25 +97,36 @@ class Unlock extends Component {
 		return (
 			<LinearGradient colors={['#5759D5', '#4E50E6']} style={styles.container}>
 		        <View> 
-			        {closable && <TouchableOpacity style={styles.closeButton} onPress={() => this.props.navigation.goBack()}>
+			        {closable && <TouchableOpacity style={styles.closeButton} onPress={() => {
+			        	if (this.props.navigation.state.params.cancelCallback) {
+			        		this.props.navigation.state.params.cancelCallback()
+			        	}
+			        	this.props.navigation.goBack()
+			        }}>
 			          <Image style={styles.closeIcon} source={require('../../assets/icons/Xbutton.png')}/>
 			        </TouchableOpacity>}
 					<Image source={icons.whiteSplash} style={styles.splashLogo} resizeMode={'contain'}/>
 		        </View>
-				<Animated.View style={[styles.drops, shakeTransform]}>
+				{this.state.usePasscode && <Animated.View style={[styles.drops, shakeTransform]}>
 					{dropIcon(1)}
 					{dropIcon(2)}
 					{dropIcon(3)}
 					{dropIcon(4)}
-				</Animated.View>
-				<Keypad primaryColor={'#484AD4'}
+				</Animated.View>}
+				{this.state.usePasscode && <Keypad primaryColor={'#484AD4'}
 						pressColor={'#6466F6'}
 						textColor={'white'}
 						onChange={(char) => this.onChangeText(char)}
 						disabled={(this.state.value.length >= 4) ? true : false}
 						decimal={false}
 						delete={true}
-						arrow={'white'} />
+						arrow={'white'} 
+						style={{
+							position: "absolute",
+							width: SCREEN_WIDTH,
+							// backgroundColor: colors.gray,
+							bottom: isIphoneX() ? 40 : 20,
+						}}/>}
 				{/*<TouchableOpacity onPress={() => console.log('forgot')}>
 					<Text style={styles.forgotText}>Forgot?</Text>
 				</TouchableOpacity>*/}
@@ -125,7 +140,10 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingVertical: isIphoneX() ? 40 : 20,
 		flexDirection: "column",
-		justifyContent: "space-between",
+		justifyContent: "flex-start",
+		position: "relative",
+		width: SCREEN_WIDTH,
+		// backgroundColor: colors.gray,
 		paddingTop: isIphoneX() ? 75 : 55,
 	},
 	closeButton: {
@@ -140,13 +158,14 @@ const styles = StyleSheet.create({
 	splashLogo: {
 		height: 34,
 		width: 26,
-		alignSelf: 'center'
+		alignSelf: 'center',
 	},
 	drops: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingHorizontal: 105,
-		width: SCREEN_WIDTH
+		width: SCREEN_WIDTH,
+		paddingTop: 50,
 	},
 	drop: {
 		height: 15,
