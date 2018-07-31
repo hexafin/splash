@@ -51,7 +51,7 @@ class ApproveTransactionModal extends Component {
 			})			
 		}
 
-		if(nextProps.loading == false && this.state.wasLoading == true) {
+		if(nextProps.loading == false && this.state.wasLoading == true && !nextProps.error) {
 			this.setState(prevState => {
 				return {
 					...prevState,
@@ -96,7 +96,7 @@ class ApproveTransactionModal extends Component {
 										}}
 									])
 					} else if (error == BITCOIN_ERRORS.UTXOS) {
-						Alert.alert("Insufficient available balance. Please wait for your transactions to be confirmed before sending more.", null, [
+						Alert.alert("Sorry! We're waiting for Blockchain confirmations. Please try again later.", null, [
 										{text: "Dismiss", onPress: () => {
 											this.props.dismiss(false)
 										}}
@@ -161,7 +161,9 @@ class ApproveTransactionModal extends Component {
 	                  	loading={this.props.loading && !this.state.success}
 	                  	checkmark={this.state.success && !this.props.loading}
 	                  	checkmarkPersist={true}
-						checkmarkCallback={() => this.props.dismiss(true)}
+						checkmarkCallback={() => {
+							this.props.dismiss(true)
+						}}
 						disabled={(this.props.error != null) ? true : false}
 						title={"Send Transaction"} primary={true}/>
 				</View>

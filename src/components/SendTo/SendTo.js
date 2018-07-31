@@ -309,6 +309,7 @@ class SendTo extends Component {
 							},
 							dismissCallback: () => {
 								this.props.DismissTransaction()
+								this.props.screenProps.rootNavigation.goBack(null)
 							},
 						})
 					}}/>
