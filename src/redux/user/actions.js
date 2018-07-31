@@ -29,10 +29,15 @@ export const ActionTypes = {
 	START_LOCKOUT_CLOCK: 'START_LOCKOUT_CLOCK',
 	RESET_LOCKOUT_CLOCK: 'RESET_LOCKOUT_CLOCK',
 	TOGGLE_LOCKOUT: "TOGGLE_LOCKOUT",
+	SET_BIOMETRIC: "SET_BIOMETRIC"
 }
 
 export function logInInit() {
 	return { type: ActionTypes.LOG_IN_INIT }
+}
+
+export function setBiometric(enabled) {
+	return { type: ActionTypes.SET_BIOMETRIC, enabled }
 }
 
 export function logInSuccess(userId, entity) {

@@ -1,7 +1,7 @@
 import Account from "./Account"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import {resetUser, toggleLockout} from "../../redux/user/actions"
+import {resetUser, toggleLockout, setBiometric} from "../../redux/user/actions"
 import { ToggleNetwork } from '../../redux/crypto/actions'
 import {resetTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
@@ -31,6 +31,7 @@ const mapStateToProps = state => {
 		userId: state.user.id,
 		lockoutEnabled: state.user.lockoutEnabled,
 		bitcoinNetwork: network,
+		biometricEnabled: state.user.biometric,
 	}
 }
 
@@ -50,6 +51,7 @@ const mapDispatchToProps = dispatch => {
     	showLockInfo,
     	resetTransactions,
     	ToggleNetwork,
+    	setBiometric,
     }, dispatch)
 }
 
