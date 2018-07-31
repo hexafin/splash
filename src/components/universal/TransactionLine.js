@@ -29,7 +29,7 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 			<View style={styles.wrapper}>
 				<View style={[styles.letterPreview, (loading && {backgroundColor: '#EDEEF2'})]}>
 					{!isSplashtag && !currency && !loading && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
-					{currency=='BTC' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12}} resizeMode={"contain"}/>}
+					{currency=='BTC' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
 					{isSplashtag && !loading && <Image
 						style={styles.circleSplash} 
 						resizeMode="contain" 
