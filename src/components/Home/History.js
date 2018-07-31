@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 		marginTop: 36,
 	},
 	noTransactionsImage: {
-		width: SCREEN_WIDTH - 40,
+		width: SCREEN_WIDTH - 20,
 		height: 200,
 		marginTop: 5,
 	},
