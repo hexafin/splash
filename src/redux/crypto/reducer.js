@@ -12,7 +12,9 @@ const initialState = {
       network: '',
     }
   },
-  balance: {},
+  balance: {
+    BTC: 0,
+  },
   loadingBalanceCurrency: null,
   isLoadingBalance: false,
   successLoadingBalance: false,

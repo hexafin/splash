@@ -19,21 +19,7 @@ import Setting from "./Setting"
 import TouchID from "react-native-touch-id"
 import api from '../../api'
 
-const Account = ({splashtag, userId, logout, navigation, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, bitcoinNetwork}) => {
-
-		const handleLogout = () => {
-			Alert.alert(
-			  'Confirm Delete',
-			  'Are you sure you want to delete your account? Your funds will be irretrievable.',
-			  [
-			    {text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-			    {text: 'Yes', onPress: () => {
-			    	navigation.navigate("Landing")
-			    	logout(userId)
-			    }},
-			  ],
-			)
-		}
+const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, showDeleteModal, bitcoinNetwork}) => {
 
 		const handleLockoutSwitch = (enabled) => {
 			if (enabled) {
@@ -107,6 +93,13 @@ const Account = ({splashtag, userId, logout, navigation, setBiometric, biometric
 			}
 		}
 
+		const handleDelete = () => {
+			showDeleteModal(() => {
+				navigation.navigate("Landing")
+				deleteAccount()
+			})
+		}
+
 		const passcodeTitle = 'Set a PIN'
 		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
 		const networkTitle = 'Use bitcoin mainnet'
@@ -135,7 +128,7 @@ const Account = ({splashtag, userId, logout, navigation, setBiometric, biometric
 							<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(bitcoinNetwork == 'mainnet')}/>
 							<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
 							<Setting title={biometricTitle} description={biometricDescription} toggleCallback={handleBiometricSwitch} toggleState={biometricEnabled}/>
-							<TouchableOpacity style={{marginTop: 42}} onPress={handleLogout}>
+							<TouchableOpacity style={{marginTop: 42}} onPress={handleDelete}>
 								<Text style={styles.logoutText}>Delete Account</Text>
 							</TouchableOpacity>
 						</View>
