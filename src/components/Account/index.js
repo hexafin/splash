@@ -10,6 +10,18 @@ import NavigatorService from "../../redux/navigator"
 import api from '../../api'
 
 
+const deleteAccount = () => {
+	return (dispatch, getState) => {
+		const state = getState()
+		const userId = state.user.id
+		dispatch(resetUser())
+		dispatch(resetTransactions())
+		dispatch(resetOnboarding())
+		dispatch(resetCrypto())
+		api.DeleteAccount(userId)
+	}		
+}
+
 const showLockInfo = () => {
   return {
     type: 'SHOW_MODAL',
@@ -17,6 +29,17 @@ const showLockInfo = () => {
     modalProps: {
     	title: 'Set a Passcode',
     	body: 'Set a four-digit passcode to secure your Splash wallet. After closing the app for 5 minutes you will be asked to authenticate using the passcode or biometrics.',
+    },   
+  }
+}
+
+const showDeleteModal = (deleteCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'DELETE',
+    modalProps: {
+    	backgroundColor: 'red',
+    	deleteCallback: deleteCallback, 
     },   
   }
 }
@@ -37,18 +60,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-		logout: (userId) => {
-			return (dispatch, getState) => {
-				dispatch(resetUser())
-				dispatch(resetTransactions())
-				dispatch(resetOnboarding())
-				dispatch(resetCrypto())
-				NavigatorService.navigate("Landing")
-				api.DeleteAccount(userId)
-			}		
-		},
+    	deleteAccount,
     	toggleLockout,
     	showLockInfo,
+    	showDeleteModal,
     	resetTransactions,
     	ToggleNetwork,
     	setBiometric,

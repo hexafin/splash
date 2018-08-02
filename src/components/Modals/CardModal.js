@@ -136,11 +136,16 @@ const CardModal = Child => {
 
 		render() {
 
+			let backgroundColor = 'rgba(67,68,167,0.32)'
+			if (this.props.backgroundColor) {
+				backgroundColor = this.props.backgroundColor
+			}
+
 			return (
 			<TouchableWithoutFeedback onPress={this.handleClose} disabled={this.state.dismissed} pointerEvents={this.state.dismissed ? 'none' : 'auto'}>
 				<Animated.View pointerEvents={this.state.dismissed ? 'none' : 'auto'}
 							   style={[styles.container, {backgroundColor: this.opacityAnimation.interpolate(
-																									{inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', 'rgba(67,68,167,0.32)']}
+																									{inputRange: [0, 1], outputRange: ['rgba(0,0,0,0)', backgroundColor]}
 																									)}]}>
 						{!this.state.dismissed && <Animated.View 
 							{...this.PanResponder.panHandlers}

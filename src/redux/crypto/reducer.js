@@ -13,7 +13,7 @@ const initialState = {
     }
   },
   balance: {
-    BTC:
+    BTC: 0,
   },
   loadingBalanceCurrency: null,
   isLoadingBalance: false,
