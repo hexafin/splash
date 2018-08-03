@@ -33,12 +33,6 @@ class EnterPhoneNumber extends Component {
         this.state = this.initialState
     }
 
-    componentWillMount () {
-        if (this.props.splashtag == "") {
-            this.props.navigation.navigate("ChooseSplashtag")
-        }
-    }
-
     componentDidUpdate(prevProps) {
         if (this.props.smsError != prevProps.smsError && this.props.smsError) {
           Alert.alert('An error occurred!', 'Sorry about this. Our team has been notified and we should fix this shortly!', [
@@ -61,11 +55,11 @@ class EnterPhoneNumber extends Component {
 
                 <Text style={styles.title}>
                     Welcome,{"\n"}
-                    @{this.props.splashtag}
+                    {!!this.props.splashtag && '@' + this.props.splashtag}
                 </Text>
 
                 <Text style={styles.subtitle}>
-                    Verify your number to create{"\n"}
+                    Verify your number to {!!this.props.splashtag ? 'create' : 'recover'}{"\n"}
                     your wallet
                 </Text>
 

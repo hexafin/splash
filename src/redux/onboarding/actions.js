@@ -15,6 +15,10 @@ analytics.setAnalyticsCollectionEnabled(true);
 import NavigatorService from "../navigator";
 import * as Keychain from 'react-native-keychain';
 
+export const ONBOARDING_ERRORS = {
+	INVALID_LOGIN: 'INVALID_LOGIN',
+}
+
 export const SMS_AUTH_INIT = "SMS_AUTH_INIT";
 export function smsAuthInit(phoneNumber, countryName) {
 	return { type: SMS_AUTH_INIT, phoneNumber, countryName };
@@ -138,49 +142,62 @@ export const SignUp = user => {
 			const userId = user.uid
 
 			// user does not already exist, full signup
-			let splashtag = state.onboarding.splashtagOnHold
+			let splashtag = ''
 			const phoneNumber = state.onboarding.phoneNumber
 
-			if (typeof state.form.chooseSplashtag !== "undefined" && state.form.chooseSplashtag.values.splashtag) {
+			if (typeof state.form.chooseSplashtag !== "undefined" && typeof state.form.chooseSplashtag.values !== "undefined" && state.form.chooseSplashtag.values.splashtag) {
 				splashtag = state.form.chooseSplashtag.values.splashtag
+			} else if (state.onboarding.splashtagOnHold) {
+				splashtag = state.onboarding.splashtagOnHold
 			}
 
 			// check if user already exists
 			let userRef = firestore.collection("users").doc(userId)
 			userRef.get().then(userDoc => {
-				api.UsernameExists(splashtag).then(data => {
+				if (splashtag) {
+					// create / overwrite firebase entity
+					api.UsernameExists(splashtag).then(data => {
 
-					if (data.available) {
+						if (data.available) {
 
-						const entity = {
-							splashtag: splashtag.toLowerCase(),
-							phoneNumber,
-				            defaultCurrency: "USD"
-						}
-						userRef.set(entity).then(() => {
-							api.DeleteTransactions(userId).then(() => {
-								dispatch(signUpSuccess())
-								resolve(userId)
+							const entity = {
+								splashtag: splashtag.toLowerCase(),
+								phoneNumber,
+					            defaultCurrency: "USD"
+							}
+							userRef.set(entity).then(() => {
+								api.DeleteTransactions(userId).then(() => {
+									dispatch(signUpSuccess())
+									resolve(userId)
+								}).catch(error => {
+									Sentry.captureMessage(error)
+									dispatch(signUpFailure(error))
+									reject(error)
+								})
 							}).catch(error => {
 								Sentry.captureMessage(error)
 								dispatch(signUpFailure(error))
 								reject(error)
 							})
-						}).catch(error => {
+
+						}
+						else {
+							// username already taken
+							const error = "Username already taken"
 							Sentry.captureMessage(error)
 							dispatch(signUpFailure(error))
 							reject(error)
-						})
-
-					}
-					else {
-						// username already taken
-						const error = "Username already taken"
-						Sentry.captureMessage(error)
-						dispatch(signUpFailure(error))
-						reject(error)
-					}
-				})
+						}
+					})
+				} else if (userDoc.exists && phoneNumber == userDoc.data().phoneNumber) {
+					// login using existing data
+					dispatch(signUpSuccess())
+					resolve(userId)
+				} else {
+					// invalid login... no user
+					dispatch(signUpFailure(ONBOARDING_ERRORS.INVALID_LOGIN))
+					reject(ONBOARDING_ERRORS.INVALID_LOGIN)
+				}
 			}).catch(error => {
 				Sentry.captureMessage(error)
 				dispatch(signUpFailure(error))

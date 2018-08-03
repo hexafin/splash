@@ -137,17 +137,19 @@ const styles = StyleSheet.create({
         shadowOpacity: defaults.shadowOpacity,
         shadowRadius: defaults.shadowRadius,
         borderRadius: 5,
-        padding: 20,
+        height: 60,
+        paddingHorizontal: 20,
         justifyContent: 'center'
     },
     baseSmall: {
-        padding: 10
+        height: 40,
+        paddingHorizontal: 10
     },
     buttonLoading: {
-        padding: 16
+        paddingHorizontal: 16
     },
     buttonCheckmark: {
-        padding: 25
+        paddingHorizontal: 25
     },
     text: {
         fontSize: 20,
