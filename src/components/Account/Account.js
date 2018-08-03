@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
 	logoutText: {
 		fontSize: 17,
 		fontWeight: "700",
-		color: '#3F41FA',
+		color: 'red',
 		alignSelf: 'center',
 		backgroundColor: 'rgba(0,0,0,0)'
 	}

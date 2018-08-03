@@ -145,6 +145,13 @@ class LandingSwipeView extends Component {
                         large
                         title="Get your wallet"
                     />
+                    <TouchableOpacity onPress={() => 
+                        {this.props.navigation.navigate('EnterPhoneNumber')}
+                    }>
+                        <Text style={styles.recoverText}>
+                            Or, recover your Splash wallet
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </Animated.View>
         )
@@ -194,7 +201,7 @@ const styles = StyleSheet.create({
         left: 50
     },
     button: {
-        marginBottom: isIphoneX() ? SCREEN_HEIGHT * 0.1 : SCREEN_HEIGHT * 0.05,
+        marginBottom: isIphoneX() ? SCREEN_HEIGHT * 0.075 : SCREEN_HEIGHT * 0.025,
         alignItems: 'center'
     },
     dot: {
@@ -203,6 +210,12 @@ const styles = StyleSheet.create({
         width: 15,
         borderRadius: 100,
         marginRight: 15
+    },
+    recoverText: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: 'white',
+        paddingTop: 20,
     }
 })
 

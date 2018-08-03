@@ -62,6 +62,9 @@ class History extends Component {
 		else if (nextProps.transactions.length != this.props.transactions.length) {
 			return true
 		}
+		else if (nextProps.bitcoinNetwork != this.props.bitcoinNetwork) {
+			return true
+		}
 		else {
 			return false
 		}
@@ -83,7 +86,12 @@ class History extends Component {
 				minHeight: this.state.height,
 				paddingBottom: this.props.transactions.length == 0 ? 20 : isIphoneX() ? 140 : 120,
 			}]} onLayout={event => this.dynamicHeight(event, "height")}>
-				<Text style={styles.sectionTitle}>Your history</Text>
+				<View style={styles.sectionHeader}>
+					<Text style={styles.sectionTitle}>Your history</Text>
+					{this.props.bitcoinNetwork == 'testnet' && <View style={styles.testnetBox}>
+																	<Text style={styles.testnetText}>Testnet</Text>
+																</View>}
+				</View>
 				{this.props.transactions.map(transaction => {
 					const satoshiAmount = transaction.type == 'card' ? transaction.amount : transaction.amount.subtotal
 					let amount
@@ -154,6 +162,24 @@ const styles = StyleSheet.create({
 		padding: 20,
 		// backgroundColor: colors.primary
 	},
+	sectionHeader: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	testnetBox: {
+		backgroundColor: colors.lighterGray,
+		paddingHorizontal: 15,
+		paddingVertical: 2,
+		borderRadius: 10,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	testnetText: {
+		color: colors.white,
+		fontSize: 16,
+		fontWeight: "600"
+	},
 	sectionTitle: {
 		color: colors.primaryDarkText,
 		fontSize: 20,
@@ -169,6 +195,7 @@ const mapStateToProps = state => {
 		isLoadingTransactions: state.transactions.isLoadingTransactions,
 		isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
 		bitcoinAddress: state.crypto.wallets.BTC.address,
+		bitcoinNetwork: state.crypto.wallets.BTC.network,
 	}
 }
 

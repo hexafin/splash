@@ -14,6 +14,7 @@ import {defaults, icons} from "../../lib/styles"
 import FlatBackButton from "../universal/FlatBackButton"
 import Button from "../universal/Button"
 import NumericCodeInput from "../universal/NumericCodeInput"
+import { ONBOARDING_ERRORS } from "../../redux/onboarding/actions";
 
 class VerifyPhoneNumber extends Component {
 
@@ -57,7 +58,12 @@ class VerifyPhoneNumber extends Component {
             }).catch(error => {
                 console.log(error)
                 this.setState(this.initialState)
-                Alert.alert("An error occurred while signing up. Please try again later")
+                if (error == ONBOARDING_ERRORS.INVALID_LOGIN) {
+                    Alert.alert("No account found. Please create a wallet")
+                    this.props.navigation.navigate('Landing')
+                } else {
+                    Alert.alert("An error occurred while signing up. Please try again later")
+                }
             })
         }).catch(error => {
             this.setState(this.initialState)
