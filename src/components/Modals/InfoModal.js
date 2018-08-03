@@ -8,18 +8,23 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors"
 import { icons, defaults } from "../../lib/styles";
+import Button from '../universal/Button'
 
-const InfoModal = ({title, body, handleClose}) => {
+const InfoModal = ({title, body, handleClose, buttonTitle, buttonCallback}) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
-			  <View />
+			  <View style={styles.closeButton} />
               <Text style={styles.title}>{title}</Text>
 	          <TouchableOpacity onPress={handleClose}>
 	            <Image style={styles.closeButton} source={require('../../assets/icons/Xbutton.png')}/>
 	          </TouchableOpacity>
 	        </View>
 	        <Text style={styles.content}>{body}</Text>
+	        {buttonTitle && buttonCallback && <Button style={styles.button} title={buttonTitle} primary={true} onPress={() => {
+	        	buttonCallback()
+	        	handleClose()
+	        }}/>}
 		</View>    							
 	);
 }
@@ -41,10 +46,9 @@ const styles = StyleSheet.create({
 	    fontSize: 20,
 	    fontWeight: "600",
 	    color: colors.nearBlack,
-	    alignSelf: 'center'
+		textAlign: 'center',
 	},
 	closeButton: {
-	    alignSelf: 'center',
 		height: 20,
 		width: 20,
 		margin: 8,
@@ -54,5 +58,9 @@ const styles = StyleSheet.create({
 		color: colors.nearBlack,
 		textAlign: 'center',
 		alignSelf: 'center'
+	},
+	button: {
+		marginTop: 20,
+		marginHorizontal: 10,
 	}
 });
