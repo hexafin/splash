@@ -19,7 +19,7 @@ import Setting from "./Setting"
 import TouchID from "react-native-touch-id"
 import api from '../../api'
 
-const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, showDeleteModal, bitcoinNetwork}) => {
+const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, showMainnetInfo, showDeleteModal, bitcoinNetwork}) => {
 
 		const handleLockoutSwitch = (enabled) => {
 			if (enabled) {
@@ -52,8 +52,15 @@ const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, bi
 		}
 
 		const handleNetworkSwitch = () => {
-			resetTransactions()
-			ToggleNetwork()
+			if (bitcoinNetwork == 'testnet') {
+				showMainnetInfo(() => {
+					resetTransactions()
+					ToggleNetwork()
+				})
+			} else {
+				resetTransactions()
+				ToggleNetwork()
+			}
 		}
 
 		const handleBiometricSwitch = (enabled) => {

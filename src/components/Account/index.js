@@ -27,8 +27,21 @@ const showLockInfo = () => {
     type: 'SHOW_MODAL',
     modalType: 'INFO',
     modalProps: {
-    	title: 'Set a Passcode',
-    	body: 'Set a four-digit passcode to secure your Splash wallet. After closing the app for 5 minutes you will be asked to authenticate using the passcode or biometrics.',
+        title: 'Set a Passcode',
+        body: 'Set a four-digit passcode to secure your Splash wallet. After closing the app for 5 minutes you will be asked to authenticate using the passcode or biometrics.',
+    },   
+  }
+}
+
+const showMainnetInfo = (buttonCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Mainnet Beta',
+        body: 'Splash mainnet is currently in Beta and undergoing security testing. We invite you try it out and please let us know if you encounter any problems.',
+        buttonTitle: 'Let\'s do it',
+        buttonCallback: buttonCallback,
     },   
   }
 }
@@ -63,6 +76,7 @@ const mapDispatchToProps = dispatch => {
     	deleteAccount,
     	toggleLockout,
     	showLockInfo,
+        showMainnetInfo,
     	showDeleteModal,
     	resetTransactions,
     	ToggleNetwork,
