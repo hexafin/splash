@@ -10,7 +10,8 @@ import {
 	Animated,
 	StyleSheet,
 	TouchableWithoutFeedback,
-	AppState
+	AppState,
+	Platform,
 } from "react-native"
 import firebase from "react-native-firebase"
 import { Sentry } from "react-native-sentry";
@@ -411,7 +412,7 @@ class SwipeApp extends Component {
 				<Animated.Image
 					pointerEvents={"none"}
 					source={require("../../assets/images/headerWave.png")}
-					resizeMode="contain"
+					resizeMode={Platform.isPad ? "cover" : "contain"}
 					style={[headerTransform(), styles.headerImage]}/>
 				
 				{Icons}
@@ -439,8 +440,8 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 		overflow: "visible",
 		marginBottom: 15,
-		paddingLeft: 20,
-		paddingRight: 20,
+		paddingLeft: Platform.isPad ? 0 : 20,
+		paddingRight: Platform.isPad ? 0 : 20,
 		shadowOffset: {
 			width: 0,
 			height: 5
@@ -457,7 +458,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.primary
 	},
 	headerImage: {
-		top: SCREEN_WIDTH*-0.6,
+		top: Platform.isPad ? SCREEN_WIDTH*-0.5 : SCREEN_WIDTH*-0.6,
 		width: SCREEN_WIDTH,
 		position: "absolute",
 		shadowOffset: {
