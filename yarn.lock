@@ -5687,6 +5687,10 @@ react-native-code-push@^5.3.4:
     plist "1.2.0"
     xcode "0.9.2"
 
+react-native-contacts@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-2.2.2.tgz#8bfec0a82bce3c24847ed69419ebc0ba8d7defee"
+
 react-native-crypto@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/react-native-crypto/-/react-native-crypto-2.1.2.tgz#cfe68cad51cd1f73a4202b7ac164f96c1144cb2a"

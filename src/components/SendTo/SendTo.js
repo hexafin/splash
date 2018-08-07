@@ -31,6 +31,8 @@ import { InstantSearch } from 'react-instantsearch/native';
 import SearchBox from "./SearchBox"
 import api from "../../api"
 import firebase from "react-native-firebase";
+import Contacts from 'react-native-contacts';
+import moment from "moment"
 let firestore = firebase.firestore();
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -104,6 +106,9 @@ class SendTo extends Component {
 		else if (nextState.selectedId != this.state.selectedId) {
 			return true
 		}
+		else if (nextProps.contacts != this.props.contacts) {
+			return true
+		}
 		else {
 			return false
 		}
@@ -111,6 +116,26 @@ class SendTo extends Component {
 
 	componentWillMount() {
 		this.yOffset = new Animated.Value(0)
+	}
+
+	componentDidMount() {
+		Contacts.checkPermission((err, permission) => {
+		  if (err) throw err;
+		  if (permission === 'undefined') {
+		  	console.log('undefined')
+		    Contacts.requestPermission((err, permission) => {
+		      if (err) throw err;
+		      if (permission === 'authorized') this.props.LoadContacts()
+		    })
+		  }
+		  if (permission === 'authorized' && (this.props.contacts.length == 0 || moment().unix() >= this.props.checkContactsTime)) {
+		    this.props.LoadContacts()
+		  }
+		  if (permission === 'denied') {
+		  	console.log('denied')
+		  	// TODO : prompt to change in settings page
+		  }
+		})
 	}
 
 	getUserFromAddress(address) {
@@ -146,6 +171,7 @@ class SendTo extends Component {
 			bitcoinAddress,
 			showApproveModal,
 			LoadTransactions,
+			contacts,
 		} = this.props
 
 		const animatedHeader = {
@@ -272,11 +298,11 @@ class SendTo extends Component {
 							extraContent="From Text Entry"/>
 					</View>}
 
-					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "") && <View style={styles.section}>
+					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "" || contacts.length == 0) && <View style={styles.section}>
 						<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
 					</View>}
 
-					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "") && <View style={styles.hits}>
+					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "" || contacts.length == 0) && <View style={styles.hits}>
 						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
 							// user selected contact from algolia query
 							const selectedId = item.objectID

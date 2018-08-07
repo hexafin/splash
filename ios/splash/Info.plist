@@ -66,6 +66,8 @@
 	<string>$(PRODUCT_NAME) calendar use.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Use your camera to scan a QR code</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Find Splash users in your contacts by phone number.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Secure your private keys with Face ID</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -84,6 +86,10 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>UIStatusBarHidden~ipad</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
