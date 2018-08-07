@@ -87,13 +87,13 @@ class LandingSwipeView extends Component {
                     ]}
                 >
                     {i == 0 && (
-                        <Image source={image1} style={styles.imageStyle} />
+                        <Image source={image1} style={styles.imageStyle} resizeMode={'contain'}/>
                     )}
                     {i == 1 && (
-                        <Image source={image2} style={styles.imageStyle} />
+                        <Image source={image2} style={styles.imageStyle} resizeMode={'contain'}/>
                     )}
                     {i == 2 && (
-                        <Image source={image3} style={styles.imageStyle} />
+                        <Image source={image3} style={styles.imageStyle} resizeMode={'contain'}/>
                     )}
                 </Animated.View>
             )
@@ -183,14 +183,13 @@ const styles = StyleSheet.create({
         zIndex: 0,
         bottom: 0,
         flex: 1,
-        backgroundColor: 'yellow'
     },
     image: {
         position: 'absolute',
         bottom: 0
     },
     imageStyle: {
-        height: SCREEN_HEIGHT - SCREEN_HEIGHT * 0.211,
+        height: SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.211),
         width: SCREEN_WIDTH,
         bottom: isIphoneX() ? 0 : -20,
         right: 0

@@ -1,6 +1,6 @@
 {
   "name": "splash",
-  "version": "0.5",
+  "version": "0.6.0",
   "private": true,
   "devDependencies": {
     "babel-jest": "22.0.6",
