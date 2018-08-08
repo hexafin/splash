@@ -177,7 +177,7 @@ export const LoadContacts = () => {
 								const newContact = {
 									splashtag: data.splashtag,
 									phoneNumber: data.phoneNumber,
-									ObjectID: uid,
+									objectID: uid,
 									wallets: data.wallets,
 								}
 								friends.push(newContact)

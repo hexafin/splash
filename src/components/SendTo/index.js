@@ -5,6 +5,21 @@ import {showApproveModal} from "../../redux/modal"
 import {LoadTransactions, DismissTransaction} from "../../redux/transactions/actions"
 import {LoadContacts} from '../../redux/user/actions'
 
+
+const addContactsInfo = (buttonCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Add Contacts',
+        body: 'Give Splash permission to access your contacts, so that we can connect you with new Splash users.',
+        buttonTitle: 'Will do',
+        buttonCallback: buttonCallback,
+    },   
+  }
+}
+
+
 const mapStateToProps = (state) => {
     return {
     	sendCurrency: state.payFlow.currency,
@@ -24,7 +39,8 @@ const mapDispatchToProps = (dispatch) => {
     	showApproveModal,
         LoadTransactions,
         LoadContacts,
-        DismissTransaction
+        DismissTransaction,
+        addContactsInfo
     }, dispatch)
 }
 

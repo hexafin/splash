@@ -9,7 +9,7 @@ import {
 import SendLineItem from "./SendLineItem"
 import { colors } from "../../lib/colors"
 
-const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, selectedId }) => {
+const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, contacts, selectedId }) => {
 
   /* if there are still results, you can
   call the refine function to load more */
@@ -18,10 +18,26 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, sel
       refine();
     }
   };
+
+  const contactIds = contacts.map(a => a.objectID);
+
+  // show contacts first
+  const sortResults = () => {
+  	if (contacts.length > 0) {
+  		return hits.sort((a, b) => {
+  			if (contactIds.includes(a.objectID)) return -1
+  			if (contactIds.includes(b.objectID)) return 1
+  			return 0
+  		})
+  	} else {
+  		return hits
+  	}
+  }
+
   if (hits.length != 0) {
 	  return (
 		    <FlatList
-		      data={hits}
+		      data={sortResults()}
 		      contentContainerStyle={styles.wrapper}
 		      onEndReached={onEndReached}
 		      keyExtractor={(item, index) => item.objectID}
@@ -31,7 +47,7 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, sel
 			          <SendLineItem
 			            title={`@${item.splashtag}`}
 			            selected={item.objectID == selectedId}
-			            subtitle={"Valid Address"}
+			            subtitle={(contactIds.includes(item.objectID)) ? "Your Contact" : "Valid Address"}
 			            onPress={() => callback(item)}/>
 			        )
 		      	}

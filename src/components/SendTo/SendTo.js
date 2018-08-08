@@ -4,6 +4,7 @@ import {
 	Dimensions,
 	TouchableWithoutFeedback,
 	View,
+	FlatList,
 	Text,
 	Alert,
 	Keyboard,
@@ -19,6 +20,7 @@ import { unitsToDecimal } from "../../lib/cryptos"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import CloseButton from "../universal/CloseButton"
+import Button from "../universal/Button"
 import FlatBackButton from "../universal/FlatBackButton"
 import NavigatorService from "../../redux/navigator";
 import SendButton from "./SendButton"
@@ -31,6 +33,7 @@ import { InstantSearch } from 'react-instantsearch/native';
 import SearchBox from "./SearchBox"
 import api from "../../api"
 import firebase from "react-native-firebase";
+import Permissions from 'react-native-permissions'
 import Contacts from 'react-native-contacts';
 import moment from "moment"
 let firestore = firebase.firestore();
@@ -53,6 +56,7 @@ class SendTo extends Component {
 			selectedAddress: null,
 			selectedSplashtag: null,
 			typedAddress: null,
+			askPermission: false,
 		}
 		this.getUserFromAddress = this.getUserFromAddress.bind(this)
 	}
@@ -97,13 +101,10 @@ class SendTo extends Component {
 		if (nextState.value != this.state.value) {
 			return true
 		}
-		else if (nextState.typedAddress != this.state.typedAddress) {
+		else if (nextState.typedAddress != this.state.typedAddress || nextState.selectedId != this.state.selectedId || nextState.askPermission != this.state.askPermission) {
 			return true
 		}
 		else if (nextState.userFromAddress != this.state.userFromAddress && nextState.userFromAddress != null) {
-			return true
-		}
-		else if (nextState.selectedId != this.state.selectedId) {
 			return true
 		}
 		else if (nextProps.contacts != this.props.contacts) {
@@ -119,21 +120,38 @@ class SendTo extends Component {
 	}
 
 	componentDidMount() {
+		let contacts = []
+		if (typeof this.props.contacts != 'undefined') contacts = this.props.contacts
+
 		Contacts.checkPermission((err, permission) => {
 		  if (err) throw err;
 		  if (permission === 'undefined') {
-		  	console.log('undefined')
 		    Contacts.requestPermission((err, permission) => {
 		      if (err) throw err;
-		      if (permission === 'authorized') this.props.LoadContacts()
+		      if (permission === 'authorized') {
+		      	this.props.LoadContacts()
+		      	this.setState({askPermission: false})
+		      }
+			  if (permission === 'denied') {
+			  	if(Permissions.canOpenSettings()) {
+			  		this.setState({askPermission: true})
+			  	} else {
+			  		this.setState({askPermission: false})
+			  	}
+			  }
 		    })
 		  }
-		  if (permission === 'authorized' && (this.props.contacts.length == 0 || moment().unix() >= this.props.checkContactsTime)) {
+		  // if permission is authorized and there are either no contacts or it is time to check again (one day has passed)
+		  if (permission === 'authorized' && (contacts.length == 0 || moment().unix() >= this.props.checkContactsTime)) {
 		    this.props.LoadContacts()
+		    this.setState({askPermission: false})
 		  }
 		  if (permission === 'denied') {
-		  	console.log('denied')
-		  	// TODO : prompt to change in settings page
+		  	if(Permissions.canOpenSettings()) {
+		  		this.setState({askPermission: true})
+		  	} else {
+		  		this.setState({askPermission: false})
+		  	}
 		  }
 		})
 	}
@@ -171,8 +189,12 @@ class SendTo extends Component {
 			bitcoinAddress,
 			showApproveModal,
 			LoadTransactions,
-			contacts,
 		} = this.props
+
+		let contacts = []
+		if (typeof this.props.contacts != 'undefined') contacts = this.props.contacts
+
+		const isAddressEntered = (this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress)
 
 		const animatedHeader = {
 			transform: [
@@ -191,156 +213,189 @@ class SendTo extends Component {
 		}
 
 		return (
-			<View style={styles.wrapper}>
-
-				<CloseButton color="dark" onPress={() => {
-					Keyboard.dismiss()
-					this.props.screenProps.rootNavigation.goBack(null)
-				}}/>
-				<FlatBackButton color="dark" onPress={() => {
-					Keyboard.dismiss()
-					this.props.navigation.goBack(null)
-				}}/>
-
-				<View style={styles.header} pointerEvents="none">
-					<Text style={styles.title}>Sending Bitcoin</Text>
-				</View>
-
-				<View style={styles.section}>
-					<Text style={styles.sectionLabel}>AMOUNT</Text>
-					<Text style={styles.amount}>{sendCurrency} {sendCurrency == "USD" && "$"}{unitsToDecimal(sendAmount, sendCurrency)}</Text>
-				</View>
-
-				<InstantSearch {...algoliaKeys}>
-
-					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress) && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>SEARCH</Text>
-						<SearchBox onChange={value => {
-							this.setState({value, selectedId: null})
-						}}/>
-					</View>}
-
-					{(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress) && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>ADDRESS</Text>
-						<View style={styles.inputWrapper}>
-							<TextInput
-								onChangeText={value => {
-									this.setState({value: "", pastedAddress: false, capturedQr: false, userFromAddress: null})
-								}}
-							    value={this.state.value}
-								style={styles.input}/>
-				        </View>
-					</View>}
-
-					<Animated.View style={[styles.sendButtons, animatedSendButtons]}>
-						<SendButton
-							image={icons.copyPaste} 
-							title={"Paste\naddress"}
-							onPress={() => {
-								Clipboard.getString().then(address => {
-									if (bitcoinAddress == address) {
-										Alert.alert("You cannot send money to yourself")
-										return
-									}
-									if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
-										console.log(address, this.props.bitcoinNetwork, true)
-										this.setState({
-											value: address, 
-											pastedAddress: true, 
-											typedAddress: false, 
-											capturedQr: false,
-										})
-									} else {
-										Alert.alert("Invalid bitcoin address")
-									}
-								}).catch(error => {
-									Alert.alert("Could not get copied address")
-								})
-							}}/>
-						<SendButton 
-							image={icons.qrIcon} 
-							title={"Scan\nQR-Code"}
-							onPress={() => {
-								this.props.screenProps.rootNavigation.navigate("ScanQrCode")
-							}}/>
-					</Animated.View>
-
-					{this.state.capturedQr && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>CAPTURED QR CODE</Text>
-						<SendLineItem
-							selected={true}
-							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={"Valid Address"}
-							address={this.state.value}
-							circleText={this.state.userFromAddress ? null : "B"}
-							extraContent="From QR-Code Scan"/>
-					</View>}
-
-					{this.state.pastedAddress && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>SENDING TO</Text>
-						<SendLineItem
-							selected={true}
-							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={"Valid Address"}
-							address={this.state.value}
-							circleText={this.state.userFromAddress ? null : "B"}
-							extraContent="From Clipboard"/>
-					</View>}
-
-					{this.state.typedAddress && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>FROM ENTRY</Text>
-						<SendLineItem
-							selected={true}
-							title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
-							subtitle={"Valid Address"}
-							address={this.state.value}
-							circleText={this.state.userFromAddress ? null : "B"}
-							extraContent="From Text Entry"/>
-					</View>}
-
-					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "" || contacts.length == 0) && <View style={styles.section}>
-						<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
-					</View>}
-
-					{!(this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress || this.state.value == "" || contacts.length == 0) && <View style={styles.hits}>
-						<Hits userId={userId} selectedId={this.state.selectedId} callback={item => {
-							// user selected contact from algolia query
-							const selectedId = item.objectID
-							const selectedSplashtag = item.splashtag
-							const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
-							if (selectedId != this.state.selectedId) {
-								this.setState({selectedId, selectedAddress, selectedSplashtag})
-							}
-							else {
-								this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
-							}
-						}}/>
-					</View>}
-
-				</InstantSearch>
-
-				<NextButton
-					title="Preview Send"
-					disabled={!(this.state.pastedAddress || this.state.typedAddress || this.state.capturedQr || this.state.selectedId)}
-					onPress={() => {
-						showApproveModal({
-							address: this.state.selectedId ? this.state.selectedAddress : this.state.value,
-							toId: this.state.selectedId ? this.state.selectedId : null,
-							toSplashtag: this.state.selectedSplashtag ? this.state.selectedSplashtag : null,
-							amount: this.state.sendAmount,
-							currency: this.state.sendCurrency,
-							successCallback: () => {
-								this.props.screenProps.rootNavigation.goBack(null)
-								LoadTransactions()
-							},
-							dismissCallback: () => {
-								this.props.DismissTransaction()
-								this.props.screenProps.rootNavigation.goBack(null)
-							},
-						})
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+				<View style={styles.wrapper}>
+					<CloseButton color="dark" onPress={() => {
+						Keyboard.dismiss()
+						this.props.screenProps.rootNavigation.goBack(null)
+					}}/>
+					<FlatBackButton color="dark" onPress={() => {
+						Keyboard.dismiss()
+						this.props.navigation.goBack(null)
 					}}/>
 
-			</View>
+					<View style={styles.header} pointerEvents="none">
+						<Text style={styles.title}>Sending Bitcoin</Text>
+					</View>
+
+					<View style={styles.section}>
+						<Text style={styles.sectionLabel}>AMOUNT</Text>
+						<Text style={styles.amount}>{sendCurrency} {sendCurrency == "USD" && "$"}{unitsToDecimal(sendAmount, sendCurrency)}</Text>
+					</View>
+
+					<InstantSearch {...algoliaKeys}>
+
+						{!isAddressEntered && <View style={styles.section}>
+							<Text style={styles.sectionLabel}>SEARCH</Text>
+							<SearchBox onChange={value => {
+								this.setState({value, selectedId: null})
+							}}/>
+						</View>}
+
+						{isAddressEntered && <View style={styles.section}>
+							<Text style={styles.sectionLabel}>ADDRESS</Text>
+							<View style={styles.inputWrapper}>
+								<TextInput
+									onChangeText={value => {
+										this.setState({value: "", pastedAddress: false, capturedQr: false, userFromAddress: null})
+									}}
+								    value={this.state.value}
+									style={styles.input}/>
+					        </View>
+						</View>}
+
+						<Animated.View style={[styles.sendButtons, animatedSendButtons]}>
+							<SendButton
+								image={icons.copyPaste} 
+								title={"Paste\naddress"}
+								onPress={() => {
+									Clipboard.getString().then(address => {
+										if (bitcoinAddress == address) {
+											Alert.alert("You cannot send money to yourself")
+											return
+										}
+										if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
+											console.log(address, this.props.bitcoinNetwork, true)
+											this.setState({
+												value: address, 
+												pastedAddress: true, 
+												typedAddress: false, 
+												capturedQr: false,
+											})
+										} else {
+											Alert.alert("Invalid bitcoin address")
+										}
+									}).catch(error => {
+										Alert.alert("Could not get copied address")
+									})
+								}}/>
+							<SendButton 
+								image={icons.qrIcon} 
+								title={"Scan\nQR-Code"}
+								onPress={() => {
+									this.props.screenProps.rootNavigation.navigate("ScanQrCode")
+								}}/>
+						</Animated.View>
+
+						{this.state.capturedQr && <View style={styles.section}>
+							<Text style={styles.sectionLabel}>CAPTURED QR CODE</Text>
+							<SendLineItem
+								selected={true}
+								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+								subtitle={"Valid Address"}
+								address={this.state.value}
+								circleText={this.state.userFromAddress ? null : "B"}
+								extraContent="From QR-Code Scan"/>
+						</View>}
+
+						{this.state.pastedAddress && <View style={styles.section}>
+							<Text style={styles.sectionLabel}>SENDING TO</Text>
+							<SendLineItem
+								selected={true}
+								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+								subtitle={"Valid Address"}
+								address={this.state.value}
+								circleText={this.state.userFromAddress ? null : "B"}
+								extraContent="From Clipboard"/>
+						</View>}
+
+						{this.state.typedAddress && <View style={styles.section}>
+							<Text style={styles.sectionLabel}>FROM ENTRY</Text>
+							<SendLineItem
+								selected={true}
+								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+								subtitle={"Valid Address"}
+								address={this.state.value}
+								circleText={this.state.userFromAddress ? null : "B"}
+								extraContent="From Text Entry"/>
+						</View>}
+
+						{!isAddressEntered && this.state.value == "" && contacts.length == 0 && this.state.askPermission && <View style={styles.section}>
+							<Button primary={false} title={'Add Contacts'} small={true} onPress={() => this.props.addContactsInfo(Permissions.openSettings)}/>
+						</View>}
+
+						{!isAddressEntered && (contacts.length != 0 || this.state.value != '') && <View style={styles.section}>
+							<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
+						</View>}
+
+						{!isAddressEntered && this.state.value != "" && <View style={styles.hits}>
+							<Hits contacts={contacts} userId={userId} selectedId={this.state.selectedId} callback={item => {
+								// user selected contact from algolia query
+								const selectedId = item.objectID
+								const selectedSplashtag = item.splashtag
+								const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
+								if (selectedId != this.state.selectedId) {
+									this.setState({selectedId, selectedAddress, selectedSplashtag})
+								}
+								else {
+									this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
+								}
+							}}/>
+						</View>}
+
+						{!isAddressEntered && this.state.value == "" && contacts.length != 0 && <FlatList
+		   				      data={contacts}
+		   				      contentContainerStyle={{overflow: "visible", paddingHorizontal: 20}}
+		   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
+		   				      renderItem={({ item }) => {
+		   				      	if (item.objectID != userId) {
+		   				      		return (
+		   					          <SendLineItem
+		   					            title={`@${item.splashtag}`}
+		   					            selected={item.objectID == this.state.selectedId}
+		   					            subtitle={"Your Contact"}
+		   					            onPress={() => {
+		   									const selectedId = item.objectID
+		   									const selectedSplashtag = item.splashtag
+		   									const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
+		   									if (selectedId != this.state.selectedId) {
+		   										this.setState({selectedId, selectedAddress, selectedSplashtag})
+		   									}
+		   									else {
+		   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
+		   									}
+		   					            }}/>
+		   					        )
+		   				      	}
+		   				      }}
+		   				    />}   
+
+
+					</InstantSearch>
+
+					<NextButton
+						title="Preview Send"
+						disabled={!(this.state.pastedAddress || this.state.typedAddress || this.state.capturedQr || this.state.selectedId)}
+						onPress={() => {
+							showApproveModal({
+								address: this.state.selectedId ? this.state.selectedAddress : this.state.value,
+								toId: this.state.selectedId ? this.state.selectedId : null,
+								toSplashtag: this.state.selectedSplashtag ? this.state.selectedSplashtag : null,
+								amount: this.state.sendAmount,
+								currency: this.state.sendCurrency,
+								successCallback: () => {
+									this.props.screenProps.rootNavigation.goBack(null)
+									LoadTransactions()
+								},
+								dismissCallback: () => {
+									this.props.DismissTransaction()
+									this.props.screenProps.rootNavigation.goBack(null)
+								},
+							})
+						}}/>
+
+				</View>
+			</TouchableWithoutFeedback>
 		)
 	}
 }
