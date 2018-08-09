@@ -11,6 +11,9 @@ const initialState = {
 	errorLoggingIn: null,
 	isUpdatingUsername: false,
 	errorUpdatingUsername: null,
+	isLoadingContacts: false,
+	errorLoadingContacts: null,
+	contacts: [],
 	entity: {},
 	lockoutEnabled: false,
 	lockoutDuration: 5,
@@ -71,6 +74,28 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isUpdatingUsername: false,
 				errorUpdatingUsername: action.error,
+			}
+
+		case ActionTypes.LOAD_CONTACTS_INIT:
+			return {
+				...state,
+				isLoadingContacts: true,
+				errorLoadingContacts: null,
+			}
+
+		case ActionTypes.LOAD_CONTACTS_SUCCESS:
+			return {
+				...state,
+				isLoadingContacts: false,
+				errorLoadingContacts: null,
+				contacts: action.contacts,
+			}
+		
+		case ActionTypes.LOAD_CONTACTS_FAILURE:
+			return {
+				...state,
+				isLoadingContacts: false,
+				errorLoadingContacts: action.error,
 			}
 
 		case ActionTypes.RESET_LOCKOUT_CLOCK:

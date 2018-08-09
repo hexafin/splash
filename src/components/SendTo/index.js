@@ -3,6 +3,22 @@ import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {showApproveModal} from "../../redux/modal"
 import {LoadTransactions, DismissTransaction} from "../../redux/transactions/actions"
+import {LoadContacts} from '../../redux/user/actions'
+
+
+const addContactsInfo = (buttonCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Add Contacts',
+        body: 'Give Splash permission to access your contacts, so that we can connect you with new Splash users.',
+        buttonTitle: 'Will do',
+        buttonCallback: buttonCallback,
+    },   
+  }
+}
+
 
 const mapStateToProps = (state) => {
     return {
@@ -13,6 +29,7 @@ const mapStateToProps = (state) => {
     	address: state.payFlow.address,
     	capturedQr: state.payFlow.capturedQr,
         userId: state.user.id,
+        contacts: state.user.contacts,
     }
 }
 
@@ -20,7 +37,9 @@ const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
     	showApproveModal,
         LoadTransactions,
-        DismissTransaction
+        LoadContacts,
+        DismissTransaction,
+        addContactsInfo
     }, dispatch)
 }
 

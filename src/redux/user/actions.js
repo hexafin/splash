@@ -11,6 +11,7 @@ import FCM, {
 import NavigatorService from "../navigator"
 import {reset} from 'redux-form';
 import * as Keychain from 'react-native-keychain';
+import Contacts from 'react-native-contacts';
 
 import { OpenWallet } from "../crypto/actions"
 
@@ -25,6 +26,9 @@ export const ActionTypes = {
 	UPDATE_USERNAME_INIT: "UPDATE_USERNAME_INIT",
 	UPDATE_USERNAME_SUCCESS: "UPDATE_USERNAME_SUCCESS",
 	UPDATE_USERNAME_FAILURE: "UPDATE_USERNAME_FAILURE",
+	LOAD_CONTACTS_INIT: "LOAD_CONTACTS_INIT",
+	LOAD_CONTACTS_SUCCESS: "LOAD_CONTACTS_SUCCESS",
+	LOAD_CONTACTS_FAILURE: "LOAD_CONTACTS_FAILURE",
 	RESET_USER: "RESET_USER",
 	START_LOCKOUT_CLOCK: 'START_LOCKOUT_CLOCK',
 	RESET_LOCKOUT_CLOCK: 'RESET_LOCKOUT_CLOCK',
@@ -62,6 +66,18 @@ export function updateUsernameSuccess(entity) {
 
 export function updateUsernameFailure(error) {
 	return { type: ActionTypes.UPDATE_USERNAME_FAILURE, error }
+}
+
+export function loadContactsInit() {
+	return { type: ActionTypes.LOAD_CONTACTS_INIT }
+}
+
+export function loadContactsSuccess(contacts) {
+	return {type: ActionTypes.LOAD_CONTACTS_SUCCESS, contacts}
+}
+
+export function loadContactsFailure(error) {
+	return { type: ActionTypes.LOAD_CONTACTS_FAILURE, error }
 }
 
 export function toggleLockout(toggle) {
@@ -125,5 +141,67 @@ export const ChangeUsername = () => {
 				reject(error)
 			})
 		})
+	}
+}
+
+export const LoadContacts = () => {
+	return async (dispatch, getState) => {
+		const state = getState()
+
+		let oldContacts = state.user.contacts.reduce((map, obj) => {
+			map[obj.phoneNumber] = obj
+			return map
+		}, {})
+		const contactNumbers = Object.keys(oldContacts)
+
+		let friends = []
+		let friendNumbers = []
+
+		dispatch(loadContactsInit())
+
+		const convertPhoneNumber = (number) => {
+			number = number.replace(/[^0-9]/g, '');
+			if (number.length > 10) {
+				return "+" + number
+			//	TODO add more internationalization
+			} else if (number.length == 10 && state.crypto.activeCurrency == 'USD') {
+				return "+1" + number
+			} else {
+				return number
+			}
+		}
+
+		try {
+			Contacts.getAll(async (error, contacts) => {
+				if (!error) {
+					await Promise.all(contacts.map(async contact => {
+						if (contact.phoneNumbers[0]) {
+							const number = convertPhoneNumber(contact.phoneNumbers[0].number)
+							if (!contactNumbers.includes(number)) {
+								const query = await firestore.collection("users").where("phoneNumber", "==", number).get()
+								if (!query.empty && query.size == 1) {
+									const data = query.docs[0].data()
+									const uid = query.docs[0].id
+									const newContact = {
+										splashtag: data.splashtag,
+										phoneNumber: data.phoneNumber,
+										objectID: uid,
+										wallets: data.wallets,
+									}
+									friends.push(newContact)
+								}
+							} else {
+								friends.push(oldContacts[number])
+							}
+						}
+					}))
+					dispatch(loadContactsSuccess(friends))
+				} else {
+					dispatch(loadContactsFailure(error))
+				}
+			})
+		} catch (error) {
+			dispatch(loadContactsFailure(error))
+		}
 	}
 }

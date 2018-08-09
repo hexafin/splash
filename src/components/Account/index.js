@@ -1,11 +1,10 @@
 import Account from "./Account"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
-import {resetUser, toggleLockout, setBiometric} from "../../redux/user/actions"
-import { ToggleNetwork } from '../../redux/crypto/actions'
+import {resetUser, toggleLockout, setBiometric, LoadContacts} from "../../redux/user/actions"
+import { ToggleNetwork, resetCrypto } from '../../redux/crypto/actions'
 import {resetTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
-import {resetCrypto} from "../../redux/crypto/actions"
 import NavigatorService from "../../redux/navigator"
 import api from '../../api'
 
@@ -57,6 +56,19 @@ const showDeleteModal = (deleteCallback) => {
   }
 }
 
+const addContactsInfo = (buttonCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Add Contacts',
+        body: 'Give Splash permission to access your contacts, so that we can connect you with new Splash users.',
+        buttonTitle: 'Will do',
+        buttonCallback: buttonCallback,
+    },   
+  }
+}
+
 const mapStateToProps = state => {
 	let network = 'testnet'
 	if (typeof state.crypto.wallets.BTC !== 'undefined') {
@@ -68,6 +80,7 @@ const mapStateToProps = state => {
 		lockoutEnabled: state.user.lockoutEnabled,
 		bitcoinNetwork: network,
 		biometricEnabled: state.user.biometric,
+        isLoadingContacts: state.user.isLoadingContacts,
 	}
 }
 
@@ -81,6 +94,8 @@ const mapDispatchToProps = dispatch => {
     	resetTransactions,
     	ToggleNetwork,
     	setBiometric,
+        LoadContacts,
+        addContactsInfo,
     }, dispatch)
 }
 
