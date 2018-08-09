@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
 	wrapper: {
 		overflow: "visible",
 		paddingHorizontal: 20,
+		paddingBottom: 130,
 	},
 	emptyWrapper: {
 		alignItems: 'center',

@@ -13,13 +13,16 @@ import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper"
 import FlatBackButton from "../universal/FlatBackButton"
+import Button from "../universal/Button"
 import { Sentry } from "react-native-sentry"
 import {Input} from "../universal/Input"
 import Setting from "./Setting"
 import TouchID from "react-native-touch-id"
+import Permissions from 'react-native-permissions'
+import Contacts from 'react-native-contacts';
 import api from '../../api'
 
-const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, showMainnetInfo, showDeleteModal, bitcoinNetwork}) => {
+const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork}) => {
 
 		const handleLockoutSwitch = (enabled) => {
 			if (enabled) {
@@ -107,6 +110,29 @@ const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, bi
 			})
 		}
 
+		const handleSyncContacts = () => {
+			Contacts.checkPermission((err, permission) => {
+			  if (err) throw err;
+			  if (permission === 'undefined') {
+			    Contacts.requestPermission((err, permission) => {
+			      if (err) throw err;
+			      if (permission === 'authorized') {
+			      	LoadContacts()
+			      }
+			    })
+			  }
+			  // if permission is authorized and there are either no contacts or it is time to check again (one day has passed)
+			  if (permission === 'authorized') {
+			    LoadContacts()
+			  }
+			  if (permission === 'denied') {
+			  	if(Permissions.canOpenSettings()) {
+			  		addContactsInfo(Permissions.openSettings)
+			  	}
+			  }
+			})
+		}
+
 		const passcodeTitle = 'Set a PIN'
 		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
 		const networkTitle = 'Use bitcoin mainnet'
@@ -129,6 +155,7 @@ const Account = ({splashtag, userId, navigation, deleteAccount, setBiometric, bi
 									<Input editable={false} input={{value: splashtag}} />
 								</View>
 							</TouchableOpacity>
+							<Button style={styles.syncButton} primary={false} loading={isLoadingContacts} title={'Sync Contacts'} onPress={handleSyncContacts} />
 						</View>
 						<View style={styles.section}>
 							<Text style={styles.sectionText}>Settings</Text>
@@ -163,7 +190,11 @@ const styles = StyleSheet.create({
 		fontWeight: "700"
 	},
 	section: {
-		paddingBottom: 40
+		paddingBottom: 30
+	},
+	syncButton: {
+		marginTop: 15,
+		marginHorizontal: 30,
 	},
 	body: {
 		flex: 1,

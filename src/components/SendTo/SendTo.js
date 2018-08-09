@@ -142,7 +142,7 @@ class SendTo extends Component {
 		    })
 		  }
 		  // if permission is authorized and there are either no contacts or it is time to check again (one day has passed)
-		  if (permission === 'authorized' && (contacts.length == 0 || moment().unix() >= this.props.checkContactsTime)) {
+		  if (permission === 'authorized' && contacts.length == 0) {
 		    this.props.LoadContacts()
 		    this.setState({askPermission: false})
 		  }
@@ -343,32 +343,35 @@ class SendTo extends Component {
 							}}/>
 						</View>}
 
-						{!isAddressEntered && this.state.value == "" && contacts.length != 0 && <FlatList
-		   				      data={contacts}
-		   				      contentContainerStyle={{overflow: "visible", paddingHorizontal: 20}}
-		   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
-		   				      renderItem={({ item }) => {
-		   				      	if (item.objectID != userId) {
-		   				      		return (
-		   					          <SendLineItem
-		   					            title={`@${item.splashtag}`}
-		   					            selected={item.objectID == this.state.selectedId}
-		   					            subtitle={"Your Contact"}
-		   					            onPress={() => {
-		   									const selectedId = item.objectID
-		   									const selectedSplashtag = item.splashtag
-		   									const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
-		   									if (selectedId != this.state.selectedId) {
-		   										this.setState({selectedId, selectedAddress, selectedSplashtag})
-		   									}
-		   									else {
-		   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
-		   									}
-		   					            }}/>
-		   					        )
-		   				      	}
-		   				      }}
-		   				    />}   
+						{!isAddressEntered && this.state.value == "" && contacts.length != 0 && 
+						<View style={styles.hits} >
+							<FlatList
+			   				      data={contacts}
+			   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
+			   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
+			   				      renderItem={({ item }) => {
+			   				      	if (item.objectID != userId) {
+			   				      		return (
+			   					          <SendLineItem
+			   					            title={`@${item.splashtag}`}
+			   					            selected={item.objectID == this.state.selectedId}
+			   					            subtitle={"Your Contact"}
+			   					            onPress={() => {
+			   									const selectedId = item.objectID
+			   									const selectedSplashtag = item.splashtag
+			   									const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
+			   									if (selectedId != this.state.selectedId) {
+			   										this.setState({selectedId, selectedAddress, selectedSplashtag})
+			   									}
+			   									else {
+			   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
+			   									}
+			   					            }}/>
+			   					        )
+			   				      	}
+			   				      }}
+			   				    />
+		   				    </View>}   
 
 
 					</InstantSearch>
@@ -439,7 +442,7 @@ const styles = StyleSheet.create({
 		marginBottom: 2
 	},
 	hits: {
-		// backgroundColor: colors.gray,
+		flex: 1,
 		minHeight: 400,
 	},
 	amount: {

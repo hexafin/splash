@@ -30,7 +30,6 @@ const mapStateToProps = (state) => {
     	capturedQr: state.payFlow.capturedQr,
         userId: state.user.id,
         contacts: state.user.contacts,
-        checkContactsTime: state.user.checkContactsTime,
     }
 }
 

@@ -13,7 +13,6 @@ const initialState = {
 	errorUpdatingUsername: null,
 	isLoadingContacts: false,
 	errorLoadingContacts: null,
-	checkContactsTime: null,
 	contacts: [],
 	entity: {},
 	lockoutEnabled: false,
@@ -89,7 +88,6 @@ export default function reducer(state = initialState, action) {
 				...state,
 				isLoadingContacts: false,
 				errorLoadingContacts: null,
-				checkContactsTime: moment().add(1,'day').unix(), // check for new contacts once a day
 				contacts: action.contacts,
 			}
 		
