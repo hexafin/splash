@@ -146,9 +146,16 @@ export const ChangeUsername = () => {
 
 export const LoadContacts = () => {
 	return async (dispatch, getState) => {
-
 		const state = getState()
+
+		let oldContacts = state.user.contacts.reduce((map, obj) => {
+			map[obj.phoneNumber] = obj
+			return map
+		}, {})
+		const contactNumbers = Object.keys(oldContacts)
+
 		let friends = []
+		let friendNumbers = []
 
 		dispatch(loadContactsInit())
 
@@ -170,17 +177,21 @@ export const LoadContacts = () => {
 					await Promise.all(contacts.map(async contact => {
 						if (contact.phoneNumbers[0]) {
 							const number = convertPhoneNumber(contact.phoneNumbers[0].number)
-							const query = await firestore.collection("users").where("phoneNumber", "==", number).get()
-							if (!query.empty && query.size == 1) {
-								const data = query.docs[0].data()
-								const uid = query.docs[0].id
-								const newContact = {
-									splashtag: data.splashtag,
-									phoneNumber: data.phoneNumber,
-									objectID: uid,
-									wallets: data.wallets,
+							if (!contactNumbers.includes(number)) {
+								const query = await firestore.collection("users").where("phoneNumber", "==", number).get()
+								if (!query.empty && query.size == 1) {
+									const data = query.docs[0].data()
+									const uid = query.docs[0].id
+									const newContact = {
+										splashtag: data.splashtag,
+										phoneNumber: data.phoneNumber,
+										objectID: uid,
+										wallets: data.wallets,
+									}
+									friends.push(newContact)
 								}
-								friends.push(newContact)
+							} else {
+								friends.push(oldContacts[number])
 							}
 						}
 					}))

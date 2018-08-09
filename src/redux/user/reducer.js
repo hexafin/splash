@@ -14,6 +14,7 @@ const initialState = {
 	isLoadingContacts: false,
 	errorLoadingContacts: null,
 	checkContactsTime: null,
+	contacts: [],
 	entity: {},
 	lockoutEnabled: false,
 	lockoutDuration: 5,
