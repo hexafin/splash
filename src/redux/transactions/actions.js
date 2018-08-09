@@ -225,6 +225,7 @@ export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAm
         relativeCurrency: 'USD',
         type: 'blockchain',
         pending: true,
+        confirmations: 0,
         timestamp: moment().unix(),
         toAddress: toAddress,
         fromId: state.user.id,	

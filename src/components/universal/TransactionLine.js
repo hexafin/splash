@@ -24,6 +24,16 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 	const currency = (transaction.type == 'blockchain') ? transaction.currency : null
 	const isSplashtag = (direction == 'to' && transaction.toSplashtag) || (direction == 'from' && transaction.fromSplashtag)
 
+	const pendingCircles = (confirmations) => {
+		return (
+			<View style={{flexDirection: 'row'}}>
+				{ [1,2,3,4,5,6].map((val) => {
+					return <View style={[styles.pendingCircle, (confirmations < val) ? {opacity: 0.2} : {}]} />
+				})}
+			</View>
+		)
+	}
+
 	return (
 		<TouchableWithoutFeedback onPress={onPress}>
 			<View style={styles.wrapper}>
@@ -48,7 +58,7 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 
 						{loading && <Shimmer style={{marginBottom: 15}}><Image style={styles.titleLoadingBar} source={icons.placeholder}/></Shimmer>}
 						{!loading && !pending && <Text style={styles.date}>{date}</Text>}
-						{!loading && pending && <Text style={styles.date}>Pending</Text>}
+						{!loading && pending && pendingCircles(transaction.confirmations)}
 						{loading && <Shimmer style={{width: 66}}><Image style={styles.dateLoadingBar} source={icons.placeholder}/></Shimmer>}
 					</View>
 					<View style={styles.rightBody}>
@@ -150,6 +160,14 @@ const styles = StyleSheet.create({
 		backgroundColor: '#EDEEF2',
 		height: 10,
 		width: 40,
+	},
+	pendingCircle: {
+		height: 10,
+		width: 10,
+		borderRadius: 5,
+		backgroundColor: colors.primary,
+		marginTop: 2,
+		marginRight: 3,
 	}
 })
 

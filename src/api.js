@@ -110,7 +110,9 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
         // if the txId is not on firebase and the transaction is important (ie not both from and to the user) or if the transaction is pending
         if ((index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') && txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
             let pending = false
-            if (typeof txs[j].block_height === 'undefined' || (blockHeight - txs[j].block_height) < 5) {
+            const confirmations = (typeof txs[j].block_height === 'undefined') ? 0 : (blockHeight - txs[j].block_height) + 1
+
+            if (typeof txs[j].block_height === 'undefined' || confirmations < 6) {
               pending = true
             }
 
@@ -120,6 +122,7 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
             currency: 'BTC',
             txId: txs[j].hash,
             pending: pending,
+            confirmations: confirmations,
             type: 'blockchain'
           }
 
