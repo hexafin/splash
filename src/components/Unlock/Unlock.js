@@ -42,7 +42,7 @@ class Unlock extends Component {
 				else {
 					this.setState({usePasscode: true})
 				}
-			})
+			}).catch(() => this.setState({usePasscode: true}))
 		}
 
 		Keychain.getGenericPassword().then(data => {
@@ -60,8 +60,7 @@ class Unlock extends Component {
 
 			// if correct passcode 
 			if (this.state.passcode && newValue == this.state.passcode) {
-
-				this.props.navigation.state.params.successCallback()
+				setTimeout(this.props.navigation.state.params.successCallback, 100)
 
 			} else if (newValue.length == 4) {
 				// if incorrect passcode

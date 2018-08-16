@@ -152,10 +152,10 @@ export const LoadContacts = () => {
 			map[obj.phoneNumber] = obj
 			return map
 		}, {})
-		const contactNumbers = Object.keys(oldContacts)
+		// const contactNumbers = Object.keys(oldContacts)
+		const contactNumbers = []
 
 		let friends = []
-		let friendNumbers = []
 
 		dispatch(loadContactsInit())
 
@@ -188,14 +188,15 @@ export const LoadContacts = () => {
 										objectID: uid,
 										wallets: data.wallets,
 									}
-									friends.push(newContact)
+									friends[data.phoneNumber] = newContact
 								}
 							} else {
-								friends.push(oldContacts[number])
+								friends[number] = oldContacts[number]
 							}
 						}
 					}))
-					dispatch(loadContactsSuccess(friends))
+
+					dispatch(loadContactsSuccess(Object.values(friends)))
 				} else {
 					dispatch(loadContactsFailure(error))
 				}

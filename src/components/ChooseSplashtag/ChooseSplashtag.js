@@ -106,7 +106,7 @@ class ChooseSplashtag extends Component {
                       </Text>
 
                       <Text style={styles.description}>
-                          Your splashtag is your unique username, how others find you on Splash
+                          Your splashtag is your unique username, how others find you on Splash. You can change this later.
                       </Text>
                     </View>
 

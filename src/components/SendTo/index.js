@@ -12,8 +12,8 @@ const addContactsInfo = (buttonCallback) => {
     modalType: 'INFO',
     modalProps: {
         title: 'Add Contacts',
-        body: 'Give Splash permission to access your contacts, so that we can connect you with new Splash users.',
-        buttonTitle: 'Will do',
+        body: 'Splash let’s you find people you know via their phone numbers, so you can send them money without typing out long bitcoin addresses and be sure it’s them.',
+        buttonTitle: 'Got it',
         buttonCallback: buttonCallback,
     },   
   }

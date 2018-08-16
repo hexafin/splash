@@ -2,6 +2,7 @@ import React, {Component} from "react"
 import {
 	Animated,
 	Dimensions,
+	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
 	FlatList,
@@ -126,20 +127,22 @@ class SendTo extends Component {
 		Contacts.checkPermission((err, permission) => {
 		  if (err) throw err;
 		  if (permission === 'undefined') {
-		    Contacts.requestPermission((err, permission) => {
-		      if (err) throw err;
-		      if (permission === 'authorized') {
-		      	this.props.LoadContacts()
-		      	this.setState({askPermission: false})
-		      }
-			  if (permission === 'denied') {
-			  	if(Permissions.canOpenSettings()) {
-			  		this.setState({askPermission: true})
-			  	} else {
-			  		this.setState({askPermission: false})
-			  	}
-			  }
-		    })
+		  	this.props.addContactsInfo(() => {
+			    Contacts.requestPermission((err, permission) => {
+			      if (err) throw err;
+			      if (permission === 'authorized') {
+			      	this.props.LoadContacts()
+			      	this.setState({askPermission: false})
+			      }
+				  if (permission === 'denied') {
+				  	if(Permissions.canOpenSettings()) {
+				  		this.setState({askPermission: true})
+				  	} else {
+				  		this.setState({askPermission: false})
+				  	}
+				  }
+			    })
+		  	})
 		  }
 		  // if permission is authorized and there are either no contacts or it is time to check again (one day has passed)
 		  if (permission === 'authorized' && contacts.length == 0) {
@@ -370,6 +373,12 @@ class SendTo extends Component {
 			   					        )
 			   				      	}
 			   				      }}
+			   				      ListFooterComponent={
+				   				    <TouchableOpacity style={styles.refreshButton} onPress={this.props.LoadContacts}>
+				   				    	<Text style={styles.newNumberText}>Added new numbers?</Text>
+				   				    	<Text style={styles.refreshText}>Refresh Contacts</Text>
+				   				    </TouchableOpacity>
+			   				      }
 			   				    />
 		   				    </View>}   
 
@@ -480,6 +489,20 @@ const styles = StyleSheet.create({
 	scrollContainer: {
 		position: "relative",
 		// minHeight: SCREEN_HEIGHT,
+	},
+	refreshButton: {
+		paddingVertical: 25,
+		alignItems: 'center'
+	},
+	newNumberText: {
+		fontSize: 16,
+		color: colors.gray,
+		marginBottom: 8,
+	},
+	refreshText: {
+		fontSize: 18,
+		fontWeight: '600',
+		color: colors.primary
 	},
 })
 
