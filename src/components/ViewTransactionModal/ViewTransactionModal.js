@@ -68,9 +68,8 @@ class ViewTransactionModal extends Component {
 		const pendingCircles = (confirmations) => {
 			return (
 				<View style={{flexDirection: 'row', paddingBottom: 5, paddingLeft: 10}}>
-					{ [1,2,3,4,5,6].map((val) => {
-						return <View style={[styles.pendingCircle, (confirmations < val) ? {opacity: 0.2} : {}]} />
-					})}
+					<View style={[styles.pendingDarkLine, {width: confirmations*(70/6)}, (confirmations == 6) ? {borderRadius: 3.5} : {}, (confirmations == 0) ? {borderWidth: 0} : {}]} />
+					<View style={[styles.pendingLightLine, {width: 70-confirmations*(70/6)}, (confirmations == 0) ? {borderRadius: 3.5} : {}]} />				
 				</View>
 			)
 		}
@@ -261,10 +260,21 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		paddingBottom: 32
 	},
-	pendingCircle: {
-		height: 10,
-		width: 10,
-		borderRadius: 5,
+	pendingDarkLine: {
+		height: 7,
+		borderTopLeftRadius: 3.5,
+		borderBottomLeftRadius: 3.5,
+		borderColor: colors.primary,
+		borderWidth: 0.1,
+		backgroundColor: colors.primary,
+		marginTop: 2,
+		opacity: 1,
+	},
+	pendingLightLine: {
+		height: 7,
+		borderTopRightRadius: 3.5,
+		borderBottomRightRadius: 3.5,
+		opacity: 0.2,
 		backgroundColor: colors.primary,
 		marginTop: 2,
 		marginRight: 3,
