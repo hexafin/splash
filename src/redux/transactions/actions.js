@@ -81,7 +81,6 @@ export function resetQr() {
 
 export const LoadTransactions = () => {
 	return async (dispatch, getState) => {
-		dispatch(loadTransactionsInit())
 
 		const state = getState()
 
@@ -108,6 +107,7 @@ export const LoadTransactions = () => {
 			// two listeners for each firebase property
 			// after one listener finds changes merges in the documents found from the other
 			let unsub1 = firestore.collection("transactions").where("toAddress", "==", state.crypto.wallets.BTC.address).onSnapshot(async querySnapshot => {
+				dispatch(loadTransactionsInit())
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
@@ -127,6 +127,7 @@ export const LoadTransactions = () => {
 			})
 
 			let unsub2 = firestore.collection("transactions").where("fromAddress", "==", state.crypto.wallets.BTC.address).onSnapshot(async querySnapshot => {
+				dispatch(loadTransactionsInit())
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
@@ -225,6 +226,7 @@ export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAm
         relativeCurrency: 'USD',
         type: 'blockchain',
         pending: true,
+        thanked: false,
         confirmations: 0,
         timestamp: moment().unix(),
         toAddress: toAddress,

@@ -35,7 +35,7 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={onPress}>
+		<TouchableWithoutFeedback onPress={onPress} disabled={loading}>
 			<View style={styles.wrapper}>
 				<View style={[styles.letterPreview, (loading && {backgroundColor: '#EDEEF2'})]}>
 					{!isSplashtag && !currency && !loading && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
