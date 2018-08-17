@@ -38,10 +38,10 @@ class SetPasscode extends Component {
 			ReactNativeHapticFeedback.trigger("impactLight", true)
 
 			if (newValue.length == 4 && !this.state.confirmValue) {
-				this.setState({confirmValue: newValue, value: ''})
+				setTimeout(() => this.setState({confirmValue: newValue, value: ''}), 150)
 			} else if (newValue.length == 4 && newValue == this.state.confirmValue) {
 
-				this.props.navigation.state.params.successCallback(newValue)
+				setTimeout(() => this.props.navigation.state.params.successCallback(newValue), 100)
 
 			} else if (newValue.length == 4 && newValue != this.state.confirmValue) {
 				Animated.spring(this.shakeAnimation, {

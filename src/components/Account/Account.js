@@ -110,28 +110,6 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 			})
 		}
 
-		const handleSyncContacts = () => {
-			Contacts.checkPermission((err, permission) => {
-			  if (err) throw err;
-			  if (permission === 'undefined') {
-			    Contacts.requestPermission((err, permission) => {
-			      if (err) throw err;
-			      if (permission === 'authorized') {
-			      	LoadContacts()
-			      }
-			    })
-			  }
-			  // if permission is authorized and there are either no contacts or it is time to check again (one day has passed)
-			  if (permission === 'authorized') {
-			    LoadContacts()
-			  }
-			  if (permission === 'denied') {
-			  	if(Permissions.canOpenSettings()) {
-			  		addContactsInfo(Permissions.openSettings)
-			  	}
-			  }
-			})
-		}
 
 		const passcodeTitle = 'Set a PIN'
 		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
@@ -155,7 +133,6 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 									<Input editable={false} input={{value: splashtag}} />
 								</View>
 							</TouchableOpacity>
-							<Button style={styles.syncButton} primary={false} loading={isLoadingContacts} title={'Sync Contacts'} onPress={handleSyncContacts} />
 						</View>
 						<View style={styles.section}>
 							<Text style={styles.sectionText}>Settings</Text>
@@ -191,10 +168,6 @@ const styles = StyleSheet.create({
 	},
 	section: {
 		paddingBottom: 30
-	},
-	syncButton: {
-		marginTop: 15,
-		marginHorizontal: 30,
 	},
 	body: {
 		flex: 1,

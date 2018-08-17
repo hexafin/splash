@@ -87,13 +87,13 @@ class LandingSwipeView extends Component {
                     ]}
                 >
                     {i == 0 && (
-                        <Image source={image1} style={styles.imageStyle} resizeMode={'contain'}/>
+                        <Image source={image1} style={styles.imageStyle} resizeMode={'cover'}/>
                     )}
                     {i == 1 && (
-                        <Image source={image2} style={styles.imageStyle} resizeMode={'contain'}/>
+                        <Image source={image2} style={styles.imageStyle} resizeMode={'cover'}/>
                     )}
                     {i == 2 && (
-                        <Image source={image3} style={styles.imageStyle} resizeMode={'contain'}/>
+                        <Image source={image3} style={styles.imageStyle} resizeMode={'cover'}/>
                     )}
                 </Animated.View>
             )

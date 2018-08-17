@@ -7,9 +7,12 @@ import {
     Text,
     Image,
 	Animated,
+	Dimensions,
 } from "react-native"
 import {colors} from "../../lib/colors"
 import { icons } from "../../lib/styles";
+const SCREEN_WIDTH = Dimensions.get('window').width
+const SCREEN_HEIGHT = Dimensions.get('window').height
 
 // example usage
 // <Keypad primaryColor={'#484AD4'}
@@ -160,18 +163,18 @@ const styles = StyleSheet.create({
 
 	},
 	button: {
-		height: 89,
-		width: 89,
+		height: SCREEN_HEIGHT*0.109,
+		width: SCREEN_HEIGHT*0.109,
 		backgroundColor: '#484AD4',
-		borderRadius: 44.5,
+		borderRadius: SCREEN_HEIGHT*0.0545,
 		marginBottom: 11,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
 	deleteButton: {
-		height: 89,
-		width: 89,
-		borderRadius: 44.5,
+		height: SCREEN_HEIGHT*0.109,
+		width: SCREEN_HEIGHT*0.109,
+		borderRadius: SCREEN_HEIGHT*0.0545,
 		marginBottom: 11,
 		backgroundColor: 'rgba(0,0,0,0)',
 		justifyContent: 'center',

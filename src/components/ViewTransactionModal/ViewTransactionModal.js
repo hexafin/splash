@@ -117,7 +117,7 @@ class ViewTransactionModal extends Component {
                     {type == 'blockchain' && isSplashtag && 
                     	<View style={styles.column}>
                     		<View style={styles.row}>
-	                    		<Text style={styles.splashtagText}>{splashtag}</Text>
+	                    		<Text style={styles.splashtagText}>@{splashtag}</Text>
 								<Image
 									style={styles.verified}
 									resizeMode="contain"
