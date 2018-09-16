@@ -85,7 +85,7 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 						else {
 							setBiometric(false)
 						}
-					})
+					}).catch(() => setBiometric(false));
 				}
 				else {
 					Alert.alert("You must set a PIN to enable biometric security")
