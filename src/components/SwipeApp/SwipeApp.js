@@ -29,6 +29,7 @@ import Home from "../Home"
 import Balance from "./Balance"
 import ReturnToHome from "./ReturnToHome"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import codePush from "react-native-code-push";
 import moment from "moment"
 import ModalRoot from '../Modals/ModalRoot'
 
@@ -230,6 +231,14 @@ class SwipeApp extends Component {
 			userId: this.props.userId,
 			username: this.props.splashtag
 		})
+
+		// do code push sync after logged in
+		codePush.sync({
+			updateDialog: false,
+			installMode: codePush.InstallMode.ON_NEXT_SUSPEND,
+			mandatoryInstallMode: codePush.InstallMode.ON_NEXT_SUSPEND,
+			minimumBackgroundDuration: 60, // must be in background for 60 seconds to sync
+		});
 
 		// if timeis past lockout
 		if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {

@@ -17,6 +17,8 @@ codePush.getUpdateMetadata().then(update => {
 	}
 });
 
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
+
 class App extends Component {
 
 	constructor(props) {
@@ -24,13 +26,6 @@ class App extends Component {
 		this.state = {
 			loggedIn: false
 		}
-	}
-
-	componentDidMount() {
-		codePush.sync({
-			updateDialog: false,
-			installMode: codePush.InstallMode.ON_NEXT_SUSPEND
-		});
 	}
 
 	render() {
@@ -62,4 +57,4 @@ class App extends Component {
 	}
 }
 
-export default codePush(App);
+export default codePush(codePushOptions)(App);
