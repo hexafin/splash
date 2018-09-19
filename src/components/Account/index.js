@@ -2,8 +2,8 @@ import Account from "./Account"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import {resetUser, toggleLockout, setBiometric} from "../../redux/user/actions"
-import { ToggleNetwork, resetCrypto } from '../../redux/crypto/actions'
-import {resetTransactions} from "../../redux/transactions/actions"
+import { ToggleNetwork, resetCrypto, LoadBalance } from '../../redux/crypto/actions'
+import {resetTransactions, LoadTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
 import NavigatorService from "../../redux/navigator"
 import api from '../../api'
@@ -19,6 +19,13 @@ const deleteAccount = () => {
 		dispatch(resetCrypto())
 		api.DeleteAccount(userId)
 	}		
+}
+
+const networkSwitchActions = {
+    ToggleNetwork,
+    resetTransactions,
+    LoadBalance,
+    LoadTransactions,
 }
 
 const showLockInfo = () => {
@@ -71,16 +78,17 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    return bindActionCreators({
-    	deleteAccount,
-    	toggleLockout,
-    	showLockInfo,
-        showMainnetInfo,
-    	showDeleteModal,
-    	resetTransactions,
-    	ToggleNetwork,
-    	setBiometric,
-    }, dispatch)
+    return {
+        ...bindActionCreators({
+                    deleteAccount,
+                    toggleLockout,
+                    showLockInfo,
+                    showMainnetInfo,
+                    showDeleteModal,
+                    setBiometric,
+                }, dispatch),
+        networkSwitchActions: bindActionCreators(networkSwitchActions, dispatch),
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Account)
