@@ -22,7 +22,6 @@ const deleteAccount = () => {
 }
 
 const networkSwitchActions = {
-    ToggleNetwork,
     resetTransactions,
     LoadBalance,
     LoadTransactions,
@@ -86,6 +85,7 @@ const mapDispatchToProps = dispatch => {
                     showMainnetInfo,
                     showDeleteModal,
                     setBiometric,
+                    ToggleNetwork,
                 }, dispatch),
         networkSwitchActions: bindActionCreators(networkSwitchActions, dispatch),
     }

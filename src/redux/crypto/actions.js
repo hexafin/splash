@@ -239,16 +239,21 @@ export const OpenWallet = (currency) => {
 
 export const ToggleNetwork = () => {
 	return (dispatch, getState) => {
-		const state = getState()
-		const currentNetwork = state.crypto.wallets.BTC.network
-		let newNetwork = 'testnet'
-		if (currentNetwork == 'testnet') newNetwork = 'mainnet'
+		return new Promise((resolve,reject) => {
+			const state = getState()
+			const currentNetwork = state.crypto.wallets.BTC.network
+			let newNetwork = 'testnet'
+			if (currentNetwork == 'testnet') newNetwork = 'mainnet'
 
-		Keychain.getGenericPassword().then(data => {
+			Keychain.getGenericPassword().then(data => {
 
-			const keychainData = JSON.parse(data.password)
-			const newWallet = keychainData.BTC[newNetwork]
-			dispatch(switchWallets({address: newWallet.address, network: newWallet.network}))
+				const keychainData = JSON.parse(data.password)
+				const newWallet = keychainData.BTC[newNetwork]
+				dispatch(switchWallets({address: newWallet.address, network: newWallet.network}))
+				resolve()
+			}).catch(e => {
+				reject(e)
+			})
 
 		})
 	}

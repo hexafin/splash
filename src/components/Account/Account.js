@@ -22,7 +22,7 @@ import Permissions from 'react-native-permissions'
 import Contacts from 'react-native-contacts';
 import api from '../../api'
 
-const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, toggleLockout, lockoutEnabled, showLockInfo, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork, networkSwitchActions}) => {
+const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, toggleLockout, lockoutEnabled, showLockInfo, ToggleNetwork, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork, networkSwitchActions}) => {
 
 		const handleLockoutSwitch = (enabled) => {
 			if (enabled) {
@@ -57,10 +57,14 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 		const handleNetworkSwitch = () => {
 			if (bitcoinNetwork == 'testnet') {
 				showMainnetInfo(() => {
-					Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
+					ToggleNetwork().then(() => {
+						Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
+					})
 				})
 			} else {
-				Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
+				ToggleNetwork().then(() => {
+					Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
+				})
 			}
 		}
 
