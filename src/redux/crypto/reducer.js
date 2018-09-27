@@ -10,10 +10,15 @@ const initialState = {
     BTC: {
       address: '',
       network: '',
+    },
+    ETH: {
+      address: '',
+      network: '',
     }
   },
   balance: {
     BTC: 0,
+    ETH: 0,
   },
   loadingBalanceCurrency: null,
   isLoadingBalance: false,
@@ -47,10 +52,7 @@ export default function cryptoReducer(state = initialState, action) {
           ...state,
           isOpeningWallet: false,
           successOpeningWallet: true,
-          wallets: {
-            ...state.wallets,
-            [state.openingWalletCurrency]: action.wallet
-          }
+          wallets: action.wallet
         }
 
       case ActionTypes.OPEN_WALLET_FAILURE:
@@ -115,10 +117,7 @@ export default function cryptoReducer(state = initialState, action) {
       case ActionTypes.SWITCH_WALLETS:
         return {
           ...state,
-          wallets: {
-            ...state.wallets,
-            [state.openingWalletCurrency]: action.wallet
-          }
+          wallets: action.wallet
         }
 
       case ActionTypes.RESET_CRYPTO:

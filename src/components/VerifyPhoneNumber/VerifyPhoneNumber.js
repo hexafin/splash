@@ -41,19 +41,19 @@ class VerifyPhoneNumber extends Component {
         Keyboard.dismiss()
         this.props.SmsConfirm(this.state.confirmResult, this.state.code).then(user => {
             this.props.SignUp(user).then(userId => {
-                this.props.LogIn(userId).then(() => {
-                    this.props.OpenWallet("BTC").then(() => {
+                this.props.OpenWallet(userId, ["BTC", "ETH"]).then(() => {
+                    this.props.LogIn(userId).then(() => {
                         this.setState(this.initialState)
                         this.props.navigation.navigate("SwipeApp")
                     }).catch(error => {
                         console.log(error)
                         this.setState(this.initialState)
-                        Alert.alert("An error occurred while opening bitcoin wallet. Please try again later")
+                        Alert.alert("An error occurred while logging in. Please try again later")
                     })
                 }).catch(error => {
                     console.log(error)
                     this.setState(this.initialState)
-                    Alert.alert("An error occurred while logging in. Please try again later")
+                    Alert.alert("An error occurred while opening bitcoin wallet. Please try again later")
                 })
             }).catch(error => {
                 console.log(error)
