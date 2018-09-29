@@ -256,17 +256,22 @@ export const OpenWallet = (userId, currencies) => {
 
 export const ToggleNetwork = () => {
 	return (dispatch, getState) => {
-		const state = getState()
-		const currentNetwork = state.crypto.wallets.BTC.network
-		let newNetwork = 'testnet'
-		if (currentNetwork == 'testnet') newNetwork = 'mainnet'
+		return new Promise((resolve,reject) => {
+			const state = getState()
+			const currentNetwork = state.crypto.wallets.BTC.network
+			let newNetwork = 'testnet'
+			if (currentNetwork == 'testnet') newNetwork = 'mainnet'
 
-		Keychain.getGenericPassword().then(data => {
+			Keychain.getGenericPassword().then(data => {
 
-			const keychainData = JSON.parse(data.password)
-			const newBTCWallet = {address: keychainData.BTC[newNetwork].address, network: keychainData.BTC[newNetwork].network}
-			const newETHWallet = {address: keychainData.ETH[newNetwork].address, network: keychainData.ETH[newNetwork].network}
-			dispatch(switchWallets({BTC: newBTCWallet, ETH: newETHWallet}))
+        const keychainData = JSON.parse(data.password)
+        const newBTCWallet = {address: keychainData.BTC[newNetwork].address, network: keychainData.BTC[newNetwork].network}
+        const newETHWallet = {address: keychainData.ETH[newNetwork].address, network: keychainData.ETH[newNetwork].network}
+        dispatch(switchWallets({BTC: newBTCWallet, ETH: newETHWallet}))
+				resolve()
+			}).catch(e => {
+				reject(e)
+			})
 
 		})
 	}

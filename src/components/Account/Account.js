@@ -22,7 +22,7 @@ import Permissions from 'react-native-permissions'
 import Contacts from 'react-native-contacts';
 import api from '../../api'
 
-const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, resetTransactions, toggleLockout, ToggleNetwork, lockoutEnabled, showLockInfo, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork}) => {
+const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, toggleLockout, lockoutEnabled, showLockInfo, ToggleNetwork, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork, networkSwitchActions}) => {
 
 		const handleLockoutSwitch = (enabled) => {
 			if (enabled) {
@@ -57,12 +57,14 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 		const handleNetworkSwitch = () => {
 			if (bitcoinNetwork == 'testnet') {
 				showMainnetInfo(() => {
-					resetTransactions()
-					ToggleNetwork()
+					ToggleNetwork().then(() => {
+						Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
+					})
 				})
 			} else {
-				resetTransactions()
-				ToggleNetwork()
+				ToggleNetwork().then(() => {
+					Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
+				})
 			}
 		}
 
@@ -85,7 +87,7 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 						else {
 							setBiometric(false)
 						}
-					})
+					}).catch(() => setBiometric(false));
 				}
 				else {
 					Alert.alert("You must set a PIN to enable biometric security")
