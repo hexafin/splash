@@ -1,9 +1,11 @@
 let axios = require('axios');
 import { Sentry } from "react-native-sentry";
 import bitcoin from 'bitcoinjs-lib'
+import { blockchain_info_apiKey } from '../env/keys.json'
 
 var BITCOIN_DIGITS = 8;
 var BITCOIN_SAT_MULT = Math.pow(10, BITCOIN_DIGITS);
+const apiCode = '?api_code=' + blockchain_info_apiKey + '&'
 
 export let providers = {
 	/**
@@ -13,14 +15,14 @@ export let providers = {
 	balance: {
 		mainnet: {
 			blockchain: function (addr) {
-				return axios.get('https://blockchain.info/q/addressbalance/' + addr + '?confirmations=6').then(function (res) {
+				return axios.get('https://blockchain.info/q/addressbalance/' + addr + apiCode + 'confirmations=6').then(function (res) {
 					return parseFloat(res.data);
 				});
 			}
 		},
 		testnet: {
 			blockchain: function (addr) {
-				return axios.get('https://testnet.blockchain.info/q/addressbalance/' + addr + '?confirmations=6').then(function (res) {
+				return axios.get('https://testnet.blockchain.info/q/addressbalance/' + addr + apiCode + 'confirmations=6').then(function (res) {
 					return parseFloat(res.data);
 				});
 			}
@@ -53,7 +55,7 @@ export let providers = {
 	utxo: {
 		mainnet: {
 			blockchain: function (addr) {
-				return axios.get('https://blockchain.info/unspent?active=' + addr).then(function (res) {
+				return axios.get('https://blockchain.info/unspent' + apiCode + 'active=' + addr).then(function (res) {
 					return res.data.unspent_outputs.map(function (e) {
 						return {
 							txid: e.tx_hash_big_endian,
@@ -67,7 +69,7 @@ export let providers = {
 		},
 		testnet: {
 			blockchain: function (addr) {
-				return axios.get('https://testnet.blockchain.info/unspent?active=' + addr).then(function (res) {
+				return axios.get('https://testnet.blockchain.info/unspent' + apiCode + 'active=' + addr).then(function (res) {
 					return res.data.unspent_outputs.map(function (e) {
 						return {
 							txid: e.tx_hash_big_endian,
@@ -87,12 +89,12 @@ export let providers = {
 	pushtx: {
 		mainnet: {
 			blockchain: function (hexTrans) {
-				return axios.post('https://blockchain.info/pushtx?tx=' + hexTrans);
+				return axios.post('https://blockchain.info/pushtx' + apiCode + 'tx=' + hexTrans);
 			}
 		},
 		testnet: {
 			blockchain: function (hexTrans) {
-				return axios.post('https://testnet.blockchain.info/pushtx?tx=' + hexTrans);
+				return axios.post('https://testnet.blockchain.info/pushtx' + apiCode + 'tx=' + hexTrans);
 			}
 		}
 	}
