@@ -14,8 +14,17 @@ import LetterCircle from "../universal/LetterCircle"
 import Button from "../universal/Button"
 import moment from "moment"
 import { cryptoUnits, decimalToUnits, unitsToDecimal } from '../../lib/cryptos'
+import api from '../../api'
 
 class ViewTransactionModal extends Component {
+
+	constructor(props) {
+	  super(props);
+	
+	  this.state = {
+	  	thanked: props.transaction.thanked,
+	  };
+	}
 
 	render() {
 
@@ -34,7 +43,11 @@ class ViewTransactionModal extends Component {
 			type,
 			timestamp,
 			toSplashtag,
-			fromSplashtag
+			fromSplashtag,
+			pending,
+			confirmations,
+			thanked,
+			id,
 		} = transaction
 
 		let splashtag = null
@@ -51,6 +64,15 @@ class ViewTransactionModal extends Component {
 	    if (!!relativeCurrency) oldRelativeAmount =  unitsToDecimal(relativeAmount, 'USD')
 	    const currentRelativeAmount = unitsToDecimal(Math.round((amount.subtotal/cryptoUnits.BTC) * rate), 'USD')
 	    const infoMessage = (direction == 'from') ? 'Received from' : 'Sent to'
+	    console.log(this.state.thanked)
+		const pendingCircles = (confirmations) => {
+			return (
+				<View style={{flexDirection: 'row', paddingBottom: 5, paddingLeft: 10}}>
+					<View style={[styles.pendingDarkLine, {width: confirmations*(70/6)}, (confirmations == 6) ? {borderRadius: 3.5} : {}, (confirmations == 0) ? {borderWidth: 0} : {}]} />
+					<View style={[styles.pendingLightLine, {width: 70-confirmations*(70/6)}, (confirmations == 0) ? {borderRadius: 3.5} : {}]} />				
+				</View>
+			)
+		}
 
 		return (
 			<View style={styles.content}>
@@ -68,7 +90,16 @@ class ViewTransactionModal extends Component {
                   <Text style={styles.amountText}>{cryptoAmount} BTC</Text>
                 </View>
                 {type == 'card' && <Text style={styles.subtitle}>Created on</Text>}
-                {type == 'blockchain' && <Text style={styles.subtitle}>{infoMessage}</Text>}
+                {type == 'blockchain' && <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                	<Text style={styles.subtitle}>{infoMessage}</Text>
+                	{isSplashtag && (direction == 'from') && <Button primary={this.state.thanked} disabled={this.state.thanked} title={!this.state.thanked ? 'Say thanks!' : 'Thanked'} small onPress={() => {
+                		if (!this.state.thanked) {
+	                		api.UpdateTransaction(id, {thanked: !this.state.thanked}).then(() => {
+	                			this.setState({thanked: !this.state.thanked})
+	                		})
+                		}
+                	}}/>}
+            	</View>}
                 <View style={styles.information}>
                     {!isSplashtag && 
                     	<View style={styles.letterCircle}>
@@ -95,6 +126,10 @@ class ViewTransactionModal extends Component {
 	                    	<Text style={styles.addressText}>{address}</Text>
                     	</View>}
                 </View>
+                {pending && <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                	<Text style={styles.subtitle}>Confirmations</Text>	
+                	{pendingCircles(confirmations)}
+                </View>}
                 <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
                 <Text style={styles.dateText}>{(!!relativeCurrency) ? '$'+ oldRelativeAmount +' '+relativeCurrency+' on ': ''}{date}</Text>
                 <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Exchange rate used' : 'Current exchange rate'}</Text>
@@ -224,7 +259,25 @@ const styles = StyleSheet.create({
 		color: colors.nearBlack,
 		fontSize: 16,
 		paddingBottom: 32
+	},
+	pendingDarkLine: {
+		height: 7,
+		borderTopLeftRadius: 3.5,
+		borderBottomLeftRadius: 3.5,
+		borderColor: colors.primary,
+		borderWidth: 0.1,
+		backgroundColor: colors.primary,
+		marginTop: 2,
+		opacity: 1,
+	},
+	pendingLightLine: {
+		height: 7,
+		borderTopRightRadius: 3.5,
+		borderBottomRightRadius: 3.5,
+		opacity: 0.2,
+		backgroundColor: colors.primary,
+		marginTop: 2,
+		marginRight: 3,
 	}
-
 
 });

@@ -14,6 +14,8 @@ let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
 import * as Keychain from 'react-native-keychain';
 
+import { blockchain_info_apiKey } from '../env/keys.json'
+
 export const Errors = {
   NETWORK_ERROR: 'NETWORK_ERROR'
 }
@@ -58,7 +60,7 @@ function NewBitcoinWallet(network='mainnet') {
 function GetBitcoinAddressBalance(address, network='mainnet') {
   return new Promise((resolve, reject) => {
     const APIaddress = (network == 'mainnet') ? 'https://blockchain.info/q/addressbalance/' : 'https://testnet.blockchain.info/q/addressbalance/'
-    axios.get(APIaddress + address + '?confirmations=6')
+    axios.get(APIaddress + address + '?api_code=' + blockchain_info_apiKey + '&confirmations=6')
     .then(response => {
       if (response.data !== null){
         resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
@@ -78,6 +80,7 @@ function GetBitcoinAddressBalance(address, network='mainnet') {
 
 async function AddBlockchainTransactions(address, userId, splashtag, network='mainnet') {
     try {
+      const apiCode = '?api_code=' + blockchain_info_apiKey
       const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
       const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
       const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
@@ -101,8 +104,8 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
       }
 
       // load txs from blockchain
-      const blockHeight = (await axios.get(blockHeightAPI)).data
-      const txs = (await axios.get(addressAPI)).data.txs
+      const blockHeight = (await axios.get(blockHeightAPI + apiCode)).data
+      const txs = (await axios.get(addressAPI + apiCode)).data.txs
       const txsLength = txs.length
       for(var j=0; j < txsLength; j++) {
         
@@ -127,7 +130,7 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
           }
 
           // load total tx amount
-          const total = (await axios.get(txAPI+txs[j].hash+'/'+address)).data
+          const total = (await axios.get(txAPI+txs[j].hash+'/'+address+apiCode)).data
           if (total < 0) {
             newTransaction.fromId = userId
             newTransaction.fromSplashtag = splashtag
@@ -146,7 +149,7 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
               newTransaction.amount = {}
             } else {
               // load fees and calculate subtotal
-              newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash)).data
+              newTransaction.amount.fee = (await axios.get(feeAPI+txs[j].hash + apiCode)).data
               newTransaction.amount.total = newTransaction.amount.subtotal + newTransaction.amount.fee            
             }
 

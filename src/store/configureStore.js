@@ -20,7 +20,9 @@ const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__
 
 export default function configureStore () {
 
-    Sentry.config(sentryDSN).install();
+    if (!__DEV__) {
+        Sentry.config(sentryDSN).install();        
+    }
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
