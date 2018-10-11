@@ -1,4 +1,5 @@
 import api, { Errors } from "../../api";
+import { sendTransaction } from "../../ethereum-api"
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -8,7 +9,7 @@ import * as Keychain from 'react-native-keychain';
 import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
-import { cryptoUnits } from '../../lib/cryptos'
+import { cryptoUnits, cryptoNames } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
 
@@ -198,12 +199,12 @@ export const ApproveTransaction = (transaction) => {
 }
 
 
-export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAmount, toId, toSplashtag, currency="BTC") => {
+export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId, toSplashtag, currency="BTC") => {
 	return (dispatch, getState) => {
     
     return new Promise((resolve, reject) => {
 
-    	if (currency != "BTC") {
+    	if (cryptoNames.indexOf(currency) < 0) {
     		const error = `Send transaction: unsupported currency: ${currency}`
 				Sentry.captureMessage(error)
     		dispatch(sendTransactionFailure(error))	
@@ -211,17 +212,18 @@ export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAm
     	}
 
       const state = getState()
-      const userBtcAddress = state.crypto.wallets[currency].address
-      const network = state.crypto.wallets[currency].network
-      const totalSatoshiAmount = satoshiAmount+feeSatoshi
+      const walletCurrency = (currency == 'BTC') ? 'BTC' : 'ETH'
+      const userAddress = state.crypto.wallets[walletCurrency].address
+      const network = state.crypto.wallets[walletCurrency].network
+      const totalUnitAmount = unitAmount+fee
 
       let transaction = {
         amount: {
-          subtotal: satoshiAmount,
-          total: totalSatoshiAmount,
-          fee: feeSatoshi,
+          subtotal: unitAmount,
+          total: totalUnitAmount,
+          fee: fee,
         },
-        currency: 'BTC',
+        currency: currency,
         relativeAmount: relativeAmount,
         relativeCurrency: 'USD',
         type: 'blockchain',
@@ -232,18 +234,38 @@ export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAm
         toAddress: toAddress,
         fromId: state.user.id,	
         fromSplashtag: state.user.entity.splashtag,
-        fromAddress: userBtcAddress,
+        fromAddress: userAddress,
       }
       if (toId) transaction.toId = toId
       if (toSplashtag) transaction.toSplashtag = toSplashtag
 
       dispatch(sendTransactionInit())
-      Keychain.getGenericPassword().then(data => {
-        const privateKey = JSON.parse(data.password)[currency][network].wif
-        api.BuildBitcoinTransaction({from: userBtcAddress, to:toAddress, privateKey, amtSatoshi: totalSatoshiAmount, fee: feeSatoshi, network}).then(response => {
-          const {txid, txhex} = response
-          transaction.txId = txid
 
+  	  if (currency == 'BTC') {
+	      Keychain.getGenericPassword().then(data => {
+	        const privateKey = JSON.parse(data.password)[walletCurrency][network].wif
+	        api.BuildBitcoinTransaction({from: userAddress, to:toAddress, privateKey, amtSatoshi: totalUnitAmount, fee: fee, network}).then(response => {
+	          const {txid, txhex} = response
+	          transaction.txId = txid
+
+	          api.NewTransaction(transaction).then(() => {
+	            dispatch(sendTransactionSuccess())
+	            resolve()
+	          }).catch(error => {
+	          	Sentry.captureMessage(error)
+	            dispatch(sendTransactionFailure(error))	
+	            reject(error)
+	          })
+	        }).catch(error => {
+			  if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
+	          dispatch(sendTransactionFailure(error))
+	          reject(error)
+	        })
+	      })
+
+  	  } else {
+  	  	sendTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(receipt => {
+          transaction.txId = receipt.transactionHash
           api.NewTransaction(transaction).then(() => {
             dispatch(sendTransactionSuccess())
             resolve()
@@ -257,7 +279,7 @@ export const SendTransaction = (toAddress, satoshiAmount, feeSatoshi, relativeAm
           dispatch(sendTransactionFailure(error))
           reject(error)
         })
-      })
+  	  }
       
     })
 
