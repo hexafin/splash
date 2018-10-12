@@ -149,7 +149,7 @@ let switchInputRange = [1]
 let i = 0
 let lastColor
 cryptoNames.forEach(crypto => {
-	switchInputRange.push(-1 * SCREEN_WIDTH/2 * i)
+	switchInputRange.push(-1 * (SCREEN_WIDTH/2-45) * i)
   	switchCryptoColors.push(cryptoColors[crypto])
   	i++
   	lastColor = cryptoColors[crypto]

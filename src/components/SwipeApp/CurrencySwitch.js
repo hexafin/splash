@@ -35,7 +35,7 @@ cryptoNames.forEach(crypto => {
     image: cryptoImages[crypto]
   })
   snapPoints.push({
-    x: -1 * SCREEN_WIDTH/2 * i
+    x: -1 * (SCREEN_WIDTH/2-45) * i
   })
   i++
 })
@@ -99,6 +99,13 @@ class CurrencySwitch extends Component {
                 <Animated.View
                   style={{
                     ...styles.coin,
+                    opacity: this.props.switchXOffset.interpolate({
+                      inputRange: [
+                        -1 * (SCREEN_WIDTH/2-45) * (currency.index+1), 
+                        -1 * (SCREEN_WIDTH/2-45) * (currency.index),
+                        -1 * (SCREEN_WIDTH/2-45) * (currency.index-1)],
+                      outputRange: [0.8, 1, 0.8]
+                    }),
                     transform: [
                       {scale: Animated.multiply(
                         this.props.yOffsets.home.interpolate({
@@ -107,9 +114,9 @@ class CurrencySwitch extends Component {
                         }),
                         this.props.switchXOffset.interpolate({
                           inputRange: [
-                            -1 * SCREEN_WIDTH/2 * (currency.index+1), 
-                            -1 * SCREEN_WIDTH/2 * (currency.index),
-                            -1 * SCREEN_WIDTH/2 * (currency.index-1)],
+                            -1 * (SCREEN_WIDTH/2-45) * (currency.index+1), 
+                            -1 * (SCREEN_WIDTH/2-45) * (currency.index),
+                            -1 * (SCREEN_WIDTH/2-45) * (currency.index-1)],
                           outputRange: [0.8, 1, 0.8]
                         })
                       )},
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
   coin: {
     width: 100,
     height: 120,
-    marginRight: (SCREEN_WIDTH - 100)/2 - 50,
+    marginRight: (SCREEN_WIDTH - 100)/2 - 95,
   },
   coinImage: {
     width: 100,
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "absolute",
-    top: isIphoneX() ? 180 : 160,
+    top: isIphoneX() ? 170 : 150,
   }
 })
 

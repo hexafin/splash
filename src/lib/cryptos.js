@@ -24,7 +24,7 @@ export const cryptoColors = {
 export const cryptoImages = {
     BTC: require("../assets/images/bitcoin-logo.png"),
     ETH: require("../assets/images/ether-icon.png"),
-    GUSD: require("../assets/images/bitcoin-logo.png"),
+    GUSD: require("../assets/images/gemini-icon.png"),
 }
 
 export const cryptoUnits = {
