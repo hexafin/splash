@@ -2,8 +2,8 @@ export const cryptoNameDict = {
     BTC: "bitcoin",
     ETH: "ethereum",
     GUSD: "gemini dollars",
-    BCH: "bitcoin cash",
-    LTC: "litecoin"
+    // BCH: "bitcoin cash",
+    // LTC: "litecoin"
 }
 
 export const cryptoTitleDict = {
@@ -13,6 +13,18 @@ export const cryptoTitleDict = {
     BCH: "Bitcoin cash",
     LTC: "Litecoin",
     USD: "US Dollars"
+}
+
+export const cryptoColors = {
+    BTC: "rgba(247, 147, 26, 1)",
+    ETH: "rgba(60, 60, 61, 1)",
+    GUSD: "rgba(32, 39, 52, 1)"
+}
+
+export const cryptoImages = {
+    BTC: require("../assets/images/bitcoin-logo.png"),
+    ETH: require("../assets/images/ether-icon.png"),
+    GUSD: require("../assets/images/bitcoin-logo.png"),
 }
 
 export const cryptoUnits = {
@@ -27,7 +39,8 @@ export const currencySymbolDict = {
 // v1 - only bitcoin
 export const cryptoNames = [
     "BTC",
-    //"ETH",
+    "ETH",
+    "GUSD"
     //"BCH",
     //"LTC"
 ]

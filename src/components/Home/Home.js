@@ -21,6 +21,7 @@ import LoadingCircle from "../universal/LoadingCircle"
 import History from "./History"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import StartPayButton from "./StartPayButton"
+import ColoredPayButton from "./ColoredPayButton"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -102,7 +103,7 @@ class Home extends Component {
 					<History/>
 				</Animated.ScrollView>
 
-				<StartPayButton onPress={() => {
+				<ColoredPayButton fillInput={this.props.switchXOffset} fill={this.props.switchColor} onPress={() => {
 					ReactNativeHapticFeedback.trigger("impactLight", true);
 					this.props.navigation.navigate("PayFlow");
 				}}/>
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
 	},
 	scrollContainer: {
 		position: "relative",
-		paddingTop: isIphoneX() ? 210 : 190,
+		paddingTop: isIphoneX() ? 380 : 360,
 		minHeight: SCREEN_HEIGHT,
 		// backgroundColor: colors.red
 	},

@@ -93,7 +93,7 @@ class Balance extends Component {
 					outputRange: [0, 1, 0]
 				}),
 				this.props.yOffsets.home.interpolate({
-					inputRange: [-1, 0, 53, 54],
+					inputRange: [-1, 0, 120, 121],
 					outputRange: [0, 0, -53, -53]
 				}),
 			),
@@ -110,7 +110,7 @@ class Balance extends Component {
 					outputRange: [0, 1, 0]
 				}),
 				this.props.yOffsets.home.interpolate({
-					inputRange: [-81, -80, 0, 70, 71],
+					inputRange: [-81, -80, 0, 160, 161],
 					outputRange: [0.2, 0.2, 0, -0.2, -0.2]
 				})
 			),

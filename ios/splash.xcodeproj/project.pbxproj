@@ -27,6 +27,7 @@
 		080B6C3120D149AB00C34F1D /* libRNReactNativeHapticFeedback.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 080B6C3020D149A000C34F1D /* libRNReactNativeHapticFeedback.a */; };
 		080B6C9D20D14F0700C34F1D /* libRNRandomBytes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 080B6C9A20D14ED900C34F1D /* libRNRandomBytes.a */; };
 		08CAC88520DDBD4300D2074C /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CAC88220DDBD3100D2074C /* libRNSVG.a */; };
+		08CEBCF52163CAB70057223D /* libInteractable.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CEBCBD2163CAAD0057223D /* libInteractable.a */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -254,6 +255,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 94DDAC5C1F3D024300EED511;
 			remoteInfo = "RNSVG-tvOS";
+		};
+		08CEBCBC2163CAAD0057223D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08CEBCB42163CAAD0057223D /* Interactable.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = CC0127971E3ACC3900B23C9F;
+			remoteInfo = Interactable;
 		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -538,6 +546,7 @@
 		080B6C2B20D149A000C34F1D /* RNReactNativeHapticFeedback.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNReactNativeHapticFeedback.xcodeproj; path = "../node_modules/react-native-haptic-feedback/ios/RNReactNativeHapticFeedback.xcodeproj"; sourceTree = "<group>"; };
 		080B6CA020D1741400C34F1D /* splash.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = splash.entitlements; path = splash/splash.entitlements; sourceTree = "<group>"; };
 		08CAC87C20DDBD3100D2074C /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
+		08CEBCB42163CAAD0057223D /* Interactable.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Interactable.xcodeproj; path = "../node_modules/react-native-interactable/lib/ios/Interactable.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* splash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = splash.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -580,6 +589,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08CEBCF52163CAB70057223D /* libInteractable.a in Frameworks */,
 				80CD597C21198BA100A8A597 /* libRCTContacts.a in Frameworks */,
 				08CAC88520DDBD4300D2074C /* libRNSVG.a in Frameworks */,
 				8074833020D8F63E001321B8 /* libBVLinearGradient.a in Frameworks */,
@@ -802,6 +812,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		08CEBCB52163CAAD0057223D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				08CEBCBD2163CAAD0057223D /* libInteractable.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -906,6 +924,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				08CEBCB42163CAAD0057223D /* Interactable.xcodeproj */,
 				80CD593C21198B8100A8A597 /* RCTContacts.xcodeproj */,
 				08CAC87C20DDBD3100D2074C /* RNSVG.xcodeproj */,
 				807482F120D8F5FC001321B8 /* BVLinearGradient.xcodeproj */,
@@ -1148,6 +1167,10 @@
 				{
 					ProductGroup = 080B6B2D20D136DD00C34F1D /* Products */;
 					ProjectRef = 080B6B2C20D136DD00C34F1D /* CodePush.xcodeproj */;
+				},
+				{
+					ProductGroup = 08CEBCB52163CAAD0057223D /* Products */;
+					ProjectRef = 08CEBCB42163CAAD0057223D /* Interactable.xcodeproj */;
 				},
 				{
 					ProductGroup = 080B6C0120D144EB00C34F1D /* Products */;
@@ -1441,6 +1464,13 @@
 			fileType = archive.ar;
 			path = "libRNSVG-tvOS.a";
 			remoteRef = 08CAC88320DDBD3100D2074C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		08CEBCBD2163CAAD0057223D /* libInteractable.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libInteractable.a;
+			remoteRef = 08CEBCBC2163CAAD0057223D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
