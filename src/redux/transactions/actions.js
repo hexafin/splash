@@ -1,5 +1,5 @@
 import api, { Errors } from "../../api";
-import { sendTransaction } from "../../ethereum-api"
+import { sendTransaction, AddETHTransactions } from "../../ethereum-api"
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -61,8 +61,8 @@ export function loadTransactionsInit() {
 }
 
 export const LOAD_TRANSACTIONS_SUCCESS = "LOAD_TRANSACTIONS_SUCCESS"
-export function loadTransactionsSuccess(transactions) {
-	return { type: LOAD_TRANSACTIONS_SUCCESS, transactions };
+export function loadTransactionsSuccess(transactions, currency) {
+	return { type: LOAD_TRANSACTIONS_SUCCESS, transactions, currency };
 }
 
 export const LOAD_TRANSACTIONS_FAILURE = "LOAD_TRANSACTIONS_FAILURE"
@@ -80,7 +80,7 @@ export function resetQr() {
 	return { type: RESET_QR }
 }
 
-export const LoadTransactions = () => {
+export const LoadTransactions = (currency="BTC") => {
 	return async (dispatch, getState) => {
 
 		const state = getState()
@@ -103,43 +103,50 @@ export const LoadTransactions = () => {
 
 		try {
 
-			await api.AddBlockchainTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
+			const walletAddress = state.crypto.wallets[currency].address
+			if (currency != "BTC") walletAddress = walletAddress.toLowerCase()
+
+			if (currency=="BTC") {
+				await api.AddBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
+			} else {
+				await AddETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
+			}
 
 			// two listeners for each firebase property
 			// after one listener finds changes merges in the documents found from the other
-			let unsub1 = firestore.collection("transactions").where("toAddress", "==", state.crypto.wallets.BTC.address).onSnapshot(async querySnapshot => {
+			let unsub1 = firestore.collection("transactions").where("toAddress", "==", walletAddress).onSnapshot(async querySnapshot => {
 				dispatch(loadTransactionsInit())
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					const query = await firestore.collection("transactions").where("fromAddress", "==", state.crypto.wallets.BTC.address).get()
+					const query = await firestore.collection("transactions").where("fromAddress", "==", walletAddress).get()
 					transactions = loadQuery(query, transactions)
 					transactions = loadQuery(querySnapshot, transactions)
 					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
-					dispatch(loadTransactionsSuccess(transactions))
+					dispatch(loadTransactionsSuccess(transactions, currency))
 
 				} else {
 					unsub1()
-					dispatch(loadTransactionsSuccess(transactions))
+					dispatch(loadTransactionsSuccess(transactions, currency))
 				}
 			}, error => {
 				Sentry.captureMessage(error)
 				dispatch(loadTransactionsFailure(error))			
 			})
 
-			let unsub2 = firestore.collection("transactions").where("fromAddress", "==", state.crypto.wallets.BTC.address).onSnapshot(async querySnapshot => {
+			let unsub2 = firestore.collection("transactions").where("fromAddress", "==", walletAddress).onSnapshot(async querySnapshot => {
 				dispatch(loadTransactionsInit())
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					const query = await firestore.collection("transactions").where("toAddress", "==", state.crypto.wallets.BTC.address).get()
+					const query = await firestore.collection("transactions").where("toAddress", "==", walletAddress).get()
 					transactions = loadQuery(query, transactions)
 					transactions = loadQuery(querySnapshot, transactions)
 					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
-					dispatch(loadTransactionsSuccess(transactions))
+					dispatch(loadTransactionsSuccess(transactions, currency))
 				} else {
 					unsub2()
-					dispatch(loadTransactionsSuccess(transactions))
+					dispatch(loadTransactionsSuccess(transactions, currency))
 				}
 			}, error => {
 				Sentry.captureMessage(error)
@@ -213,9 +220,11 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 
       const state = getState()
       const walletCurrency = (currency == 'BTC') ? 'BTC' : 'ETH'
-      const userAddress = state.crypto.wallets[walletCurrency].address
+      let userAddress = state.crypto.wallets[walletCurrency].address
       const network = state.crypto.wallets[walletCurrency].network
       const totalUnitAmount = unitAmount+fee
+
+      if (currency != 'BTC') userAddress = userAddress.toLowerCase() // store eth addresses in lower case
 
       let transaction = {
         amount: {

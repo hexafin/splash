@@ -78,7 +78,7 @@ function GetBitcoinAddressBalance(address, network='mainnet') {
   });
 }
 
-async function AddBlockchainTransactions(address, userId, splashtag, network='mainnet') {
+async function AddBTCTransactions(address, userId, splashtag, network='mainnet') {
     try {
       const apiCode = '?api_code=' + blockchain_info_apiKey
       const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
@@ -87,8 +87,12 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
       const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
 
       // get list of txs on firebase
-      const query1 = await firestore.collection("transactions").where("fromId", "==", userId).where("type", "==", "blockchain").get()
-      const query2 = await firestore.collection("transactions").where("toId", "==", userId).where("type", "==", "blockchain").get()
+      const query1 = await firestore.collection("transactions").where("fromId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
+      const query2 = await firestore.collection("transactions").where("toId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
 
       let firebaseTxIds = []
       let firebaseTxs = []
@@ -659,7 +663,7 @@ export default api = {
     GenerateCard,
     AddToKeychain,
     DeleteAccount,
-    AddBlockchainTransactions,
+    AddBTCTransactions,
     IsValidAddress,
     DeleteTransactions,
     UpdateRequest: UpdateRequest,
