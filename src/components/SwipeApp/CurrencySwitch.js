@@ -104,7 +104,7 @@ class CurrencySwitch extends Component {
                         -1 * (SCREEN_WIDTH/2-45) * (currency.index+1), 
                         -1 * (SCREEN_WIDTH/2-45) * (currency.index),
                         -1 * (SCREEN_WIDTH/2-45) * (currency.index-1)],
-                      outputRange: [0.8, 1, 0.8]
+                      outputRange: [0.5, 1, 0.5]
                     }),
                     transform: [
                       {scale: Animated.multiply(
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   container: {
     position: "absolute",
-    top: isIphoneX() ? 170 : 150,
+    top: isIphoneX() ? 175 : 155,
   }
 })
 
