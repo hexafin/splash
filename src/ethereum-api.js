@@ -17,7 +17,8 @@ export const getBalance = async ({currency='ETH', address, network='testnet'}) =
 	const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
 	const web3 = new Web3( new Web3.providers.HttpProvider(api + infura_apiKey) )
 	let balance
-	if (token == 'ETH') {
+	console.log(currency, network, contractAddresses[currency])
+	if (currency == 'ETH') {
 		balance = await web3.eth.getBalance(address)
 		balance = parseFloat(web3.utils.fromWei(balance))
 	} else {

@@ -22,7 +22,10 @@ import {
 const initialState = {
   isApprovingTransaction: false,
   pendingTransaction: {},
-  transactions: {},
+  transactions: {
+    BTC: [],
+    ETH: [],
+  },
   errorApprovingTransaction: null,
   isLoadingTransactions: false,
   errorLoadingTransactions: null,

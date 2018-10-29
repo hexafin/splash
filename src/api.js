@@ -14,7 +14,7 @@ let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
 import * as Keychain from 'react-native-keychain';
 
-import { blockchain_info_apiKey } from '../env/keys.json'
+import { blockchain_info_apiKey, coinmarketcap_apiKey } from '../env/keys.json'
 
 export const Errors = {
   NETWORK_ERROR: 'NETWORK_ERROR'
@@ -399,11 +399,16 @@ function GetBalance(uid, currency = null) {
     });
 }
 
-function GetExchangeRate(currency = 'BTC') {
+function GetExchangeRate(currencies =['BTC'], relativeCurrency = 'USD') {
     return new Promise((resolve, reject) => {
-        const APIaddress = 'https://api.coinbase.com/v2/exchange-rates?currency=$'.replace('$', currency)
+        const APIaddress = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?CMC_PRO_API_KEY='+coinmarketcap_apiKey+'&symbol='+currencies.join(',')+'&convert='+relativeCurrency
         axios.get(APIaddress).then(response => {
-            resolve(response.data.data.rates)
+            const data = response.data.data
+            let exchangeRates = {}
+            Object.keys(data).map((key, index) => {
+               exchangeRates[key] = {[relativeCurrency]: data[key].quote[relativeCurrency].price}
+            })
+            resolve(exchangeRates)
         }).catch(error => {
             if (!error.status) {
               reject(Errors.NETWORK_ERROR)

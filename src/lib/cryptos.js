@@ -34,6 +34,11 @@ export const cryptoNames = [
     //"LTC"
 ]
 
+export const erc20Names = [
+    "GUSD",
+    "USDT",
+]
+
 const decimalLengths = {
     BTC: 5,
     USD: 2,
