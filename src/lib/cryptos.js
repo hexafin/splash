@@ -24,12 +24,19 @@ export const currencySymbolDict = {
     USD: "$"
 }
 
-// v1 - only bitcoin
+// v2 - only bitcoin and ether
 export const cryptoNames = [
     "BTC",
-    //"ETH",
+    "ETH",
+    "GUSD",
+    "USDT"
     //"BCH",
     //"LTC"
+]
+
+export const erc20Names = [
+    "GUSD",
+    "USDT",
 ]
 
 const decimalLengths = {

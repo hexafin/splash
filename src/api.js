@@ -14,7 +14,7 @@ let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
 import * as Keychain from 'react-native-keychain';
 
-import { blockchain_info_apiKey } from '../env/keys.json'
+import { blockchain_info_apiKey, coinmarketcap_apiKey } from '../env/keys.json'
 
 export const Errors = {
   NETWORK_ERROR: 'NETWORK_ERROR'
@@ -78,7 +78,7 @@ function GetBitcoinAddressBalance(address, network='mainnet') {
   });
 }
 
-async function AddBlockchainTransactions(address, userId, splashtag, network='mainnet') {
+async function AddBTCTransactions(address, userId, splashtag, network='mainnet') {
     try {
       const apiCode = '?api_code=' + blockchain_info_apiKey
       const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
@@ -87,8 +87,12 @@ async function AddBlockchainTransactions(address, userId, splashtag, network='ma
       const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
 
       // get list of txs on firebase
-      const query1 = await firestore.collection("transactions").where("fromId", "==", userId).where("type", "==", "blockchain").get()
-      const query2 = await firestore.collection("transactions").where("toId", "==", userId).where("type", "==", "blockchain").get()
+      const query1 = await firestore.collection("transactions").where("fromId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
+      const query2 = await firestore.collection("transactions").where("toId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
 
       let firebaseTxIds = []
       let firebaseTxs = []
@@ -395,11 +399,16 @@ function GetBalance(uid, currency = null) {
     });
 }
 
-function GetExchangeRate(currency = 'BTC') {
+function GetExchangeRate(currencies =['BTC'], relativeCurrency = 'USD') {
     return new Promise((resolve, reject) => {
-        const APIaddress = 'https://api.coinbase.com/v2/exchange-rates?currency=$'.replace('$', currency)
+        const APIaddress = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?CMC_PRO_API_KEY='+coinmarketcap_apiKey+'&symbol='+currencies.join(',')+'&convert='+relativeCurrency
         axios.get(APIaddress).then(response => {
-            resolve(response.data.data.rates)
+            const data = response.data.data
+            let exchangeRates = {}
+            Object.keys(data).map((key, index) => {
+               exchangeRates[key] = {[relativeCurrency]: data[key].quote[relativeCurrency].price}
+            })
+            resolve(exchangeRates)
         }).catch(error => {
             if (!error.status) {
               reject(Errors.NETWORK_ERROR)
@@ -659,7 +668,7 @@ export default api = {
     GenerateCard,
     AddToKeychain,
     DeleteAccount,
-    AddBlockchainTransactions,
+    AddBTCTransactions,
     IsValidAddress,
     DeleteTransactions,
     UpdateRequest: UpdateRequest,

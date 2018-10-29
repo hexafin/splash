@@ -22,7 +22,10 @@ import {
 const initialState = {
   isApprovingTransaction: false,
   pendingTransaction: {},
-  transactions: [],
+  transactions: {
+    BTC: [],
+    ETH: [],
+  },
   errorApprovingTransaction: null,
   isLoadingTransactions: false,
   errorLoadingTransactions: null,
@@ -109,7 +112,10 @@ export default function transactionReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoadingTransactions: false,
-                transactions: action.transactions
+                transactions: {
+                  ...state.transactions,
+                  [action.currency]: action.transactions,
+                },
             }
 
         case LOAD_TRANSACTIONS_FAILURE:
