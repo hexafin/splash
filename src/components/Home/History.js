@@ -33,7 +33,7 @@ class History extends Component {
 		super(props)
 		this.state = {
 			loading: false,
-			height: SCREEN_HEIGHT-280,
+			height: SCREEN_HEIGHT,
 		}
 	}
 

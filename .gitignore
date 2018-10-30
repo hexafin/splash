@@ -1,17 +1,13 @@
+ios/Pods/
+
 # OSX
 #
 .DS_Store
-
-# Environment Variables
-env/
-codepush/
 
 # Xcode
 #
 build/
 *.pbxuser
-*.jsbundle
-ios/Pods/
 !default.pbxuser
 *.mode1v3
 !default.mode1v3
@@ -27,7 +23,6 @@ DerivedData
 *.ipa
 *.xcuserstate
 project.xcworkspace
-ios/hexa.xcodeproj/*
 
 # Android/IntelliJ
 #
@@ -42,7 +37,6 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
-package-lock.json
 
 # BUCK
 buck-out/
@@ -59,3 +53,6 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle

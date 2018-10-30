@@ -10,7 +10,7 @@ import {defaults} from "../../lib/styles"
 import { Field } from 'redux-form'
 import Checkmark from './Checkmark'
 import PropTypes from 'prop-types'
-export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, input={}, style={}, checkmark=false, children}) => {
+export const Input = ({secureTextEntry, value, placeholder, name, input={}, style={}, checkmark=false, children, ...inputProps}) => {
 
 	return (
     <View style={styles.input}>
@@ -32,7 +32,7 @@ export const Input = ({secureTextEntry, value, placeholder, name,...inputProps, 
 		)
 }
 
-export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, placeholder, name,...inputProps, input}) => {
+export const MultiInput = ({onChange, secureTextEntry, inputPosition, value, placeholder, name, input, ...inputProps}) => {
 
 	const inputStyle = [styles.multiInput]
 	if (inputPosition == 'firstInput') {

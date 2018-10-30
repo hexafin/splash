@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	payButton: {
-		backgroundColor: colors.primary,
 		width: 70,
 		height: 70,
 		borderRadius: 35,

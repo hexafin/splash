@@ -20,6 +20,7 @@ import { defaults, icons } from "../../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
+import { cryptoNames, cryptoColors, cryptoImages } from "../../lib/cryptos"
 import { LoadExchangeRates, LoadBalance } from "../../redux/crypto/actions"
 import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions"
 import PropTypes from "prop-types"
@@ -27,11 +28,13 @@ import Account from "../Account"
 import Wallet from "../Wallet"
 import Home from "../Home"
 import Balance from "./Balance"
+import CurrencySwitch from "./CurrencySwitch"
 import ReturnToHome from "./ReturnToHome"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import codePush from "react-native-code-push";
 import moment from "moment"
 import ModalRoot from '../Modals/ModalRoot'
+import Header from "./Header"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -115,7 +118,7 @@ function titleTransform(index: number) {
 const headerTranslateY = Animated.add(
 	xOffset.interpolate({
 		inputRange: [0, 1 * SCREEN_WIDTH, 2 * SCREEN_WIDTH],
-		outputRange: [-20, 0, -20]
+		outputRange: [-160, 0, -160]
 	}),
 	Animated.multiply(
 		xOffset.interpolate({
@@ -123,8 +126,8 @@ const headerTranslateY = Animated.add(
 			outputRange: [0, 1, 0]
 		}),
 		yOffsets.home.interpolate({
-			inputRange: [-41, -40, 0, 70, 71],
-			outputRange: [40, 40, 0, -70, -70]
+			inputRange: [-41, -40, 0, 200, 201],
+			outputRange: [40, 40, 0, -200, -200]
 		})
 	)
 )
@@ -138,6 +141,29 @@ function headerTransform() {
 		]
 	}
 }
+
+const switchXOffset = new Animated.Value(0)
+
+let switchCryptoColors = [cryptoColors[cryptoNames[0]]]
+let switchInputRange = [1]
+let i = 0
+let lastColor
+cryptoNames.forEach(crypto => {
+	switchInputRange.push(-1 * (SCREEN_WIDTH/2-45) * i)
+  	switchCryptoColors.push(cryptoColors[crypto])
+  	i++
+  	lastColor = cryptoColors[crypto]
+})
+switchCryptoColors.push(lastColor)
+switchInputRange.push(switchInputRange[i]-1)
+switchInputRange.reverse()
+switchCryptoColors.reverse()
+
+const switchColor = switchXOffset.interpolate({
+	inputRange: switchInputRange,
+	outputRange: switchCryptoColors
+})
+
 
 class SwipeApp extends Component {
 	refScrollView = view => {
@@ -307,7 +333,7 @@ class SwipeApp extends Component {
 		xOffset.removeAllListeners()
 		this.onTokenRefreshListener();
 		this.notificationListener()
-		this.notificationOpenedListener()	    
+		this.notificationOpenedListener()
 		AppState.removeEventListener('change', this.handleAppStateChange);			
 	}
 
@@ -336,7 +362,9 @@ class SwipeApp extends Component {
 				<Page key={"page-" + i}>
 					{React.createElement(page.component, {
 						...this.props,
-						yOffset: yOffsets[page.name]
+						yOffset: yOffsets[page.name],
+						switchColor: switchColor,
+						switchXOffset: switchXOffset
 					})}
 				</Page>
 			)
@@ -418,11 +446,12 @@ class SwipeApp extends Component {
 					{Pages}
 				</Animated.ScrollView>
 
-				<Animated.Image
-					pointerEvents={"none"}
-					source={require("../../assets/images/headerWave.png")}
-					resizeMode={Platform.isPad ? "cover" : "contain"}
-					style={[headerTransform(), styles.headerImage]}/>
+				<Animated.View
+					style={[headerTransform(), styles.headerImage]}>
+					<Header
+						fillInput={switchXOffset}
+						fill={switchColor}/>
+				</Animated.View>
 				
 				{Icons}
 
@@ -432,6 +461,10 @@ class SwipeApp extends Component {
 					this.goToPageByIndex(this.scrollView, 1)
 				}}/>
 				<Balance yOffsets={yOffsets} xOffset={xOffset}/>
+				<CurrencySwitch
+					switchXOffset={switchXOffset}
+					yOffsets={yOffsets} 
+					xOffset={xOffset}/>
 				<ModalRoot />
 			</View>
 		)
@@ -467,7 +500,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.primary
 	},
 	headerImage: {
-		top: Platform.isPad ? SCREEN_WIDTH*-0.5 : SCREEN_WIDTH*-0.6,
+		top: -40,
 		width: SCREEN_WIDTH,
 		position: "absolute",
 		shadowOffset: {
