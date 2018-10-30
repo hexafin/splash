@@ -6,6 +6,7 @@ import {ActionTypes} from "./actions.js"
 
 const initialState = {
   activeCurrency: "USD",
+  activeCryptoCurrency: "BTC",
   wallets: {
     BTC: {
       address: '',
@@ -17,8 +18,9 @@ const initialState = {
     }
   },
   balance: {
-    BTC: 0,
-    ETH: 0,
+    BTC: 0.0,
+    ETH: 0.0,
+    GUSD: 0.0,
   },
   loadingBalanceCurrency: null,
   isLoadingBalance: false,

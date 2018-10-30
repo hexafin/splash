@@ -5,6 +5,7 @@ import {enterAmount} from "../../redux/payFlow"
 
 const mapStateToProps = (state) => {
     return {
+    	activeCryptoCurrency: state.crypto.activeCryptoCurrency,
     	balance: state.crypto.balance,
     	exchangeRates: state.crypto.exchangeRates
     }

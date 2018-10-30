@@ -18,7 +18,7 @@ import CloseButton from "../universal/CloseButton";
 import NextButton from "../universal/NextButton";
 import CurrencySwitcherLight from "../universal/CurrencySwitcherLight";
 import NavigatorService from "../../redux/navigator";
-import { cryptoTitleDict, cryptoUnits, decimalToUnits, unitsToDecimal } from "../../lib/cryptos"
+import { cryptoTitleDict, cryptoUnits, decimalToUnits, unitsToDecimal, decimalLengths } from "../../lib/cryptos"
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -58,10 +58,10 @@ class EnterAmount extends Component {
 			let newAmount
 			let newValue
 			if (typeof this.state.amount == "number" && this.state.amount > 0) {
-				const exchangeRate = decimalToUnits(this.props.exchangeRates.BTC.USD, 'USD')
+				const exchangeRate = decimalToUnits(this.props.exchangeRates[this.props.activeCryptoCurrency].USD, 'USD')
 				newAmount = nextState.activeCurrency == "USD" 
-					? Math.round((this.state.amount/cryptoUnits.BTC) * exchangeRate)
-					: Math.round((this.state.amount/exchangeRate)*cryptoUnits.BTC)
+					? Math.round((this.state.amount/cryptoUnits[this.props.activeCryptoCurrency]) * exchangeRate)
+					: Math.round((this.state.amount/exchangeRate)*cryptoUnits[this.props.activeCryptoCurrency])
 				newValue = unitsToDecimal(newAmount, nextState.activeCurrency)
 
 			}
@@ -84,14 +84,15 @@ class EnterAmount extends Component {
 	}
 
 	render() {
-		const btcBalance = this.props.balance.BTC
+		const cryptoBalance = this.props.balance[this.props.activeCryptoCurrency]
+		const exchangeRates = this.props.exchangeRates[this.props.activeCryptoCurrency]
 		const balance = {
-			BTC: btcBalance.toFixed(5),
-			USD: (btcBalance * (this.props.exchangeRates.BTC ? this.props.exchangeRates.BTC.USD : 0)).toFixed(2)
+			[this.props.activeCryptoCurrency]: cryptoBalance.toFixed(decimalLengths[this.props.activeCryptoCurrency]),
+			USD: (cryptoBalance * (exchangeRates ? exchangeRates.USD : 0)).toFixed(2)
 		}
 		const amountOverBalance = (this.state.activeCurrency == "USD") 
 			? balance.USD*cryptoUnits.USD <= this.state.amount
-			: balance.BTC*cryptoUnits.BTC <= this.state.amount
+			: balance[this.props.activeCryptoCurrency]*cryptoUnits[this.props.activeCryptoCurrency] <= this.state.amount
 		return (
 			<View style={styles.wrapper}>
 
@@ -102,7 +103,7 @@ class EnterAmount extends Component {
 				<View style={styles.bodyWrapper}>
 					<CurrencySwitcherLight
 						fiat="USD" 
-						crypto="BTC"
+						crypto={this.props.activeCryptoCurrency}
 						activeCurrency={this.state.activeCurrency}
 						textColor={colors.primary} 
 						switcherColor={"purple"}
@@ -132,18 +133,18 @@ class EnterAmount extends Component {
 								{this.state.value == "" ? 0 : this.state.value}
 							</Text>
 
-							{this.state.activeCurrency == "BTC" && 
+							{this.state.activeCurrency == this.props.activeCryptoCurrency && 
 								<Text style={[styles.amountSuffix, {
 									fontSize: 30, 
 									paddingLeft: 5,
 									color: amountOverBalance ? colors.red : colors.primary,
-								}]}>BTC</Text>}
+								}]}>{this.props.activeCryptoCurrency}</Text>}
 						</Animated.View>
 						<Text style={[styles.balance, {
 							color: amountOverBalance ? colors.red : colors.gray,
 						}]}>
 							Balance: {this.state.activeCurrency == "USD" && "$"}{balance[this.state.activeCurrency]} 
-							{this.state.activeCurrency == "BTC" && " BTC"}
+							{this.state.activeCurrency == this.props.activeCryptoCurrency && " " + this.props.activeCryptoCurrency}
 						</Text>
 					</View>
 				</View>
