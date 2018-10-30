@@ -1,5 +1,5 @@
 import api, { Errors } from "../../api";
-import { NewEthereumWallet } from "../../ethereum-api"
+import { NewEthereumWallet, getBalance  } from "../../ethereum-api"
 
 var axios = require("axios");
 import firebase from "react-native-firebase";
@@ -10,7 +10,7 @@ import * as Keychain from 'react-native-keychain';
 import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
-import { cryptoUnits } from '../../lib/cryptos'
+import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
 
@@ -85,23 +85,34 @@ export const LoadBalance = (currency="BTC") => {
 
 		const state = getState()
 
-		const address = state.crypto.wallets[currency].address
-		const network = state.crypto.wallets[currency].network
+		let address
+		let network
+		if (erc20Names.indexOf(currency) > -1 ) {
+			address = state.crypto.wallets.ETH.address
+		    network = state.crypto.wallets.ETH.network
+		} else {
+			address = state.crypto.wallets[currency].address
+			network = state.crypto.wallets[currency].network
+		}
 
-		switch(currency) {
-			case "BTC":
+		if(currency == "BTC") {
 				api.GetBitcoinAddressBalance(address, network).then(balance => {
 					dispatch(loadBalanceSuccess(balance))
 				}).catch(error => {
 					if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 					dispatch(loadBalanceFailure(error))
 				})
-				break
-			default:
-				const error = `Load balance: unsupported currency: ${currency}`
-				Sentry.captureMessage(error)
+		} else if (cryptoNames.indexOf(currency) >= 0) {
+			getBalance({currency, address, network}).then(balance => {
+				dispatch(loadBalanceSuccess(balance))
+			}).catch(error => {
+				if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 				dispatch(loadBalanceFailure(error))
-				break
+			})
+		} else {
+			const error = `Load balance: unsupported currency: ${currency}`
+			Sentry.captureMessage(error)
+			dispatch(loadBalanceFailure(error))
 		}
 	}
 }
@@ -112,15 +123,15 @@ export const LoadExchangeRates = (currency="BTC") => {
 
 		const state = getState()
 
-		if (currency != "BTC") {
+		if (cryptoNames.indexOf(currency) < 0) {
 			const error = `Load exchange rates: unsupported currency: ${currency}`
 			Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
 			return
 		}
 
-		api.GetExchangeRate(currency).then(exchangeRate => {
-			dispatch(loadExchangeRatesSuccess(exchangeRate))
+		api.GetExchangeRate([currency]).then(exchangeRates => {
+			dispatch(loadExchangeRatesSuccess(exchangeRates))
 		}).catch(error => {
 			if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
