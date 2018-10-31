@@ -1,13 +1,13 @@
 PODS:
-  - BoringSSL-GRPC (0.0.2):
-    - BoringSSL-GRPC/Implementation (= 0.0.2)
-    - BoringSSL-GRPC/Interface (= 0.0.2)
-  - BoringSSL-GRPC/Implementation (0.0.2):
-    - BoringSSL-GRPC/Interface (= 0.0.2)
-  - BoringSSL-GRPC/Interface (0.0.2)
-  - Crashlytics (3.10.8):
-    - Fabric (~> 1.7.12)
-  - Fabric (1.7.12)
+  - BoringSSL (10.0.5):
+    - BoringSSL/Implementation (= 10.0.5)
+    - BoringSSL/Interface (= 10.0.5)
+  - BoringSSL/Implementation (10.0.5):
+    - BoringSSL/Interface (= 10.0.5)
+  - BoringSSL/Interface (10.0.5)
+  - Crashlytics (3.10.2):
+    - Fabric (~> 1.7.7)
+  - Fabric (1.7.7)
   - Firebase/AdMob (5.0.1):
     - Firebase/Core
     - Google-Mobile-Ads-SDK (= 7.30.0)
@@ -69,7 +69,7 @@ PODS:
     - gRPC-ProtoRPC (~> 1.0)
     - leveldb-library (~> 1.18)
     - Protobuf (~> 3.1)
-  - FirebaseInstanceID (3.1.1):
+  - FirebaseInstanceID (3.1.0):
     - FirebaseCore (~> 5.0)
   - FirebaseMessaging (3.0.0):
     - FirebaseCore (~> 5.0)
@@ -104,35 +104,33 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.4)
   - "GoogleToolboxForMac/NSData+zlib (2.1.4)":
     - GoogleToolboxForMac/Defines (= 2.1.4)
-  - gRPC (1.15.1):
-    - gRPC-RxLibrary (= 1.15.1)
-    - gRPC/Main (= 1.15.1)
-  - gRPC-Core (1.15.1):
-    - gRPC-Core/Implementation (= 1.15.1)
-    - gRPC-Core/Interface (= 1.15.1)
-  - gRPC-Core/Implementation (1.15.1):
-    - BoringSSL-GRPC (= 0.0.2)
-    - gRPC-Core/Interface (= 1.15.1)
+  - gRPC (1.12.0):
+    - gRPC-RxLibrary (= 1.12.0)
+    - gRPC/Main (= 1.12.0)
+  - gRPC-Core (1.12.0):
+    - gRPC-Core/Implementation (= 1.12.0)
+    - gRPC-Core/Interface (= 1.12.0)
+  - gRPC-Core/Implementation (1.12.0):
+    - BoringSSL (~> 10.0)
+    - gRPC-Core/Interface (= 1.12.0)
     - nanopb (~> 0.3)
-  - gRPC-Core/Interface (1.15.1)
-  - gRPC-ProtoRPC (1.15.1):
-    - gRPC-ProtoRPC/Main (= 1.15.1)
-  - gRPC-ProtoRPC/Main (1.15.1):
-    - gRPC (= 1.15.1)
-    - gRPC-RxLibrary (= 1.15.1)
+  - gRPC-Core/Interface (1.12.0)
+  - gRPC-ProtoRPC (1.12.0):
+    - gRPC (= 1.12.0)
+    - gRPC-RxLibrary (= 1.12.0)
     - Protobuf (~> 3.0)
-  - gRPC-RxLibrary (1.15.1)
-  - gRPC/Main (1.15.1):
-    - gRPC-Core (= 1.15.1)
-    - gRPC-RxLibrary (= 1.15.1)
-  - GTMSessionFetcher/Core (1.2.0)
+  - gRPC-RxLibrary (1.12.0)
+  - gRPC/Main (1.12.0):
+    - gRPC-Core (= 1.12.0)
+    - gRPC-RxLibrary (= 1.12.0)
+  - GTMSessionFetcher/Core (1.1.15)
   - leveldb-library (1.20)
   - nanopb (0.3.8):
     - nanopb/decode (= 0.3.8)
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - Protobuf (3.6.1)
+  - Protobuf (3.6.0)
 
 DEPENDENCIES:
   - Crashlytics (~> 3.10.1)
@@ -150,7 +148,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - BoringSSL-GRPC
+    - BoringSSL
     - Crashlytics
     - Fabric
     - Firebase
@@ -179,9 +177,9 @@ SPEC REPOS:
     - Protobuf
 
 SPEC CHECKSUMS:
-  BoringSSL-GRPC: 2a230d9cd93e7ce39916044f645cebb31f37dde6
-  Crashlytics: 058dc1ba579f6c100bc60a6878703779bff383c4
-  Fabric: d7387db9a31aadff63b147a4b91d982c53afaa4f
+  BoringSSL: cf3f1793eb6e3c445c4d150456341f149c268a35
+  Crashlytics: 0360624eea1c978a743feddb2fb1ef8b37fb7a0d
+  Fabric: bda89e242bce1b7b8ab264248cf3407774ce0095
   Firebase: d6861c2059d8c32d1e6dd8932e22ada346d90a3a
   FirebaseABTesting: 1f50b8d50f5e3469eea54e7463a7b7fe221d1f5e
   FirebaseAnalytics: 19812b49fa5f283dd6b23edf8a14b5d477029ab8
@@ -190,7 +188,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 697eb53e5b4fe7cd4fa8756c1f82a9fca011345f
   FirebaseDynamicLinks: c70e8ef2f267f13459db89b8816b13a06b2278d2
   FirebaseFirestore: f686b8e83f3cf8bbc37db6e98e01029a14f01f55
-  FirebaseInstanceID: f3f0657372592ecdfdfe2cac604a5a75758376a6
+  FirebaseInstanceID: 05d779cbb97bd5bd5c51a38a903fc9cfe1b2454a
   FirebaseMessaging: f2360a966ecfb0d14facf0fbdf306efc2df0ddbe
   FirebasePerformance: 1ec6c40e5dad2543ca4c4f25d15168bde6322c2c
   FirebaseRemoteConfig: 3c57e4644bd6976b671ae0b725cd709f198bd1f5
@@ -198,14 +196,14 @@ SPEC CHECKSUMS:
   FirebaseSwizzlingUtilities: 6c22677c50d0b6f5f0dc637c1233f13694a3003f
   Google-Mobile-Ads-SDK: 7404f68120ae8682afeb5af001fbf4aad731c78e
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
-  gRPC: c1fa6fccfc3d31212f32aa7d4e40ab0452195ccb
-  gRPC-Core: 840d1068a0a57eeca00b52486897ad6265b8f0be
-  gRPC-ProtoRPC: 69552f09c9e8e6c253663668525b7c708814a9bd
-  gRPC-RxLibrary: 67a03bd22ef654e95fd7d6e4b9c5e62420a867b8
-  GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
+  gRPC: 9362451032695e2dfb7bafcd3740e3a27939e4ff
+  gRPC-Core: 9696b220565b283e021cf2722d473a4a74b7622a
+  gRPC-ProtoRPC: a1bd56fb1991a8dae4581250d7259eddabb66779
+  gRPC-RxLibrary: 1ed5314e8b38cd6e55c9bfa048387136ae925ce9
+  GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
+  Protobuf: 0fc0ad8bec688b2a3017a139953e01374fedbd5f
 
 PODFILE CHECKSUM: 47728b4a58767e096b370848ffbd94b0c0509fd0
 

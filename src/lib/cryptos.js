@@ -29,6 +29,8 @@ export const cryptoImages = {
 
 export const cryptoUnits = {
     BTC: 100000000,
+    ETH: 1000000000000000000,
+    GUSD: 100,
     USD: 100,
 }
 
@@ -36,14 +38,11 @@ export const currencySymbolDict = {
     USD: "$"
 }
 
-// v2 - only bitcoin and ether
+// v2 - only bitcoin, ether, and GUSD
 export const cryptoNames = [
     "BTC",
     "ETH",
     "GUSD",
-    "USDT"
-    //"BCH",
-    //"LTC"
 ]
 
 export const erc20Names = [
@@ -51,9 +50,11 @@ export const erc20Names = [
     "USDT",
 ]
 
-const decimalLengths = {
+export const decimalLengths = {
     BTC: 5,
+    ETH: 5,
     USD: 2,
+    GUSD: 2,
 }
 
 export const contractAddresses = {

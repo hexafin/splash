@@ -18,7 +18,7 @@ const Setting = ({title, description, toggleCallback, toggleState, infoCallback,
 			    		<Text style={styles.questionMark}>?</Text>
 			    	</TouchableOpacity>}
 		    	</View>
-		    	<Switch onTintColor={'#5153E9'} onValueChange={toggleCallback} value={toggleState}/>
+		    	<Switch trackColor={'#5153E9'} onValueChange={toggleCallback} value={toggleState}/>
 	    	</View>
 	    	<Text style={styles.description}>{description}</Text>
 	    </View>
