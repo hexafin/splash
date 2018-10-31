@@ -191,7 +191,8 @@ const mapStateToProps = state => {
 	return {
 		exchangeRates: state.crypto.exchangeRates,
 		currency: state.crypto.activeCurrency,
-		transactions: state.transactions.transactions.BTC,
+		// transactions: state.transactions.transactions.BTC,
+		transactions: [],
 		isLoadingTransactions: state.transactions.isLoadingTransactions,
 		isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
 		bitcoinAddress: state.crypto.wallets.BTC.address,

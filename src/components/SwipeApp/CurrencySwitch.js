@@ -19,6 +19,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { connect } from "react-redux"
 import { cryptoNames, cryptoNameDict, cryptoColors, cryptoImages } from "../../lib/cryptos"
 import { bindActionCreators } from "redux"
+import { setActiveCryptoCurrency } from "../../redux/crypto/actions"
 import { colors } from "../../lib/colors"
 import Interactable from 'react-native-interactable';
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -47,7 +48,7 @@ class CurrencySwitch extends Component {
   }
 
   handleCurrencySwitch(currency) {
-    console.log(currency)
+    this.props.setActiveCryptoCurrency(currency)
   }
 
   render() {
@@ -180,7 +181,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      
+      setActiveCryptoCurrency
     },
     dispatch
   );

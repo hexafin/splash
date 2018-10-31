@@ -36,6 +36,12 @@ const initialState = {
 export default function cryptoReducer(state = initialState, action) {
     switch (action.type) {
 
+      case ActionTypes.SET_ACTIVE_CRYPTO_CURRENCY:
+        return {
+          ...state,
+          activeCryptoCurrency: action.cryptoCurrency
+        }
+
       case ActionTypes.SET_ACTIVE_CURRENCY:
         return {
           ...state,
