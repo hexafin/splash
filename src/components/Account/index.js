@@ -63,16 +63,13 @@ const showDeleteModal = (deleteCallback) => {
 }
 
 const mapStateToProps = state => {
-	let network = 'testnet'
-	if (typeof state.crypto.wallets.BTC !== 'undefined') {
-		network = state.crypto.wallets.BTC.network
-	}
 	return {
 		splashtag: state.user.entity.splashtag,
 		userId: state.user.id,
 		lockoutEnabled: state.user.lockoutEnabled,
-		bitcoinNetwork: network,
 		biometricEnabled: state.user.biometric,
+        activeCryptoCurrency: state.crypto.activeCryptoCurrency,
+        activeCryptoNetwork: state.crypto.wallets[state.crypto.activeCryptoCurrency] ? state.crypto.wallets[state.crypto.activeCryptoCurrency].network : state.crypto.wallets["ETH"].network
 	}
 }
 
