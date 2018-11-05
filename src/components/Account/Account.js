@@ -21,8 +21,9 @@ import TouchID from "react-native-touch-id"
 import Permissions from 'react-native-permissions'
 import Contacts from 'react-native-contacts';
 import api from '../../api'
+import { cryptoNameDict } from "../../lib/cryptos"
 
-const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, toggleLockout, lockoutEnabled, showLockInfo, ToggleNetwork, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork, networkSwitchActions}) => {
+const Account = ({activeCryptoCurrency, activeCryptoNetwork, splashtag, userId, navigation, deleteAccount, LoadContacts, isLoadingContacts, setBiometric, biometricEnabled, toggleLockout, lockoutEnabled, showLockInfo, ToggleNetwork, showMainnetInfo, showDeleteModal, addContactsInfo, bitcoinNetwork, networkSwitchActions}) => {
 
 		const handleLockoutSwitch = (enabled) => {
 			if (enabled) {
@@ -55,7 +56,7 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 		}
 
 		const handleNetworkSwitch = () => {
-			if (bitcoinNetwork == 'testnet') {
+			if (activeCryptoNetwork == 'testnet') {
 				showMainnetInfo(() => {
 					ToggleNetwork().then(() => {
 						Object.keys(networkSwitchActions).forEach(key => networkSwitchActions[key]())
@@ -112,10 +113,11 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 			})
 		}
 
+		const currencyName = cryptoNameDict[activeCryptoCurrency]
 
 		const passcodeTitle = 'Set a PIN'
 		const passcodeDescription = 'Set a four digit passcode to secure your Splash wallet.'
-		const networkTitle = 'Use bitcoin mainnet'
+		const networkTitle = `Use ${currencyName} mainnet`
 		const networkDescription = 'On the mainnet your coins hold real value. If unselected your app will use testnet tokens.'
 		const biometricTitle = "Use biometric security"
 		const biometricDescription = "Secure your account with Touch ID or Face ID."
@@ -138,7 +140,7 @@ const Account = ({splashtag, userId, navigation, deleteAccount, LoadContacts, is
 						</View>
 						<View style={styles.section}>
 							<Text style={styles.sectionText}>Settings</Text>
-							<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(bitcoinNetwork == 'mainnet')}/>
+							<Setting title={networkTitle} description={networkDescription} toggleCallback={handleNetworkSwitch} toggleState={(activeCryptoNetwork == 'mainnet')}/>
 							<Setting title={passcodeTitle} description={passcodeDescription} toggleCallback={handleLockoutSwitch} infoCallback={showLockInfo} toggleState={lockoutEnabled} help={true}/>
 							<Setting title={biometricTitle} description={biometricDescription} toggleCallback={handleBiometricSwitch} toggleState={biometricEnabled}/>
 							<TouchableOpacity style={{marginTop: 42}} onPress={handleDelete}>
@@ -203,4 +205,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Account;
+export default Account

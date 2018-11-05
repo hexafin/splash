@@ -18,6 +18,7 @@ import NavigatorService from "../navigator";
 
 export const ActionTypes = {
 	SET_ACTIVE_CURRENCY: "SET_ACTIVE_CURRENCY",
+	SET_ACTIVE_CRYPTO_CURRENCY: "SET_ACTIVE_CRYPTO_CURRENCY",
 	LOAD_BALANCE_INIT: "LOAD_BALANCE_INIT",
 	LOAD_BALANCE_SUCCESS: "LOAD_BALANCE_SUCCESS",
 	LOAD_BALANCE_FAILURE: "LOAD_BALANCE_FAILURE",
@@ -29,6 +30,10 @@ export const ActionTypes = {
 	OPEN_WALLET_FAILURE: "OPEN_WALLET_FAILURE",
 	RESET_CRYPTO: "RESET_CRYPTO",
 	SWITCH_WALLETS: 'SWITCH_WALLETS',
+}
+
+export function setActiveCryptoCurrency(cryptoCurrency) {
+	return { type: ActionTypes.SET_ACTIVE_CRYPTO_CURRENCY, cryptoCurrency }
 }
 
 export function setActiveCurrency(currency) {

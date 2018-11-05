@@ -16,6 +16,7 @@ import { defaults, icons } from "../../lib/styles";
 import FlatBackButton from "../universal/FlatBackButton"
 import Button from "../universal/Button"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { cryptoNameDict } from "../../lib/cryptos"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -59,19 +60,19 @@ class Wallet extends Component {
 	}
 
 	render() {
-		const { address, splashtag } = this.props
+		const { address, splashtag, activeCryptoCurrency, addresses, activeCurrencyAddress } = this.props
+
+		const currencyName = cryptoNameDict[activeCryptoCurrency]
 
 		const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+address
 
 		return (
 			<View style={styles.container}>
 				<ScrollView>
-					<View style={styles.header}>
-						<Text style={styles.title}>Your splash wallet</Text>
-					</View>
+					<View style={styles.header}/>
 					<View style={styles.body}>
 						<View style={styles.bodyTitleWrapper}>
-							<Text style={styles.bodyTitle}>Receive bitcoin here</Text>
+							<Text style={styles.bodyTitle}>Receive {currencyName} here</Text>
 						</View>
 						<TouchableWithoutFeedback
 							onPress={this.handleCopy}
@@ -92,7 +93,7 @@ class Wallet extends Component {
 							}]}>
 								<Image source={{uri: qrCode}} style={styles.qr}/>
 								<View style={styles.addressWrapper}>
-									<Text style={styles.addressText}>{address}</Text>
+									<Text style={styles.addressText}>{activeCurrencyAddress}</Text>
 								</View>
 								<Text style={styles.addressCopyText}>
 									{this.state.isCopying && "Copied!"}
@@ -127,11 +128,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginBottom: 40,
 		paddingTop: 60
-	},
-	title: {
-		color: colors.white,
-		fontSize: 24,
-		fontWeight: "700"
 	},
 	body: {
 		flex: 1,
@@ -182,4 +178,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Wallet;
+export default Wallet

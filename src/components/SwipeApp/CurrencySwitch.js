@@ -19,15 +19,19 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import { connect } from "react-redux"
 import { cryptoNames, cryptoNameDict, cryptoColors, cryptoImages } from "../../lib/cryptos"
 import { bindActionCreators } from "redux"
+import { setActiveCryptoCurrency, setActiveCurrency } from "../../redux/crypto/actions"
 import { colors } from "../../lib/colors"
 import Interactable from 'react-native-interactable';
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
 
 let currencies = []
+let currencyIndex = {}
 let i = 0
 let snapPoints = []
+const snapPointFromIndex = j => -1 * (SCREEN_WIDTH/2-45) * j
 cryptoNames.forEach(crypto => {
+  currencyIndex[crypto] = i
   currencies.push({
     index: i,
     name: cryptoNameDict[crypto],
@@ -35,7 +39,7 @@ cryptoNames.forEach(crypto => {
     image: cryptoImages[crypto]
   })
   snapPoints.push({
-    x: -1 * (SCREEN_WIDTH/2-45) * i
+    x: snapPointFromIndex(i)
   })
   i++
 })
@@ -47,7 +51,10 @@ class CurrencySwitch extends Component {
   }
 
   handleCurrencySwitch(currency) {
-    console.log(currency)
+    this.props.setActiveCryptoCurrency(currency)
+    if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
+      this.props.setActiveCurrency(currency)
+    }
   }
 
   render() {
@@ -84,6 +91,7 @@ class CurrencySwitch extends Component {
           horizontalOnly={true}
           snapPoints={snapPoints}
           animatedValueX={this.props.switchXOffset}
+          initialPosition={{ x: snapPointFromIndex(currencyIndex[this.props.activeCryptoCurrency]) }}
           onSnap={event => {
             this.handleCurrencySwitch(currencies[event.nativeEvent.index].code)
           }}>
@@ -173,14 +181,16 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    
+    activeCurrency: state.crypto.activeCurrency,
+    activeCryptoCurrency: state.crypto.activeCryptoCurrency
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      
+      setActiveCryptoCurrency,
+      setActiveCurrency
     },
     dispatch
   );
