@@ -26,6 +26,8 @@ import firebase from "react-native-firebase"
 import LoadingCircle from "../universal/LoadingCircle"
 import CurrencySwitcher from "../universal/CurrencySwitcher"
 import { setActiveCurrency } from "../../redux/crypto/actions"
+import { decimalLengths } from "../../lib/cryptos"
+
 let firestore = firebase.firestore();
 
 const SCREEN_WIDTH = Dimensions.get("window").width
@@ -66,6 +68,9 @@ class Balance extends Component {
 		else if (nextProps.currency != this.props.currency) {
 			return true
 		}
+		else if (nextProps.cryptoCurrency != this.props.cryptoCurrency) {
+			return true
+		}
 		else {
 			return false
 		}
@@ -73,13 +78,15 @@ class Balance extends Component {
   
 	render() {
 
+		const {cryptoCurrency, currency, balance, exchangeRates} = this.props
+
 		let relativeBalance
-		if (this.props.currency == "BTC") {
-			relativeBalance = this.props.balance.BTC.toFixed(5)
+		if (currency == cryptoCurrency) {
+			relativeBalance = balance[cryptoCurrency].toFixed(decimalLengths[cryptoCurrency])
 		}
 		else {
-			if (this.props.exchangeRates.BTC) {
-				relativeBalance = (this.props.balance.BTC * this.props.exchangeRates.BTC.USD).toFixed(2)
+			if (exchangeRates[cryptoCurrency]) {
+				relativeBalance = (balance[cryptoCurrency] * exchangeRates[cryptoCurrency].USD).toFixed(decimalLengths["USD"])
 			}
 			else {
 				relativeBalance = 0
@@ -166,7 +173,7 @@ class Balance extends Component {
 					</View>
 					<CurrencySwitcher
 						fiat="USD"
-						crypto="BTC"
+						crypto={cryptoCurrency}
 						textColor={"rgba(255, 255, 255, 0.7)"}
 						switcherColor={"white"}
 						activeCurrencySize={24}
@@ -242,6 +249,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
 	return {
 		currency: state.crypto.activeCurrency,
+		cryptoCurrency: state.crypto.activeCryptoCurrency,
 		balance: state.crypto.balance,
 		exchangeRates: state.crypto.exchangeRates,
 		isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,

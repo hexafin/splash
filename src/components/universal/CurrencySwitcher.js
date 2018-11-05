@@ -190,7 +190,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-    	activeCurrency: state.crypto.activeCurrency
+    	activeCurrency: state.crypto.activeCurrency,
+    	cryptoCurrency: state.crypto.activeCryptoCurrency,
     }
 }
 
