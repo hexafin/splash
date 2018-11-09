@@ -13,8 +13,9 @@ let random = require('react-native-randombytes').randomBytes
 let bitcoin = require('bitcoinjs-lib')
 var axios = require('axios')
 import * as Keychain from 'react-native-keychain';
+import Web3 from 'web3'
 
-import { blockchain_info_apiKey, coinmarketcap_apiKey } from '../env/keys.json'
+import { infura_apiKey, blockchain_info_apiKey, coinmarketcap_apiKey } from '../env/keys.json'
 
 export const Errors = {
   NETWORK_ERROR: 'NETWORK_ERROR'
@@ -239,13 +240,19 @@ function BuildBitcoinTransaction({from, to, privateKey, amtSatoshi, fee=null, ne
   })
 }
 
-function IsValidAddress(address, btcNetwork='mainnet') {
-  try {
-    const network = (btcNetwork == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
-    bitcoin.address.toOutputScript(address, network)
-    return true
-  } catch (e) {
-    return false
+function IsValidAddress(address, currency="BTC", network='mainnet') {
+  if (currency == "BTC") {
+    try {
+      network = (network == 'testnet') ? bitcoin.networks.testnet : bitcoin.networks.bitcoin
+      bitcoin.address.toOutputScript(address, network)
+      return true
+    } catch (e) {
+      return false
+    }
+  } else if (currency == "ETH" || erc20Names.indexOf(currency) > -1) {
+    const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
+    const web3 = new Web3( new Web3.providers.HttpProvider(api + infura_apiKey) )
+    return web3.utils.isAddress(address)
   }
 }
 

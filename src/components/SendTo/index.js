@@ -12,7 +12,7 @@ const addContactsInfo = (buttonCallback) => {
     modalType: 'INFO',
     modalProps: {
         title: 'Add Contacts',
-        body: 'Splash let’s you find people you know via their phone numbers, so you can send them money without typing out long bitcoin addresses and be sure it’s them.',
+        body: 'Splash let’s you find people you know via their phone numbers, so you can send them money without typing out long addresses and be sure it’s them.',
         buttonTitle: 'Got it',
         buttonCallback: buttonCallback,
     },   
@@ -21,11 +21,13 @@ const addContactsInfo = (buttonCallback) => {
 
 
 const mapStateToProps = (state) => {
+    const activeCryptoCurrency = state.crypto.activeCryptoCurrency
     return {
+        activeCryptoCurrency: activeCryptoCurrency,
     	sendCurrency: state.payFlow.currency,
     	sendAmount: state.payFlow.amount,
-    	bitcoinNetwork: state.crypto.wallets.BTC.network,
-    	bitcoinAddress: state.crypto.wallets.BTC.address,
+    	network: state.crypto.wallets[activeCryptoCurrency].network,
+    	address: state.crypto.wallets[activeCryptoCurrency].address,
     	address: state.payFlow.address,
     	capturedQr: state.payFlow.capturedQr,
         userId: state.user.id,

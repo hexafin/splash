@@ -17,7 +17,7 @@ import {
 } from "react-native"
 import { defaults, icons } from "../../lib/styles"
 import { colors } from "../../lib/colors"
-import { unitsToDecimal } from "../../lib/cryptos"
+import { unitsToDecimal, cryptoTitleDict, cryptoNameDict, erc20Names } from "../../lib/cryptos"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import CloseButton from "../universal/CloseButton"
@@ -94,7 +94,7 @@ class SendTo extends Component {
 		}
 
 		if (nextState.value != this.state.value && !nextState.pastedAddress && !nextState.capturedQr) {
-			const isAddress = api.IsValidAddress(nextState.value, nextProps.bitcoinNetwork)
+			const isAddress = api.IsValidAddress(nextState.value, nextProps.activeCryptoCurrency, nextProps.network)
 			this.setState({typedAddress: isAddress})
 			this.getUserFromAddress(nextState.value)
 		}
@@ -160,7 +160,10 @@ class SendTo extends Component {
 	}
 
 	getUserFromAddress(address) {
-		const query = "wallets.BTC." + this.props.bitcoinNetwork + '.address'
+		let activeCryptoCurrency = this.props.activeCryptoCurrency
+		if (erc20Names.indexOf(activeCryptoCurrency) > -1) activeCryptoCurrency = 'ETH'
+
+		const query = "wallets." + activeCryptoCurrency + "." + this.props.network + '.address'
 		firestore.collection("users").where(query, "==", address).get().then(query => {
 			if (!query.empty) {
 				const userData = {
@@ -171,7 +174,7 @@ class SendTo extends Component {
 					userFromAddress: userData, 
 					selectedId: userData.id, 
 					selectedSplashtag: userData.splashtag, 
-					selectedAddress: userData.wallets.BTC[this.props.bitcoinNetwork].address
+					selectedAddress: userData.wallets[activeCryptoCurrency][this.props.network].address
 				})
 			}
 			else {
@@ -189,13 +192,16 @@ class SendTo extends Component {
 			sendAmount,
 			sendTo,
 			userId,
-			bitcoinAddress,
+			address,
 			showApproveModal,
+			activeCryptoCurrency,
 			LoadTransactions,
 		} = this.props
 
 		let contacts = []
 		if (typeof this.props.contacts != 'undefined') contacts = this.props.contacts
+
+		if (erc20Names.indexOf(activeCryptoCurrency) > -1) activeCryptoCurrency = 'ETH'
 
 		const isAddressEntered = (this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress)
 
@@ -228,7 +234,7 @@ class SendTo extends Component {
 					}}/>
 
 					<View style={styles.header} pointerEvents="none">
-						<Text style={styles.title}>Sending Bitcoin</Text>
+						<Text style={styles.title}>Sending {cryptoTitleDict[this.props.activeCryptoCurrency]}</Text>
 					</View>
 
 					<View style={styles.section}>
@@ -262,21 +268,21 @@ class SendTo extends Component {
 								image={icons.copyPaste} 
 								title={"Paste\naddress"}
 								onPress={() => {
-									Clipboard.getString().then(address => {
-										if (bitcoinAddress == address) {
+									Clipboard.getString().then(clipboard => {
+										if (clipboard == address) {
 											Alert.alert("You cannot send money to yourself")
 											return
 										}
-										if (api.IsValidAddress(address, this.props.bitcoinNetwork)) {
-											console.log(address, this.props.bitcoinNetwork, true)
+										if (api.IsValidAddress(clipboard, activeCryptoCurrency, this.props.network)) {
+											console.log(clipboard, this.props.network, true)
 											this.setState({
-												value: address, 
+												value: clipboard, 
 												pastedAddress: true, 
 												typedAddress: false, 
 												capturedQr: false,
 											})
 										} else {
-											Alert.alert("Invalid bitcoin address")
+											Alert.alert("Invalid " +cryptoNameDict[this.props.activeCryptoCurrency] + " address")
 										}
 									}).catch(error => {
 										Alert.alert("Could not get copied address")
@@ -294,7 +300,7 @@ class SendTo extends Component {
 							<Text style={styles.sectionLabel}>CAPTURED QR CODE</Text>
 							<SendLineItem
 								selected={true}
-								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A  " + cryptoNameDict[this.props.activeCryptoCurrency] + "  wallet"}
 								subtitle={"Valid Address"}
 								address={this.state.value}
 								circleText={this.state.userFromAddress ? null : "B"}
@@ -305,7 +311,7 @@ class SendTo extends Component {
 							<Text style={styles.sectionLabel}>SENDING TO</Text>
 							<SendLineItem
 								selected={true}
-								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A  " + cryptoNameDict[this.props.activeCryptoCurrency] + "   wallet"}
 								subtitle={"Valid Address"}
 								address={this.state.value}
 								circleText={this.state.userFromAddress ? null : "B"}
@@ -316,7 +322,7 @@ class SendTo extends Component {
 							<Text style={styles.sectionLabel}>FROM ENTRY</Text>
 							<SendLineItem
 								selected={true}
-								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A bitcoin wallet"}
+								title={this.state.userFromAddress ? `@${this.state.userFromAddress.splashtag}` : "A  " + cryptoNameDict[this.props.activeCryptoCurrency] + "   wallet"}
 								subtitle={"Valid Address"}
 								address={this.state.value}
 								circleText={this.state.userFromAddress ? null : "B"}
@@ -332,11 +338,11 @@ class SendTo extends Component {
 						</View>}
 
 						{!isAddressEntered && this.state.value != "" && <View style={styles.hits}>
-							<Hits contacts={contacts} userId={userId} selectedId={this.state.selectedId} callback={item => {
+							<Hits currency={activeCryptoCurrency} contacts={contacts} userId={userId} selectedId={this.state.selectedId} callback={item => {
 								// user selected contact from algolia query
 								const selectedId = item.objectID
 								const selectedSplashtag = item.splashtag
-								const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
+								const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
 								if (selectedId != this.state.selectedId) {
 									this.setState({selectedId, selectedAddress, selectedSplashtag})
 								}
@@ -353,7 +359,7 @@ class SendTo extends Component {
 			   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
 			   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
 			   				      renderItem={({ item }) => {
-			   				      	if (item.objectID != userId) {
+			   				      	if (item.objectID != userId && typeof item.wallets[activeCryptoCurrency] != 'undefined') {
 			   				      		return (
 			   					          <SendLineItem
 			   					            title={`@${item.splashtag}`}
@@ -362,7 +368,7 @@ class SendTo extends Component {
 			   					            onPress={() => {
 			   									const selectedId = item.objectID
 			   									const selectedSplashtag = item.splashtag
-			   									const selectedAddress = item.wallets.BTC[this.props.bitcoinNetwork].address
+			   									const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
 			   									if (selectedId != this.state.selectedId) {
 			   										this.setState({selectedId, selectedAddress, selectedSplashtag})
 			   									}

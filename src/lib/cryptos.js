@@ -47,7 +47,6 @@ export const cryptoNames = [
 
 export const erc20Names = [
     "GUSD",
-    "USDT",
 ]
 
 export const decimalLengths = {
