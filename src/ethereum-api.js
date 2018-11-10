@@ -7,8 +7,11 @@ import { infura_apiKey, etherscan_apiKey } from '../env/keys.json'
 import firebase from 'react-native-firebase'
 let firestore = firebase.firestore()
 
-export const Errors = {
-  NETWORK_ERROR: 'NETWORK_ERROR'
+export const ETHEREUM_ERRORS = {
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  BALANCE: 'BALANCE', // not enough balance
+  FEE: 'FEE', // fee larger than balance
+  USAGE: 'USAGE', // improper usage of library
 }
 
 // returns token balance in ether
@@ -17,7 +20,6 @@ export const getBalance = async ({currency='ETH', address, network='testnet'}) =
 	const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
 	const web3 = new Web3( new Web3.providers.HttpProvider(api + infura_apiKey) )
 	let balance
-	console.log(currency, network, contractAddresses[currency])
 	if (currency == 'ETH') {
 		balance = await web3.eth.getBalance(address)
 		balance = parseFloat(web3.utils.fromWei(balance))
@@ -48,46 +50,59 @@ export const getGasPrice = async(network="testnet") => {
 	return await web3.eth.getGasPrice()
 }
 
+export const estimateGas = async ({fromAddress, toAddress, weiAmount, currency='ETH', network='testnet'}) => {
+  const gasLimit = await getGasLimit({fromAddress, toAddress, weiAmount, currency, network})
+  const gasPrice = await getGasPrice(network)
+  return gasLimit * gasPrice
+}
+
 export const sendTransaction = async ({fromAddress, toAddress, weiAmount, currency='ETH', network='testnet'}) => {
+    try {
+      const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
+      const web3 = new Web3( new Web3.providers.HttpProvider(api + infura_apiKey) )
+      const EthereumTx = require('ethereumjs-tx')
+      const gasLimit = await getGasLimit({fromAddress, toAddress, weiAmount, currency, network})
+      let nonce = await web3.eth.getTransactionCount(fromAddress)
 
-		const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
-		const web3 = new Web3( new Web3.providers.HttpProvider(api + infura_apiKey) )
-		const EthereumTx = require('ethereumjs-tx')
-		const gasLimit = await getGasLimit({fromAddress, toAddress, weiAmount, currency, network})
-		let nonce = await web3.eth.getTransactionCount(fromAddress)
+      let gasPrice = await getGasPrice(network)
 
-		let gasPrice = await getGasPrice(network)
+      let details = {
+        "to": toAddress,
+        "value": web3.utils.toHex( weiAmount ),
+        "gasLimit": web3.utils.toHex(gasLimit),
+        "gasPrice": web3.utils.toHex(parseInt(gasPrice)), // converts the gwei price to wei 
+        "nonce": web3.utils.toHex(nonce),
+        "chainId": (network == 'mainnet') ? 1 : 4 // EIP 155 chainId - mainnet: 1, rinkeby: 4
+      }
 
-		let details = {
-			"to": toAddress,
-			"value": web3.utils.toHex( weiAmount ),
-			"gasLimit": web3.utils.toHex(gasLimit),
-			"gasPrice": web3.utils.toHex(parseInt(gasPrice)), // converts the gwei price to wei 
-			"nonce": web3.utils.toHex(nonce),
-			"chainId": (network == 'mainnet') ? 1 : 4 // EIP 155 chainId - mainnet: 1, rinkeby: 4
-		}
+      if (currency != 'ETH') { // if ERC20
+        const contract = new web3.eth.Contract(erc20ABI, contractAddresses[currency])
+        details.data = contract.methods.transfer(toAddress, weiAmount).encodeABI()
+        details.value = '0x0'
+        details.to = contractAddresses[currency]
+        details.from = fromAddress
+      }
 
-		if (currency != 'ETH') { // if ERC20
-			const contract = new web3.eth.Contract(erc20ABI, contractAddresses[currency])
-			details.data = contract.methods.transfer(toAddress, weiAmount).encodeABI()
-			details.value = '0x0'
-			details.to = contractAddresses[currency]
-			details.from = fromAddress
-		}
+      const transaction = new EthereumTx(details)
 
-		const transaction = new EthereumTx(details)
+      const keychainData = await Keychain.getGenericPassword()
+      let privateKey = JSON.parse(keychainData.password).ETH[network].wif
+      privateKey = privateKey.replace(/^0x/, '') // remove 0x from private key so that it can be turned into a Buffer
 
-		const keychainData = await Keychain.getGenericPassword()
-		let privateKey = JSON.parse(keychainData.password).ETH[network].wif
-		privateKey = privateKey.replace(/^0x/, '') // remove 0x from private key so that it can be turned into a Buffer
+      transaction.sign( Buffer.from(privateKey, 'hex') )
 
-		transaction.sign( Buffer.from(privateKey, 'hex') )
+      const serializedTransaction = transaction.serialize()
 
-		const serializedTransaction = transaction.serialize()
-
-		const receipt = await web3.eth.sendSignedTransaction('0x' + serializedTransaction.toString('hex'))
-		
-		return receipt
+      const receipt = await web3.eth.sendSignedTransaction('0x' + serializedTransaction.toString('hex'))
+      
+      return receipt
+    } catch (e) {
+      if (e == 'Error: Returned error: insufficient funds for gas * price + value') {
+        throw ETHEREUM_ERRORS.BALANCE
+      } else {
+        throw ETHEREUM_ERRORS.USAGE
+      }
+    }
 }
 
 export function NewEthereumWallet() {

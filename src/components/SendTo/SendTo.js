@@ -396,7 +396,7 @@ class SendTo extends Component {
 						disabled={!(this.state.pastedAddress || this.state.typedAddress || this.state.capturedQr || this.state.selectedId)}
 						onPress={() => {
 							showApproveModal({
-								address: this.state.selectedId ? this.state.selectedAddress : this.state.value,
+								toAddress: this.state.selectedId ? this.state.selectedAddress : this.state.value,
 								toId: this.state.selectedId ? this.state.selectedId : null,
 								toSplashtag: this.state.selectedSplashtag ? this.state.selectedSplashtag : null,
 								amount: this.state.sendAmount,

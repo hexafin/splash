@@ -1,5 +1,5 @@
 import api, { Errors } from "../../api";
-import { sendTransaction, AddETHTransactions } from "../../ethereum-api"
+import { sendTransaction, AddETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -284,7 +284,7 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
             reject(error)
           })
         }).catch(error => {
-		  if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
+		  if (error != ETHEREUM_ERRORS.NETWORK_ERROR) Sentry.captureMessage(error)
           dispatch(sendTransactionFailure(error))
           reject(error)
         })
