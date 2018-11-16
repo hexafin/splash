@@ -1,7 +1,7 @@
 var axios = require('axios')
 import Web3 from 'web3'
 import * as Keychain from 'react-native-keychain';
-import {contractAddresses, erc20ABI} from './lib/cryptos'
+import {contractAddresses, erc20ABI, erc20Names } from './lib/cryptos'
 import { infura_apiKey, etherscan_apiKey } from '../env/keys.json'
 
 import firebase from 'react-native-firebase'
@@ -24,7 +24,7 @@ export const getBalance = async ({currency='ETH', address, network='testnet'}) =
 		balance = await web3.eth.getBalance(address)
 		balance = parseFloat(web3.utils.fromWei(balance))
 	} else {
-		var tokenContract = new web3.eth.Contract(erc20ABI, contractAddresses[currency])
+		var tokenContract = new web3.eth.Contract(erc20ABI, contractAddresses[network][currency])
 		balance = await tokenContract.methods.balanceOf(address).call();
 		var decimal = await tokenContract.methods.decimals().call()
 		balance = 1.0*parseFloat(balance) / Math.pow(10, decimal)
@@ -39,7 +39,7 @@ export const getGasLimit = async ({fromAddress, toAddress, weiAmount, currency='
 	}
 	const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
 	const web3 = new Web3( new Web3.providers.HttpProvider(api + infura_apiKey) )
-	const contract = new web3.eth.Contract(erc20ABI, contractAddresses[currency])
+	const contract = new web3.eth.Contract(erc20ABI, contractAddresses[network][currency])
 	const gasEstimate = await contract.methods.transfer(toAddress, weiAmount*2).estimateGas({from: fromAddress})
 	return gasEstimate
 }
@@ -76,10 +76,10 @@ export const sendTransaction = async ({fromAddress, toAddress, weiAmount, curren
       }
 
       if (currency != 'ETH') { // if ERC20
-        const contract = new web3.eth.Contract(erc20ABI, contractAddresses[currency])
+        const contract = new web3.eth.Contract(erc20ABI, contractAddresses[network][currency])
         details.data = contract.methods.transfer(toAddress, weiAmount).encodeABI()
         details.value = '0x0'
-        details.to = contractAddresses[currency]
+        details.to = contractAddresses[network][currency]
         details.from = fromAddress
       }
 
@@ -123,9 +123,16 @@ export function NewEthereumWallet() {
  	// todo add erc20 handling
     try {
       const apiCode = '&apikey=' + etherscan_apiKey
-      const transactionAPI = (network == 'mainnet') ?
-      	'https://api.etherscan.io/api?module=account&action=txlist&address=' + address + '&sort=desc' + apiCode :
-      	'https://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=' + address + '&sort=desc' + apiCode
+      let transactionAPI
+      if (erc20Names.indexOf(currency) > -1) {
+        transactionAPI = (network == 'mainnet') ?
+          'https://api.etherscan.io/api?module=account&action=tokentx&contractaddress=' + contractAddresses[network][currency] + '&address=' + address + '&sort=desc' + apiCode :
+          'https://api-rinkeby.etherscan.io/api?module=account&action=tokentx&contractaddress=' + contractAddresses[network][currency] + '&address=' + address + '&sort=desc' + apiCode
+      } else {
+        transactionAPI = (network == 'mainnet') ?
+          'https://api.etherscan.io/api?module=account&action=txlist&address=' + address + '&sort=desc' + apiCode :
+          'https://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=' + address + '&sort=desc' + apiCode
+      }
 
       // get list of txs on firebase
       const query1 = await firestore.collection("transactions").where("fromId", "==", userId)
@@ -150,7 +157,8 @@ export function NewEthereumWallet() {
 
       // load txs from blockchain
       const response = (await axios.get(transactionAPI)).data
-      if (response.status != 1) throw Errors.NETWORK_ERROR 
+      console.log(response, transactionAPI, erc20Names.indexOf(currency))
+      if (response.status != 1) return
       const txs = response.result
   	  const txsLength = txs.length
 
@@ -202,7 +210,7 @@ export function NewEthereumWallet() {
       return
     } catch (error) {
       if (!error.status) {
-        throw Errors.NETWORK_ERROR
+        throw ETHEREUM_ERRORS.NETWORK_ERROR
       } else {
         throw error;
       }

@@ -25,6 +25,7 @@ const initialState = {
   transactions: {
     BTC: [],
     ETH: [],
+    GUSD: [],
   },
   errorApprovingTransaction: null,
   isLoadingTransactions: false,

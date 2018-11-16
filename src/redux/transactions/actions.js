@@ -9,7 +9,7 @@ import * as Keychain from 'react-native-keychain';
 import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
-import { cryptoUnits, cryptoNames } from '../../lib/cryptos'
+import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
 
@@ -102,10 +102,13 @@ export const LoadTransactions = (currency="BTC") => {
 		}
 
 		try {
-
-			const walletAddress = state.crypto.wallets[currency].address
+			let walletAddress
+			if (erc20Names.indexOf(currency) > -1) {
+				walletAddress = state.crypto.wallets.ETH.address
+			} else {
+				walletAddress = state.crypto.wallets[currency].address
+			}
 			if (currency != "BTC") walletAddress = walletAddress.toLowerCase()
-
 			if (currency=="BTC") {
 				await api.AddBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
 			} else {
@@ -114,12 +117,14 @@ export const LoadTransactions = (currency="BTC") => {
 
 			// two listeners for each firebase property
 			// after one listener finds changes merges in the documents found from the other
-			let unsub1 = firestore.collection("transactions").where("toAddress", "==", walletAddress).onSnapshot(async querySnapshot => {
+			let unsub1 = firestore.collection("transactions").where("toAddress", "==", walletAddress)
+															 .where("currency", "==", currency).onSnapshot(async querySnapshot => {
 				dispatch(loadTransactionsInit())
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					const query = await firestore.collection("transactions").where("fromAddress", "==", walletAddress).get()
+					const query = await firestore.collection("transactions").where("fromAddress", "==", walletAddress)
+																			.where("currency", "==", currency).get()
 					transactions = loadQuery(query, transactions)
 					transactions = loadQuery(querySnapshot, transactions)
 					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
@@ -134,12 +139,14 @@ export const LoadTransactions = (currency="BTC") => {
 				dispatch(loadTransactionsFailure(error))			
 			})
 
-			let unsub2 = firestore.collection("transactions").where("fromAddress", "==", walletAddress).onSnapshot(async querySnapshot => {
+			let unsub2 = firestore.collection("transactions").where("fromAddress", "==", walletAddress)
+			                                                 .where("currency", "==", currency).onSnapshot(async querySnapshot => {
 				dispatch(loadTransactionsInit())
 				// this is a snapshot of the user's transactions => redux will stay up to date with firebase
 				let transactions = []
 				if (querySnapshot.size > 0) {
-					const query = await firestore.collection("transactions").where("toAddress", "==", walletAddress).get()
+					const query = await firestore.collection("transactions").where("toAddress", "==", walletAddress)
+																			.where("currency", "==", currency).get()
 					transactions = loadQuery(query, transactions)
 					transactions = loadQuery(querySnapshot, transactions)
 					transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });

@@ -8,12 +8,15 @@ import {
 } from "react-native"
 import { icons, defaults } from "../../lib/styles";
 import { colors } from "../../lib/colors";
+import { cryptoNameDict } from "../../lib/cryptos";
 import Shimmer from 'react-native-shimmer';
 import moment from "moment"
 
+// TODO: add new crypto letter assets
+
 const TransactionLine = ({transaction, direction, amount, onPress, loading=false }) => {
 	
-	let title = "A bitcoin wallet"
+	let title = "A " + cryptoNameDict[transaction.currency] + " wallet"
 	if (direction == 'to' && transaction.toSplashtag) title = transaction.toSplashtag
 	if (direction == 'from' && transaction.fromSplashtag) title = transaction.fromSplashtag
 	title = (transaction.type == "card") ? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)
@@ -39,6 +42,8 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 				<View style={[styles.letterPreview, (loading && {backgroundColor: '#EDEEF2'})]}>
 					{!isSplashtag && !currency && !loading && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
 					{currency=='BTC' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
+					{currency=='ETH' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
+					{currency=='GUSD' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
 					{isSplashtag && !loading && <Image
 						style={styles.circleSplash} 
 						resizeMode="contain" 

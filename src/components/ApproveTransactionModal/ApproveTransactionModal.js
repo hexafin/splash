@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 11,
     color: colors.gray,
     fontWeight: '500',
   },

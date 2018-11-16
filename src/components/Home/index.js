@@ -18,6 +18,7 @@ const showTimeoutModal = () => {
 
 const mapStateToProps = (state) => {
     return {
+        activeCryptoCurrency: state.crypto.activeCryptoCurrency,
         isLoadingTransactions: state.transactions.isLoadingTransactions,
         isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
         isLoadingBalance: state.crypto.isLoadingBalance,

@@ -17,6 +17,7 @@ import {
 } from "react-native"
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
+import { erc20Names } from "../../lib/cryptos"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
@@ -47,7 +48,8 @@ class History extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (!nextProps.isLoadingExchangeRates && nextProps.exchangeRates.BTC && this.props.exchangeRates.BTC && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
+		const activeCryptoCurrency = this.props.activeCryptoCurrency
+		if (!nextProps.isLoadingExchangeRates && nextProps.exchangeRates[activeCryptoCurrency] && this.props.exchangeRates[activeCryptoCurrency] && nextProps.exchangeRates[activeCryptoCurrency].USD != this.props.exchangeRates[activeCryptoCurrency].USD) {
 			return true
 		}
 		else if (nextProps.currency != this.props.currency) {
@@ -62,7 +64,7 @@ class History extends Component {
 		else if (nextProps.transactions.length != this.props.transactions.length) {
 			return true
 		}
-		else if (nextProps.bitcoinNetwork != this.props.bitcoinNetwork) {
+		else if (nextProps.network != this.props.network) {
 			return true
 		}
 		else {
@@ -78,6 +80,8 @@ class History extends Component {
 
 		const currencyPrefix = {
 			BTC: "BTC ",
+			ETH: "ETH ",
+			GUSD: "GUSD ",
 			USD: "$"
 		}
 
@@ -88,23 +92,29 @@ class History extends Component {
 			}]} onLayout={event => this.dynamicHeight(event, "height")}>
 				<View style={styles.sectionHeader}>
 					<Text style={styles.sectionTitle}>Your history</Text>
-					{this.props.bitcoinNetwork == 'testnet' && <View style={styles.testnetBox}>
+					{this.props.network == 'testnet' && <View style={styles.testnetBox}>
 																	<Text style={styles.testnetText}>Testnet</Text>
 																</View>}
 				</View>
 				{this.props.transactions.map(transaction => {
-					const satoshiAmount = transaction.type == 'card' ? transaction.amount : transaction.amount.subtotal
+					const unitAmount = transaction.type == 'card' ? transaction.amount : transaction.amount.subtotal
 					let amount
-					if (this.props.exchangeRates.BTC) {
-						const rate = decimalToUnits(this.props.exchangeRates.BTC.USD, 'USD')
-						amount = this.props.currency == "BTC"
-							? unitsToDecimal(satoshiAmount, 'BTC')
-							: unitsToDecimal( Math.round((satoshiAmount/cryptoUnits.BTC) * rate), 'USD')
+					if (this.props.exchangeRates[this.props.activeCryptoCurrency]) {
+						const rate = decimalToUnits(this.props.exchangeRates[this.props.activeCryptoCurrency].USD, 'USD')
+						amount = this.props.currency != "USD"
+							? unitsToDecimal(unitAmount, this.props.activeCryptoCurrency)
+							: unitsToDecimal( Math.round((unitAmount/cryptoUnits[this.props.activeCryptoCurrency]) * rate), 'USD')
 					}
 					else {
 						amount = 0
 					}
-					const direction = (transaction.type == "card" || transaction.fromAddress == this.props.bitcoinAddress) ? "to" : "from"
+
+					let direction 
+					if (transaction.fromAddress == this.props.address || (this.props.activeCryptoCurrency != 'BTC' && transaction.fromAddress == this.props.address.toLowerCase())) {
+						direction = "to"
+					} else {
+						direction = 'from'
+					}
 
 					return (
 						<TransactionLine
@@ -188,6 +198,13 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
+	let activeCryptoCurrency
+	if (erc20Names.indexOf(state.crypto.activeCryptoCurrency) > -1) {
+		activeCryptoCurrency = 'ETH'
+	} else {
+		activeCryptoCurrency = state.crypto.activeCryptoCurrency
+	}
+
 	return {
 		exchangeRates: state.crypto.exchangeRates,
 		currency: state.crypto.activeCurrency,
@@ -195,8 +212,8 @@ const mapStateToProps = state => {
 		transactions: state.transactions.transactions[state.crypto.activeCryptoCurrency] ? state.transactions.transactions[state.crypto.activeCryptoCurrency] : state.transactions.transactions.ETH,
 		isLoadingTransactions: state.transactions.isLoadingTransactions,
 		isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
-		bitcoinAddress: state.crypto.wallets.BTC.address,
-		bitcoinNetwork: state.crypto.wallets.BTC.network,
+		address: state.crypto.wallets[activeCryptoCurrency].address,
+		network: state.crypto.wallets[activeCryptoCurrency].network,
 	}
 }
 

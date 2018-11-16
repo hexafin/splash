@@ -281,9 +281,9 @@ class SwipeApp extends Component {
 		xOffset.setValue(SCREEN_WIDTH)
 
 		// load
-		this.props.LoadBalance()
-		this.props.LoadExchangeRates()
-		this.props.LoadTransactions()
+		this.props.LoadBalance(this.props.activeCryptoCurrency)
+		this.props.LoadExchangeRates(this.props.activeCryptoCurrency)
+		this.props.LoadTransactions(this.props.activeCryptoCurrency)
 
 		// set up notification permissions and tokens
 		firebase.messaging().hasPermission().then(async (enabled) => {
@@ -315,15 +315,15 @@ class SwipeApp extends Component {
 			  .setBody(notif.body)
 			firebase.notifications().displayNotification(notification)
 			ReactNativeHapticFeedback.trigger("impactLight", true)
-			this.props.LoadTransactions()
+			this.props.LoadTransactions(this.props.activeCryptoCurrency)
   	    });
 
   	    this.notificationOpenedListener = firebase.notifications().onNotificationOpened(() => {
-  	    	this.props.LoadTransactions()
+  	    	this.props.LoadTransactions(this.props.activeCryptoCurrency)
 	    });
 
 	    firebase.notifications().getInitialNotification().then(() => {
-	    	this.props.LoadTransactions()
+	    	this.props.LoadTransactions(this.props.activeCryptoCurrency)
 	    })
 
 	    AppState.addEventListener('change', this.handleAppStateChange);	    	

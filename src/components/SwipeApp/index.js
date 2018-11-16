@@ -6,6 +6,7 @@ import {LoadBalance, LoadExchangeRates, setActiveCurrency} from "../../redux/cry
 
 const mapStateToProps = (state) => {
     return {
+    	activeCryptoCurrency: state.crypto.activeCryptoCurrency,
     	splashtag: state.user.entity.username || "yourname",
         loggedIn: state.user.loggedIn,
         userId: state.user.id,

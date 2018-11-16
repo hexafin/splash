@@ -69,9 +69,9 @@ class Home extends Component {
 			const currentY = data.value
 			if (currentY < -80 && !this.state.loading) {
 				this.setState({loading: true})
-				this.props.LoadBalance("BTC")
-				this.props.LoadExchangeRates("BTC")
-				this.props.LoadTransactions()
+				this.props.LoadBalance(this.props.activeCryptoCurrency)
+				this.props.LoadExchangeRates(this.props.activeCryptoCurrency)
+				this.props.LoadTransactions(this.props.activeCryptoCurrency)
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			}
 		})
