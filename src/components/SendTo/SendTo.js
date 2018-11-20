@@ -403,7 +403,7 @@ class SendTo extends Component {
 								currency: this.state.sendCurrency,
 								successCallback: () => {
 									this.props.screenProps.rootNavigation.navigate("SwipeApp")
-									LoadTransactions()
+									LoadTransactions(this.props.activeCryptoCurrency)
 								},
 								dismissCallback: () => {
 									this.props.DismissTransaction()

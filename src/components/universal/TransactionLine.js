@@ -12,7 +12,6 @@ import { cryptoNameDict } from "../../lib/cryptos";
 import Shimmer from 'react-native-shimmer';
 import moment from "moment"
 
-// TODO: add new crypto letter assets
 
 const TransactionLine = ({transaction, direction, amount, onPress, loading=false }) => {
 	
@@ -42,8 +41,8 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 				<View style={[styles.letterPreview, (loading && {backgroundColor: '#EDEEF2'})]}>
 					{!isSplashtag && !currency && !loading && <Text style={styles.letterPreviewText}>{title[0]}</Text>}
 					{currency=='BTC' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
-					{currency=='ETH' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
-					{currency=='GUSD' && !isSplashtag && !loading && <Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
+					{currency=='ETH' && !isSplashtag && !loading && <Image source={icons.ethLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
+					{currency=='GUSD' && !isSplashtag && !loading && <Image source={icons.gusdLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/>}
 					{isSplashtag && !loading && <Image
 						style={styles.circleSplash} 
 						resizeMode="contain" 

@@ -281,9 +281,11 @@ class SwipeApp extends Component {
 		xOffset.setValue(SCREEN_WIDTH)
 
 		// load
-		this.props.LoadBalance(this.props.activeCryptoCurrency)
-		this.props.LoadExchangeRates(this.props.activeCryptoCurrency)
-		this.props.LoadTransactions(this.props.activeCryptoCurrency)
+		for (var i = 0; i < cryptoNames.length; i++) {
+			this.props.LoadBalance(cryptoNames[i])
+			this.props.LoadExchangeRates(cryptoNames[i])
+			this.props.LoadTransactions(cryptoNames[i])
+		}
 
 		// set up notification permissions and tokens
 		firebase.messaging().hasPermission().then(async (enabled) => {
