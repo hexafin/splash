@@ -4,7 +4,6 @@ import { bindActionCreators } from "redux"
 
 const mapStateToProps = state => {
 	return {
-		address: state.crypto.wallets.BTC.address,
 		splashtag: state.user.entity.splashtag,
 		loggedIn: state.user.loggedIn,
 		activeCryptoCurrency: state.crypto.activeCryptoCurrency,
