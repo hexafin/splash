@@ -128,7 +128,7 @@ class History extends Component {
 									  transaction,
 									  direction,
 					                  address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-				                      exchangeRate: this.props.exchangeRates.BTC["USD"],
+				                      exchangeRate: this.props.exchangeRates[this.props.activeCryptoCurrency].USD,
 				                	})
 			             	}}/>
 					)

@@ -50,12 +50,6 @@ export const getGasPrice = async(network="testnet") => {
 	return await web3.eth.getGasPrice()
 }
 
-export const estimateGas = async ({fromAddress, toAddress, weiAmount, currency='ETH', network='testnet'}) => {
-  const gasLimit = await getGasLimit({fromAddress, toAddress, weiAmount, currency, network})
-  const gasPrice = await getGasPrice(network)
-  return gasLimit * gasPrice
-}
-
 export const sendTransaction = async ({fromAddress, toAddress, weiAmount, currency='ETH', network='testnet'}) => {
     try {
       const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'

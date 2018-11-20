@@ -5,9 +5,9 @@ import LoadingCircle from "../universal/LoadingCircle"
 import Checkmark from "../universal/Checkmark"
 import TouchID from "react-native-touch-id"
 import Button from "../universal/Button"
-import { cryptoUnits, decimalToUnits, unitsToDecimal, cryptoTitleDict } from "../../lib/cryptos"
+import { erc20Names, cryptoUnits, decimalToUnits, unitsToDecimal, cryptoTitleDict } from "../../lib/cryptos"
 import { BITCOIN_ERRORS } from '../../bitcoin-api'
-import { estimateGas, ETHEREUM_ERRORS } from '../../ethereum-api'
+import { getGasLimit, ETHEREUM_ERRORS } from '../../ethereum-api'
 
 class ApproveTransactionModal extends Component {
 
@@ -34,7 +34,7 @@ class ApproveTransactionModal extends Component {
 	    const rate = decimalToUnits(exchangeRate, 'USD')
 	    const unitAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits[activeCryptoCurrency]) : amount
 	    const feeApi = (activeCryptoCurrency == 'BTC') ? api.GetBitcoinFees({network: network, from: this.props.userAddress, amtSatoshi: unitAmount}):
-	    												 estimateGas({fromAddress: this.props.userAddress, toAddress, weiAmount: unitAmount, currency: activeCryptoCurrency, network})
+	    												 getGasLimit({fromAddress: this.props.userAddress, toAddress, weiAmount: unitAmount, currency: activeCryptoCurrency, network})
 
 
 		feeApi.then(unitFee => {
@@ -87,11 +87,17 @@ class ApproveTransactionModal extends Component {
 
 	    let fee = 0
 	    let relativeFee = 0
+	    let totalUnitAmount = unitAmount
 	    if (this.state.unitFee) {
-			fee = unitsToDecimal(this.state.unitFee, activeCryptoCurrency)
-			relativeFee = unitsToDecimal(Math.round((this.state.unitFee/cryptoUnits[activeCryptoCurrency]) * rate), 'USD')
+	    	if (erc20Names.indexOf(activeCryptoCurrency) > -1) {
+				fee = unitsToDecimal(this.state.unitFee, 'ETH')
+				relativeFee = unitsToDecimal(Math.round((this.state.unitFee/cryptoUnits.ETH) * rate), 'USD')
+	    	} else {
+				fee = unitsToDecimal(this.state.unitFee, activeCryptoCurrency)
+				relativeFee = unitsToDecimal(Math.round((this.state.unitFee/cryptoUnits[activeCryptoCurrency]) * rate), 'USD')
+	    		totalUnitAmount = unitAmount+this.state.unitFee
+	    	}
 	    }
-		const totalUnitAmount = unitAmount+this.state.unitFee
 		const totalRelativeAmount = Math.round((totalUnitAmount/cryptoUnits[activeCryptoCurrency]) * rate)
 
 		const runTransaction = () => {
@@ -120,11 +126,11 @@ class ApproveTransactionModal extends Component {
 				})
 
 			// 5 second timeout	
-			setTimeout(() => {
-				if (this.props.loading) {
-					this.props.showTimeoutModal()								
-				}
-			}, 5000)
+			// setTimeout(() => {
+			// 	if (this.props.loading) {
+			// 		this.props.showTimeoutModal()								
+			// 	}
+			// }, 15000)
 		}
 
 		const confirm = () => {
