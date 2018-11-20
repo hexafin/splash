@@ -187,7 +187,7 @@ class SendTo extends Component {
 
 	render() {
 
-		const {
+		let {
 			sendCurrency,
 			sendAmount,
 			sendTo,
