@@ -93,7 +93,7 @@ class Wallet extends Component {
 							}]}>
 								<Image source={{uri: qrCode}} style={styles.qr}/>
 								<View style={styles.addressWrapper}>
-									<Text style={styles.addressText}>{activeCurrencyAddress}</Text>
+									<Text style={[styles.addressText, {fontSize: activeCryptoCurrency == 'BTC' ? 14 : 11}]}>{activeCurrencyAddress}</Text>
 								</View>
 								<Text style={styles.addressCopyText}>
 									{this.state.isCopying && "Copied!"}
@@ -168,7 +168,6 @@ const styles = StyleSheet.create({
 	},
 	addressText: {
 		color: colors.primary,
-		fontSize: 14,
 		fontWeight: "700"
 	},
 	addressCopyText: {

@@ -9,6 +9,7 @@ import {
 	Animated,
 	Alert
 } from "react-native"
+import { cryptoNameDict } from "../lib/cryptos"
 import { colors } from "../lib/colors"
 import { defaults, icons } from "../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
@@ -61,11 +62,11 @@ class ScanQrCode extends Component {
 				ref={(node) => { this.scanner = node }}
 				onRead={e => {
 					const address = (e.data.slice(0,8) == 'bitcoin:') ? e.data.slice(8) : e.data
-					if (api.IsValidAddress(address, this.props.network)) {
+					if (api.IsValidAddress(address, this.props.currency, this.props.network)) {
 						this.props.captureQr(address)
 						this.props.navigation.goBack(null)
 					} else {
-						Alert.alert("Invalid bitcoin address", null, [
+						Alert.alert("Invalid " + cryptoNameDict[this.props.currency] + " address", null, [
 							{text: "Dismiss", onPress: () => {
 								this.scanner.reactivate()
 							}}
@@ -185,8 +186,10 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
+	const currency = state.crypto.activeCryptoCurrency
 	return {
-		network: state.crypto.wallets.BTC.network
+		network: state.crypto.wallets[currency].network,
+		currency: currency,
 	}
 }
 

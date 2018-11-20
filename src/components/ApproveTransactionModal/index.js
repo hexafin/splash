@@ -16,12 +16,14 @@ const showTimeoutModal = () => {
 }
 
 const mapStateToProps = (state) => {
+    const activeCryptoCurrency = state.crypto.activeCryptoCurrency
     return {
+      activeCryptoCurrency,
       loading: state.transactions.isSendingTransaction,
       error: state.transactions.errorSendingTransaction,
-      bitcoinNetwork: state.crypto.wallets.BTC.network,
-      userBitcoinAddress: state.crypto.wallets.BTC.address,
-      exchangeRate: state.crypto.exchangeRates.BTC.USD,
+      network: state.crypto.wallets[activeCryptoCurrency] ? state.crypto.wallets[activeCryptoCurrency].network : state.crypto.wallets.ETH.network,
+      userAddress: state.crypto.wallets[activeCryptoCurrency] ? state.crypto.wallets[activeCryptoCurrency].address : state.crypto.wallets.ETH.address,
+      exchangeRate: state.crypto.exchangeRates[activeCryptoCurrency].USD,
       biometricEnabled: state.user.biometric,
     }
 }

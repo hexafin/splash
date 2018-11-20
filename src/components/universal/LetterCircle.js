@@ -24,6 +24,8 @@ const LetterCircle = ({size, letter, textColor=colors.blue, color='#EFEFFD', cur
           backgroundColor: 'rgba(0,0,0,0)'
         }}>{letter}</Text>}
     {currency == 'BTC' && <Image source={icons.btcLetter} style={{width: 12, height: 15.75, alignSelf: 'center'}} resizeMode={'contain'}/>}
+    {currency == 'ETH' && <Image source={icons.ethLetter} style={{width: 12, height: 15.75, alignSelf: 'center'}} resizeMode={'contain'}/>}
+    {currency == 'GUSD' && <Image source={icons.gusdLetter} style={{width: 12, height: 15.75, alignSelf: 'center'}} resizeMode={'contain'}/>}
   </View>
 );
 

@@ -5,8 +5,9 @@ import LoadingCircle from "../universal/LoadingCircle"
 import Checkmark from "../universal/Checkmark"
 import TouchID from "react-native-touch-id"
 import Button from "../universal/Button"
-import { cryptoUnits, decimalToUnits, unitsToDecimal } from "../../lib/cryptos"
+import { cryptoUnits, decimalToUnits, unitsToDecimal, cryptoTitleDict } from "../../lib/cryptos"
 import { BITCOIN_ERRORS } from '../../bitcoin-api'
+import { estimateGas, ETHEREUM_ERRORS } from '../../ethereum-api'
 
 class ApproveTransactionModal extends Component {
 
@@ -15,27 +16,32 @@ class ApproveTransactionModal extends Component {
 		this.state = {
 			success: false,
 			wasLoading: false,
-			feeSatoshi: null,
+			unitFee: null,
 		}
 	}
 
 	componentDidMount() {
 
 		const {
-			address,
+			toAddress,
 			amount,
 			currency,
-		    exchangeRate
+		    exchangeRate,
+		    activeCryptoCurrency,
+		    network,
 		} = this.props
 
 	    const rate = decimalToUnits(exchangeRate, 'USD')
-	    const satoshiAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits.BTC) : amount
+	    const unitAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits[activeCryptoCurrency]) : amount
+	    const feeApi = (activeCryptoCurrency == 'BTC') ? api.GetBitcoinFees({network: network, from: this.props.userAddress, amtSatoshi: unitAmount}):
+	    												 estimateGas({fromAddress: this.props.userAddress, toAddress, weiAmount: unitAmount, currency: activeCryptoCurrency, network})
 
-		api.GetBitcoinFees({network: this.props.bitcoinNetwork, from: this.props.userBitcoinAddress, amtSatoshi: satoshiAmount}).then(feeSatoshi => {
+
+		feeApi.then(unitFee => {
 			this.setState(prevState => {
 				return {
 					...prevState,
-					feeSatoshi,
+					unitFee,
 				}
 			})			
 		})
@@ -65,33 +71,34 @@ class ApproveTransactionModal extends Component {
 	render() {
 
 		const {
-			address,
+			toAddress,
 			toId,
 			toSplashtag,
 			amount,
 			currency,
 		    exchangeRate,
 		    biometricEnabled,
+		    activeCryptoCurrency,
 		} = this.props
 
 	    const rate = decimalToUnits(exchangeRate, 'USD')
-	    const satoshiAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits.BTC) : amount
-	    const relativeAmount = (currency == 'USD') ? amount : Math.round((amount/cryptoUnits.BTC) * rate)
+	    const unitAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits[activeCryptoCurrency]) : amount
+	    const relativeAmount = (currency == 'USD') ? amount : Math.round((amount/cryptoUnits[activeCryptoCurrency]) * rate)
 
 	    let fee = 0
 	    let relativeFee = 0
-	    if (this.state.feeSatoshi) {
-			fee = unitsToDecimal(this.state.feeSatoshi, 'BTC')
-			relativeFee = unitsToDecimal(Math.round((this.state.feeSatoshi/cryptoUnits.BTC) * rate), 'USD')
+	    if (this.state.unitFee) {
+			fee = unitsToDecimal(this.state.unitFee, activeCryptoCurrency)
+			relativeFee = unitsToDecimal(Math.round((this.state.unitFee/cryptoUnits[activeCryptoCurrency]) * rate), 'USD')
 	    }
-		const totalSatoshiAmount = satoshiAmount+this.state.feeSatoshi
-		const totalRelativeAmount = Math.round((totalSatoshiAmount/cryptoUnits.BTC) * rate)
+		const totalUnitAmount = unitAmount+this.state.unitFee
+		const totalRelativeAmount = Math.round((totalUnitAmount/cryptoUnits[activeCryptoCurrency]) * rate)
 
 		const runTransaction = () => {
-			this.props.SendTransaction(address, satoshiAmount, this.state.feeSatoshi, relativeAmount, toId, toSplashtag)
+			this.props.SendTransaction(toAddress, unitAmount, this.state.unitFee, relativeAmount, toId, toSplashtag, activeCryptoCurrency)
 				.then(() => this.props.dismiss(true))
 				.catch(error => {
-					if (error == BITCOIN_ERRORS.BALANCE) {
+					if (error == BITCOIN_ERRORS.BALANCE || error == ETHEREUM_ERRORS.BALANCE) {
 						Alert.alert("Insufficient balance", null, [
 										{text: "Dismiss", onPress: () => {
 											this.props.dismiss(false)
@@ -104,7 +111,7 @@ class ApproveTransactionModal extends Component {
 										}}
 									])
 					} else if (error == BITCOIN_ERRORS.FEE) {
-						Alert.alert("Bitcoin fee is greater than balance. Try lowering the fee in settings.", null, [
+						Alert.alert(cryptoTitleDict[activeCryptoCurrency] + " fee is greater than balance. Try lowering the fee in settings.", null, [
 										{text: "Dismiss", onPress: () => {
 											this.props.dismiss(false)
 										}}
@@ -121,7 +128,7 @@ class ApproveTransactionModal extends Component {
 		}
 
 		const confirm = () => {
-			if (totalSatoshiAmount) {
+			if (totalUnitAmount) {
 				if (biometricEnabled) {
 					TouchID.authenticate("Sign transaction biometrically").then(() => {
 						runTransaction()
@@ -146,17 +153,17 @@ class ApproveTransactionModal extends Component {
 	                  </TouchableOpacity>
 	                </View>
 	                <View style={styles.information}>
-	                  <Text style={styles.exchangeText}>1 BTC = ${unitsToDecimal(rate, 'USD')} USD</Text>
+	                  <Text style={styles.exchangeText}>1 {activeCryptoCurrency} = ${unitsToDecimal(rate, 'USD')} USD</Text>
 	                  <View style={styles.amountBox}>
 	                    <Text style={styles.relativeText}>USD ${unitsToDecimal(totalRelativeAmount, 'USD')}</Text>
-	                    <Text style={styles.amountText}>{unitsToDecimal(totalSatoshiAmount, 'BTC')} BTC</Text>
+	                    <Text style={styles.amountText}>{unitsToDecimal(totalUnitAmount, activeCryptoCurrency)} {activeCryptoCurrency}</Text>
 	                  </View>
 	                </View>
 	                <View style={styles.feeBox}>
-	                    <Text style={styles.description}>Blockchain fee —— {fee} BTC (${relativeFee})</Text>
-	                    <Text style={styles.description}>They receive —— {unitsToDecimal(satoshiAmount, 'BTC')} BTC (${unitsToDecimal(relativeAmount, 'USD')})</Text>
+	                    <Text style={styles.description}>Blockchain fee —— {fee} {activeCryptoCurrency} (${relativeFee})</Text>
+	                    <Text style={styles.description}>They receive —— {unitsToDecimal(unitAmount, activeCryptoCurrency)} {activeCryptoCurrency} (${unitsToDecimal(relativeAmount, 'USD')})</Text>
 	                </View>
-	                <Text style={[styles.description, {paddingBottom: 15}]}>To {address}</Text>
+	                <Text style={[styles.description, {paddingBottom: 15}]}>To {toAddress}</Text>
 	                  <Button
 	                  	onPress={confirm}
 	                  	style={styles.button} 
@@ -236,7 +243,7 @@ const styles = StyleSheet.create({
   },
   description: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 11,
     color: colors.gray,
     fontWeight: '500',
   },

@@ -9,7 +9,7 @@ import {
 import SendLineItem from "./SendLineItem"
 import { colors } from "../../lib/colors"
 
-const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, contacts, selectedId }) => {
+const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, contacts, selectedId, currency }) => {
 
   /* if there are still results, you can
   call the refine function to load more */
@@ -19,7 +19,7 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, con
     }
   };
 
-  const contactIds = contacts.map(a => a.objectID);
+  let contactIds = contacts.map(a => a.objectID);
 
   // show contacts first
   const sortResults = () => {
@@ -42,7 +42,7 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine, callback, userId, con
 		      onEndReached={onEndReached}
 		      keyExtractor={(item, index) => item.objectID}
 		      renderItem={({ item }) => {
-		      	if (item.objectID != userId) {
+		      	if (item.objectID != userId && typeof item.wallets != 'undefined' && typeof item.wallets[currency] != 'undefined') {
 		      		return (
 			          <SendLineItem
 			            title={`@${item.splashtag}`}

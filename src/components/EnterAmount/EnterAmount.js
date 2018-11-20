@@ -97,7 +97,7 @@ class EnterAmount extends Component {
 			<View style={styles.wrapper}>
 
 				<View style={styles.header}>
-					<Text style={styles.title}>Sending Bitcoin</Text>
+					<Text style={styles.title}>Sending {cryptoTitleDict[this.props.activeCryptoCurrency]}</Text>
 				</View>
 
 				<View style={styles.bodyWrapper}>

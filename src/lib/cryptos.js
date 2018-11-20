@@ -47,22 +47,26 @@ export const cryptoNames = [
 
 export const erc20Names = [
     "GUSD",
-    "USDT",
 ]
 
 export const decimalLengths = {
     BTC: 5,
-    ETH: 5,
+    ETH: 6,
     USD: 2,
     GUSD: 2,
 }
 
 export const contractAddresses = {
-    'OMG': '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07', // OmiseGo coin
-    'USDT': '0xdac17f958d2ee523a2206206994597c13d831ec7', // tether
-    'GUSD': '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd', // Gemini USD
-    'BNB': '0xB8c77482e45F1F44dE1745F52C74426C631bDD52', // BNB
-    'ZRX': '0xe41d2489571d322189246dafa5ebde1f4699f498', // 0x
+    'testnet': {
+        'GUSD': '0x388b0d6c519b1a502302f81a56efeda0b137d9c1', // Gemini USD
+    },
+    'mainnet': {
+        'OMG': '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07', // OmiseGo coin
+        'USDT': '0xdac17f958d2ee523a2206206994597c13d831ec7', // tether
+        'GUSD': '0x056fd409e1d7a124bd7017459dfea2f387b6d5cd', // Gemini USD
+        'BNB': '0xB8c77482e45F1F44dE1745F52C74426C631bDD52', // BNB
+        'ZRX': '0xe41d2489571d322189246dafa5ebde1f4699f498', // 0x
+    }
 }
 
 export const erc20ABI = [
@@ -182,6 +186,10 @@ export const unitsToDecimal = (value, currency) => {
             return parseFloat(str.slice(0, index) + '.' + zeros + str.slice(index)).toFixed(decimalLength)
         }
     } else {
-        return str.slice(0, index)
+        if(!str.slice(0, index)) {
+            return parseFloat('0.' + zeros).toFixed(decimalLength)
+        } else {
+            return str.slice(0, index)
+        }
     }
 }
