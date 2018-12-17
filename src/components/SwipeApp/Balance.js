@@ -47,7 +47,7 @@ class Balance extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.isLoadingTransactions || nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates) {
+		if (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates) {
 			this.setState({loading: true})
 		}
 		else {

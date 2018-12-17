@@ -50,12 +50,6 @@ export const getGasPrice = async(network="testnet") => {
 	return await web3.eth.getGasPrice()
 }
 
-export const estimateGas = async ({fromAddress, toAddress, weiAmount, currency='ETH', network='testnet'}) => {
-  const gasLimit = await getGasLimit({fromAddress, toAddress, weiAmount, currency, network})
-  const gasPrice = await getGasPrice(network)
-  return gasLimit * gasPrice
-}
-
 export const sendTransaction = async ({fromAddress, toAddress, weiAmount, currency='ETH', network='testnet'}) => {
     try {
       const api = (network == 'mainnet') ? 'https://mainnet.infura.io/v3/' : 'https://rinkeby.infura.io/v3/'
@@ -93,9 +87,14 @@ export const sendTransaction = async ({fromAddress, toAddress, weiAmount, curren
 
       const serializedTransaction = transaction.serialize()
 
-      const receipt = await web3.eth.sendSignedTransaction('0x' + serializedTransaction.toString('hex'))
+      return await new Promise((resolve, reject) => {
+        web3.eth.sendSignedTransaction('0x' + serializedTransaction.toString('hex'))
+              .once('transactionHash', (hash) => 
+                {  
+                  resolve(hash)
+                })
+        })
       
-      return receipt
     } catch (e) {
       if (e == 'Error: Returned error: insufficient funds for gas * price + value') {
         throw ETHEREUM_ERRORS.BALANCE

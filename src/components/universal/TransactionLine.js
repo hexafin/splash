@@ -26,11 +26,12 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 	const currency = (transaction.type == 'blockchain') ? transaction.currency : null
 	const isSplashtag = (direction == 'to' && transaction.toSplashtag) || (direction == 'from' && transaction.fromSplashtag)
 
-	const pendingCircles = (confirmations) => {
+	const pendingCircles = (confirmations, currency) => {
+		const total_confirmation = (currency != 'BTC') ? 12 : 6
 		return (
 			<View style={{flexDirection: 'row'}}>
-				<View style={[styles.pendingDarkLine, {width: confirmations*(70/6)}, (confirmations == 6) ? {borderRadius: 3.5} : {}, (confirmations == 0) ? {borderWidth: 0} : {}]} />
-				<View style={[styles.pendingLightLine, {width: 70-confirmations*(70/6)}, (confirmations == 0) ? {borderRadius: 3.5} : {}]} />				
+				<View style={[styles.pendingDarkLine, {width: confirmations*(70/total_confirmation)}, (confirmations == total_confirmation) ? {borderRadius: 3.5} : {}, (confirmations == 0) ? {borderWidth: 0} : {}]} />
+				<View style={[styles.pendingLightLine, {width: 70-confirmations*(70/total_confirmation)}, (confirmations == 0) ? {borderRadius: 3.5} : {}]} />				
 			</View>
 		)
 	}
@@ -61,7 +62,7 @@ const TransactionLine = ({transaction, direction, amount, onPress, loading=false
 
 						{loading && <Shimmer style={{marginBottom: 15}}><Image style={styles.titleLoadingBar} source={icons.placeholder}/></Shimmer>}
 						{!loading && !pending && <Text style={styles.date}>{date}</Text>}
-						{!loading && pending && pendingCircles(transaction.confirmations)}
+						{!loading && pending && pendingCircles(transaction.confirmations, transaction.currency)}
 						{loading && <Shimmer style={{width: 66}}><Image style={styles.dateLoadingBar} source={icons.placeholder}/></Shimmer>}
 					</View>
 					<View style={styles.rightBody}>

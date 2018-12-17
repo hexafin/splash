@@ -46,7 +46,7 @@ class Wallet extends Component {
 			}
 		})
 		
-		Clipboard.setString(this.props.address)
+		Clipboard.setString(this.props.activeCurrencyAddress)
 		ReactNativeHapticFeedback.trigger("impactLight", true)
 
 		setTimeout(() => {
@@ -60,11 +60,11 @@ class Wallet extends Component {
 	}
 
 	render() {
-		const { address, splashtag, activeCryptoCurrency, addresses, activeCurrencyAddress } = this.props
+		const { splashtag, activeCryptoCurrency, activeCurrencyAddress } = this.props
 
 		const currencyName = cryptoNameDict[activeCryptoCurrency]
 
-		const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+address
+		const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+activeCurrencyAddress
 
 		return (
 			<View style={styles.container}>
@@ -104,7 +104,7 @@ class Wallet extends Component {
 						<Button small title="Share" onPress={() => {
 							Share.share({
 								title: `@${splashtag} bitcoin wallet`,
-								message: address
+								message: activeCurrencyAddress
 							})
 						}} style={{
 							marginTop: 30,

@@ -64,12 +64,12 @@ class ViewTransactionModal extends Component {
 	    if (!!relativeCurrency) oldRelativeAmount =  unitsToDecimal(relativeAmount, 'USD')
 	    const currentRelativeAmount = unitsToDecimal(Math.round((amount.subtotal/cryptoUnits[currency]) * rate), 'USD')
 	    const infoMessage = (direction == 'from') ? 'Received from' : 'Sent to'
-	    console.log(this.state.thanked)
-		const pendingCircles = (confirmations) => {
+		const pendingCircles = (confirmations, currency) => {
+			const total_confirmation = (currency != 'BTC') ? 12 : 6
 			return (
 				<View style={{flexDirection: 'row', paddingBottom: 5, paddingLeft: 10}}>
-					<View style={[styles.pendingDarkLine, {width: confirmations*(70/6)}, (confirmations == 6) ? {borderRadius: 3.5} : {}, (confirmations == 0) ? {borderWidth: 0} : {}]} />
-					<View style={[styles.pendingLightLine, {width: 70-confirmations*(70/6)}, (confirmations == 0) ? {borderRadius: 3.5} : {}]} />				
+					<View style={[styles.pendingDarkLine, {width: confirmations*(70/total_confirmation)}, (confirmations == total_confirmation) ? {borderRadius: 3.5} : {}, (confirmations == 0) ? {borderWidth: 0} : {}]} />
+					<View style={[styles.pendingLightLine, {width: 70-confirmations*(70/total_confirmation)}, (confirmations == 0) ? {borderRadius: 3.5} : {}]} />				
 				</View>
 			)
 		}
@@ -128,7 +128,7 @@ class ViewTransactionModal extends Component {
                 </View>
                 {pending && <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 	<Text style={styles.subtitle}>Confirmations</Text>	
-                	{pendingCircles(confirmations)}
+                	{pendingCircles(confirmations, currency)}
                 </View>}
                 <Text style={styles.subtitle}>{(!!relativeCurrency) ? 'Worth' : 'Date'}</Text>
                 <Text style={styles.dateText}>{(!!relativeCurrency) ? '$'+ oldRelativeAmount +' '+relativeCurrency+' on ': ''}{date}</Text>

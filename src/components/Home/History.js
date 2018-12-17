@@ -122,13 +122,13 @@ class History extends Component {
 							transaction={transaction}
 							direction={direction}
 							amount={currencyPrefix[this.props.currency] + amount}
-							loading={this.state.loading}
+							loading={false}
 							onPress={() => {
 									this.props.showViewModal({
 									  transaction,
 									  direction,
 					                  address: transaction.type == 'blockchain' ? transaction[direction+'Address'] : null,
-				                      exchangeRate: this.props.exchangeRates.BTC["USD"],
+				                      exchangeRate: this.props.exchangeRates[this.props.activeCryptoCurrency].USD,
 				                	})
 			             	}}/>
 					)

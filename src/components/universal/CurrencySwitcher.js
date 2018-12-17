@@ -29,7 +29,7 @@ class CurrencySwitcher extends Component {
 			activeScale: 1.0,
 			inactiveScale: 0.5,
 			activeXOffset: 78,
-			inactiveXOffset: 0,
+			inactiveXOffset: -10,
 			activeOpacity: 1.0,
 			inactiveOpacity: 0.7,
 		}
