@@ -122,7 +122,7 @@ class History extends Component {
 							transaction={transaction}
 							direction={direction}
 							amount={currencyPrefix[this.props.currency] + amount}
-							loading={this.state.loading}
+							loading={false}
 							onPress={() => {
 									this.props.showViewModal({
 									  transaction,

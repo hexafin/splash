@@ -126,11 +126,11 @@ class ApproveTransactionModal extends Component {
 				})
 
 			// 5 second timeout	
-			// setTimeout(() => {
-			// 	if (this.props.loading) {
-			// 		this.props.showTimeoutModal()								
-			// 	}
-			// }, 15000)
+			setTimeout(() => {
+				if (this.props.loading) {
+					this.props.showTimeoutModal()								
+				}
+			}, 15000)
 		}
 
 		const confirm = () => {
