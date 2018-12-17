@@ -87,9 +87,14 @@ export const sendTransaction = async ({fromAddress, toAddress, weiAmount, curren
 
       const serializedTransaction = transaction.serialize()
 
-      const receipt = await web3.eth.sendSignedTransaction('0x' + serializedTransaction.toString('hex'))
+      return await new Promise((resolve, reject) => {
+        web3.eth.sendSignedTransaction('0x' + serializedTransaction.toString('hex'))
+              .once('transactionHash', (hash) => 
+                {  
+                  resolve(hash)
+                })
+        })
       
-      return receipt
     } catch (e) {
       if (e == 'Error: Returned error: insufficient funds for gas * price + value') {
         throw ETHEREUM_ERRORS.BALANCE

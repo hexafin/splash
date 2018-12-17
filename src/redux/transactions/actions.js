@@ -280,8 +280,8 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 	      })
 
   	  } else {
-  	  	sendTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(receipt => {
-          transaction.txId = receipt.transactionHash
+  	  	sendTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(transactionHash => {
+          transaction.txId = transactionHash
           api.NewTransaction(transaction).then(() => {
             dispatch(sendTransactionSuccess())
             resolve()
