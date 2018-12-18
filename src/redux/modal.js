@@ -33,6 +33,14 @@ export function showApproveModal(modalProps) {
   }
 }
 
+export function showCardModal(modalProps) {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'APPROVE_CARD',
+    modalProps: modalProps,   
+  }
+}
+
 export function hideModal() {
   return {
     type: 'HIDE_MODAL',

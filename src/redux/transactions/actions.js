@@ -153,24 +153,16 @@ export const ApproveTransaction = (transaction) => {
 
 		const approveTransaction = async (transaction) => {
 			const state = getState()
-			const network = state.crypto.wallets.BTC.network
-			const privateKey = JSON.parse(await Keychain.getGenericPassword().password)[network].wif
-			const userBtcAddress = state.user.bitcoin.address
 			dispatch(approveTransactionInit(transaction))
 			try {
 				// commented for demo
-				const exchangeRate = await api.GetExchangeRate()
-				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-				const feeSatoshi = await api.GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
-				const totalBtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount, network)
-				await api.UpdateTransaction(transaction.transactionId, {
+		        await firestore.collection("cards").doc(transaction.transactionId).update({
 					approved: true,
-					txId: txid,
+					txId: 1,
 					timestamp: moment().unix(),
-					amount: totalBtcAmount,
+					amount: 1,
 					currency: "BTC"
-				})
+		        })
 				await api.GenerateCard(transaction.transactionId)
 				return Promise.resolve();
 			} catch (e) {

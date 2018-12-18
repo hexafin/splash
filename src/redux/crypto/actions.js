@@ -187,6 +187,8 @@ export const OpenWallet = (userId, currencies) => {
 						createWallets.push('mainnet')
 					}
 
+					console.log(updateWallets, createWallets)
+					
 					for (var i = 0; i < updateWallets.length; i++) {
 						
 						const network = updateWallets[i]

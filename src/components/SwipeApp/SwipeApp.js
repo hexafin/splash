@@ -339,10 +339,21 @@ class SwipeApp extends Component {
 
 		// display notification if in foreground
 		this.notificationListener = firebase.notifications().onNotification((notif) => {
+			console.log(notif.data)
 			const notification = new firebase.notifications.Notification()
 			  .setNotificationId(notif.notificationId)
 			  .setTitle(notif.title)
 			  .setBody(notif.body)
+			if (notif.data.domain) {
+				this.props.showCardModal({
+					...notif.data,
+					exchangeRate: this.props.exchangeRate,
+					activeCryptoCurrency: this.props.activeCryptoCurrency,
+					dismissCallback: () => {
+						this.props.DismissTransaction()
+					},
+				})
+			}
 			firebase.notifications().displayNotification(notification)
 			ReactNativeHapticFeedback.trigger("impactLight", true)
 			this.props.LoadTransactions(this.props.activeCryptoCurrency)
