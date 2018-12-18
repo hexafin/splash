@@ -176,12 +176,12 @@ export const OpenWallet = (userId, currencies) => {
 
 					let updateWallets = []
 					let createWallets = []
-					if (!!keychainData[currency].testnet) {
+					if (typeof keychainData[currency] !== 'undefined' && !!keychainData[currency].testnet) {
 						updateWallets.push('testnet')
 					} else {
 						createWallets.push('testnet')
 					}
-					if (!!keychainData[currency].mainnet) {
+					if (typeof keychainData[currency] !== 'undefined' && !!keychainData[currency].mainnet) {
 						updateWallets.push('mainnet')
 					} else {
 						createWallets.push('mainnet')
