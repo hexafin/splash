@@ -214,6 +214,7 @@ export const OpenWallet = (userId, currencies) => {
 									network,
 									wif: bitcoinData.wif
 								}
+								console.log('created btc wallet')
 								break
 							case "ETH":
 								const etherData = NewEthereumWallet()
@@ -226,6 +227,7 @@ export const OpenWallet = (userId, currencies) => {
 									network,
 									wif: etherData.wif
 								}
+								console.log('created eth wallet')
 								break
 							default:
 								const error = `Open wallet: unsupported currency: ${currency}`
