@@ -84,8 +84,8 @@ class CurrencySwitch extends Component {
         transform: [
           {translateY: Animated.add(
             this.props.yOffsets.home.interpolate({
-              inputRange: [-81, -80, 0, 160, 161],
-              outputRange: [50, 50, 0, -100, -300]
+              inputRange: [-41, -40, 0, 160, 161],
+              outputRange: [25, 25, 0, -100, -300]
             }),
             this.props.xOffset.interpolate({
               inputRange: [0, SCREEN_WIDTH*2/3, SCREEN_WIDTH, SCREEN_WIDTH*4/3, SCREEN_WIDTH*2],
