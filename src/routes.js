@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { createBottomTabNavigator, createStackNavigator } from "react-navigation"
+import { createBottomTabNavigator, createStackNavigator, createAppContainer } from "react-navigation"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import { colors } from "./lib/colors"
@@ -128,7 +128,7 @@ const AppRouter = createStackNavigator(
 	}
 )
 
-export default (loggedIn) => {
+const cointainer = (loggedIn) => {
 	return createStackNavigator(
 		{
 			AppRouter: {
@@ -149,4 +149,8 @@ export default (loggedIn) => {
 			}
 		}
 	)
+}
+
+export default (loggedIn) => {
+	return createAppContainer(cointainer(loggedIn))
 }

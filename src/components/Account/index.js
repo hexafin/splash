@@ -5,7 +5,7 @@ import {resetUser, toggleLockout, setBiometric} from "../../redux/user/actions"
 import { ToggleNetwork, resetCrypto, LoadBalance } from '../../redux/crypto/actions'
 import {resetTransactions, LoadTransactions} from "../../redux/transactions/actions"
 import {resetOnboarding} from "../../redux/onboarding/actions"
-import NavigatorService from "../../redux/navigator"
+
 import api from '../../api'
 
 

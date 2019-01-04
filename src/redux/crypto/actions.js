@@ -14,7 +14,7 @@ import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
 
-import NavigatorService from "../navigator";
+
 
 export const ActionTypes = {
 	SET_ACTIVE_CURRENCY: "SET_ACTIVE_CURRENCY",

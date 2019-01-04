@@ -8,7 +8,7 @@ import FCM, {
 	WillPresentNotificationResult,
 	NotificationType
 } from "react-native-fcm"
-import NavigatorService from "../navigator"
+
 import {reset} from 'redux-form';
 import * as Keychain from 'react-native-keychain';
 import Contacts from 'react-native-contacts';
