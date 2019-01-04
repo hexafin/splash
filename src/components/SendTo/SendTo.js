@@ -226,7 +226,7 @@ class SendTo extends Component {
 				<View style={styles.wrapper}>
 					<CloseButton color="dark" onPress={() => {
 						Keyboard.dismiss()
-						this.props.screenProps.rootNavigation.goBack(null)
+						this.props.navigation.goBack("PayFlow")
 					}}/>
 					<FlatBackButton color="dark" onPress={() => {
 						Keyboard.dismiss()
