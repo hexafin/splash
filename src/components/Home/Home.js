@@ -111,7 +111,7 @@ class Home extends Component {
 
 				<ColoredPayButton fillInput={this.props.switchXOffset} fill={this.props.switchColor} onPress={() => {
 					ReactNativeHapticFeedback.trigger("impactLight", true);
-					this.props.navigation.navigate("PayFlow");
+					this.props.navigation.navigate("EnterAmount");
 				}}/>
 			</View>
 		);
