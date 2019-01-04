@@ -359,7 +359,7 @@ class SendTo extends Component {
 			   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
 			   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
 			   				      renderItem={({ item }) => {
-			   				      	if (item.objectID != userId && typeof item.wallets[activeCryptoCurrency] !== 'undefined') {
+			   				      	if (item.objectID != userId && typeof item.wallets !== 'undefined' && typeof item.wallets[activeCryptoCurrency] !== 'undefined') {
 			   				      		return (
 			   					          <SendLineItem
 			   					            title={`@${item.splashtag}`}
@@ -368,7 +368,6 @@ class SendTo extends Component {
 			   					            onPress={() => {
 			   									const selectedId = item.objectID
 			   									const selectedSplashtag = item.splashtag
-			   									console.log(item.wallets[activeCryptoCurrency], this.props.network)
 			   									const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
 			   									if (selectedId != this.state.selectedId) {
 			   										this.setState({selectedId, selectedAddress, selectedSplashtag})
