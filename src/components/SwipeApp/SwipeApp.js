@@ -314,12 +314,15 @@ class SwipeApp extends Component {
 
 		// set up notification permissions and tokens
 		firebase.messaging().hasPermission().then(async (enabled) => {
-			if (!enabled) {
-				await firebase.messaging().requestPermission()
-				const fcmToken = await firebase.messaging().getToken()
-				if (fcmToken) {
-					await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
-				}
+			if (!enabled && !this.props.notificationsRequested) {
+				this.props.setNotifsRequested(true)
+				this.props.notificationPermissionInfo(async () => {
+					await firebase.messaging().requestPermission()
+					const fcmToken = await firebase.messaging().getToken()
+					if (fcmToken) {
+						await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+					}
+				})
 			} else {
 				const doc = await firebase.firestore().collection('users').doc(this.props.userId).get()
 				if (!doc.data().pushToken) {
@@ -554,6 +557,25 @@ const styles = StyleSheet.create({
 	}
 })
 
+const notificationPermissionInfo = (buttonCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Turn On Notifications',
+        body: 'Get notified when you receive money or a friend thanks you.',
+        buttonTitle: 'Great',
+        buttonCallback: buttonCallback,
+    },   
+  }
+}
+
+const setNotifsRequested = (requested) => {
+  return {
+    type: 'NOTIFICATIONS_REQUESTED',
+    requested: requested,
+  }
+}
 
 const mapStateToProps = state => {
 	return {
@@ -573,6 +595,7 @@ const mapStateToProps = state => {
     	errorLoadingBalance: state.crypto.errorLoadingBalance,
     	lockoutTime: state.user.lockoutTime,
     	lockoutEnabled: state.user.lockoutEnabled,
+    	notificationsRequested: state.user.notificationsRequested,
 	}
 }
 
@@ -582,7 +605,8 @@ const mapDispatchToProps = dispatch => {
 			LoadBalance,
 			LoadExchangeRates,
 			resetLockoutClock,
-			startLockoutClock
+			startLockoutClock,
+			setNotifsRequested,
 		},
 		dispatch
 	)

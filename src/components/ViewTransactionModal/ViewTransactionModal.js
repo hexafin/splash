@@ -113,7 +113,11 @@ class ViewTransactionModal extends Component {
 							source={require("../../assets/icons/primarySplash.png")}/>
 						</View>}
                     {type == 'card' && <Text style={styles.domainText}>{domainCapitalized}</Text>}
-                    {type == 'blockchain' && !isSplashtag && <Text style={styles.addressText}>{address}</Text>}
+                    {type == 'blockchain' && !isSplashtag &&
+                    	<View style={styles.column}>
+		                    <Text style={[styles.addressText, {fontSize: 9}]}>{address}</Text>
+	                    </View>
+	                }
                     {type == 'blockchain' && isSplashtag && 
                     	<View style={styles.column}>
                     		<View style={styles.row}>
@@ -148,6 +152,7 @@ const styles = StyleSheet.create({
 		padding: 30,
 	},
 	column: {
+		flex: 1,
 		flexDirection: 'column',
 		justifyContent: 'space-between'
 	},
