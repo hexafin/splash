@@ -292,7 +292,7 @@ class SendTo extends Component {
 								image={icons.qrIcon} 
 								title={"Scan\nQR-Code"}
 								onPress={() => {
-									this.props.screenProps.rootNavigation.navigate("ScanQrCode")
+									this.props.navigation.navigate("ScanQrCode")
 								}}/>
 						</Animated.View>
 
@@ -402,7 +402,7 @@ class SendTo extends Component {
 								amount: this.state.sendAmount,
 								currency: this.state.sendCurrency,
 								successCallback: () => {
-									this.props.screenProps.rootNavigation.navigate("SwipeApp")
+									this.props.navigation.navigate("SwipeApp")
 									LoadTransactions(this.props.activeCryptoCurrency)
 								},
 								dismissCallback: () => {
