@@ -77,7 +77,7 @@ class Home extends Component {
 				this.props.LoadExchangeRates(this.props.activeCryptoCurrency)
 				this.props.LoadTransactions(this.props.activeCryptoCurrency)
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
-			} else if (currentY > -80&& this.state.pulled) {
+			} else if (currentY > -80 && this.state.pulled) {
 				this.setState({pulled: false})
 			}
 		})

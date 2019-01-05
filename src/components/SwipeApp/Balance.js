@@ -37,7 +37,8 @@ class Balance extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			loading: false
+			loading: false,
+			loadingTimeout: false
 		}
 	}
 
@@ -47,8 +48,11 @@ class Balance extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates) {
-			this.setState({loading: true})
+		if (!this.state.loading && (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates)) {
+			this.setState({loading: true, loadingTimeout: true})
+			setTimeout(() => {
+				this.setState({loadingTimeout: false})
+			}, 500)
 		}
 		else {
 			this.setState({loading: false})
@@ -63,6 +67,9 @@ class Balance extends Component {
 			return true
 		}
 		else if (nextState.loading != this.state.loading) {
+			return true
+		}
+		else if (nextState.loadingTimeout != this.state.loadingTimeout) {
 			return true
 		}
 		else if (nextProps.currency != this.props.currency) {
@@ -158,6 +165,8 @@ class Balance extends Component {
 			]
 		}
 
+		const loading = this.state.loading || this.state.loadingTimeout
+
 		return (
 			
 			<Animated.View pointerEvents="box-none" style={[
@@ -165,11 +174,11 @@ class Balance extends Component {
 				styles.balanceWrapper
 			]}>
 				<Animated.View style={[styles.balance, animatedBalanceView]} pointerEvents="box-none">
-					<Text style={styles.balanceText}>{this.state.loading ? " " : relativeBalance}</Text>
+					<Text style={styles.balanceText}>{loading ? " " : relativeBalance}</Text>
 					<View style={[styles.balanceRefresh, {
-						opacity: this.state.loading ? 100 : 0
+						opacity: loading ? 100 : 0
 					}]}>
-						<LoadingCircle size={30} restart={this.state.loading}/>
+						<LoadingCircle size={30} restart={loading}/>
 					</View>
 					<CurrencySwitcher
 						fiat="USD"
