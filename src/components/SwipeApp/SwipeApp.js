@@ -607,6 +607,7 @@ const mapDispatchToProps = dispatch => {
 			resetLockoutClock,
 			startLockoutClock,
 			setNotifsRequested,
+			notificationPermissionInfo
 		},
 		dispatch
 	)
