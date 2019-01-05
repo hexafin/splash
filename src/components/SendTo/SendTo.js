@@ -353,40 +353,40 @@ class SendTo extends Component {
 						</View>}
 
 						{!isAddressEntered && this.state.value == "" && contacts.length != 0 && 
-						<View style={styles.hits} >
-							<FlatList
-			   				      data={contacts}
-			   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
-			   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
-			   				      renderItem={({ item }) => {
-			   				      	if (item.objectID != userId && typeof item.wallets !== 'undefined' && typeof item.wallets[activeCryptoCurrency] !== 'undefined') {
-			   				      		return (
-			   					          <SendLineItem
-			   					            title={`@${item.splashtag}`}
-			   					            selected={item.objectID == this.state.selectedId}
-			   					            subtitle={"Your Contact"}
-			   					            onPress={() => {
-			   									const selectedId = item.objectID
-			   									const selectedSplashtag = item.splashtag
-			   									const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
-			   									if (selectedId != this.state.selectedId) {
-			   										this.setState({selectedId, selectedAddress, selectedSplashtag})
-			   									}
-			   									else {
-			   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
-			   									}
-			   					            }}/>
-			   					        )
-			   				      	}
-			   				      }}
-			   				      ListFooterComponent={
-				   				    <TouchableOpacity style={styles.refreshButton} onPress={this.props.LoadContacts}>
-				   				    	<Text style={styles.newNumberText}>Added new numbers?</Text>
-				   				    	<Text style={styles.refreshText}>Refresh Contacts</Text>
-				   				    </TouchableOpacity>
-			   				      }
-			   				    />
-		   				    </View>}   
+							<View style={styles.hits} >
+								<FlatList
+		   				      data={contacts}
+		   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
+		   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
+		   				      renderItem={({ item }) => {
+		   				      	if (item.objectID != userId && typeof item.wallets !== 'undefined' && typeof item.wallets[activeCryptoCurrency] !== 'undefined') {
+		   				      		return (
+		   					          <SendLineItem
+		   					            title={`@${item.splashtag}`}
+		   					            selected={item.objectID == this.state.selectedId}
+		   					            subtitle={"Your Contact"}
+		   					            onPress={() => {
+		   									const selectedId = item.objectID
+		   									const selectedSplashtag = item.splashtag
+		   									const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
+		   									if (selectedId != this.state.selectedId) {
+		   										this.setState({selectedId, selectedAddress, selectedSplashtag})
+		   									}
+		   									else {
+		   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
+		   									}
+		   					            }}/>
+		   					        )
+		   				      	}
+		   				      }}
+		   				      ListFooterComponent={
+			   				    <TouchableOpacity style={styles.refreshButton} onPress={this.props.LoadContacts}>
+			   				    	<Text style={styles.newNumberText}>Added new numbers?</Text>
+			   				    	<Text style={styles.refreshText}>Refresh Contacts</Text>
+			   				    </TouchableOpacity>
+		   				      }
+		   				    />
+	   				    </View>}
 
 
 					</InstantSearch>

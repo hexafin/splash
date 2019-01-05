@@ -56,6 +56,20 @@ class CurrencySwitch extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    this.props.switchXOffset.addListener(({value}) => {
+      const index = Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100)/2 - 95)))
+      const centeredCrypto = currencies[index].code
+      if (this.props.activeCryptoCurrency != centeredCrypto) {
+        this.handleCurrencySwitch(centeredCrypto)
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    this.props.switchXOffset.removeListeners()
+  }
+
   handleCurrencySwitch(currency) {
     this.props.setActiveCryptoCurrency(currency)
     this.props.LoadTransactions(currency)
@@ -101,9 +115,10 @@ class CurrencySwitch extends Component {
           snapPoints={snapPoints}
           animatedValueX={this.props.switchXOffset}
           initialPosition={{ x: snapPointFromIndex(currencyIndex[this.props.activeCryptoCurrency]) }}
-          onSnap={event => {
-            this.handleCurrencySwitch(currencies[event.nativeEvent.index].code)
-          }}>
+          // onSnap={event => {
+          //   this.handleCurrencySwitch(currencies[event.nativeEvent.index].code)
+          // }}
+          >
 
           <View style={styles.coinWrapper}>
 
