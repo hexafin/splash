@@ -20,7 +20,7 @@ import { defaults, icons } from "../../lib/styles"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
-import { cryptoNames, cryptoColors, cryptoImages } from "../../lib/cryptos"
+import { cryptoNames, cryptoColors, cryptoImages, cryptoNameDict } from "../../lib/cryptos"
 import { LoadExchangeRates, LoadBalance } from "../../redux/crypto/actions"
 import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions"
 import PropTypes from "prop-types"
@@ -38,6 +38,25 @@ import Header from "./Header"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
+
+let currencies = []
+let currencyIndex = {}
+let i = 0
+let snapPoints = []
+const snapPointFromIndex = j => -1 * (SCREEN_WIDTH/2-45) * j
+cryptoNames.forEach(crypto => {
+  currencyIndex[crypto] = i
+  currencies.push({
+    index: i,
+    name: cryptoNameDict[crypto],
+    code: crypto,
+    image: cryptoImages[crypto]
+  })
+  snapPoints.push({
+    x: snapPointFromIndex(i)
+  })
+  i++
+})
 
 const xOffset = new Animated.Value(0)
 const yOffsets = {
@@ -146,16 +165,16 @@ const switchXOffset = new Animated.Value(0)
 
 let switchCryptoColors = [cryptoColors[cryptoNames[0]]]
 let switchInputRange = [1]
-let i = 0
+let j = 0
 let lastColor
 cryptoNames.forEach(crypto => {
-	switchInputRange.push(-1 * (SCREEN_WIDTH/2-45) * i)
+	switchInputRange.push(-1 * (SCREEN_WIDTH/2-45) * j)
   	switchCryptoColors.push(cryptoColors[crypto])
-  	i++
+  	j++
   	lastColor = cryptoColors[crypto]
 })
 switchCryptoColors.push(lastColor)
-switchInputRange.push(switchInputRange[i]-1)
+switchInputRange.push(switchInputRange[j]-1)
 switchInputRange.reverse()
 switchCryptoColors.reverse()
 
@@ -251,6 +270,14 @@ class SwipeApp extends Component {
 		this.setState({appState: nextAppState});
 	}
 
+	componentWillMount() {
+		// initialize swipe app to center page
+		xOffset.setValue(SCREEN_WIDTH)
+
+		// initialize currency
+		switchXOffset.setValue(-1 * currencyIndex[this.props.activeCryptoCurrency] * (100 + (SCREEN_WIDTH - 100)/2 - 95))
+	}
+
 	componentDidMount() {
 
 		Sentry.setUserContext({
@@ -277,8 +304,6 @@ class SwipeApp extends Component {
 		}
 
 		this.goToPageByIndex(this.scrollView, 1)
-		// initialize swipe app to center page
-		xOffset.setValue(SCREEN_WIDTH)
 
 		// load
 		for (var i = 0; i < cryptoNames.length; i++) {
@@ -289,12 +314,15 @@ class SwipeApp extends Component {
 
 		// set up notification permissions and tokens
 		firebase.messaging().hasPermission().then(async (enabled) => {
-			if (!enabled) {
-				await firebase.messaging().requestPermission()
-				const fcmToken = await firebase.messaging().getToken()
-				if (fcmToken) {
-					await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
-				}
+			if (!enabled && !this.props.notificationsRequested) {
+				this.props.setNotifsRequested(true)
+				this.props.notificationPermissionInfo(async () => {
+					await firebase.messaging().requestPermission()
+					const fcmToken = await firebase.messaging().getToken()
+					if (fcmToken) {
+						await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+					}
+				})
 			} else {
 				const doc = await firebase.firestore().collection('users').doc(this.props.userId).get()
 				if (!doc.data().pushToken) {
@@ -333,6 +361,7 @@ class SwipeApp extends Component {
 
 	componentWillUnmount() {
 		xOffset.removeAllListeners()
+		switchXOffset.removeAllListeners()
 		this.onTokenRefreshListener();
 		this.notificationListener()
 		this.notificationOpenedListener()
@@ -528,6 +557,25 @@ const styles = StyleSheet.create({
 	}
 })
 
+const notificationPermissionInfo = (buttonCallback) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Turn On Notifications',
+        body: 'Get notified when you receive money or a friend thanks you.',
+        buttonTitle: 'Great',
+        buttonCallback: buttonCallback,
+    },   
+  }
+}
+
+const setNotifsRequested = (requested) => {
+  return {
+    type: 'NOTIFICATIONS_REQUESTED',
+    requested: requested,
+  }
+}
 
 const mapStateToProps = state => {
 	return {
@@ -547,6 +595,7 @@ const mapStateToProps = state => {
     	errorLoadingBalance: state.crypto.errorLoadingBalance,
     	lockoutTime: state.user.lockoutTime,
     	lockoutEnabled: state.user.lockoutEnabled,
+    	notificationsRequested: state.user.notificationsRequested,
 	}
 }
 
@@ -556,7 +605,8 @@ const mapDispatchToProps = dispatch => {
 			LoadBalance,
 			LoadExchangeRates,
 			resetLockoutClock,
-			startLockoutClock
+			startLockoutClock,
+			setNotifsRequested,
 		},
 		dispatch
 	)

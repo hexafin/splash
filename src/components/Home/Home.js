@@ -77,7 +77,7 @@ class Home extends Component {
 				this.props.LoadExchangeRates(this.props.activeCryptoCurrency)
 				this.props.LoadTransactions(this.props.activeCryptoCurrency)
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
-			} else if (currentY > -80&& this.state.pulled) {
+			} else if (currentY > -80 && this.state.pulled) {
 				this.setState({pulled: false})
 			}
 		})
@@ -111,7 +111,7 @@ class Home extends Component {
 
 				<ColoredPayButton fillInput={this.props.switchXOffset} fill={this.props.switchColor} onPress={() => {
 					ReactNativeHapticFeedback.trigger("impactLight", true);
-					this.props.navigation.navigate("PayFlow");
+					this.props.navigation.navigate("EnterAmount");
 				}}/>
 			</View>
 		);

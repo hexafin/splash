@@ -7,7 +7,6 @@ import { Sentry } from "react-native-sentry";
 import Routes from "./routes";
 import configureStore from "./store/configureStore";
 import Loading from "./components/universal/Loading";
-import NavigatorService from "./redux/navigator";
 
 const { persistor, store } = configureStore();
 
@@ -46,11 +45,7 @@ class App extends Component {
 							}
 						})
 					}}>
-					<Router
-						ref={navigatorRef => {
-							NavigatorService.setContainer(navigatorRef);
-						}}
-					/>
+					<Router/>
 				</PersistGate>
 			</Provider>
 		);

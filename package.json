@@ -24,7 +24,7 @@
     "test": "jest",
     "codepush": "rm -r codepush;mkdir codepush;react-native bundle --entry-file index.js --platform ios --dev false --bundle-output codepush/main.jsbundle --assets-dest codepush;code-push release lukas.burger/Splash-iOS codepush $npm_package_version",
     "codepushm": "rm -r codepush;mkdir codepush;react-native bundle --entry-file index.js --platform ios --dev false --bundle-output codepush/main.jsbundle --assets-dest codepush;code-push release lukas.burger/Splash-iOS codepush $npm_package_version -m",
-    "postinstall": "patch-package;./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto --hack"
+    "postinstall": "./node_modules/.bin/rn-nodeify --install vm,buffer,events,process,stream,util,inherits,fs,path,crypto --hack"
   },
   "jest": {
     "preset": "react-native"
@@ -33,8 +33,8 @@
     "assert": "^1.4.1",
     "axios": "^0.18.0",
     "bip39": "^2.5.0",
-    "bitcoinjs-lib": "^3.3.2",
-    "buffer": "^5.1.0",
+    "bitcoinjs-lib": "^4.0.2",
+    "buffer": "5.0.5",
     "color": "^3.0.0",
     "crypto": "^1.0.1",
     "ethereumjs-tx": "^1.3.7",
@@ -57,6 +57,7 @@
     "react-native-crypto": "^2.1.2",
     "react-native-fcm": "^15.0.2",
     "react-native-firebase": "^4.1.0",
+    "react-native-gesture-handler": "^1.0.12",
     "react-native-haptic-feedback": "^1.1.7",
     "react-native-interactable": "^0.1.10",
     "react-native-iphone-x-helper": "^1.0.3",
@@ -71,7 +72,7 @@
     "react-native-svg": "^6.3.1",
     "react-native-svg-uri": "^1.2.3",
     "react-native-touch-id": "^4.0.2",
-    "react-navigation": "^2.3.1",
+    "react-navigation": "^3.0.9",
     "react-navigation-redux-helpers": "^1.1.2",
     "react-redux": "^5.0.7",
     "readable-stream": "^1.0.33",

@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { createBottomTabNavigator, createStackNavigator } from "react-navigation"
+import { createBottomTabNavigator, createStackNavigator, createAppContainer } from "react-navigation"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import { colors } from "./lib/colors"
@@ -40,102 +40,97 @@ function forVertical(props) {
 	}
 }
 
-
-const OnboardingRouter = createBottomTabNavigator(
-	{
-		Landing: {
-			screen: Landing,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		},
-		ChooseSplashtag: {
-			screen: ChooseSplashtag,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		},
-		EnterPhoneNumber: {
-			screen: EnterPhoneNumber,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		},
-		VerifyPhoneNumber: {
-			screen: VerifyPhoneNumber,
-			navigationOptions: {
-				tabBarVisible: false
-			}
-		}
-	},
-	{
-		animationEnabled: true,
-		swipeEnabled: false,
-		initialRouteName: "Landing",
-		activeBackgroundColor: colors.white,
-		inactiveBackgroundColor: colors.white
-	}
-)
-
-const PayFlowRouter = createStackNavigator(
-	{
-		EnterAmount: {
-			screen: EnterAmount,
-			
-		},
-		SendTo: {
-			screen: SendTo,
-			
-		}
-	},
-	{
-		initialRouteName: "EnterAmount",
-		activeBackgroundColor: colors.white,
-		inactiveBackgroundColor: colors.white,
-		headerMode: "none",
-		lazy: true,
-	}
-)
-
-const AppRouter = createStackNavigator(
-	{
-		ScanQrCode: {
-			screen: ScanQrCode
-		},
-		UpdateUsername: {
-			screen: UpdateUsername
-		},
-		Unlock: {
-			screen: Unlock
-		},
-		SetPasscode: {
-			screen: SetPasscode
-		},
-		PayFlow: ({navigation}) => <PayFlowRouter screenProps={{rootNavigation: navigation}}/>,
-		SwipeApp: {
-			screen: SwipeApp
-		},
-	},
-	{
-		headerMode: "none",
-		mode: "modal",
-		swipeEnabled: false,
-		initialRouteName: "SwipeApp",
-		transitionConfig: () => ({ screenInterpolator: forVertical }),
-		cardStyle: {
-			backgroundColor: "rgba(0,0,0,0)"
-		}
-	}
-)
-
-export default (loggedIn) => {
+const cointainer = (loggedIn) => {
 	return createStackNavigator(
 		{
 			AppRouter: {
-				screen: AppRouter
+				screen: createStackNavigator(
+					{
+						ScanQrCode: {
+							screen: ScanQrCode
+						},
+						UpdateUsername: {
+							screen: UpdateUsername
+						},
+						Unlock: {
+							screen: Unlock
+						},
+						SetPasscode: {
+							screen: SetPasscode
+						},
+						PayFlow: {
+							screen: createStackNavigator(
+								{
+									EnterAmount: {
+										screen: EnterAmount,
+										
+									},
+									SendTo: {
+										screen: SendTo,
+										
+									}
+								},
+								{
+									initialRouteName: "EnterAmount",
+									activeBackgroundColor: colors.white,
+									inactiveBackgroundColor: colors.white,
+									headerMode: "none",
+									lazy: true,
+								}
+							)
+						},
+						SwipeApp: {
+							screen: SwipeApp
+						},
+					},
+					{
+						headerMode: "none",
+						mode: "modal",
+						swipeEnabled: false,
+						initialRouteName: "SwipeApp",
+						transitionConfig: () => ({ screenInterpolator: forVertical }),
+						cardStyle: {
+							backgroundColor: "rgba(0,0,0,0)"
+						}
+					}
+				)
 			},
 			OnboardingRouter: {
-				screen: OnboardingRouter
+				screen: createBottomTabNavigator(
+					{
+						Landing: {
+							screen: Landing,
+							navigationOptions: {
+								tabBarVisible: false
+							}
+						},
+						ChooseSplashtag: {
+							screen: ChooseSplashtag,
+							navigationOptions: {
+								tabBarVisible: false
+							}
+						},
+						EnterPhoneNumber: {
+							screen: EnterPhoneNumber,
+							navigationOptions: {
+								tabBarVisible: false
+							}
+						},
+						VerifyPhoneNumber: {
+							screen: VerifyPhoneNumber,
+							navigationOptions: {
+								tabBarVisible: false
+							}
+						}
+					},
+					{
+						animationEnabled: true,
+						swipeEnabled: false,
+						initialRouteName: "Landing",
+						activeBackgroundColor: colors.white,
+						inactiveBackgroundColor: colors.white
+					}
+				)
 			},
 		},
 		{
@@ -149,4 +144,8 @@ export default (loggedIn) => {
 			}
 		}
 	)
+}
+
+export default (loggedIn) => {
+	return createAppContainer(cointainer(loggedIn))
 }

@@ -12,7 +12,7 @@ import FCM, {
 } from "react-native-fcm";
 import { NavigationActions } from "react-navigation";
 analytics.setAnalyticsCollectionEnabled(true);
-import NavigatorService from "../navigator";
+
 import * as Keychain from 'react-native-keychain';
 
 export const ONBOARDING_ERRORS = {

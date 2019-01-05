@@ -8,7 +8,7 @@ import FCM, {
 	WillPresentNotificationResult,
 	NotificationType
 } from "react-native-fcm"
-import NavigatorService from "../navigator"
+
 import {reset} from 'redux-form';
 import * as Keychain from 'react-native-keychain';
 import Contacts from 'react-native-contacts';
@@ -33,7 +33,8 @@ export const ActionTypes = {
 	START_LOCKOUT_CLOCK: 'START_LOCKOUT_CLOCK',
 	RESET_LOCKOUT_CLOCK: 'RESET_LOCKOUT_CLOCK',
 	TOGGLE_LOCKOUT: "TOGGLE_LOCKOUT",
-	SET_BIOMETRIC: "SET_BIOMETRIC"
+	SET_BIOMETRIC: "SET_BIOMETRIC",
+	NOTIFICATIONS_REQUESTED: "NOTIFICATIONS_REQUESTED",
 }
 
 export function logInInit() {

@@ -23,7 +23,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import CloseButton from "../universal/CloseButton"
 import Button from "../universal/Button"
 import FlatBackButton from "../universal/FlatBackButton"
-import NavigatorService from "../../redux/navigator";
+
 import SendButton from "./SendButton"
 import Hits from "./Hits"
 import SendLineItem from "./SendLineItem"
@@ -226,7 +226,7 @@ class SendTo extends Component {
 				<View style={styles.wrapper}>
 					<CloseButton color="dark" onPress={() => {
 						Keyboard.dismiss()
-						this.props.screenProps.rootNavigation.goBack(null)
+						this.props.navigation.navigate("SwipeApp")
 					}}/>
 					<FlatBackButton color="dark" onPress={() => {
 						Keyboard.dismiss()
@@ -292,7 +292,7 @@ class SendTo extends Component {
 								image={icons.qrIcon} 
 								title={"Scan\nQR-Code"}
 								onPress={() => {
-									this.props.screenProps.rootNavigation.navigate("ScanQrCode")
+									this.props.navigation.navigate("ScanQrCode")
 								}}/>
 						</Animated.View>
 
@@ -353,40 +353,40 @@ class SendTo extends Component {
 						</View>}
 
 						{!isAddressEntered && this.state.value == "" && contacts.length != 0 && 
-						<View style={styles.hits} >
-							<FlatList
-			   				      data={contacts}
-			   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
-			   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
-			   				      renderItem={({ item }) => {
-			   				      	if (item.objectID != userId && typeof item.wallets[activeCryptoCurrency] != 'undefined') {
-			   				      		return (
-			   					          <SendLineItem
-			   					            title={`@${item.splashtag}`}
-			   					            selected={item.objectID == this.state.selectedId}
-			   					            subtitle={"Your Contact"}
-			   					            onPress={() => {
-			   									const selectedId = item.objectID
-			   									const selectedSplashtag = item.splashtag
-			   									const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
-			   									if (selectedId != this.state.selectedId) {
-			   										this.setState({selectedId, selectedAddress, selectedSplashtag})
-			   									}
-			   									else {
-			   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
-			   									}
-			   					            }}/>
-			   					        )
-			   				      	}
-			   				      }}
-			   				      ListFooterComponent={
-				   				    <TouchableOpacity style={styles.refreshButton} onPress={this.props.LoadContacts}>
-				   				    	<Text style={styles.newNumberText}>Added new numbers?</Text>
-				   				    	<Text style={styles.refreshText}>Refresh Contacts</Text>
-				   				    </TouchableOpacity>
-			   				      }
-			   				    />
-		   				    </View>}   
+							<View style={styles.hits} >
+								<FlatList
+		   				      data={contacts}
+		   				      contentContainerStyle={{overflow: "hidden", paddingHorizontal: 20, paddingBottom: 130}}
+		   				      keyExtractor={(item, index) => 'contact-'+item.objectID}
+		   				      renderItem={({ item }) => {
+		   				      	if (item.objectID != userId && typeof item.wallets !== 'undefined' && typeof item.wallets[activeCryptoCurrency] !== 'undefined') {
+		   				      		return (
+		   					          <SendLineItem
+		   					            title={`@${item.splashtag}`}
+		   					            selected={item.objectID == this.state.selectedId}
+		   					            subtitle={"Your Contact"}
+		   					            onPress={() => {
+		   									const selectedId = item.objectID
+		   									const selectedSplashtag = item.splashtag
+		   									const selectedAddress = item.wallets[activeCryptoCurrency][this.props.network].address
+		   									if (selectedId != this.state.selectedId) {
+		   										this.setState({selectedId, selectedAddress, selectedSplashtag})
+		   									}
+		   									else {
+		   										this.setState({selectedId: null, selectedAddress: null, selectedSplashtag: null})
+		   									}
+		   					            }}/>
+		   					        )
+		   				      	}
+		   				      }}
+		   				      ListFooterComponent={
+			   				    <TouchableOpacity style={styles.refreshButton} onPress={this.props.LoadContacts}>
+			   				    	<Text style={styles.newNumberText}>Added new numbers?</Text>
+			   				    	<Text style={styles.refreshText}>Refresh Contacts</Text>
+			   				    </TouchableOpacity>
+		   				      }
+		   				    />
+	   				    </View>}
 
 
 					</InstantSearch>
@@ -402,7 +402,7 @@ class SendTo extends Component {
 								amount: this.state.sendAmount,
 								currency: this.state.sendCurrency,
 								successCallback: () => {
-									this.props.screenProps.rootNavigation.navigate("SwipeApp")
+									this.props.navigation.navigate("SwipeApp")
 									LoadTransactions(this.props.activeCryptoCurrency)
 								},
 								dismissCallback: () => {

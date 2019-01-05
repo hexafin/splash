@@ -54,16 +54,39 @@ class CurrencySwitch extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      initialized: false
+    }
+  }
+
+  componentDidMount() {
+
+    // default to BTC
+    this.handleCurrencySwitch("BTC")
+
+    setTimeout(() => {
+      this.setState({initialized: true})
+    }, 500)
+
+    this.props.switchXOffset.addListener(({value}) => {
+      if (this.state.initialized) {
+        const index = Math.abs(Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100)/2 - 95))))
+        const centeredCrypto = currencies[index].code
+        if (this.props.activeCryptoCurrency != centeredCrypto) {
+          this.handleCurrencySwitch(centeredCrypto)
+        }
+      }
+    })
   }
 
   handleCurrencySwitch(currency) {
+    if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
+      this.props.setActiveCurrency(currency)
+    }
     this.props.setActiveCryptoCurrency(currency)
     this.props.LoadTransactions(currency)
     this.props.LoadBalance(currency)
     this.props.LoadExchangeRates(currency)
-    if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
-      this.props.setActiveCurrency(currency)
-    }
   }
 
   render() {
@@ -84,8 +107,8 @@ class CurrencySwitch extends Component {
         transform: [
           {translateY: Animated.add(
             this.props.yOffsets.home.interpolate({
-              inputRange: [-81, -80, 0, 160, 161],
-              outputRange: [50, 50, 0, -100, -300]
+              inputRange: [-41, -40, 0, 160, 161],
+              outputRange: [25, 25, 0, -100, -300]
             }),
             this.props.xOffset.interpolate({
               inputRange: [0, SCREEN_WIDTH*2/3, SCREEN_WIDTH, SCREEN_WIDTH*4/3, SCREEN_WIDTH*2],
@@ -101,9 +124,10 @@ class CurrencySwitch extends Component {
           snapPoints={snapPoints}
           animatedValueX={this.props.switchXOffset}
           initialPosition={{ x: snapPointFromIndex(currencyIndex[this.props.activeCryptoCurrency]) }}
-          onSnap={event => {
-            this.handleCurrencySwitch(currencies[event.nativeEvent.index].code)
-          }}>
+          // onSnap={event => {
+          //   this.handleCurrencySwitch(currencies[event.nativeEvent.index].code)
+          // }}
+          >
 
           <View style={styles.coinWrapper}>
 

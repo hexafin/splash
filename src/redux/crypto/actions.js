@@ -14,7 +14,7 @@ import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
 
-import NavigatorService from "../navigator";
+
 
 export const ActionTypes = {
 	SET_ACTIVE_CURRENCY: "SET_ACTIVE_CURRENCY",
@@ -176,12 +176,12 @@ export const OpenWallet = (userId, currencies) => {
 
 					let updateWallets = []
 					let createWallets = []
-					if (!!keychainData[currency].testnet) {
+					if (typeof keychainData[currency] !== 'undefined' && !!keychainData[currency].testnet) {
 						updateWallets.push('testnet')
 					} else {
 						createWallets.push('testnet')
 					}
-					if (!!keychainData[currency].mainnet) {
+					if (typeof keychainData[currency] !== 'undefined' && !!keychainData[currency].mainnet) {
 						updateWallets.push('mainnet')
 					} else {
 						createWallets.push('mainnet')
@@ -214,6 +214,7 @@ export const OpenWallet = (userId, currencies) => {
 									network,
 									wif: bitcoinData.wif
 								}
+								console.log('created btc wallet')
 								break
 							case "ETH":
 								const etherData = NewEthereumWallet()
@@ -226,6 +227,7 @@ export const OpenWallet = (userId, currencies) => {
 									network,
 									wif: etherData.wif
 								}
+								console.log('created eth wallet')
 								break
 							default:
 								const error = `Open wallet: unsupported currency: ${currency}`

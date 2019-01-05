@@ -20,6 +20,7 @@ const initialState = {
 	lockoutTime: null,
 	id: null,
 	biometric: false,
+	notificationsRequested: false,
 }
 
 export default function reducer(state = initialState, action) {
@@ -29,6 +30,12 @@ export default function reducer(state = initialState, action) {
 			return {
 				...state,
 				biometric: action.enabled
+			}
+		
+		case ActionTypes.NOTIFICATIONS_REQUESTED:
+			return {
+				...state,
+				notificationsRequested: action.requested
 			}
 		
 		case ActionTypes.LOG_IN_INIT:

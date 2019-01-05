@@ -17,7 +17,7 @@ import Keypad from "../universal/Keypad";
 import CloseButton from "../universal/CloseButton";
 import NextButton from "../universal/NextButton";
 import CurrencySwitcherLight from "../universal/CurrencySwitcherLight";
-import NavigatorService from "../../redux/navigator";
+
 import { cryptoTitleDict, cryptoUnits, decimalToUnits, unitsToDecimal, decimalLengths } from "../../lib/cryptos"
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -215,7 +215,7 @@ class EnterAmount extends Component {
 				<CloseButton
 					color="dark"
 					onPress={() => {
-						this.props.screenProps.rootNavigation.goBack(null);
+						this.props.navigation.goBack(null);
 					}}
 				/>
 			</View>

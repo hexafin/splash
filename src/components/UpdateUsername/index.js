@@ -2,7 +2,7 @@ import UpdateUsername from "./UpdateUsername"
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import {ChangeUsername} from "../../redux/user/actions"
-import NavigatorService from "../../redux/navigator"
+
 
 
 const mapStateToProps = state => {
