@@ -54,30 +54,42 @@ class CurrencySwitch extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      initialized: false
+    }
   }
 
   componentDidMount() {
+
+    // this.interactable.snapTo({index: currencyIndex[this.props.activeCryptoCurrency]})
+    this.handleCurrencySwitch(this.props.activeCryptoCurrency)
+    // this.props.setActiveCurrency("USD")
+
+    setTimeout(() => {
+      this.setState({initialized: true})
+    }, 500)
+
     this.props.switchXOffset.addListener(({value}) => {
-      const index = Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100)/2 - 95)))
-      const centeredCrypto = currencies[index].code
-      if (this.props.activeCryptoCurrency != centeredCrypto) {
-        this.handleCurrencySwitch(centeredCrypto)
+      if (this.state.initialized) {
+        const index = Math.abs(Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100)/2 - 95))))
+        console.log(index)
+        const centeredCrypto = currencies[index].code
+        if (this.props.activeCryptoCurrency != centeredCrypto) {
+          this.handleCurrencySwitch(centeredCrypto)
+        }
       }
     })
   }
 
-  componentWillUnmount() {
-    this.props.switchXOffset.removeListeners()
-  }
-
   handleCurrencySwitch(currency) {
+    console.log("from switch")
+    if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
+      this.props.setActiveCurrency(currency)
+    }
     this.props.setActiveCryptoCurrency(currency)
     this.props.LoadTransactions(currency)
     this.props.LoadBalance(currency)
     this.props.LoadExchangeRates(currency)
-    if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
-      this.props.setActiveCurrency(currency)
-    }
   }
 
   render() {
