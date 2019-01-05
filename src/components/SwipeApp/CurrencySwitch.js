@@ -61,8 +61,8 @@ class CurrencySwitch extends Component {
 
   componentDidMount() {
 
-    // this.interactable.snapTo({index: currencyIndex[this.props.activeCryptoCurrency]})
-    this.handleCurrencySwitch(this.props.activeCryptoCurrency)
+    this.handleCurrencySwitch("BTC")
+    // this.handleCurrencySwitch(this.props.activeCryptoCurrency)
     // this.props.setActiveCurrency("USD")
 
     setTimeout(() => {
@@ -82,7 +82,7 @@ class CurrencySwitch extends Component {
   }
 
   handleCurrencySwitch(currency) {
-    console.log("from switch")
+    console.log("switch")
     if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
       this.props.setActiveCurrency(currency)
     }
