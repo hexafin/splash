@@ -54,7 +54,7 @@ function NewBitcoinWallet(network='mainnet') {
     })
     return {
         wif: keyPair.toWIF(),
-        address: keyPair.getAddress()
+        address: bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: network }).address
     }
 }
 

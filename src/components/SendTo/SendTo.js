@@ -292,7 +292,7 @@ class SendTo extends Component {
 								image={icons.qrIcon} 
 								title={"Scan\nQR-Code"}
 								onPress={() => {
-									this.props.screenProps.rootNavigation.navigate("ScanQrCode")
+									this.props.navigation.navigate("ScanQrCode")
 								}}/>
 						</Animated.View>
 
