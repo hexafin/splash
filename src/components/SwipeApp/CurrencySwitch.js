@@ -61,9 +61,8 @@ class CurrencySwitch extends Component {
 
   componentDidMount() {
 
+    // default to BTC
     this.handleCurrencySwitch("BTC")
-    // this.handleCurrencySwitch(this.props.activeCryptoCurrency)
-    // this.props.setActiveCurrency("USD")
 
     setTimeout(() => {
       this.setState({initialized: true})
