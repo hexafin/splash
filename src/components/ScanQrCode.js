@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
 	const currency = state.crypto.activeCryptoCurrency
 	return {
-		network: 'mainnet',
+		network: state.crypto.wallets[currency].network,
 		currency: currency,
 	}
 }

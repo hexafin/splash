@@ -16,8 +16,6 @@ codePush.getUpdateMetadata().then(update => {
 	}
 });
 
-console.disableYellowBox = true
-
 let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
 class App extends Component {
