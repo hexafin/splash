@@ -72,7 +72,7 @@ class CurrencySwitch extends Component {
       if (this.state.initialized) {
         const index = Math.abs(Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100)/2 - 95))))
         if (currencies[index] && currencies[index].code && (this.props.activeCryptoCurrency != currencies[index].code)) {
-          this.handleCurrencySwitch(centeredCrypto)
+          this.handleCurrencySwitch(currencies[index].code)
         }
       }
     })
