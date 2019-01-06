@@ -71,8 +71,7 @@ class CurrencySwitch extends Component {
     this.props.switchXOffset.addListener(({value}) => {
       if (this.state.initialized) {
         const index = Math.abs(Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100)/2 - 95))))
-        const centeredCrypto = currencies[index].code
-        if (this.props.activeCryptoCurrency != centeredCrypto) {
+        if (currencies[index] && currencies[index].code && (this.props.activeCryptoCurrency != currencies[index].code)) {
           this.handleCurrencySwitch(centeredCrypto)
         }
       }
