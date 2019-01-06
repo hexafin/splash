@@ -186,10 +186,10 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
-	const currency = state.crypto.activeCryptoCurrency
+	const addressType = (state.crypto.activeCryptoCurrency == 'BTC') ? 'BTC' : 'ETH' 
 	return {
-		network: state.crypto.wallets[currency].network,
-		currency: currency,
+		network: state.crypto.wallets[addressType].network,
+		currency: state.crypto.activeCryptoCurrency,
 	}
 }
 

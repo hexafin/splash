@@ -1,6 +1,6 @@
 import firebase from 'react-native-firebase'
 import moment from "moment"
-import {cryptoNames, cryptoUnits} from "./lib/cryptos"
+import {cryptoNames, cryptoUnits, erc20Names} from "./lib/cryptos"
 import { sendTransaction,
          getTransactionSize,
          BITCOIN_ERRORS,
