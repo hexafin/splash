@@ -362,9 +362,15 @@ class SwipeApp extends Component {
 	componentWillUnmount() {
 		xOffset.removeAllListeners()
 		switchXOffset.removeAllListeners()
-		this.onTokenRefreshListener();
-		this.notificationListener()
-		this.notificationOpenedListener()
+
+		try {
+			this.onTokenRefreshListener()
+			this.notificationListener()
+			this.notificationOpenedListener()
+		} catch (e) {
+			console.log('notification error: ', e)
+		}
+		
 		AppState.removeEventListener('change', this.handleAppStateChange);			
 	}
 
