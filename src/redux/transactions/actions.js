@@ -1,5 +1,6 @@
 import api, { Errors } from "../../api";
 import { sendTransaction, AddETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
+import { AddBTCTransactions } from "../../bitcoin-api"
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -85,23 +86,10 @@ export const LoadTransactions = (currency="BTC") => {
 
 		const state = getState()
 
-		const loadQuery = (query, transactions) => {
-			for (var i = 0, len = query.docs.length; i < len; i++) {
-				const doc = query.docs[i]
-				const transaction = {
-					id: doc.id,
-					...doc.data(),
-				}
-				if (transaction.type == 'card' && transaction.approved === true) {
-					transactions.push(transaction)
-				} else if (transaction.type == "blockchain") {
-					transactions.push(transaction)
-				}
-			}
-			return transactions
-		}
-
 		try {
+			dispatch(loadTransactionsInit())
+
+			let transactions = []
 			let walletAddress
 			if (erc20Names.indexOf(currency) > -1) {
 				walletAddress = state.crypto.wallets.ETH.address
@@ -110,23 +98,12 @@ export const LoadTransactions = (currency="BTC") => {
 			}
 			if (currency != "BTC") walletAddress = walletAddress.toLowerCase()
 			if (currency=="BTC") {
-				await api.AddBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
+				transactions = await AddBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
 			} else {
-				await AddETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
+				transactions = await AddETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
 			}
-			dispatch(loadTransactionsInit())
 
-			// two listeners for each firebase property
-			// after one listener finds changes merges in the documents found from the other
-			querySnapshot = await firestore.collection("transactions").where("toAddress", "==", walletAddress)
-															 .where("currency", "==", currency).get() 
-			// this is a snapshot of the user's transactions => redux will stay up to date with firebase
-			let transactions = []
-			if (querySnapshot.size > 0) {
-				const query = await firestore.collection("transactions").where("fromAddress", "==", walletAddress)
-																		.where("currency", "==", currency).get()
-				transactions = loadQuery(query, transactions)
-				transactions = loadQuery(querySnapshot, transactions)
+			if (transactions.length > 0) {
 				transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
 				dispatch(loadTransactionsSuccess(transactions, currency))
 
@@ -209,11 +186,6 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
       if (currency != 'BTC') userAddress = userAddress.toLowerCase() // store eth addresses in lower case
 
       let transaction = {
-        amount: {
-          subtotal: unitAmount,
-          total: totalUnitAmount,
-          fee: fee,
-        },
         currency: currency,
         relativeAmount: relativeAmount,
         relativeCurrency: 'USD',

@@ -2,10 +2,17 @@ let axios = require('axios');
 import { Sentry } from "react-native-sentry";
 import bitcoin from 'bitcoinjs-lib'
 import { blockchain_info_apiKey } from '../env/keys.json'
+import firebase from 'react-native-firebase'
+let firestore = firebase.firestore()
+
 
 var BITCOIN_DIGITS = 8;
 var BITCOIN_SAT_MULT = Math.pow(10, BITCOIN_DIGITS);
 const apiCode = '?api_code=' + blockchain_info_apiKey + '&'
+
+export const Errors = {
+  NETWORK_ERROR: 'NETWORK_ERROR'
+}
 
 export let providers = {
 	/**
@@ -214,3 +221,108 @@ export function sendTransaction (options) {
 		})
 	})
 }
+
+export async function AddBTCTransactions(address, userId, splashtag, network='mainnet') {
+    let allTransactions = []
+    try {
+      const apiCode = '?api_code=' + blockchain_info_apiKey
+      const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
+      const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
+      const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
+      const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
+
+      // get list of txs on firebase
+      const query1 = await firestore.collection("transactions").where("fromId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
+      const query2 = await firestore.collection("transactions").where("toId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
+
+      let firebaseTxIds = []
+      let firebaseTxs = []
+      if(query1.size > 0 || query2.size > 0) {
+        query1.forEach(doc => {
+          firebaseTxIds.push(doc.data().txId)
+          firebaseTxs.push(doc.data())
+        })
+        query2.forEach(doc => {
+          firebaseTxIds.push(doc.data().txId)
+          firebaseTxs.push(doc.data())
+        })
+      }
+
+      // load txs from blockchain
+      const blockHeight = (await axios.get(blockHeightAPI + apiCode)).data
+      const txs = (await axios.get(addressAPI + apiCode)).data.txs
+      const txsLength = txs.length
+      for(var j=0; j < txsLength; j++) {
+        
+        const index = firebaseTxIds.indexOf(txs[j].hash)
+        // if the transaction is important (ie not both from and to the user)
+        if (txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+            let pending = false
+            const confirmations = (typeof txs[j].block_height === 'undefined') ? 0 : (blockHeight - txs[j].block_height) + 1
+
+            if (typeof txs[j].block_height === 'undefined' || confirmations < 6) {
+              pending = true
+            }
+
+          let newTransaction = {}
+          if (index !== -1) {
+          	newTransaction = firebaseTxs[index]
+          	newTransaction.pending = pending
+          	newTransaction.confirmations = confirmations
+          } else {
+	          newTransaction = {
+	            timestamp: txs[j].time,
+	            currency: 'BTC',
+	            txId: txs[j].hash,
+	            pending: pending,
+	            confirmations: confirmations,
+	            type: 'blockchain'
+	          }
+          }
+          let amount = {}
+
+          // load total tx amount
+          const total = (await axios.get(txAPI+txs[j].hash+'/'+address+apiCode)).data
+          if (total < 0) {
+            newTransaction.fromId = userId
+            newTransaction.fromSplashtag = splashtag
+            newTransaction.fromAddress = address
+            newTransaction.toAddress = txs[j].out[0].addr
+            amount.subtotal = -1*total
+          } else  {
+            newTransaction.toId = userId
+            newTransaction.toSplashtag = splashtag
+            newTransaction.toAddress = address
+            newTransaction.fromAddress = txs[j].inputs[0].prev_out.addr
+            amount.subtotal = total
+          }
+
+              // load fees and calculate subtotal
+              amount.fee = (await axios.get(feeAPI+txs[j].hash + apiCode)).data
+              amount.total = amount.subtotal + amount.fee            
+
+            // if has total add to firebase so that it can be loaded on Home
+            if (amount.total > 0) {
+              if (index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') {
+	              await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
+              }
+              newTransaction.amount = {...amount}
+              newTransaction.id = newTransaction.txId
+              allTransactions.push(newTransaction)
+            }
+         }
+      }
+      return allTransactions
+    } catch (error) {
+      if (!error.status) {
+        throw Errors.NETWORK_ERROR
+      } else {
+        throw error;
+      }
+    }
+}
+
