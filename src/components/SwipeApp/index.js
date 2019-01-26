@@ -2,7 +2,7 @@ import SwipeApp from "./SwipeApp"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
 import {LoadTransactions} from "../../redux/transactions/actions"
-import {LoadBalance, LoadExchangeRates, setActiveCurrency} from "../../redux/crypto/actions"
+import {Load, setActiveCurrency} from "../../redux/crypto/actions"
 
 const mapStateToProps = (state) => {
     return {
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-    	LoadTransactions, LoadBalance, LoadExchangeRates, setActiveCurrency
+    	Load, setActiveCurrency
     }, dispatch)
 }
 

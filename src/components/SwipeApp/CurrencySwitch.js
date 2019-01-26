@@ -22,8 +22,7 @@ import { bindActionCreators } from "redux"
 import { 
         setActiveCryptoCurrency,
         setActiveCurrency,
-        LoadBalance,
-        LoadExchangeRates,
+        Load,
  } from "../../redux/crypto/actions"
  import {LoadTransactions} from "../../redux/transactions/actions"
 import { colors } from "../../lib/colors"
@@ -83,9 +82,7 @@ class CurrencySwitch extends Component {
       this.props.setActiveCurrency(currency)
     }
     this.props.setActiveCryptoCurrency(currency)
-    this.props.LoadTransactions(currency)
-    this.props.LoadBalance(currency)
-    this.props.LoadExchangeRates(currency)
+    this.props.Load(currency)
   }
 
   render() {
@@ -223,9 +220,7 @@ const mapDispatchToProps = dispatch => {
     {
       setActiveCryptoCurrency,
       setActiveCurrency,
-      LoadTransactions,
-      LoadBalance,
-      LoadExchangeRates,
+      Load,
     },
     dispatch
   );

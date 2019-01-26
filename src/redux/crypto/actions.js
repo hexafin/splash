@@ -1,5 +1,7 @@
 import api, { Errors } from "../../api";
 import { NewEthereumWallet, getBalance  } from "../../ethereum-api"
+import { NewBitcoinWallet, GetBitcoinAddressBalance  } from "../../bitcoin-api"
+import { LoadTransactions } from "../transactions/actions"
 
 var axios = require("axios");
 import firebase from "react-native-firebase";
@@ -44,8 +46,8 @@ export function loadBalanceInit(currency) {
 	return { type: ActionTypes.LOAD_BALANCE_INIT, currency };
 }
 
-export function loadBalanceSuccess(balance) {
-	return { type: ActionTypes.LOAD_BALANCE_SUCCESS, balance };
+export function loadBalanceSuccess(balance, currency) {
+	return { type: ActionTypes.LOAD_BALANCE_SUCCESS, balance, currency };
 }
 
 export function loadBalanceFailure(error) {
@@ -56,8 +58,8 @@ export function loadExchangeRatesInit(currency) {
 	return { type: ActionTypes.LOAD_EXCHANGE_RATES_INIT, currency };
 }
 
-export function loadExchangeRatesSuccess(exchangeRates) {
-	return { type: ActionTypes.LOAD_EXCHANGE_RATES_SUCCESS, exchangeRates };
+export function loadExchangeRatesSuccess(exchangeRates, currency) {
+	return { type: ActionTypes.LOAD_EXCHANGE_RATES_SUCCESS, exchangeRates, currency };
 }
 
 export function loadExchangeRatesFailure(error) {
@@ -84,7 +86,38 @@ export function resetCrypto() {
 	return { type: ActionTypes.RESET_CRYPTO };
 }
 
-export const LoadBalance = (currency="BTC") => {
+export const Load = (currency="BTC") => {
+	return async (dispatch, getState) => {
+		dispatch(loadBalanceInit(currency))
+		const state = getState()
+		let address
+		if (erc20Names.indexOf(currency) > -1 ) {
+			address = state.crypto.wallets.ETH.address
+		} else {
+			address = state.crypto.wallets[currency].address
+		}
+
+		const loadTransactionsAction = LoadTransactions(currency)
+		const transactions = await loadTransactionsAction(dispatch,getState)
+		let unconfirmedOutboundAmount = 0
+		console.log(transactions)
+		if (typeof transactions !== 'undefined') {
+			for (var i; i < transactions.length; i++) {
+				console.log(transactions[i])
+				if (transactions[i].pending == true) {
+					unconfirmedOutboundAmount += transactions[i].amount
+				}
+			}
+		}
+		console.log('blah', unconfirmedOutboundAmount)
+		const balanceAction = LoadBalance(currency, unconfirmedOutboundAmount)
+		balanceAction(dispatch, getState)
+		const exchangeRateAction = LoadExchangeRates(currency)
+		exchangeRateAction(dispatch, getState)
+	}
+}
+
+export const LoadBalance = (currency="BTC", unconfirmedOutboundAmount=0) => {
 	return (dispatch, getState) => {
 		dispatch(loadBalanceInit(currency))
 
@@ -101,15 +134,17 @@ export const LoadBalance = (currency="BTC") => {
 		}
 
 		if(currency == "BTC") {
-				api.GetBitcoinAddressBalance(address, network).then(balance => {
-					dispatch(loadBalanceSuccess(balance))
+				GetBitcoinAddressBalance(address, network).then(balance => {
+					const totalBalance = balance - unconfirmedOutboundAmount
+					dispatch(loadBalanceSuccess(totalBalance, currency))
 				}).catch(error => {
 					if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 					dispatch(loadBalanceFailure(error))
 				})
 		} else if (cryptoNames.indexOf(currency) >= 0) {
 			getBalance({currency, address, network}).then(balance => {
-				dispatch(loadBalanceSuccess(balance))
+				const totalBalance = balance - unconfirmedOutboundAmount
+				dispatch(loadBalanceSuccess(totalBalance, currency))
 			}).catch(error => {
 				if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 				dispatch(loadBalanceFailure(error))
@@ -136,7 +171,7 @@ export const LoadExchangeRates = (currency="BTC") => {
 		}
 
 		api.GetExchangeRate([currency]).then(exchangeRates => {
-			dispatch(loadExchangeRatesSuccess(exchangeRates))
+			dispatch(loadExchangeRatesSuccess(exchangeRates, currency))
 		}).catch(error => {
 			if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error)
 			dispatch(loadExchangeRatesFailure(error))
@@ -204,7 +239,7 @@ export const OpenWallet = (userId, currencies) => {
 						// generate wallet for currency
 						switch(currency) {
 							case "BTC":
-								const bitcoinData = api.NewBitcoinWallet(network)
+								const bitcoinData = NewBitcoinWallet(network)
 								publicWalletData[currency][network] = {
 									address: bitcoinData.address,
 									network,

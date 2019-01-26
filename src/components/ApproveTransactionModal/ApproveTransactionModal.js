@@ -6,7 +6,7 @@ import Checkmark from "../universal/Checkmark"
 import TouchID from "react-native-touch-id"
 import Button from "../universal/Button"
 import { erc20Names, cryptoUnits, decimalToUnits, unitsToDecimal, cryptoTitleDict } from "../../lib/cryptos"
-import { BITCOIN_ERRORS } from '../../bitcoin-api'
+import { BITCOIN_ERRORS, GetBitcoinFees } from '../../bitcoin-api'
 import { getGasLimit, ETHEREUM_ERRORS } from '../../ethereum-api'
 
 class ApproveTransactionModal extends Component {
@@ -33,7 +33,7 @@ class ApproveTransactionModal extends Component {
 
 	    const rate = decimalToUnits(exchangeRate, 'USD')
 	    const unitAmount = (currency == 'USD') ? Math.round((amount/rate)*cryptoUnits[activeCryptoCurrency]) : amount
-	    const feeApi = (activeCryptoCurrency == 'BTC') ? api.GetBitcoinFees({network: network, from: this.props.userAddress, amtSatoshi: unitAmount}):
+	    const feeApi = (activeCryptoCurrency == 'BTC') ? GetBitcoinFees({network: network, from: this.props.userAddress, amtSatoshi: unitAmount}):
 	    												 getGasLimit({fromAddress: this.props.userAddress, toAddress, weiAmount: unitAmount, currency: activeCryptoCurrency, network})
 
 

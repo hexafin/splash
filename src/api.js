@@ -65,109 +65,6 @@ function GetAccount(uid) {
     })
 }
 
-// Bitcoin:
-
-function NewBitcoinWallet(network='mainnet') {
-    network = (network == 'mainnet') ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
-    var keyPair = bitcoin.ECPair.makeRandom({
-        rng: random,
-        network: network
-    })
-    return {
-        wif: keyPair.toWIF(),
-        address: bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: network }).address
-    }
-}
-
-function GetBitcoinAddressBalance(address, network='mainnet') {
-  return new Promise((resolve, reject) => {
-    const APIaddress = (network == 'mainnet') ? 'https://blockchain.info/q/addressbalance/' : 'https://testnet.blockchain.info/q/addressbalance/'
-    axios.get(APIaddress + address + '?api_code=' + blockchain_info_apiKey + '&confirmations=6')
-    .then(response => {
-      if (response.data !== null){
-        resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
-      } else {
-        reject('Cannot retrieve balance');
-      }
-    })
-    .catch(error => {
-      if (!error.status) {
-        reject(Errors.NETWORK_ERROR)
-      } else {
-        reject(error);
-      }
-    });
-  });
-}
-
-
-// feenames: "fastest", "halfHour", "hour"
-// if from and amtSatoshi are provided returns total fee. if not returns feePerByte
-function GetBitcoinFees({feeName="fastest", network="mainnet", from=null, amtSatoshi=null}) {
-
-  return new Promise((resolve, reject) => {
-
-    getFees(feeName).then(feePerByte => {
-        if (from && amtSatoshi) {
-          providers.utxo[network].default(from).then(utxos => {
-
-            var bitcoinNetwork = network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
-            let tx = new bitcoin.TransactionBuilder(bitcoinNetwork);
-        		let ninputs = 0;
-        		let availableSat = 0;
-        		for (var i = 0; i < utxos.length; i++) {
-        			const utxo = utxos[i];
-        			if (utxo.confirmations >= 6) {
-        				tx.addInput(utxo.txid, utxo.vout);
-        				availableSat += utxo.satoshis;
-        				ninputs++;
-
-        				if (availableSat >= amtSatoshi) break;
-        			}
-        		}
-        		const change = availableSat - amtSatoshi;
-        		const fee = getTransactionSize(ninputs, change > 0 ? 2 : 1)*feePerByte;
-            resolve(fee)
-
-          }).catch(error => {
-            reject(error)
-          })
-
-        } else {
-          resolve(feePerByte)
-        }
-      }).catch(error => {
-        reject(error)
-      });
-  })
-}
-
-function BuildBitcoinTransaction({from, to, privateKey, amtSatoshi, fee=null, network="testnet"}) {
-    return new Promise((resolve, reject) => {
-      GetBitcoinAddressBalance(from, network).then((balanceBtc) => {
-          if ((amtSatoshi/cryptoUnits.BTC) < balanceBtc) {
-              sendTransaction({
-                  from: from,
-                  to: to,
-                  privKeyWIF: privateKey,
-                  satoshis: amtSatoshi,
-                  fee: fee,
-                  dryrun: false,
-                  network: network,
-              }).then(response => {
-                resolve(response)
-              }).catch(error => {
-                  reject(error);
-              });
-          } else {
-              reject(BITCOIN_ERRORS.BALANCE);
-          }
-      }).catch(error => {
-          reject(error);
-      });
-  })
-}
-
 function IsValidAddress(address, currency="BTC", network='mainnet') {
   if (currency == "BTC") {
     try {
@@ -614,10 +511,6 @@ export default api = {
     NewTransactionFromRequest: NewTransactionFromRequest,
     LoadFriends: LoadFriends,
     LoadTransactions: LoadTransactions,
-    GetBitcoinAddressBalance,
-    BuildBitcoinTransaction,
-    GetBitcoinFees,
-    NewBitcoinWallet,
     ConvertTimestampToDate: ConvertTimestampToDate,
     Log: Log
 }

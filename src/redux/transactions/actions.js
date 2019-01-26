@@ -1,6 +1,6 @@
 import api, { Errors } from "../../api";
 import { sendTransaction, AddETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
-import { AddBTCTransactions } from "../../bitcoin-api"
+import { AddBTCTransactions, GetBitcoinFees, BuildBitcoinTransaction } from "../../bitcoin-api"
 var axios = require("axios");
 import firebase from "react-native-firebase";
 let firestore = firebase.firestore();
@@ -106,9 +106,10 @@ export const LoadTransactions = (currency="BTC") => {
 			if (transactions.length > 0) {
 				transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
 				dispatch(loadTransactionsSuccess(transactions, currency))
-
+				return transactions
 			} else {
 				dispatch(loadTransactionsSuccess(transactions, currency))
+				return transactions
 			}
 
 		} catch (error) {
@@ -138,9 +139,9 @@ export const ApproveTransaction = (transaction) => {
 				// commented for demo
 				const exchangeRate = await api.GetExchangeRate()
 				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-				const feeSatoshi = await api.GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
+				const feeSatoshi = await GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
 				const totalBtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				const {txid, txhex} = await api.BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount, network)
+				const {txid, txhex} = await BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount, network)
 				await api.UpdateTransaction(transaction.transactionId, {
 					approved: true,
 					txId: txid,
@@ -207,7 +208,7 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
   	  if (currency == 'BTC') {
 	      Keychain.getGenericPassword().then(data => {
 	        const privateKey = JSON.parse(data.password)[walletCurrency][network].wif
-	        api.BuildBitcoinTransaction({from: userAddress, to:toAddress, privateKey, amtSatoshi: totalUnitAmount, fee: fee, network}).then(response => {
+	        BuildBitcoinTransaction({from: userAddress, to:toAddress, privateKey, amtSatoshi: totalUnitAmount, fee: fee, network}).then(response => {
 	          const {txid, txhex} = response
 	          transaction.txId = txid
 
