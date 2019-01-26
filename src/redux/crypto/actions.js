@@ -12,7 +12,7 @@ import * as Keychain from 'react-native-keychain';
 import { Sentry } from "react-native-sentry";
 
 analytics.setAnalyticsCollectionEnabled(true);
-import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
+import { cryptoUnits, cryptoNames, erc20Names, unitsToDecimal } from '../../lib/cryptos'
 import { hexaBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
 
@@ -100,16 +100,15 @@ export const Load = (currency="BTC") => {
 		const loadTransactionsAction = LoadTransactions(currency)
 		const transactions = await loadTransactionsAction(dispatch,getState)
 		let unconfirmedOutboundAmount = 0
-		console.log(transactions)
-		if (typeof transactions !== 'undefined') {
-			for (var i; i < transactions.length; i++) {
-				console.log(transactions[i])
+		if (typeof transactions !== 'undefined' && currency == 'BTC') {
+			for (var i=0; i < transactions.length; i++) {
 				if (transactions[i].pending == true) {
-					unconfirmedOutboundAmount += transactions[i].amount
+					unconfirmedOutboundAmount += transactions[i].amount.total
 				}
 			}
 		}
-		console.log('blah', unconfirmedOutboundAmount)
+
+		unconfirmedOutboundAmount = unitsToDecimal(unconfirmedOutboundAmount, currency)
 		const balanceAction = LoadBalance(currency, unconfirmedOutboundAmount)
 		balanceAction(dispatch, getState)
 		const exchangeRateAction = LoadExchangeRates(currency)

@@ -48,13 +48,13 @@ class Balance extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (!this.state.loading && (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates)) {
+		if (!this.state.loading && (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates || nextProps.isLoadingTransactions)) {
 			this.setState({loading: true, loadingTimeout: true})
 			setTimeout(() => {
 				this.setState({loadingTimeout: false})
 			}, 500)
 		}
-		else {
+		else if (this.state.loading && !nextProps.isLoadingBalance && !nextProps.isLoadingExchangeRates && !nextProps.isLoadingTransactions) {
 			this.setState({loading: false})
 		}
 	}

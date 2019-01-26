@@ -71,7 +71,6 @@ class Home extends Component {
 
 			// reload on pull down
 			if (currentY < -80 && !this.state.loading && !this.state.pulled) {
-				console.log("triggered")
 				this.setState({loading: true, pulled: true})
 				this.props.Load(this.props.activeCryptoCurrency)
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
