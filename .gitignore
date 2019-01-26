@@ -57,3 +57,9 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+
+# codepush
+codepush/
+
+# archive
+archive/
