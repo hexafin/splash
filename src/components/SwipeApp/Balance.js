@@ -48,25 +48,26 @@ class Balance extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (!this.state.loading && (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates)) {
+		if (!this.state.loading && (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates || nextProps.isLoadingTransactions)) {
 			this.setState({loading: true, loadingTimeout: true})
 			setTimeout(() => {
 				this.setState({loadingTimeout: false})
 			}, 500)
 		}
-		else {
+		else if (this.state.loading && !nextProps.isLoadingBalance && !nextProps.isLoadingExchangeRates && !nextProps.isLoadingTransactions) {
 			this.setState({loading: false})
 		}
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (this.props.exchangeRates.BTC && nextProps.exchangeRates.BTC && nextProps.exchangeRates.BTC.USD != this.props.exchangeRates.BTC.USD) {
-			return true
-		}
-		else if (nextProps.balance.BTC != this.props.balance.BTC) {
-			return true
-		}
-		else if (nextState.loading != this.state.loading) {
+		// const activeCurrency = nextProps.cryptoCurrency
+		// if (this.props.exchangeRates[activeCurrency] && nextProps.exchangeRates[activeCurrency] && nextProps.exchangeRates[activeCurrency].USD != this.props.exchangeRates[activeCurrency].USD) {
+		// 	return true
+		// }
+		// else if (nextProps.balance[activeCurrency] != this.props.balance[activeCurrency]) {
+		// 	return true
+		// }
+		if (nextState.loading != this.state.loading) {
 			return true
 		}
 		else if (nextState.loadingTimeout != this.state.loadingTimeout) {

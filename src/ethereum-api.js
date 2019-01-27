@@ -119,7 +119,8 @@ export function NewEthereumWallet() {
 
 
  export const AddETHTransactions = async (address, userId, splashtag, currency='ETH', network='mainnet') => {
- 	// todo add erc20 handling
+    let allTransactions = []
+
     try {
       const apiCode = '&apikey=' + etherscan_apiKey
       let transactionAPI
@@ -156,7 +157,6 @@ export function NewEthereumWallet() {
 
       // load txs from blockchain
       const response = (await axios.get(transactionAPI)).data
-      console.log(response, transactionAPI, erc20Names.indexOf(currency))
       if (response.status != 1) return
       const txs = response.result
   	  const txsLength = txs.length
@@ -165,7 +165,7 @@ export function NewEthereumWallet() {
 
         const index = firebaseTxIds.indexOf(txs[j].hash)
         // if the txId is not on firebase and the transaction is important (ie not both from and to the user) or if the transaction is pending
-        if ((index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') && txs[j].value != '0') {
+        if (txs[j].value != '0') {
 
             let pending = false
             const confirmations = parseInt(txs[j].confirmations)
@@ -176,20 +176,28 @@ export function NewEthereumWallet() {
 
             const fee = parseInt(txs[j].gasUsed) * parseInt(txs[j].gasPrice)
 
-          let newTransaction = {
-            amount: {
-            	fee: fee,
-            	subtotal: parseInt(txs[j].value),
-            	total: fee + parseInt(txs[j].value),
-            },
-            fromAddress: txs[j].from,
-            toAddress: txs[j].to,
-            timestamp: parseInt(txs[j].timeStamp),
-            currency: currency,
-            txId: txs[j].hash,
-            pending: pending,
-            confirmations: confirmations,
-            type: 'blockchain'
+          let amount = {
+              fee: fee,
+              subtotal: parseInt(txs[j].value),
+              total: fee + parseInt(txs[j].value),
+          }
+
+          let newTransaction
+          if (index !== -1) {
+            newTransaction = firebaseTxs[index]
+            newTransaction.pending = pending
+            newTransaction.confirmations = confirmations
+          } else {
+            newTransaction = {
+              fromAddress: txs[j].from,
+              toAddress: txs[j].to,
+              timestamp: parseInt(txs[j].timeStamp),
+              currency: currency,
+              txId: txs[j].hash,
+              pending: pending,
+              confirmations: confirmations,
+              type: 'blockchain'
+            }
           }
           // load total tx amount
           if (address.toLowerCase() == txs[j].from) {
@@ -201,12 +209,17 @@ export function NewEthereumWallet() {
           }
 
 	        // if has total add to firebase so that it can be loaded on Home
-	        if (newTransaction.amount.total > 0 || firebaseTxs[index].amount.total > 0) {
-	          await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
+	        if (amount.total > 0) {
+            if (index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') {
+  	          await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
+            }
+            newTransaction.amount = {...amount}
+            newTransaction.id = newTransaction.txId
+            allTransactions.push(newTransaction)
 	        }
          }
       }
-      return
+      return allTransactions
     } catch (error) {
       if (!error.status) {
         throw ETHEREUM_ERRORS.NETWORK_ERROR

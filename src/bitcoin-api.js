@@ -1,11 +1,22 @@
 let axios = require('axios');
 import { Sentry } from "react-native-sentry";
 import bitcoin from 'bitcoinjs-lib'
+let random = require('react-native-randombytes').randomBytes
 import { blockchain_info_apiKey } from '../env/keys.json'
+import firebase from 'react-native-firebase'
+let firestore = firebase.firestore()
+
+import {cryptoNames, cryptoUnits, erc20Names} from "./lib/cryptos"
+
+const SATOSHI_CONVERSION = 100000000;
 
 var BITCOIN_DIGITS = 8;
 var BITCOIN_SAT_MULT = Math.pow(10, BITCOIN_DIGITS);
 const apiCode = '?api_code=' + blockchain_info_apiKey + '&'
+
+export const Errors = {
+  NETWORK_ERROR: 'NETWORK_ERROR'
+}
 
 export let providers = {
 	/**
@@ -139,6 +150,82 @@ export function getFees (feeName, provider=providers.fees.mainnet.earn) {
 	}
 }
 
+export function NewBitcoinWallet(network='mainnet') {
+    network = (network == 'mainnet') ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
+    var keyPair = bitcoin.ECPair.makeRandom({
+        rng: random,
+        network: network
+    })
+    return {
+        wif: keyPair.toWIF(),
+        address: bitcoin.payments.p2pkh({ pubkey: keyPair.publicKey, network: network }).address
+    }
+}
+
+export function GetBitcoinAddressBalance(address, network='mainnet') {
+  return new Promise((resolve, reject) => {
+    const APIaddress = (network == 'mainnet') ? 'https://blockchain.info/q/addressbalance/' : 'https://testnet.blockchain.info/q/addressbalance/'
+    axios.get(APIaddress + address + '?api_code=' + blockchain_info_apiKey + '&confirmations=6')
+    .then(response => {
+      if (response.data !== null){
+        resolve(1.0*parseFloat(response.data)/SATOSHI_CONVERSION);
+      } else {
+        reject('Cannot retrieve balance');
+      }
+    })
+    .catch(error => {
+      if (!error.status) {
+        reject(Errors.NETWORK_ERROR)
+      } else {
+        reject(error);
+      }
+    });
+  });
+}
+
+
+// feenames: "fastest", "halfHour", "hour"
+// if from and amtSatoshi are provided returns total fee. if not returns feePerByte
+export function GetBitcoinFees({feeName="fastest", network="mainnet", from=null, amtSatoshi=null}) {
+
+  return new Promise((resolve, reject) => {
+
+    getFees(feeName).then(feePerByte => {
+        if (from && amtSatoshi) {
+          providers.utxo[network].default(from).then(utxos => {
+
+            var bitcoinNetwork = network == "testnet" ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
+            let tx = new bitcoin.TransactionBuilder(bitcoinNetwork);
+        		let ninputs = 0;
+        		let availableSat = 0;
+        		for (var i = 0; i < utxos.length; i++) {
+        			const utxo = utxos[i];
+        			if (utxo.confirmations >= 6) {
+        				tx.addInput(utxo.txid, utxo.vout);
+        				availableSat += utxo.satoshis;
+        				ninputs++;
+
+        				if (availableSat >= amtSatoshi) break;
+        			}
+        		}
+        		const change = availableSat - amtSatoshi;
+        		const fee = getTransactionSize(ninputs, change > 0 ? 2 : 1)*feePerByte;
+            resolve(fee)
+
+          }).catch(error => {
+            reject(error)
+          })
+
+        } else {
+          resolve(feePerByte)
+        }
+      }).catch(error => {
+        reject(error)
+      });
+  })
+}
+
+
 export function sendTransaction (options) {
 	//Required
 	if (options == null || typeof options !== 'object') throw BITCOIN_ERRORS.USAGE
@@ -214,3 +301,136 @@ export function sendTransaction (options) {
 		})
 	})
 }
+
+export async function AddBTCTransactions(address, userId, splashtag, network='mainnet') {
+    let allTransactions = []
+    try {
+      const apiCode = '?api_code=' + blockchain_info_apiKey
+      const addressAPI = (network == 'mainnet') ? 'https://blockchain.info/rawaddr/'+address : 'https://testnet.blockchain.info/rawaddr/'+address
+      const txAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txresult/' : 'https://testnet.blockchain.info/q/txresult/'
+      const feeAPI = (network == 'mainnet') ? 'https://blockchain.info/q/txfee/' : 'https://testnet.blockchain.info/q/txfee/'
+      const blockHeightAPI = (network == 'mainnet') ? 'https://blockchain.info/q/getblockcount' : 'https://testnet.blockchain.info/q/getblockcount'
+
+      // get list of txs on firebase
+      const query1 = await firestore.collection("transactions").where("fromId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
+      const query2 = await firestore.collection("transactions").where("toId", "==", userId)
+                                                               .where("type", "==", "blockchain")
+                                                               .where("currency", "==", "BTC").get()
+
+      let firebaseTxIds = []
+      let firebaseTxs = []
+      if(query1.size > 0 || query2.size > 0) {
+        query1.forEach(doc => {
+          firebaseTxIds.push(doc.data().txId)
+          firebaseTxs.push(doc.data())
+        })
+        query2.forEach(doc => {
+          firebaseTxIds.push(doc.data().txId)
+          firebaseTxs.push(doc.data())
+        })
+      }
+
+      // load txs from blockchain
+      const blockHeight = (await axios.get(blockHeightAPI + apiCode)).data
+      const txs = (await axios.get(addressAPI + apiCode)).data.txs
+      const txsLength = txs.length
+      for(var j=0; j < txsLength; j++) {
+        
+        const index = firebaseTxIds.indexOf(txs[j].hash)
+        // if the transaction is important (ie not both from and to the user)
+        if (txs[j].inputs[0].prev_out.addr !== txs[j].out[0].addr) {
+            let pending = false
+            const confirmations = (typeof txs[j].block_height === 'undefined') ? 0 : (blockHeight - txs[j].block_height) + 1
+
+            if (typeof txs[j].block_height === 'undefined' || confirmations < 6) {
+              pending = true
+            }
+
+          let newTransaction = {}
+          if (index !== -1) {
+          	newTransaction = firebaseTxs[index]
+          	newTransaction.pending = pending
+          	newTransaction.confirmations = confirmations
+          } else {
+	          newTransaction = {
+	            timestamp: txs[j].time,
+	            currency: 'BTC',
+	            txId: txs[j].hash,
+	            pending: pending,
+	            confirmations: confirmations,
+	            type: 'blockchain'
+	          }
+          }
+          let amount = {}
+
+          // load total tx amount
+          const total = (await axios.get(txAPI+txs[j].hash+'/'+address+apiCode)).data
+          if (total < 0) {
+            newTransaction.fromId = userId
+            newTransaction.fromSplashtag = splashtag
+            newTransaction.fromAddress = address
+            newTransaction.toAddress = txs[j].out[0].addr
+            amount.subtotal = -1*total
+          } else  {
+            newTransaction.toId = userId
+            newTransaction.toSplashtag = splashtag
+            newTransaction.toAddress = address
+            newTransaction.fromAddress = txs[j].inputs[0].prev_out.addr
+            amount.subtotal = total
+          }
+
+              // load fees and calculate subtotal
+              amount.fee = (await axios.get(feeAPI+txs[j].hash + apiCode)).data
+              amount.total = amount.subtotal + amount.fee            
+
+            // if has total add to firebase so that it can be loaded on Home
+            if (amount.total > 0) {
+              if (index == -1 || firebaseTxs[index].pending || typeof firebaseTxs[index].pending == 'undefined') {
+	              await firestore.collection("transactions").doc(newTransaction.txId).set(newTransaction, { merge: true })
+              }
+              newTransaction.amount = {...amount}
+              newTransaction.id = newTransaction.txId
+              allTransactions.push(newTransaction)
+            }
+         }
+      }
+      return allTransactions
+    } catch (error) {
+      console.log(error)
+      if (!error.status) {
+        throw Errors.NETWORK_ERROR
+      } else {
+        throw error;
+      }
+    }
+}
+
+export function BuildBitcoinTransaction({from, to, privateKey, amtSatoshi, fee=null, network="testnet"}) {
+    return new Promise((resolve, reject) => {
+      GetBitcoinAddressBalance(from, network).then((balanceBtc) => {
+          if ((amtSatoshi/cryptoUnits.BTC) < balanceBtc) {
+              sendTransaction({
+                  from: from,
+                  to: to,
+                  privKeyWIF: privateKey,
+                  satoshis: amtSatoshi,
+                  fee: fee,
+                  dryrun: false,
+                  network: network,
+              }).then(response => {
+                resolve(response)
+              }).catch(error => {
+                  reject(error);
+              });
+          } else {
+              reject(BITCOIN_ERRORS.BALANCE);
+          }
+      }).catch(error => {
+          reject(error);
+      });
+  })
+}
+
+

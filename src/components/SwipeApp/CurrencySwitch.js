@@ -22,8 +22,7 @@ import { bindActionCreators } from "redux"
 import { 
         setActiveCryptoCurrency,
         setActiveCurrency,
-        LoadBalance,
-        LoadExchangeRates,
+        Load,
  } from "../../redux/crypto/actions"
  import {LoadTransactions} from "../../redux/transactions/actions"
 import { colors } from "../../lib/colors"
@@ -62,7 +61,7 @@ class CurrencySwitch extends Component {
   componentDidMount() {
 
     // default to BTC
-    this.handleCurrencySwitch("BTC")
+    // this.handleCurrencySwitch("BTC")
 
     setTimeout(() => {
       this.setState({initialized: true})
@@ -79,14 +78,15 @@ class CurrencySwitch extends Component {
   }
 
   handleCurrencySwitch(currency) {
-    if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
-      this.props.setActiveCurrency(currency)
+    if (!this.props.loading) {
+      if (this.props.activeCurrency == this.props.activeCryptoCurrency) {
+        this.props.setActiveCurrency(currency)
+      }
+      console.log(2)
+      this.props.setActiveCryptoCurrency(currency)
+      this.props.Load(currency)
+      }
     }
-    this.props.setActiveCryptoCurrency(currency)
-    this.props.LoadTransactions(currency)
-    this.props.LoadBalance(currency)
-    this.props.LoadExchangeRates(currency)
-  }
 
   render() {
 
@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
   return {
     activeCurrency: state.crypto.activeCurrency,
-    activeCryptoCurrency: state.crypto.activeCryptoCurrency
+    activeCryptoCurrency: state.crypto.activeCryptoCurrency,
+    loading: state.crypto.isLoadingExchangeRates || state.crypto.isLoadingBalance || state.transactions.isLoadingTransactions,
   }
 }
 
@@ -223,9 +224,7 @@ const mapDispatchToProps = dispatch => {
     {
       setActiveCryptoCurrency,
       setActiveCurrency,
-      LoadTransactions,
-      LoadBalance,
-      LoadExchangeRates,
+      Load,
     },
     dispatch
   );

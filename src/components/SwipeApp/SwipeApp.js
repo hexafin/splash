@@ -21,7 +21,7 @@ import { isIphoneX } from "react-native-iphone-x-helper"
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux"
 import { cryptoNames, cryptoColors, cryptoImages, cryptoNameDict } from "../../lib/cryptos"
-import { LoadExchangeRates, LoadBalance } from "../../redux/crypto/actions"
+import { Load } from "../../redux/crypto/actions"
 import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions"
 import PropTypes from "prop-types"
 import Account from "../Account"
@@ -293,7 +293,7 @@ class SwipeApp extends Component {
 			minimumBackgroundDuration: 60, // must be in background for 60 seconds to sync
 		});
 
-		// if timeis past lockout
+		// if time is past lockout
 		if (this.props.lockoutEnabled && this.props.lockoutTime && moment().unix() >= this.props.lockoutTime) {
 			this.props.navigation.navigate("Unlock", {
 				successCallback: () => {
@@ -307,9 +307,7 @@ class SwipeApp extends Component {
 
 		// load
 		for (var i = 0; i < cryptoNames.length; i++) {
-			this.props.LoadBalance(cryptoNames[i])
-			this.props.LoadExchangeRates(cryptoNames[i])
-			this.props.LoadTransactions(cryptoNames[i])
+			this.props.Load(cryptoNames[i])
 		}
 
 		// set up notification permissions and tokens
@@ -608,8 +606,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
 		{
-			LoadBalance,
-			LoadExchangeRates,
+			Load,
 			resetLockoutClock,
 			startLockoutClock,
 			setNotifsRequested,

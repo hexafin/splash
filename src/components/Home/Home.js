@@ -37,10 +37,10 @@ class Home extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if ((nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates) && !this.state.loading) {
+		if ((nextProps.isLoadingBalance || nextProps.isLoadingTransactions || nextProps.isLoadingExchangeRates) && !this.state.loading) {
 			this.setState({loading: true})
 		}
-		else if (!nextProps.isLoadingBalance && !nextProps.isLoadingExchangeRates) {
+		else if (!nextProps.isLoadingBalance && !nextProps.isLoadingExchangeRates && !nextProps.isLoadingTransactions) {
 			this.setState({loading: false})
 		}
 
@@ -71,11 +71,8 @@ class Home extends Component {
 
 			// reload on pull down
 			if (currentY < -80 && !this.state.loading && !this.state.pulled) {
-				console.log("triggered")
 				this.setState({loading: true, pulled: true})
-				this.props.LoadBalance(this.props.activeCryptoCurrency)
-				this.props.LoadExchangeRates(this.props.activeCryptoCurrency)
-				this.props.LoadTransactions(this.props.activeCryptoCurrency)
+				this.props.Load(this.props.activeCryptoCurrency)
 				ReactNativeHapticFeedback.trigger("impactHeavy", true)
 			} else if (currentY > -80 && this.state.pulled) {
 				this.setState({pulled: false})
