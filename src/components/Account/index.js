@@ -17,7 +17,7 @@ const deleteAccount = () => {
 		dispatch(resetTransactions())
 		dispatch(resetOnboarding())
 		dispatch(resetCrypto())
-		api.DeleteAccount(userId)
+		api.DeleteUser(userId)
 	}		
 }
 

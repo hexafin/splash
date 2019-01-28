@@ -1,35 +1,33 @@
-import {colors} from "./colors"
+import { colors } from "./colors";
 
-import {isIphoneX} from "react-native-iphone-x-helper"
+import { isIphoneX } from "react-native-iphone-x-helper";
 
 export const defaults = {
 	shadowOffset: {
 		width: 0,
-		height: 10,
+		height: 10
 	},
 	shadowOpacity: 0.1,
 	shadowRadius: 24,
 	shadow: {
 		shadowOffset: {
 			width: 0,
-			height: 10,
+			height: 10
 		},
 		shadowOpacity: 0.1,
-		shadowRadius: 24,
+		shadowRadius: 24
 	},
 	container: {
-        backgroundColor: colors.white,
+		backgroundColor: colors.white,
 		flex: 1
 	},
-	footer: {
-
-	}
-}
+	footer: {}
+};
 
 if (isIphoneX()) {
 	defaults.container.paddingBottom = 20;
-    defaults.container.paddingTop = 20;
-    defaults.footer.paddingBottom = 20;
+	defaults.container.paddingTop = 20;
+	defaults.footer.paddingBottom = 20;
 }
 
 export const icons = {
@@ -61,5 +59,5 @@ export const icons = {
 	whiteSwitcher: require("../assets/icons/whiteSwitcher.png"),
 	purpleSwitcher: require("../assets/icons/purpleSwitcher.png"),
 	purpleSwitcherVertical: require("../assets/icons/purpleSwitcherVertical.png"),
-	rightCarrotWhite: require("../assets/icons/rightCarrotWhite.png"),
-}
+	rightCarrotWhite: require("../assets/icons/rightCarrotWhite.png")
+};

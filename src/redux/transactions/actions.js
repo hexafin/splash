@@ -1,18 +1,11 @@
 import api, { Errors } from "../../api";
-import { sendTransaction, AddETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
-var axios = require("axios");
-import firebase from "react-native-firebase";
-let firestore = firebase.firestore();
-let analytics = firebase.analytics();
-import { NavigationActions } from "react-navigation";
+import { sendETHTransaction, LoadETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
+import { LoadBTCTransactions, GetBitcoinFees, BuildBitcoinTransaction } from "../../bitcoin-api"
 import * as Keychain from 'react-native-keychain';
 import { Sentry } from "react-native-sentry";
-
-analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
-import { hexaBtcAddress } from '../../../env/keys.json'
+import { splashBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
-
 
 
 export const DISMISS_TRANSACTION = "DISMISS_TRANSACTION";
@@ -85,23 +78,12 @@ export const LoadTransactions = (currency="BTC") => {
 
 		const state = getState()
 
-		const loadQuery = (query, transactions) => {
-			for (var i = 0, len = query.docs.length; i < len; i++) {
-				const doc = query.docs[i]
-				const transaction = {
-					id: doc.id,
-					...doc.data(),
-				}
-				if (transaction.type == 'card' && transaction.approved === true) {
-					transactions.push(transaction)
-				} else if (transaction.type == "blockchain") {
-					transactions.push(transaction)
-				}
-			}
-			return transactions
-		}
-
 		try {
+			dispatch(loadTransactionsInit())
+
+			let transactions = []
+
+			// get correct wallet address
 			let walletAddress
 			if (erc20Names.indexOf(currency) > -1) {
 				walletAddress = state.crypto.wallets.ETH.address
@@ -109,29 +91,22 @@ export const LoadTransactions = (currency="BTC") => {
 				walletAddress = state.crypto.wallets[currency].address
 			}
 			if (currency != "BTC") walletAddress = walletAddress.toLowerCase()
-			if (currency=="BTC") {
-				await api.AddBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
-			} else {
-				await AddETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
-			}
-			dispatch(loadTransactionsInit())
 
-			// two listeners for each firebase property
-			// after one listener finds changes merges in the documents found from the other
-			querySnapshot = await firestore.collection("transactions").where("toAddress", "==", walletAddress)
-															 .where("currency", "==", currency).get() 
-			// this is a snapshot of the user's transactions => redux will stay up to date with firebase
-			let transactions = []
-			if (querySnapshot.size > 0) {
-				const query = await firestore.collection("transactions").where("fromAddress", "==", walletAddress)
-																		.where("currency", "==", currency).get()
-				transactions = loadQuery(query, transactions)
-				transactions = loadQuery(querySnapshot, transactions)
+			// load transactions
+			if (currency=="BTC") {
+				transactions = await LoadBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
+			} else {
+				transactions = await LoadETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
+			}
+
+			if (transactions.length > 0) {
+				// if transactions are loaded sort by timestamp and add to redux
 				transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
 				dispatch(loadTransactionsSuccess(transactions, currency))
-
+				return transactions
 			} else {
 				dispatch(loadTransactionsSuccess(transactions, currency))
+				return transactions
 			}
 
 		} catch (error) {
@@ -140,7 +115,6 @@ export const LoadTransactions = (currency="BTC") => {
 		}
 	}
 }
-
 
 const getDate = () => {
 	const date = new Date()
@@ -185,6 +159,7 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
     
     return new Promise((resolve, reject) => {
 
+    	// check for unsupported currency
     	if (cryptoNames.indexOf(currency) < 0) {
     		const error = `Send transaction: unsupported currency: ${currency}`
 				Sentry.captureMessage(error)
@@ -193,19 +168,15 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
     	}
 
       const state = getState()
-      const walletCurrency = (currency == 'BTC') ? 'BTC' : 'ETH'
+      const walletCurrency = (currency == 'BTC') ? 'BTC' : 'ETH' // use ETH wallet if ERC20
       let userAddress = state.crypto.wallets[walletCurrency].address
       const network = state.crypto.wallets[walletCurrency].network
       const totalUnitAmount = unitAmount+fee
 
       if (currency != 'BTC') userAddress = userAddress.toLowerCase() // store eth addresses in lower case
 
+      // transaction information
       let transaction = {
-        amount: {
-          subtotal: unitAmount,
-          total: totalUnitAmount,
-          fee: fee,
-        },
         currency: currency,
         relativeAmount: relativeAmount,
         relativeCurrency: 'USD',
@@ -226,11 +197,13 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 
   	  if (currency == 'BTC') {
 	      Keychain.getGenericPassword().then(data => {
-	        const privateKey = JSON.parse(data.password)[walletCurrency][network].wif
-	        api.BuildBitcoinTransaction({from: userAddress, to:toAddress, privateKey, amtSatoshi: totalUnitAmount, fee: fee, network}).then(response => {
+	      	// get private key from keychain
+	        const privateKey = JSON.parse(data.password)[walletCurrency][network].wif 
+	        // push btc transaction
+	        BuildBitcoinTransaction({from: userAddress, to:toAddress, privateKey, amtSatoshi: totalUnitAmount, fee: fee, network}).then(response => {
 	          const {txid, txhex} = response
 	          transaction.txId = txid
-
+			  // add transaction information to firebase
 	          api.NewTransaction(transaction).then(() => {
 	            dispatch(sendTransactionSuccess())
 	            resolve()
@@ -247,8 +220,10 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 	      })
 
   	  } else {
-  	  	sendTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(transactionHash => {
+  	  	// push eth/erc20 transaction
+  	  	sendETHTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(transactionHash => {
           transaction.txId = transactionHash
+          // add transaction info to firebase
           api.NewTransaction(transaction).then(() => {
             dispatch(sendTransactionSuccess())
             resolve()
@@ -269,6 +244,7 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 	}
 }
 
+// dismiss pending transaction (clear information from reducer)
 export const DismissTransaction = () => {
 	return (dispatch, getState) => {
 		dispatch(dismissTransaction())

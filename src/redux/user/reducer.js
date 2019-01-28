@@ -1,7 +1,4 @@
-import firebase from "react-native-firebase"
 import moment from "moment"
-let analytics = firebase.analytics()
-analytics.setAnalyticsCollectionEnabled(true)
 
 import { ActionTypes } from "./actions.js"
 
@@ -15,12 +12,12 @@ const initialState = {
 	errorLoadingContacts: null,
 	contacts: [],
 	entity: {},
-	lockoutEnabled: false,
-	lockoutDuration: 5,
+	lockoutEnabled: false, // is a pin set
+	lockoutDuration: 5, // five minute lockout duration
 	lockoutTime: null,
 	id: null,
-	biometric: false,
-	notificationsRequested: false,
+	biometric: false, // is biometrics enabled
+	notificationsRequested: false, // have we already asked for notification access
 }
 
 export default function reducer(state = initialState, action) {
@@ -114,7 +111,7 @@ export default function reducer(state = initialState, action) {
 		case ActionTypes.START_LOCKOUT_CLOCK:
 			return {
 				...state,
-				lockoutTime: moment().add(state.lockoutDuration,'minutes').unix(),
+				lockoutTime: moment().add(state.lockoutDuration,'minutes').unix(), // set lockout timer
 			}
 
 		case ActionTypes.TOGGLE_LOCKOUT:
