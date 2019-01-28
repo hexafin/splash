@@ -1,8 +1,11 @@
+// reducer for modal actions
+
 const initialState = {
   modalType: null,
   modalProps: {}
 }
 
+// modal reducer
 export default function modal(state = initialState, action) {
   switch (action.type) {
     case 'SHOW_MODAL':
@@ -17,6 +20,7 @@ export default function modal(state = initialState, action) {
   }
 }
 
+// modal actions
 export function showViewModal(modalProps) {
   return {
     type: 'SHOW_MODAL',

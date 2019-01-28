@@ -10,12 +10,14 @@ import Loading from "./components/universal/Loading";
 
 const { persistor, store } = configureStore();
 
+// share codepush version with sentry
 codePush.getUpdateMetadata().then(update => {
 	if (update) {
 		Sentry.setVersion(update.appVersion + "-codepush:" + update.label);
 	}
 });
 
+// setup codepush for manual sync
 let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
 class App extends Component {

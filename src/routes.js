@@ -1,14 +1,10 @@
-import React, { Component } from "react"
 import { createBottomTabNavigator, createStackNavigator, createAppContainer } from "react-navigation"
-import {connect} from "react-redux"
-import {bindActionCreators} from "redux"
 import { colors } from "./lib/colors"
 
 import Landing from "./components/Landing"
 import ChooseSplashtag from "./components/ChooseSplashtag"
 import EnterPhoneNumber from "./components/EnterPhoneNumber"
 import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
-import Waitlisted from "./components/Waitlisted"
 import UpdateUsername from "./components/UpdateUsername"
 import ScanQrCode from "./components/ScanQrCode"
 import Unlock from "./components/Unlock"
@@ -20,6 +16,8 @@ import EnterAmount from "./components/EnterAmount"
 import SendTo from "./components/SendTo"
 import SetPasscode from "./components/SetPasscode"
 
+
+// vertical slide transition
 function forVertical(props) {
 	const { layout, position, scene } = props
 
@@ -31,15 +29,19 @@ function forVertical(props) {
 		inputRange: ([index - 1, index, index + 1]: Array<number>),
 		outputRange: ([height, 0, 0]: Array<number>)
 	})
+
+	// if screen is unlock use abrupt transition
 	if (scene.route.routeName == 'Unlock') {
 		return null
-	} else {
+	} else { // otherwise use vertical slide
 		return {
 			transform: [{ translateX }, { translateY }]
 		}
 	}
 }
 
+
+// define app layout
 const cointainer = (loggedIn) => {
 	return createStackNavigator(
 		{
@@ -63,11 +65,9 @@ const cointainer = (loggedIn) => {
 								{
 									EnterAmount: {
 										screen: EnterAmount,
-										
 									},
 									SendTo: {
 										screen: SendTo,
-										
 									}
 								},
 								{
@@ -137,8 +137,7 @@ const cointainer = (loggedIn) => {
 			headerMode: "none",
 			mode: "modal",
 			swipeEnabled: false,
-			initialRouteName: loggedIn ? "AppRouter" : "OnboardingRouter",
-			// transitionConfig: () => ({ screenInterpolator: forVertical }),
+			initialRouteName: loggedIn ? "AppRouter" : "OnboardingRouter", // show initial route based on loggedIn
 			cardStyle: {
 				backgroundColor: "rgba(0,0,0,0)"
 			}

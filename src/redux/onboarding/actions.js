@@ -1,23 +1,13 @@
 import api from "../../api";
-var axios = require("axios");
 import firebase from "react-native-firebase";
+import { Sentry } from "react-native-sentry";
 let firestore = firebase.firestore();
 let analytics = firebase.analytics();
-import { Sentry } from "react-native-sentry";
-import FCM, {
-	FCMEvent,
-	RemoteNotificationResult,
-	WillPresentNotificationResult,
-	NotificationType
-} from "react-native-fcm";
-import { NavigationActions } from "react-navigation";
 analytics.setAnalyticsCollectionEnabled(true);
 
-import * as Keychain from 'react-native-keychain';
-
 export const ONBOARDING_ERRORS = {
-	INVALID_LOGIN: 'INVALID_LOGIN',
-}
+	INVALID_LOGIN: "INVALID_LOGIN"
+};
 
 export const SMS_AUTH_INIT = "SMS_AUTH_INIT";
 export function smsAuthInit(phoneNumber, countryName) {
@@ -74,6 +64,8 @@ export function resetOnboarding() {
 	return { type: RESET_ONBOARDING };
 }
 
+
+// will be used for deep linking flow (ie signing up through browser extension)
 export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
 	return (dispatch, getState) => {
 		const state = getState();
@@ -88,6 +80,7 @@ export const getDeepLinkedSplashtag = (splashtag, phoneNumber) => {
 	};
 };
 
+// initiate firebase auth w/ sms
 export const SmsAuthenticate = (phoneNumber, countryName) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
@@ -101,17 +94,18 @@ export const SmsAuthenticate = (phoneNumber, countryName) => {
 				.signInWithPhoneNumber(phoneNumber)
 				.then(confirmResult => {
 					dispatch(smsAuthSuccess());
-					resolve(confirmResult)
+					resolve(confirmResult);
 				})
 				.catch(error => {
-					Sentry.captureMessage(error)
+					Sentry.captureMessage(error);
 					dispatch(smsAuthFailure(error));
-					reject(error)
+					reject(error);
 				});
-		})
+		});
 	};
 };
 
+// confirm auth w/ confirmation code
 export const SmsConfirm = (confirmResult, confirmationCode) => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
@@ -121,94 +115,102 @@ export const SmsConfirm = (confirmResult, confirmationCode) => {
 				.confirm(confirmationCode)
 				.then(user => {
 					dispatch(smsConfirmSuccess());
-					resolve(user)
+					resolve(user);
 				})
 				.catch(error => {
-					Sentry.captureMessage(error)
+					Sentry.captureMessage(error);
 					dispatch(smsConfirmFailure(error));
-					reject(error)
+					reject(error);
 				});
-		})
+		});
 	};
 };
 
+// creates user database entry
 export const SignUp = user => {
 	return (dispatch, getState) => {
 		return new Promise((resolve, reject) => {
+			dispatch(signUpInit());
 
-			dispatch(signUpInit())
+			const state = getState();
+			const userId = user.uid;
 
-			const state = getState()
-			const userId = user.uid
+			let splashtag = "";
+			const phoneNumber = state.onboarding.phoneNumber;
 
-			// user does not already exist, full signup
-			let splashtag = ''
-			const phoneNumber = state.onboarding.phoneNumber
-
-			if (typeof state.form.chooseSplashtag !== "undefined" && typeof state.form.chooseSplashtag.values !== "undefined" && state.form.chooseSplashtag.values.splashtag) {
-				splashtag = state.form.chooseSplashtag.values.splashtag
-			} else if (state.onboarding.splashtagOnHold) {
-				splashtag = state.onboarding.splashtagOnHold
+			if (
+				typeof state.form.chooseSplashtag !== "undefined" &&
+				typeof state.form.chooseSplashtag.values !== "undefined" &&
+				state.form.chooseSplashtag.values.splashtag
+			) {
+				splashtag = state.form.chooseSplashtag.values.splashtag;
+			} else if (state.onboarding.splashtagOnHold) { // use splashtag on hold if deep link
+				splashtag = state.onboarding.splashtagOnHold;
 			}
 
-			// check if user already exists
-			let userRef = firestore.collection("users").doc(userId)
-			userRef.get().then(userDoc => {
-				if (splashtag) {
-					// create / overwrite firebase entity
-					api.UsernameExists(splashtag).then(data => {
-
-						if (data.available) {
-
-							const entity = {
-								splashtag: splashtag.toLowerCase(),
-								phoneNumber,
-					            defaultCurrency: "USD"
+			// check if user has already authenticated with the phone number
+			let userRef = firestore.collection("users").doc(userId);
+			userRef
+				.get()
+				.then(userDoc => {
+					if (splashtag) {
+						// create / overwrite firebase entity if the splashtag is available
+						api.UsernameExists(splashtag).then(data => {
+							if (data.available) {
+								const entity = {
+									splashtag: splashtag.toLowerCase(),
+									phoneNumber,
+									defaultCurrency: "USD"
+								};
+								// set to firebase
+								userRef
+									.set(entity)
+									.then(() => {
+										// delete old transactions
+										api.DeleteTransactions(userId)
+											.then(() => {
+												dispatch(signUpSuccess());
+												resolve(userId);
+											})
+											.catch(error => {
+												Sentry.captureMessage(error);
+												dispatch(signUpFailure(error));
+												reject(error);
+											});
+									})
+									.catch(error => {
+										Sentry.captureMessage(error);
+										dispatch(signUpFailure(error));
+										reject(error);
+									});
+							} else {
+								// username already taken
+								const error = "Username already taken";
+								Sentry.captureMessage(error);
+								dispatch(signUpFailure(error));
+								reject(error);
 							}
-							userRef.set(entity).then(() => {
-								api.DeleteTransactions(userId).then(() => {
-									dispatch(signUpSuccess())
-									resolve(userId)
-								}).catch(error => {
-									Sentry.captureMessage(error)
-									dispatch(signUpFailure(error))
-									reject(error)
-								})
-							}).catch(error => {
-								Sentry.captureMessage(error)
-								dispatch(signUpFailure(error))
-								reject(error)
-							})
-
-						}
-						else {
-							// username already taken
-							const error = "Username already taken"
-							Sentry.captureMessage(error)
-							dispatch(signUpFailure(error))
-							reject(error)
-						}
-					})
-				} else if (userDoc.exists && phoneNumber == userDoc.data().phoneNumber) {
-					// login using existing data
-					dispatch(signUpSuccess())
-					resolve(userId)
-				} else {
-					// invalid login... no user
-					dispatch(signUpFailure(ONBOARDING_ERRORS.INVALID_LOGIN))
-					reject(ONBOARDING_ERRORS.INVALID_LOGIN)
-				}
-			}).catch(error => {
-				Sentry.captureMessage(error)
-				dispatch(signUpFailure(error))
-				reject(error)
-			})
-		})
-	}
-}
-
-
-
-
-
-
+						});
+					} else if (
+						userDoc.exists &&
+						phoneNumber == userDoc.data().phoneNumber
+					) {
+						// login using existing data
+						dispatch(signUpSuccess());
+						resolve(userId);
+					} else {
+						// invalid login... no user
+						dispatch(
+							signUpFailure(ONBOARDING_ERRORS.INVALID_LOGIN)
+						);
+						reject(ONBOARDING_ERRORS.INVALID_LOGIN);
+					}
+				})
+				.catch(error => {
+					Sentry.captureMessage(error);
+					dispatch(signUpFailure(error));
+					reject(error);
+				});
+		});
+	};
+};

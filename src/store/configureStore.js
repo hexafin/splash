@@ -18,14 +18,16 @@ const persistReducers = persistCombineReducers(config, reducers)
 
 const loggerMiddleware = createLogger({ predicate: (getState, action) => __DEV__ })
 
+// configure redux store
 export default function configureStore () {
 
-    if (!__DEV__) {
+    if (!__DEV__) { // if not dev log sentry errors
         Sentry.config(sentryDSN).install();        
     }
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+    // log redux crumbs
     const middleware = [createRavenMiddleware(Sentry), thunkMiddleware]
 
     if (__DEV__) {

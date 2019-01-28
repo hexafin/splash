@@ -1,50 +1,54 @@
+// reducer for payflow actions
+
 const initialState = {
 	currency: null,
 	amount: null,
 	splashtag: null,
 	address: null,
 	userId: null,
-	capturedQr: false,
-}
+	capturedQr: false
+};
 
+// payflow reducer
 export default function payFlow(state = initialState, action) {
 	switch (action.type) {
 		case "ENTER_AMOUNT":
 			return {
 				...initialState,
 				currency: action.currency,
-				amount: action.amount,
-			}
+				amount: action.amount
+			};
 		case "SEND_TO":
 			return {
 				...state,
 				splashtag: action.splashtag,
 				address: action.address,
-				userId: action.userId,
-			}
+				userId: action.userId
+			};
 		case "CAPTURE_QR":
 			return {
 				...state,
 				capturedQr: true,
-				address: action.address,
-			}
-			
+				address: action.address
+			};
+
 		case "RESET":
-			return initialState
+			return initialState;
 
 		default:
-			return state
+			return state;
 	}
 }
 
+// payflow actions
 export function enterAmount(currency, amount) {
-	return {type: "ENTER_AMOUNT", currency, amount}
+	return { type: "ENTER_AMOUNT", currency, amount };
 }
 
 export function captureQr(address) {
-	return {type: "CAPTURE_QR", address}
+	return { type: "CAPTURE_QR", address };
 }
 
-export function sendTo(address, splashtag=null, userId=null) {
-	return {type: "SEND_TO", address, splashtag, userId}
+export function sendTo(address, splashtag = null, userId = null) {
+	return { type: "SEND_TO", address, splashtag, userId };
 }

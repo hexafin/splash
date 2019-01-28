@@ -1,6 +1,6 @@
 {
   "name": "splash",
-  "version": "0.8",
+  "version": "0.8.0",
   "private": true,
   "devDependencies": {
     "babel-cli": "^6.26.0",

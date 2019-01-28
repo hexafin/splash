@@ -1,19 +1,11 @@
 import api, { Errors } from "../../api";
-import { sendTransaction, AddETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
-import { AddBTCTransactions, GetBitcoinFees, BuildBitcoinTransaction } from "../../bitcoin-api"
-var axios = require("axios");
-import firebase from "react-native-firebase";
-let firestore = firebase.firestore();
-let analytics = firebase.analytics();
-import { NavigationActions } from "react-navigation";
+import { sendETHTransaction, LoadETHTransactions, ETHEREUM_ERRORS } from "../../ethereum-api"
+import { LoadBTCTransactions, GetBitcoinFees, BuildBitcoinTransaction } from "../../bitcoin-api"
 import * as Keychain from 'react-native-keychain';
 import { Sentry } from "react-native-sentry";
-
-analytics.setAnalyticsCollectionEnabled(true);
 import { cryptoUnits, cryptoNames, erc20Names } from '../../lib/cryptos'
-import { hexaBtcAddress } from '../../../env/keys.json'
+import { splashBtcAddress } from '../../../env/keys.json'
 import moment from "moment"
-
 
 
 export const DISMISS_TRANSACTION = "DISMISS_TRANSACTION";
@@ -90,6 +82,8 @@ export const LoadTransactions = (currency="BTC") => {
 			dispatch(loadTransactionsInit())
 
 			let transactions = []
+
+			// get correct wallet address
 			let walletAddress
 			if (erc20Names.indexOf(currency) > -1) {
 				walletAddress = state.crypto.wallets.ETH.address
@@ -97,13 +91,16 @@ export const LoadTransactions = (currency="BTC") => {
 				walletAddress = state.crypto.wallets[currency].address
 			}
 			if (currency != "BTC") walletAddress = walletAddress.toLowerCase()
+
+			// load transactions
 			if (currency=="BTC") {
-				transactions = await AddBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
+				transactions = await LoadBTCTransactions(state.crypto.wallets.BTC.address, state.user.id, state.user.entity.splashtag, state.crypto.wallets.BTC.network)
 			} else {
-				transactions = await AddETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
+				transactions = await LoadETHTransactions(state.crypto.wallets.ETH.address, state.user.id, state.user.entity.splashtag, currency, state.crypto.wallets.ETH.network)
 			}
 
 			if (transactions.length > 0) {
+				// if transactions are loaded sort by timestamp and add to redux
 				transactions.sort(function(a, b) { return b.timestamp - a.timestamp; });
 				dispatch(loadTransactionsSuccess(transactions, currency))
 				return transactions
@@ -120,50 +117,45 @@ export const LoadTransactions = (currency="BTC") => {
 }
 
 
-const getDate = () => {
-	const date = new Date()
-	const parts = date.toDateString().split(' ')
-	return parts[1] + ' ' + parts[2] + ', ' + parts[3]
-}
+// To be used for card generation
+// export const ApproveTransaction = (transaction) => {
+// 	return (dispatch, getState) => {
 
-export const ApproveTransaction = (transaction) => {
-	return (dispatch, getState) => {
+// 		const approveTransaction = async (transaction) => {
+// 			const state = getState()
+// 			const network = state.crypto.wallets.BTC.network
+// 			const privateKey = JSON.parse(await Keychain.getGenericPassword().password)[network].wif
+// 			const userBtcAddress = state.user.bitcoin.address
+// 			dispatch(approveTransactionInit(transaction))
+// 			try {
+// 				// commented for demo
+// 				const exchangeRate = await api.GetExchangeRate()
+// 				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
+// 				const feeSatoshi = await GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
+// 				const totalBtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
+// 				const {txid, txhex} = await BuildBitcoinTransaction(userBtcAddress, splashBtcAddress, privateKey, totalbtcAmount, network)
+// 				await api.UpdateTransaction(transaction.transactionId, {
+// 					approved: true,
+// 					txId: txid,
+// 					timestamp: moment;().unix(),
+// 					amount: totalBtcAmount,
+// 					currency: "BTC"
+// 				})
+// 				await api.GenerateCard(transaction.transactionId)
+// 				return Promise.resolve();
+// 			} catch (e) {
+// 				return Promise.reject(e)
+// 			}
+// 		}
 
-		const approveTransaction = async (transaction) => {
-			const state = getState()
-			const network = state.crypto.wallets.BTC.network
-			const privateKey = JSON.parse(await Keychain.getGenericPassword().password)[network].wif
-			const userBtcAddress = state.user.bitcoin.address
-			dispatch(approveTransactionInit(transaction))
-			try {
-				// commented for demo
-				const exchangeRate = await api.GetExchangeRate()
-				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-				const feeSatoshi = await GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
-				const totalBtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-				const {txid, txhex} = await BuildBitcoinTransaction(userBtcAddress, hexaBtcAddress, privateKey, totalbtcAmount, network)
-				await api.UpdateTransaction(transaction.transactionId, {
-					approved: true,
-					txId: txid,
-					timestamp: moment().unix(),
-					amount: totalBtcAmount,
-					currency: "BTC"
-				})
-				await api.GenerateCard(transaction.transactionId)
-				return Promise.resolve();
-			} catch (e) {
-				return Promise.reject(e)
-			}
-		}
-
-		approveTransaction(transaction).then(transaction => {
-			dispatch(successApprovingTransaction())
-		}).catch(error => {
-			Sentry.captureMessage(error)
-			dispatch(approveTransactionFailure(error))
-		})
-	}
-}
+// 		approveTransaction(transaction).then(transaction => {
+// 			dispatch(successApprovingTransaction())
+// 		}).catch(error => {
+// 			Sentry.captureMessage(error)
+// 			dispatch(approveTransactionFailure(error))
+// 		})
+// 	}
+// }
 
 
 export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId, toSplashtag, currency="BTC") => {
@@ -171,6 +163,7 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
     
     return new Promise((resolve, reject) => {
 
+    	// check for unsupported currency
     	if (cryptoNames.indexOf(currency) < 0) {
     		const error = `Send transaction: unsupported currency: ${currency}`
 				Sentry.captureMessage(error)
@@ -179,13 +172,14 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
     	}
 
       const state = getState()
-      const walletCurrency = (currency == 'BTC') ? 'BTC' : 'ETH'
+      const walletCurrency = (currency == 'BTC') ? 'BTC' : 'ETH' // use ETH wallet if ERC20
       let userAddress = state.crypto.wallets[walletCurrency].address
       const network = state.crypto.wallets[walletCurrency].network
       const totalUnitAmount = unitAmount+fee
 
       if (currency != 'BTC') userAddress = userAddress.toLowerCase() // store eth addresses in lower case
 
+      // transaction information
       let transaction = {
         currency: currency,
         relativeAmount: relativeAmount,
@@ -207,11 +201,13 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 
   	  if (currency == 'BTC') {
 	      Keychain.getGenericPassword().then(data => {
-	        const privateKey = JSON.parse(data.password)[walletCurrency][network].wif
+	      	// get private key from keychain
+	        const privateKey = JSON.parse(data.password)[walletCurrency][network].wif 
+	        // push btc transaction
 	        BuildBitcoinTransaction({from: userAddress, to:toAddress, privateKey, amtSatoshi: totalUnitAmount, fee: fee, network}).then(response => {
 	          const {txid, txhex} = response
 	          transaction.txId = txid
-
+			  // add transaction information to firebase
 	          api.NewTransaction(transaction).then(() => {
 	            dispatch(sendTransactionSuccess())
 	            resolve()
@@ -228,8 +224,10 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 	      })
 
   	  } else {
-  	  	sendTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(transactionHash => {
+  	  	// push eth/erc20 transaction
+  	  	sendETHTransaction({fromAddress: userAddress, toAddress: toAddress, weiAmount: unitAmount, currency: currency, network}).then(transactionHash => {
           transaction.txId = transactionHash
+          // add transaction info to firebase
           api.NewTransaction(transaction).then(() => {
             dispatch(sendTransactionSuccess())
             resolve()
@@ -250,6 +248,7 @@ export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId
 	}
 }
 
+// dismiss pending transaction (clear information from reducer)
 export const DismissTransaction = () => {
 	return (dispatch, getState) => {
 		dispatch(dismissTransaction())
