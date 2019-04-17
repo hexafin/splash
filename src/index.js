@@ -20,7 +20,7 @@ codePush.getUpdateMetadata().then(update => {
 // setup codepush for manual sync
 let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
-export class App extends Component {
+class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
