@@ -1,48 +1,51 @@
-import { createBottomTabNavigator, createStackNavigator, createAppContainer } from "react-navigation"
-import { colors } from "./lib/colors"
+import {
+	createBottomTabNavigator,
+	createStackNavigator,
+	createAppContainer
+} from "react-navigation";
+import { colors } from "./lib/colors";
 
-import Landing from "./components/Landing"
-import ChooseSplashtag from "./components/ChooseSplashtag"
-import EnterPhoneNumber from "./components/EnterPhoneNumber"
-import VerifyPhoneNumber from "./components/VerifyPhoneNumber"
-import UpdateUsername from "./components/UpdateUsername"
-import ScanQrCode from "./components/ScanQrCode"
-import Unlock from "./components/Unlock"
-import ViewTransactionModal from "./components/ViewTransactionModal"
-import SwipeApp from "./components/SwipeApp"
-import ApproveTransactionModal from "./components/ApproveTransactionModal"
-import ApproveCardModal from "./components/ApproveCardModal"
-import EnterAmount from "./components/EnterAmount"
-import SendTo from "./components/SendTo"
-import SetPasscode from "./components/SetPasscode"
-
+import Landing from "./components/Landing";
+import ChooseSplashtag from "./components/ChooseSplashtag";
+import EnterPhoneNumber from "./components/EnterPhoneNumber";
+import VerifyPhoneNumber from "./components/VerifyPhoneNumber";
+import UpdateUsername from "./components/UpdateUsername";
+import ScanQrCode from "./components/ScanQrCode";
+import Unlock from "./components/Unlock";
+import ViewTransactionModal from "./components/ViewTransactionModal";
+import SwipeApp from "./components/SwipeApp";
+import ApproveTransactionModal from "./components/ApproveTransactionModal";
+import ApproveCardModal from "./components/ApproveCardModal";
+import EnterAmount from "./components/EnterAmount";
+import SendTo from "./components/SendTo";
+import SetPasscode from "./components/SetPasscode";
 
 // vertical slide transition
 function forVertical(props) {
-	const { layout, position, scene } = props
+	const { layout, position, scene } = props;
 
-	const index = scene.index
-	const height = layout.initHeight
+	const index = scene.index;
+	const height = layout.initHeight;
 
-	const translateX = 0
+	const translateX = 0;
 	const translateY = position.interpolate({
 		inputRange: ([index - 1, index, index + 1]: Array<number>),
 		outputRange: ([height, 0, 0]: Array<number>)
-	})
+	});
 
 	// if screen is unlock use abrupt transition
-	if (scene.route.routeName == 'Unlock') {
-		return null
-	} else { // otherwise use vertical slide
+	if (scene.route.routeName == "Unlock") {
+		return null;
+	} else {
+		// otherwise use vertical slide
 		return {
 			transform: [{ translateX }, { translateY }]
-		}
+		};
 	}
 }
 
-
 // define app layout
-const cointainer = (loggedIn) => {
+const container = loggedIn => {
 	return createStackNavigator(
 		{
 			AppRouter: {
@@ -64,10 +67,10 @@ const cointainer = (loggedIn) => {
 							screen: createStackNavigator(
 								{
 									EnterAmount: {
-										screen: EnterAmount,
+										screen: EnterAmount
 									},
 									SendTo: {
-										screen: SendTo,
+										screen: SendTo
 									}
 								},
 								{
@@ -75,13 +78,13 @@ const cointainer = (loggedIn) => {
 									activeBackgroundColor: colors.white,
 									inactiveBackgroundColor: colors.white,
 									headerMode: "none",
-									lazy: true,
+									lazy: true
 								}
 							)
 						},
 						SwipeApp: {
 							screen: SwipeApp
-						},
+						}
 					},
 					{
 						headerMode: "none",
@@ -131,7 +134,7 @@ const cointainer = (loggedIn) => {
 						inactiveBackgroundColor: colors.white
 					}
 				)
-			},
+			}
 		},
 		{
 			headerMode: "none",
@@ -142,9 +145,9 @@ const cointainer = (loggedIn) => {
 				backgroundColor: "rgba(0,0,0,0)"
 			}
 		}
-	)
-}
+	);
+};
 
-export default (loggedIn) => {
-	return createAppContainer(cointainer(loggedIn))
-}
+export default loggedIn => {
+	return createAppContainer(container(loggedIn));
+};
