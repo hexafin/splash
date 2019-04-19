@@ -5,6 +5,26 @@ import { LoadTransactions } from "../../redux/transactions/actions";
 import { Load, setActiveCurrency } from "../../redux/crypto/actions";
 import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions";
 
+const notificationPermissionInfo = buttonCallback => {
+	return {
+		type: "SHOW_MODAL",
+		modalType: "INFO",
+		modalProps: {
+			title: "Turn On Notifications",
+			body: "Get notified when you receive money or a friend thanks you.",
+			buttonTitle: "Great",
+			buttonCallback: buttonCallback
+		}
+	};
+};
+
+const setNotifsRequested = requested => {
+	return {
+		type: "NOTIFICATIONS_REQUESTED",
+		requested: requested
+	};
+};
+
 const mapStateToProps = state => {
 	return {
 		transactions: state.transactions.transactions,

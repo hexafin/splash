@@ -1,0 +1,349 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Landing Swipe View renders correctly 1`] = `
+<AnimatedComponent
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#4547E0",
+        "flex": 1,
+      },
+    ]
+  }
+>
+  <Component
+    style={
+      Object {
+        "bottom": 0,
+        "flex": 1,
+        "position": "absolute",
+        "zIndex": 0,
+      }
+    }
+  >
+    <AnimatedComponent
+      key="0-dot"
+      style={
+        Array [
+          Object {
+            "bottom": 0,
+            "position": "absolute",
+          },
+          Object {
+            "opacity": 1,
+          },
+        ]
+      }
+    >
+      <Component
+        resizeMode="cover"
+        source={
+          Object {
+            "testUri": "../../../src/assets/images/screen-view1.png",
+          }
+        }
+        style={
+          Object {
+            "bottom": 0,
+            "height": 1052.526,
+            "right": 0,
+            "width": 750,
+          }
+        }
+      />
+    </AnimatedComponent>
+    <AnimatedComponent
+      key="1-dot"
+      style={
+        Array [
+          Object {
+            "bottom": 0,
+            "position": "absolute",
+          },
+          Object {
+            "opacity": 0,
+          },
+        ]
+      }
+    >
+      <Component
+        resizeMode="cover"
+        source={
+          Object {
+            "testUri": "../../../src/assets/images/screen-view2.png",
+          }
+        }
+        style={
+          Object {
+            "bottom": 0,
+            "height": 1052.526,
+            "right": 0,
+            "width": 750,
+          }
+        }
+      />
+    </AnimatedComponent>
+    <AnimatedComponent
+      key="2-dot"
+      style={
+        Array [
+          Object {
+            "bottom": 0,
+            "position": "absolute",
+          },
+          Object {
+            "opacity": 0,
+          },
+        ]
+      }
+    >
+      <Component
+        resizeMode="cover"
+        source={
+          Object {
+            "testUri": "../../../src/assets/images/screen-view3.png",
+          }
+        }
+        style={
+          Object {
+            "bottom": 0,
+            "height": 1052.526,
+            "right": 0,
+            "width": 750,
+          }
+        }
+      />
+    </AnimatedComponent>
+  </Component>
+  <Component
+    style={
+      Object {
+        "flexDirection": "row",
+        "left": 50,
+        "position": "absolute",
+        "top": 266.8,
+        "zIndex": 2,
+      }
+    }
+  >
+    <AnimatedComponent
+      key="0-dot"
+      style={
+        Array [
+          Object {
+            "backgroundColor": "white",
+            "borderRadius": 100,
+            "height": 15,
+            "marginRight": 15,
+            "width": 15,
+          },
+          Object {
+            "opacity": 1,
+          },
+        ]
+      }
+    />
+    <AnimatedComponent
+      key="1-dot"
+      style={
+        Array [
+          Object {
+            "backgroundColor": "white",
+            "borderRadius": 100,
+            "height": 15,
+            "marginRight": 15,
+            "width": 15,
+          },
+          Object {
+            "opacity": 0.25,
+          },
+        ]
+      }
+    />
+    <AnimatedComponent
+      key="2-dot"
+      style={
+        Array [
+          Object {
+            "backgroundColor": "white",
+            "borderRadius": 100,
+            "height": 15,
+            "marginRight": 15,
+            "width": 15,
+          },
+          Object {
+            "opacity": 0.25,
+          },
+        ]
+      }
+    />
+  </Component>
+  <AnimatedComponent
+    horizontal={true}
+    onScroll={[Function]}
+    pagingEnabled={true}
+    scrollEventThrottle={16}
+    showsHorizontalScrollIndicator={false}
+  >
+    <Screen
+      index={0}
+      text="Splash is your cryptocurrency wallet."
+    />
+    <Screen
+      index={1}
+      text="Send money to anyone.
+Buy anything."
+    />
+    <Screen
+      index={2}
+      text="Bye, bye big banks.
+Hello Splash."
+    />
+  </AnimatedComponent>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "marginBottom": 100.05,
+      }
+    }
+  >
+    <Button
+      large={true}
+      onPress={[Function]}
+      round={true}
+      title="Get your wallet"
+    />
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+    >
+      <Component
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 16,
+            "fontWeight": "700",
+            "paddingTop": 20,
+          }
+        }
+      >
+        Or, recover your Splash wallet
+      </Component>
+    </TouchableOpacity>
+  </Component>
+</AnimatedComponent>
+`;
+
+exports[`Landing renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "space-between",
+      "paddingBottom": 20,
+      "paddingTop": 20,
+      "position": "relative",
+    }
+  }
+>
+  <AnimatedWaves />
+  <Component
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "column",
+        "padding": 30,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "paddingTop": 63,
+        }
+      }
+    >
+      <Component
+        source={
+          Object {
+            "testUri": "../../../src/assets/images/splash-logo.png",
+          }
+        }
+        style={
+          Object {
+            "height": 30,
+            "margin": 5,
+            "width": 22.5,
+          }
+        }
+      />
+      <Component
+        style={
+          Object {
+            "color": "#333333",
+            "fontSize": 22,
+            "fontWeight": "400",
+            "paddingBottom": 4,
+          }
+        }
+      >
+        Splash
+      </Component>
+    </Component>
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "column",
+          "marginTop": 30,
+          "padding": 0,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#333333",
+            "fontSize": 32,
+            "fontWeight": "500",
+            "textAlign": "center",
+          }
+        }
+      >
+        Splash is your wallet
+      </Component>
+      <Component
+        style={
+          Object {
+            "color": "#ADADAD",
+            "fontSize": 22,
+            "marginTop": 20,
+            "textAlign": "center",
+          }
+        }
+      >
+        Make it personal with a splashtag
+      </Component>
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "marginBottom": 10,
+        "padding": 20,
+      }
+    }
+  >
+    <Button
+      onPress={[Function]}
+      primary={false}
+      title="Get started"
+    />
+  </Component>
+</Component>
+`;

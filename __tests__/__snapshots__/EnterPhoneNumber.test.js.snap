@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Enter Phone Number renders correctly 1`] = `
+<KeyboardAvoidingView
+  behavior="padding"
+  enabled={true}
+  keyboardVerticalOffset={0}
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "space-between",
+      "paddingBottom": 0,
+      "paddingTop": 80,
+      "position": "relative",
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "column",
+        "justifyContent": "space-between",
+        "padding": 20,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#333333",
+          "fontSize": 29,
+          "marginBottom": 15,
+          "textAlign": "center",
+        }
+      }
+    >
+      Welcome,
+      
+
+    </Component>
+    <Component
+      style={
+        Object {
+          "color": "#333333",
+          "fontSize": 17,
+          "marginBottom": 20,
+          "textAlign": "center",
+          "zIndex": 10,
+        }
+      }
+    >
+      Verify your number to 
+      recover
+      
+
+      your wallet
+    </Component>
+    <PhoneNumberInput
+      autoFocus={true}
+      callback={[Function]}
+      number=""
+    />
+    <Component
+      style={
+        Object {
+          "color": "#ADADAD",
+          "fontSize": 20,
+          "marginBottom": 20,
+          "marginTop": 15,
+          "textAlign": "center",
+          "zIndex": 40,
+        }
+      }
+    >
+      We
+      '
+      ll text you a verification code
+      
+
+      to make sure it
+      '
+      s you
+    </Component>
+    <Button
+      disabled={true}
+      loading={false}
+      onPress={[Function]}
+      primary={true}
+      title="Text me the code"
+    />
+  </Component>
+  <FlatBackButton
+    onPress={[Function]}
+  />
+</KeyboardAvoidingView>
+`;

@@ -118,6 +118,9 @@ export class Messaging {
   getToken = jest.fn(() => {
     return Promise.resolve();
   });
+  hasPermission = jest.fn(() => {
+    return Promise.resolve();
+  });
 }
 
 export class Storage {

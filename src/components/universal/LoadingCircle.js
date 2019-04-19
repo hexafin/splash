@@ -1,9 +1,7 @@
-import React, {Component} from "react"
-import {
-    View
-} from "react-native"
-import LottieView from 'lottie-react-native'
-import PropTypes from "prop-types"
+import React, { Component } from "react";
+import { View } from "react-native";
+import LottieView from "lottie-react-native";
+import PropTypes from "prop-types";
 
 /*
 
@@ -21,61 +19,67 @@ Usage:
 */
 
 export default class LoadingCircle extends Component {
-
     componentWillReceiveProps(nextProps) {
         if (nextProps.restart === true) {
-            this.animation.play()
+            this.animation.play();
         }
     }
 
     componentDidMount() {
-        this.animation.play()
+        if (this.animation) {
+            this.animation.play();
+        }
     }
 
     render() {
+        const wrapperSize = this.props.size || 20;
+        const animationSize = wrapperSize * 3;
 
-        const wrapperSize = this.props.size || 20
-        const animationSize = wrapperSize * 3
-
-        const color = this.props.color || "white"
-        const animationSource = (color == "white") 
-            ? require('../../assets/animations/loadingCircleWhite.json') 
-            : require('../../assets/animations/loadingCirclePurple.json')
+        const color = this.props.color || "white";
+        const animationSource =
+            color == "white"
+                ? require("../../assets/animations/loadingCircleWhite.json")
+                : require("../../assets/animations/loadingCirclePurple.json");
 
         return (
-            <View style={[
-                {
-                    position: 'relative',
-                    height: wrapperSize,
-                    width: wrapperSize
-                },
-                this.props.style || {}
-            ]}>
-                <View style={{
-                    position: 'absolute',
-                    left: wrapperSize * -1,
-                    top: wrapperSize * -1,
-                    height: animationSize,
-                    width: animationSize,
-                }}>
+            <View
+                style={[
+                    {
+                        position: "relative",
+                        height: wrapperSize,
+                        width: wrapperSize
+                    },
+                    this.props.style || {}
+                ]}
+            >
+                <View
+                    style={{
+                        position: "absolute",
+                        left: wrapperSize * -1,
+                        top: wrapperSize * -1,
+                        height: animationSize,
+                        width: animationSize
+                    }}
+                >
                     <LottieView
                         ref={animation => {
-                            this.animation = animation
-                        }} source={animationSource}
+                            this.animation = animation;
+                        }}
+                        source={animationSource}
                         style={{
                             height: animationSize,
-                            width: animationSize,
+                            width: animationSize
                         }}
                         loop={true}
                         autoplay={true}
                     />
                 </View>
             </View>
-        )
+        );
     }
 }
 
 LoadingCircle.propTypes = {
     size: PropTypes.number,
     color: PropTypes.string
-}
+};

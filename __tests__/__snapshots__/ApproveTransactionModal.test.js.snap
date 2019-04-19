@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApproveTransactionModal renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "alignSelf": "stretch",
+      "flex": 1,
+      "justifyContent": "space-between",
+      "paddingBottom": 65,
+      "paddingHorizontal": 25,
+      "paddingTop": 25,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingBottom": 10,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#333333",
+          "fontSize": 20,
+          "fontWeight": "600",
+        }
+      }
+    >
+      Confirm transaction
+    </Component>
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+    >
+      <Component
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/Xbutton.png",
+          }
+        }
+        style={
+          Object {
+            "height": 20,
+            "margin": 8,
+            "width": 20,
+          }
+        }
+      />
+    </TouchableOpacity>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "space-around",
+        "paddingHorizontal": 32,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#919191",
+          "fontSize": 14,
+          "fontWeight": "500",
+          "paddingBottom": 5,
+        }
+      }
+    >
+      1 
+      BTC
+       = $
+      0.01
+       USD
+    </Component>
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "alignSelf": "stretch",
+          "backgroundColor": "#6364F1",
+          "borderRadius": 8,
+          "height": 83,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 28,
+            "fontWeight": "600",
+          }
+        }
+      >
+        USD $
+        0.00
+      </Component>
+      <Component
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 18,
+            "fontWeight": "600",
+            "opacity": 0.77,
+          }
+        }
+      >
+        0.00000
+         
+        BTC
+      </Component>
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "padding": 10,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#919191",
+          "fontSize": 11,
+          "fontWeight": "500",
+          "textAlign": "center",
+        }
+      }
+    >
+      Blockchain fee —— 
+      0
+       
+      BTC
+       ($
+      0
+      )
+    </Component>
+    <Component
+      style={
+        Object {
+          "color": "#919191",
+          "fontSize": 11,
+          "fontWeight": "500",
+          "textAlign": "center",
+        }
+      }
+    >
+      They receive —— 
+      0.00000
+       
+      BTC
+       ($
+      0.00
+      )
+    </Component>
+  </Component>
+  <Component
+    style={
+      Array [
+        Object {
+          "color": "#919191",
+          "fontSize": 11,
+          "fontWeight": "500",
+          "textAlign": "center",
+        },
+        Object {
+          "paddingBottom": 15,
+        },
+      ]
+    }
+  >
+    To 
+    testAddress
+  </Component>
+  <Button
+    checkmark={false}
+    checkmarkCallback={[Function]}
+    checkmarkPersist={true}
+    disabled={false}
+    onPress={[Function]}
+    primary={true}
+    title="Send Transaction"
+  />
+</Component>
+`;

@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Set Passcode renders correctly 1`] = `
+<LinearGradient
+  colors={
+    Array [
+      "#5759D5",
+      "#4E50E6",
+    ]
+  }
+  style={
+    Object {
+      "alignContent": "center",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "space-between",
+      "paddingVertical": 50,
+    }
+  }
+>
+  <Component>
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+      style={
+        Object {
+          "alignSelf": "flex-end",
+          "paddingHorizontal": 43,
+        }
+      }
+    >
+      <Component
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/Xbutton.png",
+          }
+        }
+        style={
+          Object {
+            "height": 20,
+            "width": 20,
+          }
+        }
+      />
+    </TouchableOpacity>
+    <Component>
+      <Component
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "#FFFFFF",
+            "fontSize": 20,
+            "fontWeight": "600",
+            "paddingBottom": 20,
+            "paddingTop": 20,
+          }
+        }
+      >
+        Type your new passcode
+      </Component>
+      <Component
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "#A4A5F6",
+            "fontSize": 16,
+          }
+        }
+      >
+        Splash will lock when you leave
+      </Component>
+      <Component
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "color": "#A4A5F6",
+              "fontSize": 16,
+            },
+            Object {
+              "marginBottom": 49,
+            },
+          ]
+        }
+      >
+        for more than 5 minutes.
+      </Component>
+    </Component>
+    <AnimatedComponent
+      style={
+        Array [
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "paddingBottom": 40,
+            "paddingHorizontal": 105,
+            "width": 750,
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "translateX": 0,
+              },
+            ],
+          },
+        ]
+      }
+    >
+      <Component
+        resizeMode="contain"
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/purpleDrop.png",
+          }
+        }
+        style={
+          Object {
+            "height": 15,
+            "width": 12,
+          }
+        }
+      />
+      <Component
+        resizeMode="contain"
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/purpleDrop.png",
+          }
+        }
+        style={
+          Object {
+            "height": 15,
+            "width": 12,
+          }
+        }
+      />
+      <Component
+        resizeMode="contain"
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/purpleDrop.png",
+          }
+        }
+        style={
+          Object {
+            "height": 15,
+            "width": 12,
+          }
+        }
+      />
+      <Component
+        resizeMode="contain"
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/purpleDrop.png",
+          }
+        }
+        style={
+          Object {
+            "height": 15,
+            "width": 12,
+          }
+        }
+      />
+    </AnimatedComponent>
+  </Component>
+  <Keypad
+    arrow="white"
+    decimal={false}
+    delete={true}
+    disabled={false}
+    onChange={[Function]}
+    pressColor="#6466F6"
+    primaryColor="#484AD4"
+    textColor="white"
+  />
+</LinearGradient>
+`;

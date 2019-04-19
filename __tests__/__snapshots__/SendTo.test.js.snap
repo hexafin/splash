@@ -1,0 +1,527 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hits renders correctly 1`] = `
+<FlatList
+  contentContainerStyle={
+    Object {
+      "overflow": "visible",
+      "paddingBottom": 130,
+      "paddingHorizontal": 20,
+    }
+  }
+  data={
+    Array [
+      Object {
+        "splashtag": "userman",
+      },
+    ]
+  }
+  disableVirtualization={false}
+  horizontal={false}
+  initialNumToRender={10}
+  keyExtractor={[Function]}
+  maxToRenderPerBatch={10}
+  numColumns={1}
+  onEndReached={[Function]}
+  onEndReachedThreshold={2}
+  renderItem={[Function]}
+  scrollEventThrottle={50}
+  updateCellsBatchingPeriod={50}
+  windowSize={21}
+/>
+`;
+
+exports[`Search Box renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": 5,
+      "marginBottom": 15,
+      "marginTop": 10,
+      "shadowOffset": Object {
+        "height": 5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.05,
+      "shadowRadius": 12,
+    }
+  }
+>
+  <TextInput
+    allowFontScaling={true}
+    autoCapitalize="none"
+    autoCorrect={false}
+    onChangeText={[Function]}
+    placeholder="Splashtag, Phone or Address"
+    style={
+      Object {
+        "color": undefined,
+        "fontSize": 20,
+        "fontWeight": "500",
+        "padding": 20,
+      }
+    }
+    underlineColorAndroid="transparent"
+  />
+</Component>
+`;
+
+exports[`Send To renders correctly 1`] = `
+<TouchableWithoutFeedback
+  onPress={[Function]}
+>
+  <Component
+    style={
+      Object {
+        "backgroundColor": "#FFFFFF",
+        "flex": 1,
+        "flexDirection": "column",
+        "paddingBottom": 40,
+        "paddingTop": 60,
+      }
+    }
+  >
+    <CloseButton
+      color="dark"
+      onPress={[Function]}
+    />
+    <FlatBackButton
+      color="dark"
+      onPress={[Function]}
+    />
+    <Component
+      pointerEvents="none"
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "column",
+          "justifyContent": "center",
+          "marginBottom": 10,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": undefined,
+            "fontSize": 24,
+            "fontWeight": "600",
+            "marginBottom": 4,
+          }
+        }
+      >
+        Sending 
+        Bitcoin
+      </Component>
+    </Component>
+    <Component
+      style={
+        Object {
+          "paddingHorizontal": 20,
+          "paddingVertical": 10,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#919191",
+            "fontSize": 18,
+            "fontWeight": "500",
+            "letterSpacing": 1,
+            "marginBottom": 2,
+          }
+        }
+      >
+        AMOUNT
+      </Component>
+      <Component
+        style={
+          Object {
+            "color": undefined,
+            "fontSize": 20,
+            "fontWeight": "700",
+          }
+        }
+      >
+        USD
+         
+        $
+        0.05
+      </Component>
+    </Component>
+    <CreateInstantSearch
+      apiKey="ba602b59c39f9584a485db5c32a55048"
+      appId="HL2AA4354B"
+      indexName="Users"
+      refresh={false}
+      root={
+        Object {
+          "Root": [Function],
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#919191",
+              "fontSize": 18,
+              "fontWeight": "500",
+              "letterSpacing": 1,
+              "marginBottom": 2,
+            }
+          }
+        >
+          SEARCH
+        </Component>
+        <AlgoliaSearchBox(SearchBox)
+          onChange={[Function]}
+        />
+      </Component>
+      <AnimatedComponent
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "space-between",
+              "paddingBottom": 20,
+              "paddingHorizontal": 25,
+              "width": 750,
+            },
+            Object {
+              "opacity": 1,
+            },
+          ]
+        }
+      >
+        <HeaderButton
+          image={
+            Object {
+              "testUri": "../../../src/assets/icons/copyPaste.png",
+            }
+          }
+          onPress={[Function]}
+          title="Paste
+address"
+        />
+        <HeaderButton
+          image={
+            Object {
+              "testUri": "../../../src/assets/icons/qrIcon.png",
+            }
+          }
+          onPress={[Function]}
+          title="Scan
+QR-Code"
+        />
+      </AnimatedComponent>
+      <Component
+        style={
+          Object {
+            "paddingHorizontal": 20,
+            "paddingVertical": 10,
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#919191",
+              "fontSize": 18,
+              "fontWeight": "500",
+              "letterSpacing": 1,
+              "marginBottom": 2,
+            }
+          }
+        >
+          YOUR CONTACTS
+        </Component>
+      </Component>
+      <Component
+        style={
+          Object {
+            "flex": 1,
+            "minHeight": 400,
+          }
+        }
+      >
+        <FlatList
+          ListFooterComponent={
+            <TouchableOpacity
+              activeOpacity={0.2}
+              onPress={[Function]}
+              style={
+                Object {
+                  "alignItems": "center",
+                  "paddingVertical": 25,
+                }
+              }
+            >
+              <Component
+                style={
+                  Object {
+                    "color": "#919191",
+                    "fontSize": 16,
+                    "marginBottom": 8,
+                  }
+                }
+              >
+                Added new numbers?
+              </Component>
+              <Component
+                style={
+                  Object {
+                    "color": "#4547E0",
+                    "fontSize": 18,
+                    "fontWeight": "600",
+                  }
+                }
+              >
+                Refresh Contacts
+              </Component>
+            </TouchableOpacity>
+          }
+          contentContainerStyle={
+            Object {
+              "overflow": "hidden",
+              "paddingBottom": 130,
+              "paddingHorizontal": 20,
+            }
+          }
+          data={
+            Array [
+              Object {
+                "objectID": "uid",
+                "phoneNumber": "+19785012350",
+                "splashtag": "userman",
+                "wallets": Object {
+                  "BTC": "testAddress",
+                },
+              },
+            ]
+          }
+          disableVirtualization={false}
+          horizontal={false}
+          initialNumToRender={10}
+          keyExtractor={[Function]}
+          maxToRenderPerBatch={10}
+          numColumns={1}
+          onEndReachedThreshold={2}
+          renderItem={[Function]}
+          scrollEventThrottle={50}
+          updateCellsBatchingPeriod={50}
+          windowSize={21}
+        />
+      </Component>
+    </CreateInstantSearch>
+    <NextButton
+      disabled={true}
+      onPress={[Function]}
+      title="Preview Send"
+    />
+  </Component>
+</TouchableWithoutFeedback>
+`;
+
+exports[`SendButton renders correctly 1`] = `
+<TouchableWithoutFeedback
+  onPressIn={[Function]}
+  onPressOut={[Function]}
+>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#6163F4",
+          "borderRadius": 3,
+          "flexDirection": "row",
+          "height": 65,
+          "justifyContent": "center",
+          "shadowColor": undefined,
+          "shadowOffset": Object {
+            "height": 10,
+            "width": 0,
+          },
+          "shadowOpacity": 0.1,
+          "shadowRadius": 12,
+          "width": 150,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 1,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Component
+      resizeMode="contain"
+      style={
+        Object {
+          "height": 25,
+          "marginRight": 15,
+          "width": 25,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "color": "#FFFFFF",
+          "fontSize": 16,
+          "fontWeight": "600",
+          "textAlign": "left",
+        }
+      }
+    />
+  </AnimatedComponent>
+</TouchableWithoutFeedback>
+`;
+
+exports[`SendLineItem renders correctly 1`] = `
+<TouchableWithoutFeedback
+  onPressIn={[Function]}
+  onPressOut={[Function]}
+>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "alignItems": "flex-start",
+          "backgroundColor": "#FFFFFF",
+          "borderColor": "#FFFFFF",
+          "borderRadius": 5,
+          "borderWidth": 1,
+          "flexDirection": "column",
+          "justifyContent": "center",
+          "marginTop": 10,
+          "padding": 15,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 1,
+            },
+          ],
+        },
+        Object {
+          "shadowColor": undefined,
+          "shadowOffset": Object {
+            "height": 5,
+            "width": 0,
+          },
+          "shadowOpacity": 0.08,
+          "shadowRadius": 10,
+        },
+      ]
+    }
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "flex-start",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#EFEFFD",
+            "borderRadius": 20,
+            "height": 40,
+            "justifyContent": "center",
+            "marginRight": 10,
+            "width": 40,
+          }
+        }
+      >
+        <Component
+          resizeMode="contain"
+          source={
+            Object {
+              "testUri": "../../../src/assets/icons/primarySplash.png",
+            }
+          }
+          style={
+            Object {
+              "height": 25,
+              "width": 25,
+            }
+          }
+        />
+      </Component>
+      <Component
+        style={
+          Object {
+            "alignItems": "flex-start",
+            "flexDirection": "column",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "justifyContent": "flex-start",
+            }
+          }
+        >
+          <Component
+            style={
+              Object {
+                "color": undefined,
+                "fontSize": 18,
+                "fontWeight": "700",
+                "textAlign": "left",
+              }
+            }
+          />
+          <Component
+            resizeMode="contain"
+            source={
+              Object {
+                "testUri": "../../../src/assets/icons/checkmarkGreen.png",
+              }
+            }
+            style={
+              Object {
+                "height": 18,
+                "marginLeft": 5,
+                "width": 18,
+              }
+            }
+          />
+        </Component>
+        <Component
+          style={
+            Object {
+              "color": "#919191",
+              "fontSize": 16,
+              "marginTop": 5,
+              "textAlign": "left",
+            }
+          }
+        />
+      </Component>
+    </Component>
+  </AnimatedComponent>
+</TouchableWithoutFeedback>
+`;

@@ -20,6 +20,17 @@ jest.mock("react-native-interactable");
 jest.mock("react-native-svg/lib/extract/extractBrush", value => {
 	return "";
 });
+jest.mock("react-native-contacts");
+
+jest.mock("lottie-react-native");
+
+if (typeof window !== "object") {
+	global.window = global;
+	global.window.navigator = {};
+}
+global.XMLHttpRequest = class XMLHttpRequest {
+	constructor() {}
+};
 
 // Make Enzyme functions available in all test files without importing
 global.shallow = shallow;

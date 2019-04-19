@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Colored Pay Button renders correctly 1`] = `
+<AnimatedComponent
+  style={
+    Object {
+      "bottom": 40,
+      "flexDirection": "row",
+      "justifyContent": "center",
+      "position": "absolute",
+      "transform": Array [
+        Object {
+          "scale": 1,
+        },
+      ],
+      "width": 750,
+    }
+  }
+>
+  <TouchableWithoutFeedback
+    onPressIn={[Function]}
+    onPressOut={[Function]}
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "justifyContent": "center",
+        }
+      }
+    >
+      <[object Object]
+        height={70}
+        viewBox="0 0 70 70"
+        width={70}
+      >
+        <AnimatedComponent
+          cx="35"
+          cy="35"
+          r="35"
+        />
+      </[object Object]>
+      <Component
+        pointerEvents="none"
+        resizeMode="contain"
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/startPay.png",
+          }
+        }
+        style={
+          Object {
+            "height": 35,
+            "marginRight": 4,
+            "position": "absolute",
+            "width": 35,
+          }
+        }
+      />
+    </Component>
+  </TouchableWithoutFeedback>
+</AnimatedComponent>
+`;
+
+exports[`History renders correctly 1`] = `
+<Component
+  onLayout={[Function]}
+  style={
+    Array [
+      Object {
+        "padding": 20,
+      },
+      Object {
+        "minHeight": 1334,
+        "paddingBottom": 20,
+      },
+    ]
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#292342",
+          "fontSize": 20,
+          "fontWeight": "700",
+        }
+      }
+    >
+      Your history
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "flexDirection": "column",
+        "justifyContent": "flex-start",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#ADADAD",
+          "fontSize": 18,
+          "fontWeight": "400",
+          "lineHeight": 30,
+          "marginTop": 36,
+          "textAlign": "center",
+        }
+      }
+    >
+      No transactions yet.
+      
+
+      Here
+      '
+      s what it could look like...
+    </Component>
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/images/empty_state.png",
+        }
+      }
+      style={
+        Object {
+          "height": 200,
+          "marginTop": 5,
+          "width": 730,
+        }
+      }
+    />
+  </Component>
+</Component>
+`;
+
+exports[`Home renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "height": 1334,
+      "width": 750,
+    }
+  }
+>
+  <AnimatedComponent
+    contentContainerStyle={
+      Object {
+        "minHeight": 1334,
+        "paddingTop": 380,
+        "position": "relative",
+      }
+    }
+    onScroll={[Function]}
+    scrollEventThrottle={16}
+  >
+    <Connect(History) />
+  </AnimatedComponent>
+  <ColoredPayButton
+    onPress={[Function]}
+  />
+</Component>
+`;

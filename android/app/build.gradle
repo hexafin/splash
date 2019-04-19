@@ -139,6 +139,9 @@ android {
 }
 
 dependencies {
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
     compile project(':react-native-interactable')
     compile project(':react-native-contacts')
     compile project(':react-native-svg')

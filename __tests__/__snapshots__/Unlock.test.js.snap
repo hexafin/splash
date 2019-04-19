@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Unlock renders correctly 1`] = `
+<LinearGradient
+  colors={
+    Array [
+      "#5759D5",
+      "#4E50E6",
+    ]
+  }
+  style={
+    Object {
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "flex-start",
+      "paddingTop": 75,
+      "paddingVertical": 40,
+      "position": "relative",
+      "width": 750,
+    }
+  }
+>
+  <Component>
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/whiteSplash.png",
+        }
+      }
+      style={
+        Object {
+          "alignSelf": "center",
+          "height": 34,
+          "width": 26,
+        }
+      }
+    />
+  </Component>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "paddingHorizontal": 105,
+          "paddingTop": 50,
+          "width": 750,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "translateX": 0,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/purpleDrop.png",
+        }
+      }
+      style={
+        Object {
+          "height": 15,
+          "width": 12,
+        }
+      }
+    />
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/purpleDrop.png",
+        }
+      }
+      style={
+        Object {
+          "height": 15,
+          "width": 12,
+        }
+      }
+    />
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/purpleDrop.png",
+        }
+      }
+      style={
+        Object {
+          "height": 15,
+          "width": 12,
+        }
+      }
+    />
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/purpleDrop.png",
+        }
+      }
+      style={
+        Object {
+          "height": 15,
+          "width": 12,
+        }
+      }
+    />
+  </AnimatedComponent>
+  <Keypad
+    arrow="white"
+    decimal={false}
+    delete={true}
+    disabled={false}
+    onChange={[Function]}
+    pressColor="#6466F6"
+    primaryColor="#484AD4"
+    style={
+      Object {
+        "bottom": 40,
+        "position": "absolute",
+        "width": 750,
+      }
+    }
+    textColor="white"
+  />
+</LinearGradient>
+`;

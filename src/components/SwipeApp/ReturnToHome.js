@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, { Component } from "react";
 import {
 	View,
 	Text,
@@ -14,66 +14,59 @@ import {
 	Share,
 	Dimensions,
 	TextInput
-} from "react-native"
+} from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux"
-import { isIphoneX } from "react-native-iphone-x-helper"
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import { bindActionCreators } from "redux";
+import { isIphoneX } from "react-native-iphone-x-helper";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 
-const SCREEN_WIDTH = Dimensions.get("window").width
-const SCREEN_HEIGHT = Dimensions.get("window").height
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-class ReturnToHome extends Component {
-
+export class ReturnToHome extends Component {
 	shouldComponentUpdate(nextProps, nextState) {
-		return false
+		return false;
 	}
-  
-	render() {
 
+	render() {
 		const translateY = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 			outputRange: [-30, 0, -30]
-		})
+		});
 
 		const opacity = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 			outputRange: [1, 0, 1]
-		})
+		});
 
 		const rotate = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 			outputRange: ["180deg", "90deg", "0deg"]
-		})
+		});
 
 		const translateX = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
-			outputRange: [SCREEN_WIDTH*0.4, 0, -0.4*SCREEN_WIDTH]
-		})
+			inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
+			outputRange: [SCREEN_WIDTH * 0.4, 0, -0.4 * SCREEN_WIDTH]
+		});
 
 		const animatedView = {
-			transform: [
-				{translateX},
-				{translateY},
-				{rotate},
-			],
+			transform: [{ translateX }, { translateY }, { rotate }],
 			opacity: opacity
-		}
+		};
 
 		return (
-			
 			<TouchableWithoutFeedback onPress={this.props.onPress}>
-				<Animated.View style={[
-					animatedView,
-					styles.wrapper
-				]}>
-					<Image source={require("../../assets/icons/leftCarrotWhite.png")} style={styles.image} resizeMode="contain"/>
+				<Animated.View style={[animatedView, styles.wrapper]}>
+					<Image
+						source={require("../../assets/icons/leftCarrotWhite.png")}
+						style={styles.image}
+						resizeMode="contain"
+					/>
 				</Animated.View>
 			</TouchableWithoutFeedback>
-			
-		)
+		);
 	}
 }
 
@@ -81,29 +74,25 @@ const styles = StyleSheet.create({
 	wrapper: {
 		position: "absolute",
 		alignSelf: "center",
-		top: (isIphoneX()) ? 70 : 50,
-		padding: 20,
+		top: isIphoneX() ? 70 : 50,
+		padding: 20
 		// backgroundColor: colors.red,
 	},
 	image: {
 		width: 14,
-		height: 28,
+		height: 28
 	}
-})
+});
 
 const mapStateToProps = state => {
-	return {
-		
-	}
-}
+	return {};
+};
 
 const mapDispatchToProps = dispatch => {
-	return bindActionCreators(
-		{
-			
-		},
-		dispatch
-	)
-}
+	return bindActionCreators({}, dispatch);
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReturnToHome)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(ReturnToHome);

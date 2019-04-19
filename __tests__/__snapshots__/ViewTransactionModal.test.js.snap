@@ -1,0 +1,191 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`View Transaction Modal renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "flex": 1,
+      "padding": 30,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingBottom": 17,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#333333",
+            "fontSize": 20,
+            "fontWeight": "600",
+          }
+        }
+      >
+        You 
+        sent
+      </Component>
+      <Component
+        resizeMode="cover"
+        style={
+          Object {
+            "height": 24,
+            "marginLeft": 5,
+            "marginTop": 9,
+            "overflow": "visible",
+            "width": 48,
+          }
+        }
+      />
+    </Component>
+    <TouchableOpacity
+      activeOpacity={0.2}
+    >
+      <Component
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/Xbutton.png",
+          }
+        }
+        style={
+          Object {
+            "height": 20,
+            "margin": 8,
+            "width": 20,
+          }
+        }
+      />
+    </TouchableOpacity>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "alignSelf": "stretch",
+        "backgroundColor": "#6364F1",
+        "borderRadius": 8,
+        "height": 83,
+        "justifyContent": "center",
+        "marginBottom": 30,
+        "marginHorizontal": 11,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#FFFFFF",
+          "fontSize": 28,
+          "fontWeight": "600",
+        }
+      }
+    >
+      USD $
+      N
+    </Component>
+    <Component
+      style={
+        Object {
+          "color": "#FFFFFF",
+          "fontSize": 18,
+          "fontWeight": "600",
+          "opacity": 0.77,
+        }
+      }
+    >
+      0.00000
+       
+      BTC
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "paddingBottom": 12,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "paddingRight": 10,
+        }
+      }
+    >
+      <LetterCircle
+        currency="BTC"
+        letter={null}
+        size={32}
+      />
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "color": "#B1B1B1",
+        "fontSize": 16,
+        "paddingBottom": 5,
+      }
+    }
+  >
+    Worth
+  </Component>
+  <Component
+    style={
+      Object {
+        "color": "#333333",
+        "fontSize": 16,
+        "paddingBottom": 15,
+      }
+    }
+  >
+    $1 USD on 
+    Invalid date
+  </Component>
+  <Component
+    style={
+      Object {
+        "color": "#B1B1B1",
+        "fontSize": 16,
+        "paddingBottom": 5,
+      }
+    }
+  >
+    Exchange rate used
+  </Component>
+  <Component
+    style={
+      Object {
+        "color": "#333333",
+        "fontSize": 16,
+        "paddingBottom": 32,
+      }
+    }
+  >
+    1 
+    Bitcoin
+     = USD $
+    NaN
+  </Component>
+  <Button
+    primary={true}
+    title="Got it"
+  />
+</Component>
+`;

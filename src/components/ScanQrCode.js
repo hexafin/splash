@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import {
 	View,
 	Text,
@@ -8,27 +8,27 @@ import {
 	TouchableOpacity,
 	Animated,
 	Alert
-} from "react-native"
-import { cryptoNameDict } from "../lib/cryptos"
-import { colors } from "../lib/colors"
-import { defaults, icons } from "../lib/styles"
-import { isIphoneX } from "react-native-iphone-x-helper"
+} from "react-native";
+import { cryptoNameDict } from "../lib/cryptos";
+import { colors } from "../lib/colors";
+import { defaults, icons } from "../lib/styles";
+import { isIphoneX } from "react-native-iphone-x-helper";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux"
-import { captureQr } from "../redux/payFlow"
-import QRCodeScanner from 'react-native-qrcode-scanner'
-import CloseButton from "./universal/CloseButton"
-import Button from "./universal/Button"
+import { bindActionCreators } from "redux";
+import { captureQr } from "../redux/payFlow";
+import QRCodeScanner from "react-native-qrcode-scanner";
+import CloseButton from "./universal/CloseButton";
+import Button from "./universal/Button";
 
-import api from '../api'
+import api from "../api";
 
-const SCREEN_WIDTH = Dimensions.get("window").width
-const SCREEN_HEIGHT = Dimensions.get("window").height
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-class ScanQrCode extends Component {
+export class ScanQrCode extends Component {
 	constructor(props) {
-	  super(props);
-	  this.animation = new Animated.Value(0)	
+		super(props);
+		this.animation = new Animated.Value(0);
 	}
 
 	componentDidMount() {
@@ -37,13 +37,12 @@ class ScanQrCode extends Component {
 			Animated.spring(this.animation, {
 				toValue: 1,
 				friction: 20,
-				useNativeDriver: true,
+				useNativeDriver: true
 			})
-		]).start()
+		]).start();
 	}
 
 	render() {
-
 		const boxTransform = () => {
 			return {
 				transform: [
@@ -54,78 +53,122 @@ class ScanQrCode extends Component {
 						})
 					}
 				]
-			}
-		}
+			};
+		};
 
 		return (
 			<QRCodeScanner
-				ref={(node) => { this.scanner = node }}
+				ref={node => {
+					this.scanner = node;
+				}}
 				onRead={e => {
-					const address = (e.data.slice(0,8) == 'bitcoin:') ? e.data.slice(8) : e.data
-					if (api.IsValidAddress(address, this.props.currency, this.props.network)) {
-						this.props.captureQr(address)
-						this.props.navigation.goBack(null)
+					const address =
+						e.data.slice(0, 8) == "bitcoin:" ? e.data.slice(8) : e.data;
+					if (
+						api.IsValidAddress(address, this.props.currency, this.props.network)
+					) {
+						this.props.captureQr(address);
+						this.props.navigation.goBack(null);
 					} else {
-						Alert.alert("Invalid " + cryptoNameDict[this.props.currency] + " address", null, [
-							{text: "Dismiss", onPress: () => {
-								this.scanner.reactivate()
-							}}
-						])
+						Alert.alert(
+							"Invalid " + cryptoNameDict[this.props.currency] + " address",
+							null,
+							[
+								{
+									text: "Dismiss",
+									onPress: () => {
+										this.scanner.reactivate();
+									}
+								}
+							]
+						);
 					}
 				}}
 				cameraStyle={styles.camera}
-				containerStyle={{backgroundColor: colors.white}}
-				bottomViewStyle={{position: 'absolute'}}
+				containerStyle={{ backgroundColor: colors.white }}
+				bottomViewStyle={{ position: "absolute" }}
 				bottomContent={
 					<View>
-						<View style={{overflow: 'hidden', width: SCREEN_WIDTH}}>
+						<View style={{ overflow: "hidden", width: SCREEN_WIDTH }}>
 							<Image
-							source={require("../assets/images/headerWave.png")}
-							resizeMode="contain"
-							style={styles.headerImage}/>
+								source={require("../assets/images/headerWave.png")}
+								resizeMode="contain"
+								style={styles.headerImage}
+							/>
 						</View>
 						<View style={styles.topContent}>
 							<Text style={styles.title}>Point at QR Code</Text>
-							<Image source={icons.qrIcon} style={styles.qrIcon} resizeMode={'contain'}/>
+							<Image
+								source={icons.qrIcon}
+								style={styles.qrIcon}
+								resizeMode={"contain"}
+							/>
 						</View>
 						<Animated.View style={[styles.box, boxTransform()]}>
 							<View>
-								<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-									<View style={styles.horizontalRect}/>
-									<View style={styles.horizontalRect}/>
+								<View
+									style={{
+										flexDirection: "row",
+										justifyContent: "space-between"
+									}}
+								>
+									<View style={styles.horizontalRect} />
+									<View style={styles.horizontalRect} />
 								</View>
-								<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-									<View style={styles.verticalRect}/>
-									<View style={styles.verticalRect}/>
+								<View
+									style={{
+										flexDirection: "row",
+										justifyContent: "space-between"
+									}}
+								>
+									<View style={styles.verticalRect} />
+									<View style={styles.verticalRect} />
 								</View>
 							</View>
 							<View>
-								<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-									<View style={styles.verticalRect}/>
-									<View style={styles.verticalRect}/>
+								<View
+									style={{
+										flexDirection: "row",
+										justifyContent: "space-between"
+									}}
+								>
+									<View style={styles.verticalRect} />
+									<View style={styles.verticalRect} />
 								</View>
-								<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-									<View style={styles.horizontalRect}/>
-									<View style={styles.horizontalRect}/>
+								<View
+									style={{
+										flexDirection: "row",
+										justifyContent: "space-between"
+									}}
+								>
+									<View style={styles.horizontalRect} />
+									<View style={styles.horizontalRect} />
 								</View>
 							</View>
 						</Animated.View>
-						<TouchableOpacity style={styles.button} onPress={() => this.props.navigation.goBack(null)}>
-							<Image source={icons.crossPrimary} style={styles.closeIcon} resizeMode={'contain'}/>
+						<TouchableOpacity
+							style={styles.button}
+							onPress={() => this.props.navigation.goBack(null)}
+						>
+							<Image
+								source={icons.crossPrimary}
+								style={styles.closeIcon}
+								resizeMode={"contain"}
+							/>
 						</TouchableOpacity>
 					</View>
 				}
-				/>
-		)
+			/>
+		);
 	}
 }
 
 const styles = StyleSheet.create({
 	camera: {
-		height: SCREEN_HEIGHT,
+		height: SCREEN_HEIGHT
 	},
 	headerImage: {
-		top: (isIphoneX()) ? -285 : -305,
+		top: isIphoneX() ? -285 : -305,
 		width: SCREEN_WIDTH,
 		shadowOffset: {
 			width: 0,
@@ -133,65 +176,66 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.12,
 		shadowRadius: 12,
-		overflow: "hidden",
+		overflow: "hidden"
 	},
 	topContent: {
 		opacity: 0.75,
-		flexDirection: 'row',
-		alignItems: 'center',
-		alignSelf: 'center',
-		position: 'absolute',
-		top:(isIphoneX()) ? 65 : 45,
+		flexDirection: "row",
+		alignItems: "center",
+		alignSelf: "center",
+		position: "absolute",
+		top: isIphoneX() ? 65 : 45
 	},
 	title: {
 		fontSize: 25,
 		color: colors.white,
-		paddingRight: 15,
+		paddingRight: 15
 	},
 	qrIcon: {
 		height: 30,
-		width: 30,
+		width: 30
 	},
 	box: {
-		top: (isIphoneX()) ? -275 : -325,
+		top: isIphoneX() ? -275 : -325,
 		height: 270,
 		width: 270,
-		justifyContent: 'space-between',
-		alignSelf: 'center'
-	},	
+		justifyContent: "space-between",
+		alignSelf: "center"
+	},
 	horizontalRect: {
 		height: 12,
 		width: 50,
-		backgroundColor: colors.white,
+		backgroundColor: colors.white
 	},
 	verticalRect: {
 		height: 38,
 		width: 12,
-		backgroundColor: colors.white,
+		backgroundColor: colors.white
 	},
 	button: {
 		height: 98,
 		width: 98,
 		borderRadius: 49,
-		top: (isIphoneX()) ? SCREEN_HEIGHT-975 : SCREEN_HEIGHT-975,
+		top: isIphoneX() ? SCREEN_HEIGHT - 975 : SCREEN_HEIGHT - 975,
 		backgroundColor: colors.white,
-		alignSelf: 'center',
-		justifyContent: 'center',
-		alignItems: 'center'
+		alignSelf: "center",
+		justifyContent: "center",
+		alignItems: "center"
 	},
 	closeIcon: {
 		height: 25,
-		width: 25,
-	},
-})
+		width: 25
+	}
+});
 
 const mapStateToProps = state => {
-	const addressType = (state.crypto.activeCryptoCurrency == 'BTC') ? 'BTC' : 'ETH' 
+	const addressType =
+		state.crypto.activeCryptoCurrency == "BTC" ? "BTC" : "ETH";
 	return {
 		network: state.crypto.wallets[addressType].network,
-		currency: state.crypto.activeCryptoCurrency,
-	}
-}
+		currency: state.crypto.activeCryptoCurrency
+	};
+};
 
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
@@ -199,7 +243,10 @@ const mapDispatchToProps = dispatch => {
 			captureQr
 		},
 		dispatch
-	)
-}
+	);
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScanQrCode)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(ScanQrCode);

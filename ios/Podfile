@@ -8,18 +8,18 @@ target 'splash' do
   # Pods for splash
 
   # Required by RNFirebase
-  pod 'Firebase/Core', '~> 5.0.1'
+  pod 'Firebase/Core', '~> 5.15.0'
 
   # [OPTIONAL PODS] - comment out pods for firebase products you won't be using.
-  pod 'Firebase/AdMob'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Database'
-  pod 'Firebase/DynamicLinks'
-  pod 'Firebase/Performance'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Messaging'
-  pod 'Firebase/RemoteConfig'
-  pod 'Firebase/Storage'
+  pod 'Firebase/AdMob', '~> 5.15.0'
+  pod 'Firebase/Auth', '~> 5.15.0'
+  pod 'Firebase/Database', '~> 5.15.0'
+  pod 'Firebase/DynamicLinks', '~> 5.15.0'
+  pod 'Firebase/Performance', '~> 5.15.0'
+  pod 'Firebase/Firestore', '~> 5.15.0'
+  pod 'Firebase/Messaging', '~> 5.15.0'
+  pod 'Firebase/RemoteConfig', '~> 5.15.0'
+  pod 'Firebase/Storage', '~> 5.15.0'
   
   pod 'Fabric', '~> 1.7.6'
   pod 'Crashlytics', '~> 3.10.1'

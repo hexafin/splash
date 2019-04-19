@@ -1,3 +1,4 @@
 export const Sentry = {
-	captureException: error => {}
+	captureException: error => {},
+	setUserContext: context => {}
 };

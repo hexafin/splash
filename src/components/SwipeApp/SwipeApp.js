@@ -597,23 +597,3 @@ const styles = StyleSheet.create({
 		fontWeight: "700"
 	}
 });
-
-const notificationPermissionInfo = buttonCallback => {
-	return {
-		type: "SHOW_MODAL",
-		modalType: "INFO",
-		modalProps: {
-			title: "Turn On Notifications",
-			body: "Get notified when you receive money or a friend thanks you.",
-			buttonTitle: "Great",
-			buttonCallback: buttonCallback
-		}
-	};
-};
-
-const setNotifsRequested = requested => {
-	return {
-		type: "NOTIFICATIONS_REQUESTED",
-		requested: requested
-	};
-};
