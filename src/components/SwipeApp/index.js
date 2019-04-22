@@ -1,8 +1,9 @@
 import SwipeApp from "./SwipeApp"
 import {connect} from "react-redux"
 import {bindActionCreators} from "redux"
-import {LoadTransactions} from "../../redux/transactions/actions"
-import {Load, setActiveCurrency} from "../../redux/crypto/actions"
+import {LoadTransactions, DismissTransaction} from "../../redux/transactions/actions"
+import {LoadBalance, LoadExchangeRates, setActiveCurrency} from "../../redux/crypto/actions"
+import {showCardModal} from "../../redux/modal"
 
 const mapStateToProps = (state) => {
     return {
@@ -10,12 +11,13 @@ const mapStateToProps = (state) => {
     	splashtag: state.user.entity.username || "yourname",
         loggedIn: state.user.loggedIn,
         userId: state.user.id,
+        exchangeRate: state.crypto.exchangeRates[state.crypto.activeCryptoCurrency].USD,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({
-    	Load, setActiveCurrency
+    	LoadTransactions, LoadBalance, LoadExchangeRates, setActiveCurrency, showCardModal, DismissTransaction
     }, dispatch)
 }
 
