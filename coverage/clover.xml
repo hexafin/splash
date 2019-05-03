@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1555543926050" clover="3.2.0">
-  <project timestamp="1555543926051" name="All files">
-    <metrics statements="1979" coveredstatements="467" conditionals="1163" coveredconditionals="95" methods="616" coveredmethods="52" elements="3758" coveredelements="614" complexity="0" loc="1979" ncloc="1979" packages="24" files="90" classes="90"/>
+<coverage generated="1555704851237" clover="3.2.0">
+  <project timestamp="1555704851237" name="All files">
+    <metrics statements="2317" coveredstatements="761" conditionals="1453" coveredconditionals="376" methods="733" coveredmethods="133" elements="4503" coveredelements="1270" complexity="0" loc="2317" ncloc="2317" packages="30" files="108" classes="108"/>
     <package name="src">
       <metrics statements="395" coveredstatements="43" conditionals="189" coveredconditionals="5" methods="95" coveredmethods="4"/>
       <file name="api.js" path="/Users/brycedbjork/git/splash/src/api.js">
         <metrics statements="92" coveredstatements="8" conditionals="22" coveredconditionals="0" methods="41" coveredmethods="0"/>
-        <line num="4" count="5" type="stmt"/>
-        <line num="5" count="5" type="stmt"/>
-        <line num="6" count="5" type="stmt"/>
-        <line num="15" count="5" type="stmt"/>
-        <line num="19" count="5" type="stmt"/>
+        <line num="4" count="11" type="stmt"/>
+        <line num="5" count="11" type="stmt"/>
+        <line num="6" count="11" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
+        <line num="19" count="11" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -42,20 +42,20 @@
         <line num="102" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
         <line num="107" count="0" type="stmt"/>
-        <line num="111" count="5" type="stmt"/>
+        <line num="111" count="11" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
         <line num="113" count="0" type="stmt"/>
         <line num="118" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
         <line num="126" count="0" type="stmt"/>
-        <line num="131" count="5" type="stmt"/>
+        <line num="131" count="11" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
         <line num="146" count="0" type="stmt"/>
         <line num="150" count="0" type="stmt"/>
-        <line num="155" count="5" type="stmt"/>
+        <line num="155" count="11" type="stmt"/>
         <line num="156" count="0" type="stmt"/>
         <line num="157" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
@@ -101,15 +101,15 @@
       </file>
       <file name="bitcoin-api.js" path="/Users/brycedbjork/git/splash/src/bitcoin-api.js">
         <metrics statements="191" coveredstatements="23" conditionals="109" coveredconditionals="5" methods="44" coveredmethods="4"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="6" count="3" type="stmt"/>
-        <line num="10" count="3" type="stmt"/>
-        <line num="12" count="3" type="stmt"/>
-        <line num="13" count="3" type="stmt"/>
-        <line num="14" count="3" type="stmt"/>
-        <line num="16" count="3" type="stmt"/>
-        <line num="20" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="20" count="4" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
@@ -126,15 +126,15 @@
         <line num="116" count="0" type="stmt"/>
         <line num="134" count="0" type="stmt"/>
         <line num="144" count="0" type="stmt"/>
-        <line num="156" count="3" type="stmt"/>
-        <line num="157" count="3" type="stmt"/>
-        <line num="158" count="3" type="stmt"/>
-        <line num="159" count="3" type="stmt"/>
-        <line num="160" count="3" type="stmt"/>
-        <line num="161" count="3" type="stmt"/>
-        <line num="162" count="3" type="stmt"/>
-        <line num="163" count="3" type="stmt"/>
-        <line num="165" count="3" type="stmt"/>
+        <line num="156" count="4" type="stmt"/>
+        <line num="157" count="4" type="stmt"/>
+        <line num="158" count="4" type="stmt"/>
+        <line num="159" count="4" type="stmt"/>
+        <line num="160" count="4" type="stmt"/>
+        <line num="161" count="4" type="stmt"/>
+        <line num="162" count="4" type="stmt"/>
+        <line num="163" count="4" type="stmt"/>
+        <line num="165" count="4" type="stmt"/>
         <line num="173" count="0" type="stmt"/>
         <line num="178" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="179" count="0" type="stmt"/>
@@ -295,14 +295,14 @@
       </file>
       <file name="ethereum-api.js" path="/Users/brycedbjork/git/splash/src/ethereum-api.js">
         <metrics statements="112" coveredstatements="12" conditionals="58" coveredconditionals="0" methods="10" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
-        <line num="13" count="3" type="stmt"/>
-        <line num="15" count="3" type="stmt"/>
-        <line num="24" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
         <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="35" count="0" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -313,7 +313,7 @@
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="56" count="3" type="stmt"/>
+        <line num="56" count="4" type="stmt"/>
         <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="64" count="0" type="stmt"/>
         <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -321,11 +321,11 @@
         <line num="73" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
-        <line num="86" count="3" type="cond" truecount="0" falsecount="1"/>
+        <line num="86" count="4" type="cond" truecount="0" falsecount="1"/>
         <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="91" count="0" type="stmt"/>
         <line num="92" count="0" type="stmt"/>
-        <line num="95" count="3" type="stmt"/>
+        <line num="95" count="4" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
         <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="107" count="0" type="stmt"/>
@@ -355,7 +355,7 @@
         <line num="176" count="0" type="stmt"/>
         <line num="177" count="0" type="stmt"/>
         <line num="179" count="0" type="stmt"/>
-        <line num="186" count="3" type="stmt"/>
+        <line num="186" count="4" type="stmt"/>
         <line num="193" count="0" type="stmt"/>
         <line num="195" count="0" type="stmt"/>
         <line num="198" count="0" type="stmt"/>
@@ -410,50 +410,62 @@
       </file>
     </package>
     <package name="src.assets.icons">
-      <metrics statements="27" coveredstatements="27" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="30" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="Xbutton.png" path="/Users/brycedbjork/git/splash/src/assets/icons/Xbutton.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
+        <line num="1" count="5" type="stmt"/>
       </file>
       <file name="at.png" path="/Users/brycedbjork/git/splash/src/assets/icons/at.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="bitcoin-letter-icon.png" path="/Users/brycedbjork/git/splash/src/assets/icons/bitcoin-letter-icon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
+      </file>
+      <file name="checkmarkGreen.png" path="/Users/brycedbjork/git/splash/src/assets/icons/checkmarkGreen.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
       </file>
       <file name="copyPaste.png" path="/Users/brycedbjork/git/splash/src/assets/icons/copyPaste.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="crossDark.png" path="/Users/brycedbjork/git/splash/src/assets/icons/crossDark.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="crossGray.png" path="/Users/brycedbjork/git/splash/src/assets/icons/crossGray.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="crossPrimary.png" path="/Users/brycedbjork/git/splash/src/assets/icons/crossPrimary.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="crossWhite.png" path="/Users/brycedbjork/git/splash/src/assets/icons/crossWhite.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="ethereum-letter-icon.png" path="/Users/brycedbjork/git/splash/src/assets/icons/ethereum-letter-icon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="gemini-letter-icon.png" path="/Users/brycedbjork/git/splash/src/assets/icons/gemini-letter-icon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="greenLeftArrow.png" path="/Users/brycedbjork/git/splash/src/assets/icons/greenLeftArrow.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
+      </file>
+      <file name="leftCarrotGray.png" path="/Users/brycedbjork/git/splash/src/assets/icons/leftCarrotGray.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="leftCarrotWhite.png" path="/Users/brycedbjork/git/splash/src/assets/icons/leftCarrotWhite.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
       </file>
       <file name="lockIcon.png" path="/Users/brycedbjork/git/splash/src/assets/icons/lockIcon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -461,70 +473,70 @@
       </file>
       <file name="primaryRightArrow.png" path="/Users/brycedbjork/git/splash/src/assets/icons/primaryRightArrow.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="primarySplash.png" path="/Users/brycedbjork/git/splash/src/assets/icons/primarySplash.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="purpleArrow.png" path="/Users/brycedbjork/git/splash/src/assets/icons/purpleArrow.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="purpleDrop.png" path="/Users/brycedbjork/git/splash/src/assets/icons/purpleDrop.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="purpleSwitcher.png" path="/Users/brycedbjork/git/splash/src/assets/icons/purpleSwitcher.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="purpleSwitcherVertical.png" path="/Users/brycedbjork/git/splash/src/assets/icons/purpleSwitcherVertical.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="qrIcon.png" path="/Users/brycedbjork/git/splash/src/assets/icons/qrIcon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="refreshCircle.png" path="/Users/brycedbjork/git/splash/src/assets/icons/refreshCircle.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="rightCarrotWhite.png" path="/Users/brycedbjork/git/splash/src/assets/icons/rightCarrotWhite.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="send.png" path="/Users/brycedbjork/git/splash/src/assets/icons/send.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="startPay.png" path="/Users/brycedbjork/git/splash/src/assets/icons/startPay.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="whiteArrow.png" path="/Users/brycedbjork/git/splash/src/assets/icons/whiteArrow.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="whiteDrop.png" path="/Users/brycedbjork/git/splash/src/assets/icons/whiteDrop.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="whiteSplash.png" path="/Users/brycedbjork/git/splash/src/assets/icons/whiteSplash.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="whiteSwitcher.png" path="/Users/brycedbjork/git/splash/src/assets/icons/whiteSwitcher.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
     </package>
     <package name="src.assets.images">
-      <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="bitcoin-logo.png" path="/Users/brycedbjork/git/splash/src/assets/images/bitcoin-logo.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="empty_state.png" path="/Users/brycedbjork/git/splash/src/assets/images/empty_state.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -532,15 +544,19 @@
       </file>
       <file name="ether-icon.png" path="/Users/brycedbjork/git/splash/src/assets/images/ether-icon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="7" type="stmt"/>
+        <line num="1" count="14" type="stmt"/>
       </file>
       <file name="gemini-icon.png" path="/Users/brycedbjork/git/splash/src/assets/images/gemini-icon.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="7" type="stmt"/>
+        <line num="1" count="14" type="stmt"/>
+      </file>
+      <file name="headerWave.png" path="/Users/brycedbjork/git/splash/src/assets/images/headerWave.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
       </file>
       <file name="placeholder-rectangle.png" path="/Users/brycedbjork/git/splash/src/assets/images/placeholder-rectangle.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="screen-view1.png" path="/Users/brycedbjork/git/splash/src/assets/images/screen-view1.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -557,6 +573,34 @@
       <file name="splash-logo.png" path="/Users/brycedbjork/git/splash/src/assets/images/splash-logo.png">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components">
+      <metrics statements="22" coveredstatements="11" conditionals="14" coveredconditionals="4" methods="10" coveredmethods="4"/>
+      <file name="ScanQrCode.js" path="/Users/brycedbjork/git/splash/src/components/ScanQrCode.js">
+        <metrics statements="22" coveredstatements="11" conditionals="14" coveredconditionals="4" methods="10" coveredmethods="4"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="166" count="1" type="stmt"/>
+        <line num="231" count="1" type="stmt"/>
+        <line num="233" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="234" count="0" type="stmt"/>
+        <line num="240" count="1" type="stmt"/>
+        <line num="241" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Account">
@@ -1169,119 +1213,320 @@
         <line num="92" count="2" type="stmt"/>
       </file>
     </package>
-    <package name="src.components.SwipeApp">
-      <metrics statements="237" coveredstatements="102" conditionals="113" coveredconditionals="23" methods="61" coveredmethods="13"/>
-      <file name="Balance.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/Balance.js">
-        <metrics statements="43" coveredstatements="6" conditionals="32" coveredconditionals="1" methods="10" coveredmethods="0"/>
-        <line num="31" count="1" type="stmt"/>
+    <package name="src.components.SendTo">
+      <metrics statements="148" coveredstatements="43" conditionals="166" coveredconditionals="48" methods="46" coveredmethods="12"/>
+      <file name="Hits.js" path="/Users/brycedbjork/git/splash/src/components/SendTo/Hits.js">
+        <metrics statements="20" coveredstatements="9" conditionals="17" coveredconditionals="2" methods="8" coveredmethods="3"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+      </file>
+      <file name="SearchBox.js" path="/Users/brycedbjork/git/splash/src/components/SendTo/SearchBox.js">
+        <metrics statements="5" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+      </file>
+      <file name="SendButton.js" path="/Users/brycedbjork/git/splash/src/components/SendTo/SendButton.js">
+        <metrics statements="7" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="2"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+      </file>
+      <file name="SendLineItem.js" path="/Users/brycedbjork/git/splash/src/components/SendTo/SendLineItem.js">
+        <metrics statements="11" coveredstatements="7" conditionals="17" coveredconditionals="13" methods="4" coveredmethods="2"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
         <line num="33" count="1" type="stmt"/>
-        <line num="34" count="1" type="stmt"/>
+        <line num="34" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="1" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="51" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="57" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="96" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
-        <line num="169" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="171" count="0" type="stmt"/>
-        <line num="193" count="0" type="stmt"/>
-        <line num="200" count="0" type="stmt"/>
-        <line num="213" count="1" type="stmt"/>
-        <line num="259" count="1" type="stmt"/>
-        <line num="260" count="0" type="stmt"/>
-        <line num="273" count="1" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
       </file>
-      <file name="CurrencySwitch.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/CurrencySwitch.js">
-        <metrics statements="36" coveredstatements="15" conditionals="16" coveredconditionals="1" methods="13" coveredmethods="2"/>
+      <file name="SendTo.js" path="/Users/brycedbjork/git/splash/src/components/SendTo/SendTo.js">
+        <metrics statements="105" coveredstatements="21" conditionals="132" coveredconditionals="33" methods="28" coveredmethods="4"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="120" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="126" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="132" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="139" count="1" type="stmt"/>
+        <line num="143" count="1" type="stmt"/>
+        <line num="144" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="145" count="1" type="stmt"/>
+        <line num="147" count="1" type="stmt"/>
+        <line num="148" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="149" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="152" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="153" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="157" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="158" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="168" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="172" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="173" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="184" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="188" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="194" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="195" count="0" type="stmt"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="211" count="0" type="stmt"/>
+        <line num="225" count="1" type="stmt"/>
+        <line num="227" count="1" type="stmt"/>
+        <line num="228" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="229" count="1" type="stmt"/>
+        <line num="231" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="232" count="0" type="stmt"/>
+        <line num="235" count="1" type="cond" truecount="3" falsecount="0"/>
+        <line num="239" count="1" type="stmt"/>
+        <line num="250" count="1" type="stmt"/>
+        <line num="257" count="1" type="stmt"/>
+        <line num="263" count="0" type="stmt"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="270" count="0" type="stmt"/>
+        <line num="271" count="0" type="stmt"/>
+        <line num="295" count="0" type="stmt"/>
+        <line num="307" count="0" type="stmt"/>
+        <line num="326" count="0" type="stmt"/>
+        <line num="328" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="329" count="0" type="stmt"/>
+        <line num="330" count="0" type="stmt"/>
+        <line num="332" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="339" count="0" type="stmt"/>
+        <line num="340" count="0" type="stmt"/>
+        <line num="347" count="0" type="stmt"/>
+        <line num="355" count="0" type="stmt"/>
+        <line num="363" count="0" type="stmt"/>
+        <line num="438" count="0" type="stmt"/>
+        <line num="460" count="0" type="stmt"/>
+        <line num="461" count="0" type="stmt"/>
+        <line num="463" count="0" type="stmt"/>
+        <line num="465" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="466" count="0" type="stmt"/>
+        <line num="472" count="0" type="stmt"/>
+        <line num="494" count="0" type="stmt"/>
+        <line num="496" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="502" count="0" type="stmt"/>
+        <line num="508" count="0" type="stmt"/>
+        <line num="509" count="0" type="stmt"/>
+        <line num="511" count="0" type="stmt"/>
+        <line num="514" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="515" count="0" type="stmt"/>
+        <line num="521" count="0" type="stmt"/>
+        <line num="559" count="0" type="stmt"/>
+        <line num="570" count="0" type="stmt"/>
+        <line num="571" count="0" type="stmt"/>
+        <line num="574" count="0" type="stmt"/>
+        <line num="585" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.SetPasscode">
+      <metrics statements="29" coveredstatements="11" conditionals="28" coveredconditionals="6" methods="9" coveredmethods="3"/>
+      <file name="SetPasscode.js" path="/Users/brycedbjork/git/splash/src/components/SetPasscode/SetPasscode.js">
+        <metrics statements="29" coveredstatements="11" conditionals="28" coveredconditionals="6" methods="9" coveredmethods="3"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="71" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="121" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.SwipeApp">
+      <metrics statements="237" coveredstatements="132" conditionals="113" coveredconditionals="29" methods="61" coveredmethods="23"/>
+      <file name="Balance.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/Balance.js">
+        <metrics statements="43" coveredstatements="22" conditionals="32" coveredconditionals="7" methods="10" coveredmethods="3"/>
         <line num="31" count="1" type="stmt"/>
         <line num="33" count="1" type="stmt"/>
         <line num="34" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="96" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="101" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="102" count="0" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="127" count="1" type="stmt"/>
+        <line num="144" count="1" type="stmt"/>
+        <line num="149" count="1" type="stmt"/>
+        <line num="166" count="1" type="stmt"/>
+        <line num="181" count="1" type="stmt"/>
+        <line num="185" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="187" count="1" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
+        <line num="225" count="0" type="stmt"/>
+        <line num="238" count="1" type="stmt"/>
+        <line num="284" count="1" type="stmt"/>
+        <line num="285" count="0" type="stmt"/>
+        <line num="298" count="1" type="stmt"/>
+        <line num="299" count="0" type="stmt"/>
+      </file>
+      <file name="CurrencySwitch.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/CurrencySwitch.js">
+        <metrics statements="36" coveredstatements="21" conditionals="16" coveredconditionals="1" methods="13" coveredmethods="6"/>
         <line num="35" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
-        <line num="37" count="3" type="stmt"/>
         <line num="38" count="1" type="stmt"/>
-        <line num="39" count="3" type="stmt"/>
-        <line num="40" count="3" type="stmt"/>
-        <line num="46" count="3" type="stmt"/>
-        <line num="49" count="3" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="45" count="3" type="stmt"/>
+        <line num="51" count="3" type="stmt"/>
+        <line num="54" count="3" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="83" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="182" count="1" type="stmt"/>
-        <line num="214" count="1" type="stmt"/>
-        <line num="215" count="0" type="stmt"/>
-        <line num="222" count="1" type="stmt"/>
-        <line num="223" count="0" type="stmt"/>
+        <line num="90" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="91" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="101" count="1" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="158" count="3" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="215" count="1" type="stmt"/>
+        <line num="247" count="1" type="stmt"/>
+        <line num="248" count="0" type="stmt"/>
+        <line num="258" count="1" type="stmt"/>
+        <line num="259" count="0" type="stmt"/>
       </file>
       <file name="Header.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/Header.js">
-        <metrics statements="7" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="5" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="2"/>
         <line num="8" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
         <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="22" count="0" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
       </file>
       <file name="ReturnToHome.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/ReturnToHome.js">
-        <metrics statements="14" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="11" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="1"/>
         <line num="25" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="80" count="1" type="stmt"/>
-        <line num="94" count="1" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="100" count="1" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="73" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="91" count="1" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
       </file>
       <file name="SwipeApp.js" path="/Users/brycedbjork/git/splash/src/components/SwipeApp/SwipeApp.js">
         <metrics statements="137" coveredstatements="73" conditionals="61" coveredconditionals="20" methods="30" coveredmethods="11"/>
@@ -1424,35 +1669,145 @@
         <line num="546" count="1" type="stmt"/>
       </file>
     </package>
-    <package name="src.components.ViewTransactionModal">
-      <metrics statements="29" coveredstatements="3" conditionals="63" coveredconditionals="0" methods="7" coveredmethods="0"/>
-      <file name="ViewTransactionModal.js" path="/Users/brycedbjork/git/splash/src/components/ViewTransactionModal/ViewTransactionModal.js">
-        <metrics statements="25" coveredstatements="1" conditionals="63" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="cond" truecount="0" falsecount="4"/>
+    <package name="src.components.Unlock">
+      <metrics statements="37" coveredstatements="13" conditionals="34" coveredconditionals="11" methods="11" coveredmethods="4"/>
+      <file name="Unlock.js" path="/Users/brycedbjork/git/splash/src/components/Unlock/Unlock.js">
+        <metrics statements="37" coveredstatements="13" conditionals="34" coveredconditionals="11" methods="11" coveredmethods="4"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="37" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="55" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="67" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="83" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="137" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.UpdateUsername">
+      <metrics statements="19" coveredstatements="1" conditionals="8" coveredconditionals="1" methods="12" coveredmethods="0"/>
+      <file name="UpdateUsername.js" path="/Users/brycedbjork/git/splash/src/components/UpdateUsername/UpdateUsername.js">
+        <metrics statements="19" coveredstatements="1" conditionals="8" coveredconditionals="1" methods="12" coveredmethods="0"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.VerifyPhoneNumber">
+      <metrics statements="36" coveredstatements="9" conditionals="6" coveredconditionals="3" methods="17" coveredmethods="4"/>
+      <file name="VerifyPhoneNumber.js" path="/Users/brycedbjork/git/splash/src/components/VerifyPhoneNumber/VerifyPhoneNumber.js">
+        <metrics statements="36" coveredstatements="9" conditionals="6" coveredconditionals="3" methods="17" coveredmethods="4"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="124" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.ViewTransactionModal">
+      <metrics statements="29" coveredstatements="22" conditionals="63" coveredconditionals="24" methods="7" coveredmethods="2"/>
+      <file name="ViewTransactionModal.js" path="/Users/brycedbjork/git/splash/src/components/ViewTransactionModal/ViewTransactionModal.js">
+        <metrics statements="25" coveredstatements="20" conditionals="63" coveredconditionals="24" methods="5" coveredmethods="2"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="55" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="56" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="58" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="59" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="66" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="67" count="1" type="stmt"/>
         <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="69" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
         <line num="96" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="97" count="0" type="stmt"/>
         <line num="98" count="0" type="stmt"/>
-        <line num="149" count="2" type="stmt"/>
+        <line num="149" count="3" type="stmt"/>
       </file>
       <file name="index.js" path="/Users/brycedbjork/git/splash/src/components/ViewTransactionModal/index.js">
         <metrics statements="4" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -1463,17 +1818,17 @@
       </file>
     </package>
     <package name="src.components.Wallet">
-      <metrics statements="27" coveredstatements="5" conditionals="10" coveredconditionals="0" methods="12" coveredmethods="0"/>
+      <metrics statements="27" coveredstatements="15" conditionals="10" coveredconditionals="5" methods="12" coveredmethods="3"/>
       <file name="Wallet.js" path="/Users/brycedbjork/git/splash/src/components/Wallet/Wallet.js">
-        <metrics statements="23" coveredstatements="3" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
-        <line num="21" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <metrics statements="23" coveredstatements="13" conditionals="8" coveredconditionals="5" methods="10" coveredmethods="3"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="35" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
@@ -1481,14 +1836,14 @@
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="105" count="0" type="stmt"/>
-        <line num="120" count="1" type="stmt"/>
+        <line num="120" count="2" type="stmt"/>
       </file>
       <file name="index.js" path="/Users/brycedbjork/git/splash/src/components/Wallet/index.js">
         <metrics statements="4" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -1499,129 +1854,131 @@
       </file>
     </package>
     <package name="src.components.universal">
-      <metrics statements="222" coveredstatements="25" conditionals="262" coveredconditionals="3" methods="100" coveredmethods="0"/>
+      <metrics statements="255" coveredstatements="152" conditionals="288" coveredconditionals="158" methods="108" coveredmethods="36"/>
       <file name="AnimatedWaves.js" path="/Users/brycedbjork/git/splash/src/components/universal/AnimatedWaves.js">
-        <metrics statements="8" coveredstatements="1" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="50" count="1" type="stmt"/>
+        <metrics statements="9" coveredstatements="7" conditionals="10" coveredconditionals="8" methods="3" coveredmethods="2"/>
+        <line num="9" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="20" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
       </file>
       <file name="Button.js" path="/Users/brycedbjork/git/splash/src/components/universal/Button.js">
-        <metrics statements="15" coveredstatements="2" conditionals="46" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <metrics statements="15" coveredstatements="11" conditionals="46" coveredconditionals="30" methods="6" coveredmethods="3"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="123" count="8" type="stmt"/>
-        <line num="133" count="8" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="89" count="1" type="stmt"/>
+        <line num="123" count="16" type="stmt"/>
+        <line num="133" count="16" type="stmt"/>
       </file>
       <file name="Checkmark.js" path="/Users/brycedbjork/git/splash/src/components/universal/Checkmark.js">
-        <metrics statements="17" coveredstatements="1" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="85" count="9" type="stmt"/>
+        <metrics statements="18" coveredstatements="9" conditionals="16" coveredconditionals="7" methods="6" coveredmethods="3"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="15" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="34" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="41" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="44" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="87" count="17" type="stmt"/>
       </file>
       <file name="CloseButton.js" path="/Users/brycedbjork/git/splash/src/components/universal/CloseButton.js">
-        <metrics statements="21" coveredstatements="2" conditionals="7" coveredconditionals="1" methods="5" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <metrics statements="21" coveredstatements="11" conditionals="7" coveredconditionals="3" methods="5" coveredmethods="3"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="46" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="49" count="1" type="cond" truecount="1" falsecount="3"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
-        <line num="89" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="84" count="5" type="stmt"/>
+        <line num="89" count="5" type="stmt"/>
       </file>
       <file name="CurrencySwitcher.js" path="/Users/brycedbjork/git/splash/src/components/universal/CurrencySwitcher.js">
-        <metrics statements="34" coveredstatements="3" conditionals="35" coveredconditionals="0" methods="12" coveredmethods="0"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="34" coveredstatements="19" conditionals="35" coveredconditionals="12" methods="12" coveredmethods="3"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="91" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="97" count="1" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
         <line num="113" count="0" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="162" count="1" type="stmt"/>
-        <line num="191" count="1" type="stmt"/>
-        <line num="192" count="0" type="stmt"/>
-        <line num="198" count="1" type="stmt"/>
-        <line num="199" count="0" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="132" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="218" count="2" type="stmt"/>
+        <line num="247" count="2" type="stmt"/>
+        <line num="248" count="0" type="stmt"/>
+        <line num="254" count="2" type="stmt"/>
+        <line num="255" count="0" type="stmt"/>
       </file>
       <file name="CurrencySwitcherLight.js" path="/Users/brycedbjork/git/splash/src/components/universal/CurrencySwitcherLight.js">
-        <metrics statements="20" coveredstatements="1" conditionals="12" coveredconditionals="0" methods="10" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <metrics statements="20" coveredstatements="9" conditionals="12" coveredconditionals="6" methods="10" coveredmethods="3"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="56" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
@@ -1631,73 +1988,73 @@
         <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
-        <line num="101" count="1" type="stmt"/>
+        <line num="101" count="2" type="stmt"/>
       </file>
       <file name="FlatBackButton.js" path="/Users/brycedbjork/git/splash/src/components/universal/FlatBackButton.js">
-        <metrics statements="15" coveredstatements="2" conditionals="21" coveredconditionals="1" methods="1" coveredmethods="0"/>
-        <line num="12" count="4" type="cond" truecount="0" falsecount="3"/>
-        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="16" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <metrics statements="15" coveredstatements="8" conditionals="21" coveredconditionals="13" methods="1" coveredmethods="1"/>
+        <line num="12" count="8" type="cond" truecount="3" falsecount="0"/>
+        <line num="15" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="16" count="1" type="cond" truecount="1" falsecount="3"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="47" count="4" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="47" count="8" type="stmt"/>
       </file>
       <file name="Input.js" path="/Users/brycedbjork/git/splash/src/components/universal/Input.js">
-        <metrics statements="21" coveredstatements="5" conditionals="13" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="13" count="5" type="cond" truecount="0" falsecount="3"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="35" count="5" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="21" coveredstatements="16" conditionals="13" coveredconditionals="7" methods="4" coveredmethods="4"/>
+        <line num="13" count="7" type="cond" truecount="3" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="1" type="cond" truecount="1" falsecount="1"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="67" count="5" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="67" count="7" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="71" count="1" type="stmt"/>
         <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="73" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="95" count="5" type="stmt"/>
-        <line num="102" count="5" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="88" count="1" type="stmt"/>
+        <line num="95" count="7" type="stmt"/>
+        <line num="102" count="7" type="stmt"/>
       </file>
       <file name="Keypad.js" path="/Users/brycedbjork/git/splash/src/components/universal/Keypad.js">
-        <metrics statements="34" coveredstatements="3" conditionals="11" coveredconditionals="0" methods="40" coveredmethods="0"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <metrics statements="34" coveredstatements="16" conditionals="11" coveredconditionals="8" methods="40" coveredmethods="3"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="64" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="10" type="cond" truecount="1" falsecount="1"/>
         <line num="71" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="78" count="10" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
@@ -1707,68 +2064,108 @@
         <line num="119" count="0" type="stmt"/>
         <line num="124" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
-        <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="136" count="0" type="cond" truecount="1" falsecount="1"/>
         <line num="140" count="0" type="stmt"/>
-        <line num="145" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="156" count="1" type="stmt"/>
+        <line num="145" count="0" type="cond" truecount="1" falsecount="1"/>
+        <line num="156" count="4" type="stmt"/>
       </file>
       <file name="LetterCircle.js" path="/Users/brycedbjork/git/splash/src/components/universal/LetterCircle.js">
-        <metrics statements="2" coveredstatements="1" conditionals="11" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="10" count="3" type="cond" truecount="0" falsecount="3"/>
-        <line num="11" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="2" conditionals="11" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="10" count="5" type="cond" truecount="3" falsecount="0"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+      <file name="Loading.js" path="/Users/brycedbjork/git/splash/src/components/universal/Loading.js">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
       </file>
       <file name="LoadingCircle.js" path="/Users/brycedbjork/git/splash/src/components/universal/LoadingCircle.js">
-        <metrics statements="10" coveredstatements="1" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="78" count="10" type="stmt"/>
+        <metrics statements="11" coveredstatements="7" conditionals="12" coveredconditionals="8" methods="4" coveredmethods="2"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="29" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="35" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="38" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="82" count="18" type="stmt"/>
       </file>
       <file name="NextButton.js" path="/Users/brycedbjork/git/splash/src/components/universal/NextButton.js">
-        <metrics statements="11" coveredstatements="1" conditionals="6" coveredconditionals="1" methods="6" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
+        <metrics statements="11" coveredstatements="7" conditionals="6" coveredconditionals="4" methods="6" coveredmethods="3"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="78" count="4" type="stmt"/>
+      </file>
+      <file name="NumericCodeInput.js" path="/Users/brycedbjork/git/splash/src/components/universal/NumericCodeInput.js">
+        <metrics statements="23" coveredstatements="11" conditionals="16" coveredconditionals="6" methods="6" coveredmethods="2"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="78" count="2" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="61" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="6" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="82" count="2" type="stmt"/>
+        <line num="89" count="2" type="stmt"/>
+      </file>
+      <file name="Ring.js" path="/Users/brycedbjork/git/splash/src/components/universal/Ring.js">
+        <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="9" count="1" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
       </file>
       <file name="TransactionLine.js" path="/Users/brycedbjork/git/splash/src/components/universal/TransactionLine.js">
-        <metrics statements="14" coveredstatements="2" conditionals="68" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="16" count="2" type="cond" truecount="0" falsecount="1"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="20" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="29" count="0" type="stmt"/>
+        <metrics statements="14" coveredstatements="12" conditionals="68" coveredconditionals="34" methods="2" coveredmethods="1"/>
+        <line num="16" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="20" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="21" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="27" count="1" type="cond" truecount="2" falsecount="2"/>
+        <line num="29" count="1" type="stmt"/>
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="79" count="2" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="79" count="3" type="stmt"/>
       </file>
     </package>
     <package name="src.components.universal.PhoneNumberInput">
-      <metrics statements="48" coveredstatements="5" conditionals="38" coveredconditionals="0" methods="15" coveredmethods="0"/>
+      <metrics statements="48" coveredstatements="18" conditionals="38" coveredconditionals="16" methods="15" coveredmethods="3"/>
       <file name="index.js" path="/Users/brycedbjork/git/splash/src/components/universal/PhoneNumberInput/index.js">
-        <metrics statements="48" coveredstatements="5" conditionals="38" coveredconditionals="0" methods="15" coveredmethods="0"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="48" coveredstatements="18" conditionals="38" coveredconditionals="16" methods="15" coveredmethods="3"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="20" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="21" count="1" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -1780,13 +2177,13 @@
         <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="262" count="1" type="stmt"/>
-        <line num="533" count="0" type="stmt"/>
-        <line num="534" count="0" type="stmt"/>
-        <line num="541" count="0" type="stmt"/>
-        <line num="542" count="0" type="stmt"/>
-        <line num="543" count="0" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="262" count="2" type="stmt"/>
+        <line num="533" count="1" type="stmt"/>
+        <line num="534" count="1" type="stmt"/>
+        <line num="541" count="1" type="stmt"/>
+        <line num="542" count="1" type="stmt"/>
+        <line num="543" count="1" type="stmt"/>
         <line num="547" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="548" count="0" type="stmt"/>
         <line num="553" count="0" type="stmt"/>
@@ -1801,46 +2198,46 @@
         <line num="579" count="0" type="stmt"/>
         <line num="587" count="0" type="stmt"/>
         <line num="588" count="0" type="stmt"/>
-        <line num="597" count="0" type="stmt"/>
-        <line num="598" count="0" type="stmt"/>
-        <line num="599" count="0" type="stmt"/>
-        <line num="600" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="601" count="0" type="stmt"/>
-        <line num="610" count="0" type="stmt"/>
+        <line num="597" count="1" type="stmt"/>
+        <line num="598" count="1" type="stmt"/>
+        <line num="599" count="210" type="stmt"/>
+        <line num="600" count="210" type="cond" truecount="1" falsecount="1"/>
+        <line num="601" count="210" type="stmt"/>
+        <line num="610" count="1" type="stmt"/>
         <line num="625" count="0" type="stmt"/>
         <line num="634" count="0" type="stmt"/>
         <line num="635" count="0" type="stmt"/>
         <line num="647" count="0" type="stmt"/>
         <line num="670" count="0" type="stmt"/>
-        <line num="683" count="1" type="stmt"/>
-        <line num="692" count="1" type="stmt"/>
+        <line num="683" count="2" type="stmt"/>
+        <line num="692" count="2" type="stmt"/>
       </file>
     </package>
     <package name="src.lib">
-      <metrics statements="48" coveredstatements="45" conditionals="14" coveredconditionals="8" methods="2" coveredmethods="2"/>
+      <metrics statements="48" coveredstatements="47" conditionals="14" coveredconditionals="10" methods="2" coveredmethods="2"/>
       <file name="colors.js" path="/Users/brycedbjork/git/splash/src/lib/colors.js">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="10" type="stmt"/>
+        <line num="1" count="20" type="stmt"/>
       </file>
       <file name="cryptos.js" path="/Users/brycedbjork/git/splash/src/lib/cryptos.js">
-        <metrics statements="41" coveredstatements="38" conditionals="12" coveredconditionals="7" methods="2" coveredmethods="2"/>
-        <line num="1" count="7" type="stmt"/>
-        <line num="7" count="7" type="stmt"/>
-        <line num="16" count="7" type="stmt"/>
-        <line num="22" count="7" type="stmt"/>
-        <line num="28" count="7" type="stmt"/>
-        <line num="35" count="7" type="stmt"/>
-        <line num="40" count="7" type="stmt"/>
-        <line num="42" count="7" type="stmt"/>
-        <line num="44" count="7" type="stmt"/>
-        <line num="51" count="7" type="stmt"/>
-        <line num="65" count="7" type="stmt"/>
-        <line num="149" count="7" type="stmt"/>
-        <line num="151" count="2" type="stmt"/>
-        <line num="152" count="2" type="stmt"/>
-        <line num="153" count="2" type="stmt"/>
-        <line num="154" count="2" type="stmt"/>
-        <line num="155" count="2" type="cond" truecount="1" falsecount="1"/>
+        <metrics statements="41" coveredstatements="40" conditionals="12" coveredconditionals="9" methods="2" coveredmethods="2"/>
+        <line num="1" count="14" type="stmt"/>
+        <line num="7" count="14" type="stmt"/>
+        <line num="16" count="14" type="stmt"/>
+        <line num="22" count="14" type="stmt"/>
+        <line num="28" count="14" type="stmt"/>
+        <line num="35" count="14" type="stmt"/>
+        <line num="40" count="14" type="stmt"/>
+        <line num="42" count="14" type="stmt"/>
+        <line num="44" count="14" type="stmt"/>
+        <line num="51" count="14" type="stmt"/>
+        <line num="65" count="14" type="stmt"/>
+        <line num="149" count="14" type="stmt"/>
+        <line num="151" count="3" type="stmt"/>
+        <line num="152" count="3" type="stmt"/>
+        <line num="153" count="3" type="stmt"/>
+        <line num="154" count="3" type="stmt"/>
+        <line num="155" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="156" count="2" type="cond" truecount="1" falsecount="1"/>
         <line num="157" count="2" type="stmt"/>
         <line num="158" count="2" type="stmt"/>
@@ -1848,36 +2245,36 @@
         <line num="163" count="4" type="stmt"/>
         <line num="164" count="4" type="cond" truecount="1" falsecount="1"/>
         <line num="165" count="4" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
-        <line num="170" count="2" type="stmt"/>
-        <line num="174" count="7" type="stmt"/>
-        <line num="176" count="5" type="stmt"/>
-        <line num="177" count="5" type="stmt"/>
-        <line num="178" count="5" type="stmt"/>
-        <line num="179" count="5" type="stmt"/>
-        <line num="181" count="5" type="stmt"/>
-        <line num="182" count="5" type="stmt"/>
-        <line num="183" count="13" type="stmt"/>
-        <line num="185" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="186" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="187" count="3" type="stmt"/>
+        <line num="168" count="1" type="stmt"/>
+        <line num="170" count="3" type="stmt"/>
+        <line num="174" count="14" type="stmt"/>
+        <line num="176" count="9" type="stmt"/>
+        <line num="177" count="9" type="stmt"/>
+        <line num="178" count="9" type="stmt"/>
+        <line num="179" count="9" type="stmt"/>
+        <line num="181" count="9" type="stmt"/>
+        <line num="182" count="9" type="stmt"/>
+        <line num="183" count="19" type="stmt"/>
+        <line num="185" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="186" count="5" type="cond" truecount="1" falsecount="1"/>
+        <line num="187" count="5" type="stmt"/>
         <line num="191" count="0" type="stmt"/>
-        <line num="196" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="196" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="197" count="2" type="stmt"/>
-        <line num="199" count="0" type="stmt"/>
+        <line num="199" count="2" type="stmt"/>
       </file>
       <file name="styles.js" path="/Users/brycedbjork/git/splash/src/lib/styles.js">
         <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="1" methods="0" coveredmethods="0"/>
-        <line num="5" count="10" type="stmt"/>
-        <line num="27" count="10" type="cond" truecount="1" falsecount="1"/>
-        <line num="28" count="10" type="stmt"/>
-        <line num="29" count="10" type="stmt"/>
-        <line num="30" count="10" type="stmt"/>
-        <line num="33" count="10" type="stmt"/>
+        <line num="5" count="20" type="stmt"/>
+        <line num="27" count="20" type="cond" truecount="1" falsecount="1"/>
+        <line num="28" count="20" type="stmt"/>
+        <line num="29" count="20" type="stmt"/>
+        <line num="30" count="20" type="stmt"/>
+        <line num="33" count="20" type="stmt"/>
       </file>
     </package>
     <package name="src.redux">
-      <metrics statements="8" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="18" coveredstatements="2" conditionals="12" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="modal.js" path="/Users/brycedbjork/git/splash/src/redux/modal.js">
         <metrics statements="8" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="3" type="stmt"/>
@@ -1889,12 +2286,25 @@
         <line num="33" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
       </file>
+      <file name="payFlow.js" path="/Users/brycedbjork/git/splash/src/redux/payFlow.js">
+        <metrics statements="10" coveredstatements="1" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="14" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+      </file>
     </package>
     <package name="src.redux.crypto">
       <metrics statements="142" coveredstatements="6" conditionals="43" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="actions.js" path="/Users/brycedbjork/git/splash/src/redux/crypto/actions.js">
         <metrics statements="142" coveredstatements="6" conditionals="43" coveredconditionals="0" methods="39" coveredmethods="0"/>
-        <line num="10" count="1" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
@@ -1908,7 +2318,7 @@
         <line num="71" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="83" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="83" count="2" type="cond" truecount="0" falsecount="1"/>
         <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
@@ -1927,7 +2337,7 @@
         <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
         <line num="117" count="0" type="stmt"/>
-        <line num="122" count="1" type="stmt"/>
+        <line num="122" count="2" type="stmt"/>
         <line num="126" count="0" type="stmt"/>
         <line num="127" count="0" type="stmt"/>
         <line num="129" count="0" type="stmt"/>
@@ -1953,7 +2363,7 @@
         <line num="167" count="0" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
         <line num="169" count="0" type="stmt"/>
-        <line num="175" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="175" count="2" type="cond" truecount="0" falsecount="1"/>
         <line num="176" count="0" type="stmt"/>
         <line num="177" count="0" type="stmt"/>
         <line num="179" count="0" type="stmt"/>
@@ -1966,7 +2376,7 @@
         <line num="192" count="0" type="stmt"/>
         <line num="195" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="196" count="0" type="stmt"/>
-        <line num="202" count="1" type="stmt"/>
+        <line num="202" count="2" type="stmt"/>
         <line num="203" count="0" type="stmt"/>
         <line num="204" count="0" type="stmt"/>
         <line num="205" count="0" type="stmt"/>
@@ -2022,7 +2432,7 @@
         <line num="349" count="0" type="stmt"/>
         <line num="350" count="0" type="stmt"/>
         <line num="351" count="0" type="stmt"/>
-        <line num="358" count="1" type="stmt"/>
+        <line num="358" count="2" type="stmt"/>
         <line num="359" count="0" type="stmt"/>
         <line num="360" count="0" type="stmt"/>
         <line num="361" count="0" type="stmt"/>
@@ -2042,38 +2452,38 @@
       <metrics statements="95" coveredstatements="19" conditionals="21" coveredconditionals="0" methods="33" coveredmethods="0"/>
       <file name="actions.js" path="/Users/brycedbjork/git/splash/src/redux/onboarding/actions.js">
         <metrics statements="95" coveredstatements="19" conditionals="21" coveredconditionals="0" methods="33" coveredmethods="0"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="5" count="1" type="stmt"/>
-        <line num="6" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="12" count="2" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="32" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="37" count="1" type="stmt"/>
+        <line num="37" count="2" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="42" count="1" type="stmt"/>
+        <line num="42" count="2" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="47" count="1" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="57" count="1" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="62" count="1" type="stmt"/>
+        <line num="62" count="2" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="69" count="1" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="78" count="0" type="stmt"/>
-        <line num="84" count="1" type="stmt"/>
+        <line num="84" count="2" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
@@ -2086,7 +2496,7 @@
         <line num="100" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
         <line num="102" count="0" type="stmt"/>
-        <line num="109" count="1" type="stmt"/>
+        <line num="109" count="2" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
         <line num="111" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
@@ -2097,7 +2507,7 @@
         <line num="121" count="0" type="stmt"/>
         <line num="122" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
-        <line num="130" count="1" type="stmt"/>
+        <line num="130" count="2" type="stmt"/>
         <line num="131" count="0" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
@@ -2143,33 +2553,33 @@
       <metrics statements="94" coveredstatements="16" conditionals="28" coveredconditionals="0" methods="30" coveredmethods="0"/>
       <file name="actions.js" path="/Users/brycedbjork/git/splash/src/redux/transactions/actions.js">
         <metrics statements="94" coveredstatements="16" conditionals="28" coveredconditionals="0" methods="30" coveredmethods="0"/>
-        <line num="11" count="2" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="16" count="2" type="stmt"/>
+        <line num="16" count="3" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="21" count="2" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="26" count="2" type="stmt"/>
+        <line num="26" count="3" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="31" count="2" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="36" count="2" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="41" count="2" type="stmt"/>
+        <line num="41" count="3" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
-        <line num="46" count="2" type="stmt"/>
+        <line num="46" count="3" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="51" count="2" type="stmt"/>
+        <line num="51" count="3" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="56" count="2" type="stmt"/>
+        <line num="56" count="3" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="61" count="2" type="stmt"/>
+        <line num="61" count="3" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="66" count="2" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
-        <line num="71" count="2" type="stmt"/>
+        <line num="71" count="3" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="76" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="76" count="3" type="cond" truecount="0" falsecount="1"/>
         <line num="77" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
@@ -2190,7 +2600,7 @@
         <line num="109" count="0" type="stmt"/>
         <line num="113" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="114" count="0" type="stmt"/>
-        <line num="161" count="2" type="cond" truecount="0" falsecount="1"/>
+        <line num="161" count="3" type="cond" truecount="0" falsecount="1"/>
         <line num="162" count="0" type="stmt"/>
         <line num="164" count="0" type="stmt"/>
         <line num="167" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -2234,7 +2644,7 @@
         <line num="240" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="241" count="0" type="stmt"/>
         <line num="242" count="0" type="stmt"/>
-        <line num="252" count="2" type="stmt"/>
+        <line num="252" count="3" type="stmt"/>
         <line num="253" count="0" type="stmt"/>
         <line num="254" count="0" type="stmt"/>
       </file>

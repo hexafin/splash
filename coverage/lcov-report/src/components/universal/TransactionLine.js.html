@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">12.5% </span>
+        <span class="strong">75% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/16</span>
+        <span class='fraction'>12/16</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/68</span>
+        <span class='fraction'>34/68</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>1/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">14.29% </span>
+        <span class="strong">85.71% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/14</span>
+        <span class='fraction'>12/14</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -249,22 +249,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,7 +272,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -312,7 +312,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -437,20 +437,20 @@ import Shimmer from 'react-native-shimmer';
 import moment from "moment"
 &nbsp;
 &nbsp;
-const TransactionLine = <span class="fstat-no" title="function not covered" >({</span>transaction, direction, amount, onPress, loading=<span class="branch-0 cbranch-no" title="branch not covered" >false </span>}) =&gt; {
+const TransactionLine = ({transaction, direction, amount, onPress, loading=false }) =&gt; {
 	
-	let title = <span class="cstat-no" title="statement not covered" >"A " + cryptoNameDict[transaction.currency] + " wallet"</span>
-<span class="cstat-no" title="statement not covered" >	if (direction == 'to' &amp;&amp; transaction.toSplashtag) <span class="cstat-no" title="statement not covered" >title = transaction.toSplashtag</span></span>
-<span class="cstat-no" title="statement not covered" >	if (direction == 'from' &amp;&amp; transaction.fromSplashtag) <span class="cstat-no" title="statement not covered" >title = transaction.fromSplashtag</span></span>
-<span class="cstat-no" title="statement not covered" >	title = (transaction.type == "card") ? transaction.domain[0].toUpperCase() + transaction.domain.slice(1)</span>
+	let title = "A " + cryptoNameDict[transaction.currency] + " wallet"
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (direction == 'to' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >transaction.toSplashtag)</span> <span class="cstat-no" title="statement not covered" >title = transaction.toSplashtag</span>
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (direction == 'from' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >transaction.fromSplashtag)</span> <span class="cstat-no" title="statement not covered" >title = transaction.fromSplashtag</span>
+	title = (transaction.type == "card") ? <span class="branch-0 cbranch-no" title="branch not covered" >transaction.domain[0].toUpperCase() + transaction.domain.slice(1)</span>
 										 : title
 &nbsp;
-	const date = <span class="cstat-no" title="statement not covered" >moment.unix(transaction.timestamp).fromNow()</span>
-	const pending = <span class="cstat-no" title="statement not covered" >transaction.pending</span>
-	const currency = <span class="cstat-no" title="statement not covered" >(transaction.type == 'blockchain') ? transaction.currency : null</span>
-	const isSplashtag = <span class="cstat-no" title="statement not covered" >(direction == 'to' &amp;&amp; transaction.toSplashtag) || (direction == 'from' &amp;&amp; transaction.fromSplashtag)</span>
+	const date = moment.unix(transaction.timestamp).fromNow()
+	const pending = transaction.pending
+	const currency = (transaction.type == 'blockchain') ? <span class="branch-0 cbranch-no" title="branch not covered" >transaction.currency </span>: null
+	const isSplashtag = (direction == 'to' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >transaction.toSplashtag)</span> || (direction == 'from' &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >transaction.fromSplashtag)</span>
 &nbsp;
-	const pendingCircles = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>onfirmations, currency) =&gt; {</span>
+	const pendingCircles = <span class="fstat-no" title="function not covered" >(c</span>onfirmations, currency) =&gt; {
 		const total_confirmation = <span class="cstat-no" title="statement not covered" >(currency != 'BTC') ? 12 : 6</span>
 <span class="cstat-no" title="statement not covered" >		return (</span>
 			&lt;View style={{flexDirection: 'row'}}&gt;
@@ -460,38 +460,38 @@ const TransactionLine = <span class="fstat-no" title="function not covered" >({<
 		)
 	}
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	return (</span>
+	return (
 		&lt;TouchableWithoutFeedback onPress={onPress} disabled={loading}&gt;
 			&lt;View style={styles.wrapper}&gt;
-				&lt;View style={[styles.letterPreview, (loading &amp;&amp; {backgroundColor: '#EDEEF2'})]}&gt;
+				&lt;View style={[styles.letterPreview, (loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{backgroundColor: '#EDEEF2'})</span>]}&gt;
 					{!isSplashtag &amp;&amp; !currency &amp;&amp; !loading &amp;&amp; &lt;Text style={styles.letterPreviewText}&gt;{title[0]}&lt;/Text&gt;}
-					{currency=='BTC' &amp;&amp; !isSplashtag &amp;&amp; !loading &amp;&amp; &lt;Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/&gt;}
-					{currency=='ETH' &amp;&amp; !isSplashtag &amp;&amp; !loading &amp;&amp; &lt;Image source={icons.ethLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/&gt;}
-					{currency=='GUSD' &amp;&amp; !isSplashtag &amp;&amp; !loading &amp;&amp; &lt;Image source={icons.gusdLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/&gt;}
-					{isSplashtag &amp;&amp; !loading &amp;&amp; &lt;Image
+					{currency=='BTC' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!isSplashtag </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!loading </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >&lt;Image source={icons.btcLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/&gt;}</span>
+					{currency=='ETH' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!isSplashtag </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!loading </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >&lt;Image source={icons.ethLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/&gt;}</span>
+					{currency=='GUSD' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!isSplashtag </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!loading </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >&lt;Image source={icons.gusdLetter} style={{height: 15.75, width: 12, marginLeft: 2}} resizeMode={"contain"}/&gt;}</span>
+					{isSplashtag &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!loading </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >&lt;Image</span>
 						style={styles.circleSplash} 
 						resizeMode="contain" 
 						source={require("../../assets/icons/primarySplash.png")}/&gt;}
 				&lt;/View&gt;
-				&lt;View style={[styles.body, (loading &amp;&amp; {alignItems: 'flex-start'})]}&gt;
+				&lt;View style={[styles.body, (loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{alignItems: 'flex-start'})</span>]}&gt;
 					&lt;View&gt;
 &nbsp;
 						{!loading &amp;&amp; &lt;View style={styles.row}&gt;
 							&lt;Text style={styles.title}&gt;{title}&lt;/Text&gt;
-							{isSplashtag &amp;&amp; &lt;Image
+							{isSplashtag &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;Image</span>
 								style={styles.verified}
 								resizeMode="contain"
 								source={require("../../assets/icons/checkmarkGreen.png")}/&gt;}
 						&lt;/View&gt;}
 &nbsp;
-						{loading &amp;&amp; &lt;Shimmer style={{marginBottom: 15}}&gt;&lt;Image style={styles.titleLoadingBar} source={icons.placeholder}/&gt;&lt;/Shimmer&gt;}
+						{loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;Shimmer style={{marginBottom: 15}}&gt;&lt;Image style={styles.titleLoadingBar} source={icons.placeholder}/&gt;&lt;/Shimmer&gt;}</span>
 						{!loading &amp;&amp; !pending &amp;&amp; &lt;Text style={styles.date}&gt;{date}&lt;/Text&gt;}
-						{!loading &amp;&amp; pending &amp;&amp; pendingCircles(transaction.confirmations, transaction.currency)}
-						{loading &amp;&amp; &lt;Shimmer style={{width: 66}}&gt;&lt;Image style={styles.dateLoadingBar} source={icons.placeholder}/&gt;&lt;/Shimmer&gt;}
+						{!loading &amp;&amp; pending &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >pendingCircles(transaction.confirmations, transaction.currency)}</span>
+						{loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;Shimmer style={{width: 66}}&gt;&lt;Image style={styles.dateLoadingBar} source={icons.placeholder}/&gt;&lt;/Shimmer&gt;}</span>
 					&lt;/View&gt;
 					&lt;View style={styles.rightBody}&gt;
 						{!loading &amp;&amp; &lt;Image source={icons.arrow[direction]} style={styles.arrow} resizeMode="cover"/&gt;}
-						{loading &amp;&amp; &lt;Shimmer&gt;&lt;Image source={icons.placeholder} style={styles.balanceLoadingBar}/&gt;&lt;/Shimmer&gt;}
+						{loading &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;Shimmer&gt;&lt;Image source={icons.placeholder} style={styles.balanceLoadingBar}/&gt;&lt;/Shimmer&gt;}</span>
 						{!loading &amp;&amp; &lt;Text style={styles.amount}&gt;{amount}&lt;/Text&gt;}
 					&lt;/View&gt;
 				&lt;/View&gt;
@@ -616,7 +616,7 @@ export default TransactionLine</pre></td></tr>
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Apr 17 2019 19:32:05 GMT-0400 (Eastern Daylight Time)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Apr 19 2019 16:14:10 GMT-0400 (Eastern Daylight Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
