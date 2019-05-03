@@ -17,21 +17,6 @@ class ApproveCardModal extends Component {
 		}
 	}
 
-	componentWillMount() {
-		this.backgroundOpacity = new Animated.Value(0)
-	}
-
-	componentDidMount() {
-		Animated.sequence([
-		Animated.delay(300),
-		Animated.timing(this.backgroundOpacity, {
- 			toValue: 1,
- 			easing: Easing.linear(),
- 			duration: 200
- 		}),
-	 ]).start();
-	}
-
 	componentWillReceiveProps(nextProps) { 
 		if(nextProps.loading == true) {
 			this.setState(prevState => {
@@ -59,8 +44,9 @@ class ApproveCardModal extends Component {
 			relativeAmount,
 			domain,
 			relativeCurrency,
-	    	exchangeRate
-		} = this.props.navigation.state.params
+	    	exchangeRate,
+	    	activeCryptoCurrency,
+		} = this.props
 		const transaction = {
 			transactionId,
 			relativeAmount,
@@ -80,18 +66,6 @@ class ApproveCardModal extends Component {
 				})
 		}
 
-		const dismiss = () => {
-			Animated.timing(this.backgroundOpacity, {
-				toValue: 0,
-				duration: 200,
-				easing: Easing.linear(),
-			}).start(({finished}) => {
-				if (finished) {
-					this.props.navigation.goBack()
-					this.props.DismissTransaction()
-				}
-			})
-		}
 
 	  const letter = domain[0].toUpperCase()
 	  const rate = parseFloat(exchangeRate).toFixed(2)
@@ -99,27 +73,18 @@ class ApproveCardModal extends Component {
 		const domainCapitalized = domain[0].toUpperCase() + domain.slice(1)
 
 		return (
-			<TouchableWithoutFeedback onPress={() => dismiss()}>
-			<Animated.View style={[styles.container, {backgroundColor: this.backgroundOpacity.interpolate({
-																																										        inputRange: [0, 1],
-																																										        outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.2)']
-																																										    })}]}>
-				<View style={{ flexDirection: "row" }}>
-					<TouchableWithoutFeedback onPress={() => {}}>
-					<View style={styles.popup}>
-						{ !this.props.error &&
-								<View style={styles.content}>
+				<View style={styles.content}>
 	                <View style={styles.header}>
 	                  <Text style={styles.title}>Transaction request</Text>
-	                  <TouchableOpacity onPress={() => dismiss()}>
+	                  <TouchableOpacity onPress={() => this.props.dismiss(false)}>
 	                    <Image style={styles.closeButton} source={require('../../assets/icons/Xbutton.png')}/>
 	                  </TouchableOpacity>
 	                </View>
 	                <View style={styles.information}>
-	                  <Text style={styles.exchangeText}>1 BTC = ${rate} {relativeCurrency}</Text>
+	                  <Text style={styles.exchangeText}>1 {activeCryptoCurrency} = ${rate} {relativeCurrency}</Text>
 	                  <View style={styles.amountBox}>
 	                    <Text style={{fontSize: 28, color: colors.white, fontWeight: '600'}}>{relativeCurrency} ${relativeAmount}</Text>
-	                    <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{btcAmount} BTC</Text>
+	                    <Text style={{fontSize: 18, opacity: 0.77, color: colors.white, fontWeight: '600'}}>{btcAmount} {activeCryptoCurrency}</Text>
 	                  </View>
 	                  <View style={styles.domainInfo}>
 	                    <Text style={{paddingRight: 10, fontSize: 12, fontWeight: '700', color: colors.nearBlack}}>on</Text>
@@ -138,36 +103,15 @@ class ApproveCardModal extends Component {
 	                  	loading={this.props.loading && !this.state.success}
 	                  	checkmark={this.state.success && !this.props.loading}
 	                  	checkmarkPersist={true}
-											checkmarkCallback={() => dismiss()}
-											disabled={this.props.error}
+											checkmarkCallback={() => this.props.dismiss(false)}
+											disabled={this.props.error !== null}
 											title={"Approve Transaction"} primary={true}/>
 	                  <View style={{flexDirection: 'row', paddingTop: 10, alignSelf: 'center', alignItems: 'center'}}>
 	                    <Image style={{height: 13, width: 10}} source={require('../../assets/icons/lockIcon.png')}/>
 	                    <Text style={{paddingLeft: 10, backgroundColor: 'rgba(0,0,0,0)', color: colors.lightGray, fontSize: 15, fontWeight: '600'}}>Payment secured by Splash</Text>
 	                  </View>
 	                </View>
-								</View>
-	            }
-
-						{this.props.error &&
-							<View style={styles.content}>
-							<View style={styles.header}>
-								<Text style={styles.title}>Transaction request</Text>
-								<TouchableOpacity onPress={() => dismiss()}>
-									<Image style={{height: 14, width: 14}} source={require('../../assets/icons/Xbutton.png')}/>
-								</TouchableOpacity>
-							</View>
-							<Text style={{justifyContent: 'center', alignItems: 'center'}}>
-								Oops! something went wrong when processing your
-								transaction
-							</Text>
-							</View>}
-					</View>
-					</TouchableWithoutFeedback>
 				</View>
-			</Animated.View>
-			</TouchableWithoutFeedback>
-
 		)
 	}
 }
@@ -175,24 +119,10 @@ class ApproveCardModal extends Component {
 export default ApproveCardModal
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "rgba(0,0,0,0)",
-    justifyContent: 'flex-end'
-	},
-  popup: {
-    flex: 1,
-    flexDirection: "column",
-    height: 474,
-    alignItems: "center",
-    borderTopLeftRadius: 15,
-		borderTopRightRadius: 15,
-    backgroundColor: colors.white
-  },
   content: {
     flex: 1,
-    paddingTop: 32,
-    paddingBottom: 72,
+    paddingTop: 15,
+    paddingBottom: 35,
     paddingHorizontal: 25,
     justifyContent: 'space-between',
     alignSelf: "stretch",
@@ -201,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 10,
+    paddingBottom: 5,
   },
   closeButton: {
   	height: 20,
@@ -247,6 +177,6 @@ const styles = StyleSheet.create({
     color: colors.gray,
     fontWeight: '500',
 		paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 15,
   },
 })

@@ -224,22 +224,34 @@ export const OpenWallet = (userId, currencies) => {
 						};
 					}
 
-					let newKeychainData = {};
-					let publicWalletData = { BTC: {}, ETH: {} };
+				let newKeychainData = {}
+				let publicWalletData = {BTC: {}, ETH: {}}
 
-					// builds lists of wallets which are present or need to be created
-					for (var k = 0; k < currencies.length; k++) {
-						const currency = currencies[k];
+				for (var k = 0; k < currencies.length; k++) {
+					const currency = currencies[k]
 
-						let updateWallets = [];
-						let createWallets = [];
-						if (
-							typeof keychainData[currency] !== "undefined" &&
-							!!keychainData[currency].testnet
-						) {
-							updateWallets.push("testnet");
-						} else {
-							createWallets.push("testnet");
+					let updateWallets = []
+					let createWallets = []
+					if (typeof keychainData[currency] !== 'undefined' && !!keychainData[currency].testnet) {
+						updateWallets.push('testnet')
+					} else {
+						createWallets.push('testnet')
+					}
+					if (typeof keychainData[currency] !== 'undefined' && !!keychainData[currency].mainnet) {
+						updateWallets.push('mainnet')
+					} else {
+						createWallets.push('mainnet')
+					}
+
+					console.log(updateWallets, createWallets)
+					
+					for (var i = 0; i < updateWallets.length; i++) {
+						
+						const network = updateWallets[i]
+						// already have a wallet for this currency => load address to redux
+						publicWalletData[currency][network] = {
+							address: keychainData[currency][network].address,
+							network: network,
 						}
 						if (
 							typeof keychainData[currency] !== "undefined" &&
