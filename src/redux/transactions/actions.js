@@ -116,46 +116,42 @@ export const LoadTransactions = (currency="BTC") => {
 	}
 }
 
+const getDate = () => {
+	const date = new Date()
+	const parts = date.toDateString().split(' ')
+	return parts[1] + ' ' + parts[2] + ', ' + parts[3]
+}
 
-// To be used for card generation
-// export const ApproveTransaction = (transaction) => {
-// 	return (dispatch, getState) => {
+export const ApproveTransaction = (transaction) => {
+	return (dispatch, getState) => {
 
-// 		const approveTransaction = async (transaction) => {
-// 			const state = getState()
-// 			const network = state.crypto.wallets.BTC.network
-// 			const privateKey = JSON.parse(await Keychain.getGenericPassword().password)[network].wif
-// 			const userBtcAddress = state.user.bitcoin.address
-// 			dispatch(approveTransactionInit(transaction))
-// 			try {
-// 				// commented for demo
-// 				const exchangeRate = await api.GetExchangeRate()
-// 				const btcAmount = 1.0*transaction.relativeAmount/exchangeRate[transaction.relativeCurrency]
-// 				const feeSatoshi = await GetBitcoinFees({network: network, from: userBtcAddress, amtSatoshi: btcAmount*cryptoUnits.BTC})
-// 				const totalBtcAmount = btcAmount + 1.0*(feeSatoshi/cryptoUnits.BTC)
-// 				const {txid, txhex} = await BuildBitcoinTransaction(userBtcAddress, splashBtcAddress, privateKey, totalbtcAmount, network)
-// 				await api.UpdateTransaction(transaction.transactionId, {
-// 					approved: true,
-// 					txId: txid,
-// 					timestamp: moment;().unix(),
-// 					amount: totalBtcAmount,
-// 					currency: "BTC"
-// 				})
-// 				await api.GenerateCard(transaction.transactionId)
-// 				return Promise.resolve();
-// 			} catch (e) {
-// 				return Promise.reject(e)
-// 			}
-// 		}
+		const approveTransaction = async (transaction) => {
+			const state = getState()
+			dispatch(approveTransactionInit(transaction))
+			try {
+				// commented for demo
+		        await firestore.collection("cards").doc(transaction.transactionId).update({
+					approved: true,
+					txId: 1,
+					timestamp: moment().unix(),
+					amount: 1,
+					currency: "BTC"
+		        })
+				await api.GenerateCard(transaction.transactionId)
+				return Promise.resolve();
+			} catch (e) {
+				return Promise.reject(e)
+			}
+		}
 
-// 		approveTransaction(transaction).then(transaction => {
-// 			dispatch(successApprovingTransaction())
-// 		}).catch(error => {
-// 			Sentry.captureMessage(error)
-// 			dispatch(approveTransactionFailure(error))
-// 		})
-// 	}
-// }
+		approveTransaction(transaction).then(transaction => {
+			dispatch(successApprovingTransaction())
+		}).catch(error => {
+			Sentry.captureMessage(error)
+			dispatch(approveTransactionFailure(error))
+		})
+	}
+}
 
 
 export const SendTransaction = (toAddress, unitAmount, fee, relativeAmount, toId, toSplashtag, currency="BTC") => {
