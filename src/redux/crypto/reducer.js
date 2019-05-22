@@ -22,7 +22,17 @@ const initialState = {
   isLoadingBalance: false,
   successLoadingBalance: false,
   errorLoadingBalance: null,
-  exchangeRates: {},
+  exchangeRates: {
+    BTC: {
+      USD: 0.0,
+    },
+    GUSD: {
+      USD: 0.0,
+    },
+    ETH: {
+      USD: 0.0,
+    },
+  },
   loadingExchangeRatesCurrency: null,
   isLoadingExchangeRates: false,
   successLoadingExchangeRates: false,

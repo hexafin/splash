@@ -4,6 +4,11 @@ import { NewBitcoinWallet, GetBitcoinAddressBalance } from "../../bitcoin-api";
 import { LoadTransactions } from "../transactions/actions";
 import * as Keychain from "react-native-keychain";
 import { Sentry } from "react-native-sentry";
+import firebase from "react-native-firebase";
+
+let firestore = firebase.firestore();
+let analytics = firebase.analytics();
+analytics.setAnalyticsCollectionEnabled(true);
 
 import { cryptoNames, erc20Names, unitsToDecimal } from "../../lib/cryptos";
 
@@ -245,22 +250,6 @@ export const OpenWallet = (userId, currencies) => {
 
 					console.log(updateWallets, createWallets)
 					
-					for (var i = 0; i < updateWallets.length; i++) {
-						
-						const network = updateWallets[i]
-						// already have a wallet for this currency => load address to redux
-						publicWalletData[currency][network] = {
-							address: keychainData[currency][network].address,
-							network: network,
-						}
-						if (
-							typeof keychainData[currency] !== "undefined" &&
-							!!keychainData[currency].mainnet
-						) {
-							updateWallets.push("mainnet");
-						} else {
-							createWallets.push("mainnet");
-						}
 
 						// gather the public wallet data to be added to firebase
 						for (var i = 0; i < updateWallets.length; i++) {

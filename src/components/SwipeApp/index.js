@@ -22,6 +22,18 @@ const notificationPermissionInfo = buttonCallback => {
 	};
 };
 
+const linkExtensionPin = (pin) => {
+  return {
+    type: 'SHOW_MODAL',
+    modalType: 'INFO',
+    modalProps: {
+        title: 'Link Extension',
+        body: `Enter this pin: ${pin} on your browser extension to pair!`,
+        buttonTitle: 'Got it',
+    },   
+  }
+}
+
 const setNotifsRequested = requested => {
 	return {
 		type: "NOTIFICATIONS_REQUESTED",
@@ -61,6 +73,7 @@ const mapDispatchToProps = dispatch => {
 			resetLockoutClock,
 			startLockoutClock,
 			setNotifsRequested,
+			linkExtensionPin,
 			notificationPermissionInfo,
 			setActiveCurrency,
 			LoadTransactions
