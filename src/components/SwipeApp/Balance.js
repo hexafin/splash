@@ -22,13 +22,10 @@ import { bindActionCreators } from "redux"
 import { isIphoneX } from "react-native-iphone-x-helper"
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import api from '../../api'
-import firebase from "react-native-firebase"
 import LoadingCircle from "../universal/LoadingCircle"
 import CurrencySwitcher from "../universal/CurrencySwitcher"
 import { setActiveCurrency } from "../../redux/crypto/actions"
 import { decimalLengths } from "../../lib/cryptos"
-
-let firestore = firebase.firestore();
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height

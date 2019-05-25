@@ -6,6 +6,7 @@ import crypto from "./crypto/reducer"
 import payFlow from "./payFlow"
 import { reducer as formReducer } from 'redux-form';
 
+// combine reducers
 const reducers = {
 	user,
     onboarding,

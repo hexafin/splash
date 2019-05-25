@@ -33,11 +33,9 @@ import { algoliaKeys } from '../../../env/keys.json'
 import { InstantSearch } from 'react-instantsearch/native';
 import SearchBox from "./SearchBox"
 import api from "../../api"
-import firebase from "react-native-firebase";
 import Permissions from 'react-native-permissions'
 import Contacts from 'react-native-contacts';
 import moment from "moment"
-let firestore = firebase.firestore();
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 const SCREEN_HEIGHT = Dimensions.get("window").height
@@ -160,28 +158,14 @@ class SendTo extends Component {
 	}
 
 	getUserFromAddress(address) {
-		let activeCryptoCurrency = this.props.activeCryptoCurrency
-		if (erc20Names.indexOf(activeCryptoCurrency) > -1) activeCryptoCurrency = 'ETH'
 
-		const query = "wallets." + activeCryptoCurrency + "." + this.props.network + '.address'
-		firestore.collection("users").where(query, "==", address).get().then(query => {
-			if (!query.empty) {
-				const userData = {
-					id: query.docs[0].id,
-					...query.docs[0].data()
-				}
-				this.setState({
-					userFromAddress: userData, 
-					selectedId: userData.id, 
-					selectedSplashtag: userData.splashtag, 
-					selectedAddress: userData.wallets[activeCryptoCurrency][this.props.network].address
-				})
-			}
-			else {
-				// could not find a user for this address
-			}
-		}).catch(error => {
-			Sentry.captureMessage(error)
+		api.GetUserFromAddress(address, this.pros.activeCryptoCurrency, this.props.network).then(userData => {
+			this.setState({
+				userFromAddress: userData, 
+				selectedId: userData.id, 
+				selectedSplashtag: userData.splashtag, 
+				selectedAddress: userData.wallets[activeCryptoCurrency][this.props.network].address
+			})
 		})
 	}
 

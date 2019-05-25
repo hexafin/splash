@@ -318,7 +318,7 @@ class SwipeApp extends Component {
 					await firebase.messaging().requestPermission()
 					const fcmToken = await firebase.messaging().getToken()
 					if (fcmToken) {
-						await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+						await api.UpdateUser(this.props.userId, {pushToken: fcmToken})
 					}
 				})
 			} else {
@@ -326,11 +326,11 @@ class SwipeApp extends Component {
 				if (!doc.data().pushToken) {
 					const fcmToken = await firebase.messaging().getToken()
 					if (fcmToken) {
-						await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+						await api.UpdateUser(this.props.userId, {pushToken: fcmToken})
 					}
 				}
 			    this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(async (fcmToken) => {
-			        await firebase.firestore().collection('users').doc(this.props.userId).update({pushToken: fcmToken})
+			        await api.UpdateUser(this.props.userId, {pushToken: fcmToken})
 			    });
 			}
 		}).catch(e => console.log('Notification Error:', e))

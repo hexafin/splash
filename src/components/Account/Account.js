@@ -33,7 +33,7 @@ const Account = ({activeCryptoCurrency, activeCryptoNetwork, splashtag, userId, 
 							navigation.navigate('SwipeApp')	
 							toggleLockout(enabled)
 						}).catch(e => {
-							Sentry.captureException(e)
+							Sentry.captureMessage(e)
 							Alert.alert("An error occurred. Please try again later.")
 						})
 					}
@@ -47,7 +47,7 @@ const Account = ({activeCryptoCurrency, activeCryptoNetwork, splashtag, userId, 
 							navigation.navigate('SwipeApp')	
 							toggleLockout(enabled)
 						}).catch(e => {
-							Sentry.captureException(e)
+							Sentry.captureMessage(e)
 							Alert.alert("An error occurred. Please try again later.")
 						})
 					}
