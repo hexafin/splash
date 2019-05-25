@@ -328,10 +328,7 @@ export const OpenWallet = (userId, currencies) => {
 					)
 						.then(() => {
 							// update user with public wallet data for currency
-							firestore
-								.collection("users")
-								.doc(userId)
-								.update({
+							api.UpdateUser(userId, {
 									wallets: publicWalletData
 								})
 								.then(() => {

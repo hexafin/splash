@@ -152,6 +152,39 @@ const UpdateUser = (uid, updateDict) => {
   });
 };
 
+async function GetUserFromAddress(address, currency, network='mainnet') {
+    if (erc20Names.indexOf(currency) > -1) currency = 'ETH'
+    const query = "wallets." + currency + "." + network + '.address'
+
+    firestore.collection("users").where(query, "==", address).get().then(data => {
+      if (!data.empty) {
+        const userData = {
+          id: data.docs[0].id,
+          ...data.docs[0].data()
+        }
+        return userData
+      }
+      else {
+        // could not find a user for this address
+      }
+    }).catch(error => {
+      Sentry.captureMessage(error)
+    })
+}
+
+async function DeleteUser(userId) {
+  try {
+    await Keychain.resetGenericPassword();
+    await DeleteTransactions(userId);
+    await firestore
+      .collection("users")
+      .doc(userId)
+      .delete();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 const UpdateTransaction = (transactionId, updateDict) => {
   return new Promise((resolve, reject) => {
     firestore
@@ -224,19 +257,6 @@ async function AddToKeychain(userId, key, value) {
   }
 }
 
-async function DeleteUser(userId) {
-  try {
-    await Keychain.resetGenericPassword();
-    await DeleteTransactions(userId);
-    await firestore
-      .collection("users")
-      .doc(userId)
-      .delete();
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 async function DeleteTransactions(userId) {
   try {
     const query1 = await firestore
@@ -269,6 +289,7 @@ async function DeleteTransactions(userId) {
 export default (api = {
   CreateUser,
   UpdateUser,
+  GetUserFromAddress,
   UpdateTransaction,
   GetExchangeRate,
   AddToKeychain,

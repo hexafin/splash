@@ -11,12 +11,9 @@ import {
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { Input } from "../universal/Input";
-import firebase from "react-native-firebase";
 import AnimatedWaves from "../universal/AnimatedWaves";
 import TouchID from 'react-native-touch-id'
 import Button from "../universal/Button"
-
-let firestore = firebase.firestore()
 
 class Landing extends Component {
 
@@ -30,35 +27,6 @@ class Landing extends Component {
             this.props.navigation.navigate("Home");
         }
     }
-
-    componentDidMount() {
-
-        firebase
-            .links()
-            .getInitialLink()
-            .then(url => {
-                if (url) {
-                    this.handleDeepLink({ url: url });
-                }
-            });
-    }
-
-    handleDeepLink = event => {
-        if (event.url) {
-            const parts = event.url.split("/");
-            const splashtag = parts[3];
-            const phoneNumber = parts[4];
-
-            if (
-                !(
-                    splashtag == this.props.splashtagOnHold &&
-                    phoneNumber == this.props.phoneNumber
-                )
-            ) {
-                this.props.getDeepLinkedSplashtag(splashtag, phoneNumber);
-            }
-        }
-    };
 
     handlePress() {
         if (this.props.splashtagOnHold && this.props.phoneNumber) {
