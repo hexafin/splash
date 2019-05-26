@@ -1,0 +1,287 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ApproveCardModal renders correctly 1`] = `
+<TouchableWithoutFeedback
+  onPress={[Function]}
+>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "backgroundColor": "rgba(0,0,0,0)",
+          "flex": 1,
+          "justifyContent": "flex-end",
+        },
+        Object {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+        },
+      ]
+    }
+  >
+    <Component
+      style={
+        Object {
+          "flexDirection": "row",
+        }
+      }
+    >
+      <TouchableWithoutFeedback
+        onPress={[Function]}
+      >
+        <Component
+          style={
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#FFFFFF",
+              "borderTopLeftRadius": 15,
+              "borderTopRightRadius": 15,
+              "flex": 1,
+              "flexDirection": "column",
+              "height": 474,
+            }
+          }
+        >
+          <Component
+            style={
+              Object {
+                "alignSelf": "stretch",
+                "flex": 1,
+                "justifyContent": "space-between",
+                "paddingBottom": 72,
+                "paddingHorizontal": 25,
+                "paddingTop": 32,
+              }
+            }
+          >
+            <Component
+              style={
+                Object {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "justifyContent": "space-between",
+                  "paddingBottom": 10,
+                }
+              }
+            >
+              <Component
+                style={
+                  Object {
+                    "color": "#333333",
+                    "fontSize": 20,
+                    "fontWeight": "600",
+                  }
+                }
+              >
+                Transaction request
+              </Component>
+              <TouchableOpacity
+                activeOpacity={0.2}
+                onPress={[Function]}
+              >
+                <Component
+                  source={
+                    Object {
+                      "testUri": "../../../src/assets/icons/Xbutton.png",
+                    }
+                  }
+                  style={
+                    Object {
+                      "height": 20,
+                      "margin": 8,
+                      "width": 20,
+                    }
+                  }
+                />
+              </TouchableOpacity>
+            </Component>
+            <Component
+              style={
+                Object {
+                  "alignItems": "center",
+                  "flex": 1,
+                  "justifyContent": "space-around",
+                  "paddingHorizontal": 32,
+                }
+              }
+            >
+              <Component
+                style={
+                  Object {
+                    "color": "#919191",
+                    "fontSize": 14,
+                    "fontWeight": "500",
+                  }
+                }
+              >
+                1 BTC = $
+                NaN
+                 
+              </Component>
+              <Component
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "alignSelf": "stretch",
+                    "backgroundColor": "#6364F1",
+                    "borderRadius": 8,
+                    "height": 83,
+                    "justifyContent": "center",
+                  }
+                }
+              >
+                <Component
+                  style={
+                    Object {
+                      "color": "#FFFFFF",
+                      "fontSize": 28,
+                      "fontWeight": "600",
+                    }
+                  }
+                >
+                   $
+                </Component>
+                <Component
+                  style={
+                    Object {
+                      "color": "#FFFFFF",
+                      "fontSize": 18,
+                      "fontWeight": "600",
+                      "opacity": 0.77,
+                    }
+                  }
+                >
+                  NaN
+                   BTC
+                </Component>
+              </Component>
+              <Component
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "flexDirection": "row",
+                    "paddingLeft": 18,
+                  }
+                }
+              >
+                <Component
+                  style={
+                    Object {
+                      "color": "#333333",
+                      "fontSize": 12,
+                      "fontWeight": "700",
+                      "paddingRight": 10,
+                    }
+                  }
+                >
+                  on
+                </Component>
+                <LetterCircle
+                  letter="H"
+                  size={32}
+                />
+                <Component
+                  style={
+                    Object {
+                      "flexDirection": "column",
+                      "paddingLeft": 10,
+                    }
+                  }
+                >
+                  <Component
+                    style={
+                      Object {
+                        "color": "#333333",
+                        "fontSize": 15,
+                        "fontWeight": "600",
+                      }
+                    }
+                  >
+                    Https://github.com
+                  </Component>
+                  <Component
+                    style={
+                      Object {
+                        "color": "#919191",
+                        "fontSize": 12,
+                        "fontWeight": "600",
+                      }
+                    }
+                  >
+                    via Splash Chrome extension
+                  </Component>
+                </Component>
+              </Component>
+            </Component>
+            <Component>
+              <Component
+                style={
+                  Object {
+                    "color": "#919191",
+                    "fontSize": 14,
+                    "fontWeight": "500",
+                    "paddingBottom": 20,
+                    "paddingTop": 10,
+                    "textAlign": "center",
+                  }
+                }
+              >
+                We will load 
+                 $
+                 onto a temporary 
+                
+
+                 “magic” credit card you can use in your browser.
+              </Component>
+              <Button
+                checkmark={false}
+                checkmarkCallback={[Function]}
+                checkmarkPersist={true}
+                onPress={[Function]}
+                primary={true}
+                title="Approve Transaction"
+              />
+              <Component
+                style={
+                  Object {
+                    "alignItems": "center",
+                    "alignSelf": "center",
+                    "flexDirection": "row",
+                    "paddingTop": 10,
+                  }
+                }
+              >
+                <Component
+                  source={
+                    Object {
+                      "testUri": "../../../src/assets/icons/lockIcon.png",
+                    }
+                  }
+                  style={
+                    Object {
+                      "height": 13,
+                      "width": 10,
+                    }
+                  }
+                />
+                <Component
+                  style={
+                    Object {
+                      "backgroundColor": "rgba(0,0,0,0)",
+                      "color": "#ADADAD",
+                      "fontSize": 15,
+                      "fontWeight": "600",
+                      "paddingLeft": 10,
+                    }
+                  }
+                >
+                  Payment secured by Splash
+                </Component>
+              </Component>
+            </Component>
+          </Component>
+        </Component>
+      </TouchableWithoutFeedback>
+    </Component>
+  </AnimatedComponent>
+</TouchableWithoutFeedback>
+`;

@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify Phone Number renders correctly 1`] = `
+<KeyboardAvoidingView
+  behavior="padding"
+  enabled={true}
+  keyboardVerticalOffset={0}
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "space-between",
+      "paddingBottom": 27,
+      "paddingTop": 80,
+      "position": "relative",
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "column",
+        "justifyContent": "space-between",
+        "padding": 20,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#333333",
+          "fontSize": 23,
+          "marginBottom": 20,
+          "marginTop": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      Enter the 6-digit code we
+      
+
+      just texted you
+    </Component>
+    <Component>
+      <NumericCodeInput
+        autoFocus={true}
+        callback={[Function]}
+        size={6}
+      />
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "marginTop": 20,
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#ADADAD",
+              "fontSize": 16,
+            }
+          }
+        >
+          Didn
+          '
+          t get your code?
+        </Component>
+        <Button
+          onPress={[Function]}
+          primary={false}
+          small={true}
+          style={
+            Object {
+              "marginLeft": 10,
+              "width": 90,
+            }
+          }
+          title="Resend"
+        />
+      </Component>
+    </Component>
+    <Button
+      disabled={true}
+      onPress={[Function]}
+      primary={true}
+      title="Finish signup"
+    />
+  </Component>
+  <FlatBackButton
+    onPress={[Function]}
+  />
+</KeyboardAvoidingView>
+`;

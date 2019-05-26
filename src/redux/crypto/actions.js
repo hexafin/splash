@@ -82,7 +82,6 @@ export function resetCrypto() {
 // full load of transactions, exchange rates, and balance for a give currency
 export const Load = (currency = "BTC") => {
 	return async (dispatch, getState) => {
-		dispatch(loadBalanceInit(currency));
 		const state = getState();
 		// get appropriate address
 		let address;
@@ -111,7 +110,7 @@ export const Load = (currency = "BTC") => {
 			currency
 		);
 		// load balance and exchange rates
-		const balanceAction = LoadBalance(currency, unconfirmedOutboundAmount); 
+		const balanceAction = LoadBalance(currency, unconfirmedOutboundAmount);
 		balanceAction(dispatch, getState);
 		const exchangeRateAction = LoadExchangeRates(currency);
 		exchangeRateAction(dispatch, getState);
@@ -147,8 +146,7 @@ export const LoadBalance = (
 					dispatch(loadBalanceSuccess(totalBalance, currency));
 				})
 				.catch(error => {
-					if (error != Errors.NETWORK_ERROR)
-						Sentry.captureMessage(error);
+					if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error);
 					dispatch(loadBalanceFailure(error));
 				});
 		} else if (cryptoNames.indexOf(currency) >= 0) {
@@ -159,8 +157,7 @@ export const LoadBalance = (
 					dispatch(loadBalanceSuccess(totalBalance, currency));
 				})
 				.catch(error => {
-					if (error != Errors.NETWORK_ERROR)
-						Sentry.captureMessage(error);
+					if (error != Errors.NETWORK_ERROR) Sentry.captureMessage(error);
 					dispatch(loadBalanceFailure(error));
 				});
 		} else {
@@ -187,7 +184,8 @@ export const LoadExchangeRates = (currency = "BTC") => {
 		}
 
 		// call api for exchange rates
-		api.GetExchangeRate([currency])
+		api
+			.GetExchangeRate([currency])
 			.then(exchangeRates => {
 				dispatch(loadExchangeRatesSuccess(exchangeRates, currency));
 			})
@@ -213,10 +211,7 @@ export const OpenWallet = (userId, currencies) => {
 					try {
 						keychainData = JSON.parse(data.password);
 						// if the keychain does not exist for the user create a blank wallet
-						if (
-							typeof keychainData != "object" ||
-							userId != keychainUserId
-						) {
+						if (typeof keychainData != "object" || userId != keychainUserId) {
 							keychainData = {
 								BTC: {},
 								ETH: {}
@@ -272,8 +267,7 @@ export const OpenWallet = (userId, currencies) => {
 							const network = updateWallets[i];
 							// already have a wallet for this currency => load address to redux
 							publicWalletData[currency][network] = {
-								address:
-									keychainData[currency][network].address,
+								address: keychainData[currency][network].address,
 								network: network
 							};
 						}
@@ -285,9 +279,7 @@ export const OpenWallet = (userId, currencies) => {
 							// generate wallet for currency
 							switch (currency) {
 								case "BTC":
-									const bitcoinData = NewBitcoinWallet(
-										network
-									);
+									const bitcoinData = NewBitcoinWallet(network);
 									publicWalletData[currency][network] = {
 										address: bitcoinData.address,
 										network
@@ -322,10 +314,7 @@ export const OpenWallet = (userId, currencies) => {
 					}
 
 					// add wallet to keychain (keyed by userId)
-					Keychain.setGenericPassword(
-						userId,
-						JSON.stringify(keychainData)
-					)
+					Keychain.setGenericPassword(userId, JSON.stringify(keychainData))
 						.then(() => {
 							// update user with public wallet data for currency
 							firestore
@@ -335,7 +324,7 @@ export const OpenWallet = (userId, currencies) => {
 									wallets: publicWalletData
 								})
 								.then(() => {
-									// add info to redux and load mainnet wallet first on default 
+									// add info to redux and load mainnet wallet first on default
 									dispatch(
 										openWalletSuccess({
 											BTC: publicWalletData.BTC.mainnet,
@@ -388,9 +377,7 @@ export const ToggleNetwork = () => {
 						network: keychainData.ETH[newNetwork].network
 					};
 					// add the wallet to redux
-					dispatch(
-						switchWallets({ BTC: newBTCWallet, ETH: newETHWallet })
-					);
+					dispatch(switchWallets({ BTC: newBTCWallet, ETH: newETHWallet }));
 					resolve();
 				})
 				.catch(e => {

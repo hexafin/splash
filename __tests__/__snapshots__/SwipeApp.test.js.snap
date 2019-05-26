@@ -1,0 +1,667 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Balance renders correctly 1`] = `
+<AnimatedComponent
+  pointerEvents="box-none"
+  style={
+    Array [
+      Object {
+        "opacity": 50,
+        "transform": Array [
+          Object {
+            "scale": 2550,
+          },
+          Object {
+            "translateY": 2550,
+          },
+          Object {
+            "translateX": 50,
+          },
+        ],
+      },
+      Object {
+        "alignItems": "center",
+        "flexDirection": "column",
+        "justifyContent": "center",
+        "position": "absolute",
+        "top": 90,
+        "width": 750,
+      },
+    ]
+  }
+>
+  <AnimatedComponent
+    pointerEvents="box-none"
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "flexDirection": "column",
+          "justifyContent": "center",
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 1,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Component
+      style={
+        Object {
+          "backgroundColor": "transparent",
+          "color": "#FFFFFF",
+          "fontSize": 36,
+          "fontWeight": "600",
+        }
+      }
+    >
+      0
+    </Component>
+    <Component
+      style={
+        Array [
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "position": "absolute",
+            "top": 0,
+            "width": "100%",
+          },
+          Object {
+            "opacity": 0,
+          },
+        ]
+      }
+    >
+      <LoadingCircle
+        restart={false}
+        size={30}
+      />
+    </Component>
+    <Connect(CurrencySwitcher)
+      activeCurrencySize={24}
+      crypto="BTC"
+      fiat="USD"
+      onPressIn={[Function]}
+      onPressOut={[Function]}
+      style={
+        Object {
+          "marginTop": -25,
+        }
+      }
+      switcherBottom={32}
+      switcherColor="white"
+      textColor="rgba(255, 255, 255, 0.7)"
+    />
+  </AnimatedComponent>
+</AnimatedComponent>
+`;
+
+exports[`Currency Switch renders correctly 1`] = `
+<AnimatedComponent
+  pointerEvents="box-none"
+  style={
+    Object {
+      "opacity": 2500,
+      "position": "absolute",
+      "top": 175,
+      "transform": Array [
+        Object {
+          "translateY": 100,
+        },
+      ],
+    }
+  }
+>
+  <Component
+    animatedValueX={
+      Object {
+        "__getValue": [Function],
+        "addListener": [Function],
+        "interpolate": [Function],
+      }
+    }
+    horizontalOnly={true}
+    initialPosition={
+      Object {
+        "x": -0,
+      }
+    }
+    snapPoints={
+      Array [
+        Object {
+          "x": -0,
+        },
+        Object {
+          "x": -330,
+        },
+        Object {
+          "x": -660,
+        },
+      ]
+    }
+  >
+    <Component
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+          "paddingLeft": 325,
+          "paddingRight": 50,
+          "width": "auto",
+        }
+      }
+    >
+      <TouchableWithoutFeedback
+        key="currencyBTC"
+        onPress={[Function]}
+      >
+        <AnimatedComponent
+          style={
+            Object {
+              "height": 120,
+              "marginRight": 230,
+              "opacity": 50,
+              "transform": Array [
+                Object {
+                  "scale": 2500,
+                },
+              ],
+              "width": 100,
+            }
+          }
+        >
+          <Component
+            resizeMode="contain"
+            source={
+              Object {
+                "testUri": "../../../src/assets/images/bitcoin-logo.png",
+              }
+            }
+            style={
+              Object {
+                "height": 100,
+                "width": 100,
+              }
+            }
+          />
+          <Component
+            style={
+              Object {
+                "color": "#FFFFFF",
+                "fontSize": 22,
+                "fontWeight": "500",
+                "marginTop": 5,
+                "textAlign": "center",
+                "width": 100,
+              }
+            }
+          >
+            BTC
+          </Component>
+        </AnimatedComponent>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        key="currencyETH"
+        onPress={[Function]}
+      >
+        <AnimatedComponent
+          style={
+            Object {
+              "height": 120,
+              "marginRight": 230,
+              "opacity": 50,
+              "transform": Array [
+                Object {
+                  "scale": 2500,
+                },
+              ],
+              "width": 100,
+            }
+          }
+        >
+          <Component
+            resizeMode="contain"
+            source={
+              Object {
+                "testUri": "../../../src/assets/images/ether-icon.png",
+              }
+            }
+            style={
+              Object {
+                "height": 100,
+                "width": 100,
+              }
+            }
+          />
+          <Component
+            style={
+              Object {
+                "color": "#FFFFFF",
+                "fontSize": 22,
+                "fontWeight": "500",
+                "marginTop": 5,
+                "textAlign": "center",
+                "width": 100,
+              }
+            }
+          >
+            ETH
+          </Component>
+        </AnimatedComponent>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        key="currencyGUSD"
+        onPress={[Function]}
+      >
+        <AnimatedComponent
+          style={
+            Object {
+              "height": 120,
+              "marginRight": 230,
+              "opacity": 50,
+              "transform": Array [
+                Object {
+                  "scale": 2500,
+                },
+              ],
+              "width": 100,
+            }
+          }
+        >
+          <Component
+            resizeMode="contain"
+            source={
+              Object {
+                "testUri": "../../../src/assets/images/gemini-icon.png",
+              }
+            }
+            style={
+              Object {
+                "height": 100,
+                "width": 100,
+              }
+            }
+          />
+          <Component
+            style={
+              Object {
+                "color": "#FFFFFF",
+                "fontSize": 22,
+                "fontWeight": "500",
+                "marginTop": 5,
+                "textAlign": "center",
+                "width": 100,
+              }
+            }
+          >
+            GUSD
+          </Component>
+        </AnimatedComponent>
+      </TouchableWithoutFeedback>
+    </Component>
+  </Component>
+</AnimatedComponent>
+`;
+
+exports[`Header renders correctly 1`] = `
+<[object Object]
+  height={792}
+  viewBox="0 0 375 396"
+  width={750}
+>
+  <AnimatedComponent
+    fill={50}
+  >
+    <Path
+      d="M0,0 L375,0 L375,387.179245 C339.355325,393.704622 309.789941,396.485791 286.303847,395.522753 C225.328718,393.02249 169.084364,374.698552 110.07317,377.843259 C51.3417556,380.973056 14.6506989,385.197965 0,390.517986 L0,0 Z"
+    />
+  </AnimatedComponent>
+</[object Object]>
+`;
+
+exports[`Return To Home renders correctly 1`] = `
+<TouchableWithoutFeedback>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "opacity": 50,
+          "transform": Array [
+            Object {
+              "translateX": 50,
+            },
+            Object {
+              "translateY": 50,
+            },
+            Object {
+              "rotate": 50,
+            },
+          ],
+        },
+        Object {
+          "alignSelf": "center",
+          "padding": 20,
+          "position": "absolute",
+          "top": 70,
+        },
+      ]
+    }
+  >
+    <Component
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/leftCarrotWhite.png",
+        }
+      }
+      style={
+        Object {
+          "height": 28,
+          "width": 14,
+        }
+      }
+    />
+  </AnimatedComponent>
+</TouchableWithoutFeedback>
+`;
+
+exports[`Swipe App renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+    }
+  }
+>
+  <AnimatedComponent
+    automaticallyAdjustContentInsets={false}
+    bounces={false}
+    contentOffset={
+      Object {
+        "x": 750,
+      }
+    }
+    horizontal={true}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    pagingEnabled={true}
+    scrollEventThrottle={16}
+    showsHorizontalScrollIndicator={false}
+    showsVerticalScrollIndicator={false}
+    style={
+      Object {
+        "flex": 1,
+        "flexDirection": "row",
+      }
+    }
+  >
+    <Page
+      key="page-0"
+    >
+      <Connect(Account)
+        Load={[Function]}
+        notificationPermissionInfo={[Function]}
+        setNotifsRequested={[Function]}
+        switchColor={"rgba(247, 147, 26, 1)"}
+        switchXOffset={NaN}
+      />
+    </Page>
+    <Page
+      key="page-1"
+    >
+      <Connect(Home)
+        Load={[Function]}
+        notificationPermissionInfo={[Function]}
+        setNotifsRequested={[Function]}
+        switchColor={"rgba(247, 147, 26, 1)"}
+        switchXOffset={NaN}
+        yOffset={0}
+      />
+    </Page>
+    <Page
+      key="page-2"
+    >
+      <Connect(Wallet)
+        Load={[Function]}
+        notificationPermissionInfo={[Function]}
+        setNotifsRequested={[Function]}
+        switchColor={"rgba(247, 147, 26, 1)"}
+        switchXOffset={NaN}
+      />
+    </Page>
+  </AnimatedComponent>
+  <AnimatedComponent
+    style={
+      Array [
+        Object {
+          "transform": Array [
+            Object {
+              "translateY": 0,
+            },
+          ],
+        },
+        Object {
+          "overflow": "visible",
+          "position": "absolute",
+          "shadowOffset": Object {
+            "height": 5,
+            "width": 0,
+          },
+          "shadowOpacity": 0.12,
+          "shadowRadius": 12,
+          "top": -40,
+          "width": 750,
+        },
+      ]
+    }
+  >
+    <Header
+      fill={"rgba(247, 147, 26, 1)"}
+      fillInput={NaN}
+    />
+  </AnimatedComponent>
+  <TouchableWithoutFeedback
+    key="page-icon-0"
+    onPressIn={[Function]}
+  >
+    <AnimatedComponent
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/whiteSplash.png",
+        }
+      }
+      style={
+        Array [
+          Object {
+            "alignSelf": "center",
+            "marginBottom": 15,
+            "overflow": "visible",
+            "paddingLeft": 20,
+            "paddingRight": 20,
+            "position": "absolute",
+            "shadowOffset": Object {
+              "height": 5,
+              "width": 0,
+            },
+            "shadowOpacity": 0.12,
+            "shadowRadius": 12,
+            "top": 55,
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 0.75,
+              },
+              Object {
+                "translateX": -412.50000000000006,
+              },
+            ],
+          },
+          Object {
+            "height": 45,
+            "width": 45,
+          },
+          Object {},
+        ]
+      }
+    />
+  </TouchableWithoutFeedback>
+  <TouchableWithoutFeedback
+    key="page-icon-2"
+    onPressIn={[Function]}
+  >
+    <AnimatedComponent
+      resizeMode="contain"
+      source={
+        Object {
+          "testUri": "../../../src/assets/icons/qrIcon.png",
+        }
+      }
+      style={
+        Array [
+          Object {
+            "alignSelf": "center",
+            "marginBottom": 15,
+            "overflow": "visible",
+            "paddingLeft": 20,
+            "paddingRight": 20,
+            "position": "absolute",
+            "shadowOffset": Object {
+              "height": 5,
+              "width": 0,
+            },
+            "shadowOpacity": 0.12,
+            "shadowRadius": 12,
+            "top": 55,
+          },
+          Object {
+            "transform": Array [
+              Object {
+                "scale": 0.75,
+              },
+              Object {
+                "translateX": 412.50000000000006,
+              },
+            ],
+          },
+          Object {
+            "height": 37,
+            "width": 37,
+          },
+          Object {
+            "top": 59,
+          },
+        ]
+      }
+    />
+  </TouchableWithoutFeedback>
+  <AnimatedComponent
+    key="swipe-app-title-0"
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "position": "absolute",
+          "top": 115,
+          "width": 750,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 0.75,
+            },
+            Object {
+              "translateX": -900,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#FFFFFF",
+          "fontSize": 24,
+          "fontWeight": "700",
+        }
+      }
+    >
+      @undefined
+    </Component>
+  </AnimatedComponent>
+  <AnimatedComponent
+    key="swipe-app-title-2"
+    style={
+      Array [
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "position": "absolute",
+          "top": 115,
+          "width": 750,
+        },
+        Object {
+          "transform": Array [
+            Object {
+              "scale": 0.75,
+            },
+            Object {
+              "translateX": 900,
+            },
+          ],
+        },
+      ]
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": "#FFFFFF",
+          "fontSize": 24,
+          "fontWeight": "700",
+        }
+      }
+    >
+      Your splash wallet
+    </Component>
+  </AnimatedComponent>
+  <Connect(ReturnToHome)
+    onPress={[Function]}
+    xOffset={750}
+    yOffsets={
+      Object {
+        "home": 0,
+      }
+    }
+  />
+  <Connect(Balance)
+    xOffset={750}
+    yOffsets={
+      Object {
+        "home": 0,
+      }
+    }
+  />
+  <Connect(CurrencySwitch)
+    switchXOffset={NaN}
+    xOffset={750}
+    yOffsets={
+      Object {
+        "home": 0,
+      }
+    }
+  />
+  <Connect(ModalRoot) />
+</Component>
+`;

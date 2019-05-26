@@ -6,16 +6,18 @@ import { isIphoneX } from "react-native-iphone-x-helper";
 
 export default class AnimatedWaves extends Component {
 	componentDidMount() {
-		this.animation.play();
+		if (!!this.animation) {
+			this.animation.play();
+		}
 	}
 
 	render() {
 		const width = 900;
 		const height = 600;
 
-		const bottomProp = this.props.bottom || -40
+		const bottomProp = this.props.bottom || -40;
 
-		const defaultBottom = (isIphoneX()) ? bottomProp + 20 : bottomProp;
+		const defaultBottom = isIphoneX() ? bottomProp + 20 : bottomProp;
 
 		return (
 			<View

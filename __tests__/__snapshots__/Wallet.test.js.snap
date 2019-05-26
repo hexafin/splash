@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Wallet renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "transparent",
+      "flex": 1,
+      "paddingBottom": 20,
+      "paddingTop": 20,
+    }
+  }
+>
+  <ScrollView>
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 150,
+          "justifyContent": "center",
+          "marginBottom": 40,
+          "paddingTop": 60,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "flex-start",
+          "padding": 20,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+            "marginBottom": 10,
+            "width": "100%",
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#292342",
+              "fontSize": 20,
+              "fontWeight": "700",
+              "textAlign": "left",
+            }
+          }
+        >
+          Receive 
+           here
+        </Component>
+      </Component>
+      <TouchableWithoutFeedback
+        onPress={[Function]}
+        onPressIn={[Function]}
+        onPressOut={[Function]}
+      >
+        <AnimatedComponent
+          style={
+            Array [
+              Object {
+                "alignItems": "center",
+                "flexDirection": "column",
+              },
+              Object {
+                "transform": Array [
+                  Object {
+                    "scale": 1,
+                  },
+                ],
+              },
+            ]
+          }
+        >
+          <Component
+            source={
+              Object {
+                "uri": "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=undefined",
+              }
+            }
+            style={
+              Object {
+                "height": 240,
+                "padding": 40,
+                "width": 240,
+              }
+            }
+          />
+          <Component
+            style={
+              Object {
+                "backgroundColor": "#EFEFFD",
+                "borderRadius": 3,
+                "marginBottom": 10,
+                "paddingBottom": 6,
+                "paddingLeft": 10,
+                "paddingRight": 10,
+                "paddingTop": 6,
+              }
+            }
+          >
+            <Component
+              style={
+                Array [
+                  Object {
+                    "color": "#4547E0",
+                    "fontWeight": "700",
+                  },
+                  Object {
+                    "fontSize": 11,
+                  },
+                ]
+              }
+            />
+          </Component>
+          <Component
+            style={
+              Object {
+                "color": "#ADADAD",
+                "fontSize": 14,
+                "fontWeight": "600",
+              }
+            }
+          >
+            Tap to copy
+          </Component>
+        </AnimatedComponent>
+      </TouchableWithoutFeedback>
+      <Button
+        onPress={[Function]}
+        small={true}
+        style={
+          Object {
+            "marginTop": 30,
+            "width": 200,
+          }
+        }
+        title="Share"
+      />
+    </Component>
+  </ScrollView>
+</Component>
+`;

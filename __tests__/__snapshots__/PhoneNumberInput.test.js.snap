@@ -1,0 +1,1209 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Phone Number Input renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": 5,
+      "flexDirection": "row",
+      "height": 60,
+      "shadowOffset": Object {
+        "height": 5,
+        "width": 0,
+      },
+      "shadowOpacity": 0.1,
+      "shadowRadius": 10,
+    }
+  }
+>
+  <Component
+    animationType="slide"
+    hardwareAccelerated={false}
+    transparent={false}
+    visible={false}
+  >
+    <Component
+      style={
+        Object {
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-around",
+          "padding": 40,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#333333",
+            "fontSize": 22,
+            "fontWeight": "600",
+            "textAlign": "center",
+          }
+        }
+      >
+        Choose your country
+      </Component>
+      <Component
+        style={
+          Object {
+            "backgroundColor": "#FFFFFF",
+            "shadowOffset": Object {
+              "height": 10,
+              "width": 0,
+            },
+            "shadowOpacity": 0.1,
+            "shadowRadius": 12,
+          }
+        }
+      >
+        <Picker
+          mode="dialog"
+          onValueChange={[Function]}
+          selectedValue="United States"
+        >
+          <PickerItem
+            key="countryPickerItem0"
+            label="🇦🇫 Afghanistan"
+            value="Afghanistan"
+          />
+          <PickerItem
+            key="countryPickerItem1"
+            label="🇦🇱 Albania"
+            value="Albania"
+          />
+          <PickerItem
+            key="countryPickerItem2"
+            label="🇩🇿 Algeria"
+            value="Algeria"
+          />
+          <PickerItem
+            key="countryPickerItem3"
+            label="🇦🇸 American Samoa"
+            value="American Samoa"
+          />
+          <PickerItem
+            key="countryPickerItem4"
+            label="🇦🇩 Andorra"
+            value="Andorra"
+          />
+          <PickerItem
+            key="countryPickerItem5"
+            label="🇦🇴 Angola"
+            value="Angola"
+          />
+          <PickerItem
+            key="countryPickerItem6"
+            label="🇦🇮 Anguilla"
+            value="Anguilla"
+          />
+          <PickerItem
+            key="countryPickerItem7"
+            label="🇦🇶 Antarctica"
+            value="Antarctica"
+          />
+          <PickerItem
+            key="countryPickerItem8"
+            label="🇦🇷 Argentina"
+            value="Argentina"
+          />
+          <PickerItem
+            key="countryPickerItem9"
+            label="🇦🇲 Armenia"
+            value="Armenia"
+          />
+          <PickerItem
+            key="countryPickerItem10"
+            label="🇦🇼 Aruba"
+            value="Aruba"
+          />
+          <PickerItem
+            key="countryPickerItem11"
+            label="🇦🇨 Ascension Island"
+            value="Ascension Island"
+          />
+          <PickerItem
+            key="countryPickerItem12"
+            label="🇦🇺 Australia"
+            value="Australia"
+          />
+          <PickerItem
+            key="countryPickerItem13"
+            label="🇦🇹 Austria"
+            value="Austria"
+          />
+          <PickerItem
+            key="countryPickerItem14"
+            label="🇦🇿 Azerbaijan"
+            value="Azerbaijan"
+          />
+          <PickerItem
+            key="countryPickerItem15"
+            label="🇧🇸 Bahamas"
+            value="Bahamas"
+          />
+          <PickerItem
+            key="countryPickerItem16"
+            label="🇧🇭 Bahrain"
+            value="Bahrain"
+          />
+          <PickerItem
+            key="countryPickerItem17"
+            label="🇧🇩 Bangladesh"
+            value="Bangladesh"
+          />
+          <PickerItem
+            key="countryPickerItem18"
+            label="🇧🇧 Barbados"
+            value="Barbados"
+          />
+          <PickerItem
+            key="countryPickerItem19"
+            label="🇧🇾 Belarus"
+            value="Belarus"
+          />
+          <PickerItem
+            key="countryPickerItem20"
+            label="🇧🇪 Belgium"
+            value="Belgium"
+          />
+          <PickerItem
+            key="countryPickerItem21"
+            label="🇧🇿 Belize"
+            value="Belize"
+          />
+          <PickerItem
+            key="countryPickerItem22"
+            label="🇧🇯 Benin"
+            value="Benin"
+          />
+          <PickerItem
+            key="countryPickerItem23"
+            label="🇧🇲 Bermuda"
+            value="Bermuda"
+          />
+          <PickerItem
+            key="countryPickerItem24"
+            label="🇧🇹 Bhutan"
+            value="Bhutan"
+          />
+          <PickerItem
+            key="countryPickerItem25"
+            label="🇧🇴 Bolivia"
+            value="Bolivia"
+          />
+          <PickerItem
+            key="countryPickerItem26"
+            label="🇧🇼 Botswana"
+            value="Botswana"
+          />
+          <PickerItem
+            key="countryPickerItem27"
+            label="🇧🇷 Brazil"
+            value="Brazil"
+          />
+          <PickerItem
+            key="countryPickerItem28"
+            label="🇮🇴 British Indian Ocean Territory"
+            value="British Indian Ocean Territory"
+          />
+          <PickerItem
+            key="countryPickerItem29"
+            label="🇧🇫 Burkina Faso"
+            value="Burkina Faso"
+          />
+          <PickerItem
+            key="countryPickerItem30"
+            label="🇧🇮 Burundi"
+            value="Burundi"
+          />
+          <PickerItem
+            key="countryPickerItem31"
+            label="🇰🇭 Cambodia"
+            value="Cambodia"
+          />
+          <PickerItem
+            key="countryPickerItem32"
+            label="🇨🇲 Cameroon"
+            value="Cameroon"
+          />
+          <PickerItem
+            key="countryPickerItem33"
+            label="🇨🇦 Canada"
+            value="Canada"
+          />
+          <PickerItem
+            key="countryPickerItem34"
+            label="🇮🇨 Canary Islands"
+            value="Canary Islands"
+          />
+          <PickerItem
+            key="countryPickerItem35"
+            label="🇨🇻 Cape Verde"
+            value="Cape Verde"
+          />
+          <PickerItem
+            key="countryPickerItem36"
+            label="🇰🇾 Cayman Islands"
+            value="Cayman Islands"
+          />
+          <PickerItem
+            key="countryPickerItem37"
+            label="🇨🇫 Central African Republic"
+            value="Central African Republic"
+          />
+          <PickerItem
+            key="countryPickerItem38"
+            label="🇹🇩 Chad"
+            value="Chad"
+          />
+          <PickerItem
+            key="countryPickerItem39"
+            label="🇨🇱 Chile"
+            value="Chile"
+          />
+          <PickerItem
+            key="countryPickerItem40"
+            label="🇨🇳 China"
+            value="China"
+          />
+          <PickerItem
+            key="countryPickerItem41"
+            label="🇨🇽 Christmas Island"
+            value="Christmas Island"
+          />
+          <PickerItem
+            key="countryPickerItem42"
+            label="🇨🇴 Colombia"
+            value="Colombia"
+          />
+          <PickerItem
+            key="countryPickerItem43"
+            label="🇰🇲 Comoros"
+            value="Comoros"
+          />
+          <PickerItem
+            key="countryPickerItem44"
+            label="🇨🇰 Cook Islands"
+            value="Cook Islands"
+          />
+          <PickerItem
+            key="countryPickerItem45"
+            label="🇨🇷 Costa Rica"
+            value="Costa Rica"
+          />
+          <PickerItem
+            key="countryPickerItem46"
+            label="🇭🇷 Croatia"
+            value="Croatia"
+          />
+          <PickerItem
+            key="countryPickerItem47"
+            label="🇨🇺 Cuba"
+            value="Cuba"
+          />
+          <PickerItem
+            key="countryPickerItem48"
+            label="🇨🇿 Czech Republic"
+            value="Czech Republic"
+          />
+          <PickerItem
+            key="countryPickerItem49"
+            label="🇩🇰 Denmark"
+            value="Denmark"
+          />
+          <PickerItem
+            key="countryPickerItem50"
+            label="🇩🇯 Djibouti"
+            value="Djibouti"
+          />
+          <PickerItem
+            key="countryPickerItem51"
+            label="🇩🇲 Dominica"
+            value="Dominica"
+          />
+          <PickerItem
+            key="countryPickerItem52"
+            label="🇩🇴 Dominican Republic"
+            value="Dominican Republic"
+          />
+          <PickerItem
+            key="countryPickerItem53"
+            label="🇪🇨 Ecuador"
+            value="Ecuador"
+          />
+          <PickerItem
+            key="countryPickerItem54"
+            label="🇪🇬 Egypt"
+            value="Egypt"
+          />
+          <PickerItem
+            key="countryPickerItem55"
+            label="🇸🇻 El Salvador"
+            value="El Salvador"
+          />
+          <PickerItem
+            key="countryPickerItem56"
+            label="🇬🇶 Equatorial Guinea"
+            value="Equatorial Guinea"
+          />
+          <PickerItem
+            key="countryPickerItem57"
+            label="🇪🇷 Eritrea"
+            value="Eritrea"
+          />
+          <PickerItem
+            key="countryPickerItem58"
+            label="🇪🇪 Estonia"
+            value="Estonia"
+          />
+          <PickerItem
+            key="countryPickerItem59"
+            label="🇪🇹 Ethiopia"
+            value="Ethiopia"
+          />
+          <PickerItem
+            key="countryPickerItem60"
+            label="🇫🇰 Falkland Islands"
+            value="Falkland Islands"
+          />
+          <PickerItem
+            key="countryPickerItem61"
+            label="🇫🇴 Faroe Islands"
+            value="Faroe Islands"
+          />
+          <PickerItem
+            key="countryPickerItem62"
+            label="🇫🇯 Fiji"
+            value="Fiji"
+          />
+          <PickerItem
+            key="countryPickerItem63"
+            label="🇫🇮 Finland"
+            value="Finland"
+          />
+          <PickerItem
+            key="countryPickerItem64"
+            label="🇫🇷 France"
+            value="France"
+          />
+          <PickerItem
+            key="countryPickerItem65"
+            label="🇬🇫 French Guiana"
+            value="French Guiana"
+          />
+          <PickerItem
+            key="countryPickerItem66"
+            label="🇵🇫 French Polynesia"
+            value="French Polynesia"
+          />
+          <PickerItem
+            key="countryPickerItem67"
+            label="🇬🇦 Gabon"
+            value="Gabon"
+          />
+          <PickerItem
+            key="countryPickerItem68"
+            label="🇬🇲 Gambia"
+            value="Gambia"
+          />
+          <PickerItem
+            key="countryPickerItem69"
+            label="🇬🇪 Georgia"
+            value="Georgia"
+          />
+          <PickerItem
+            key="countryPickerItem70"
+            label="🇩🇪 Germany"
+            value="Germany"
+          />
+          <PickerItem
+            key="countryPickerItem71"
+            label="🇬🇭 Ghana"
+            value="Ghana"
+          />
+          <PickerItem
+            key="countryPickerItem72"
+            label="🇬🇮 Gibraltar"
+            value="Gibraltar"
+          />
+          <PickerItem
+            key="countryPickerItem73"
+            label="🇬🇷 Greece"
+            value="Greece"
+          />
+          <PickerItem
+            key="countryPickerItem74"
+            label="🇬🇱 Greenland"
+            value="Greenland"
+          />
+          <PickerItem
+            key="countryPickerItem75"
+            label="🇬🇩 Grenada"
+            value="Grenada"
+          />
+          <PickerItem
+            key="countryPickerItem76"
+            label="🇬🇵 Guadeloupe"
+            value="Guadeloupe"
+          />
+          <PickerItem
+            key="countryPickerItem77"
+            label="🇬🇺 Guam"
+            value="Guam"
+          />
+          <PickerItem
+            key="countryPickerItem78"
+            label="🇬🇹 Guatemala"
+            value="Guatemala"
+          />
+          <PickerItem
+            key="countryPickerItem79"
+            label="🇬🇬 Guernsey"
+            value="Guernsey"
+          />
+          <PickerItem
+            key="countryPickerItem80"
+            label="🇬🇳 Guinea"
+            value="Guinea"
+          />
+          <PickerItem
+            key="countryPickerItem81"
+            label="🇬🇼 Guinea-Bissau"
+            value="Guinea-Bissau"
+          />
+          <PickerItem
+            key="countryPickerItem82"
+            label="🇬🇾 Guyana"
+            value="Guyana"
+          />
+          <PickerItem
+            key="countryPickerItem83"
+            label="🇭🇹 Haiti"
+            value="Haiti"
+          />
+          <PickerItem
+            key="countryPickerItem84"
+            label="🇭🇳 Honduras"
+            value="Honduras"
+          />
+          <PickerItem
+            key="countryPickerItem85"
+            label="🇭🇰 Hong Kong"
+            value="Hong Kong"
+          />
+          <PickerItem
+            key="countryPickerItem86"
+            label="🇭🇺 Hungary"
+            value="Hungary"
+          />
+          <PickerItem
+            key="countryPickerItem87"
+            label="🇮🇸 Iceland"
+            value="Iceland"
+          />
+          <PickerItem
+            key="countryPickerItem88"
+            label="🇮🇳 India"
+            value="India"
+          />
+          <PickerItem
+            key="countryPickerItem89"
+            label="🇮🇩 Indonesia"
+            value="Indonesia"
+          />
+          <PickerItem
+            key="countryPickerItem90"
+            label="🇮🇷 Iran"
+            value="Iran"
+          />
+          <PickerItem
+            key="countryPickerItem91"
+            label="🇮🇶 Iraq"
+            value="Iraq"
+          />
+          <PickerItem
+            key="countryPickerItem92"
+            label="🇮🇪 Ireland"
+            value="Ireland"
+          />
+          <PickerItem
+            key="countryPickerItem93"
+            label="🇮🇲 Isle of Man"
+            value="Isle of Man"
+          />
+          <PickerItem
+            key="countryPickerItem94"
+            label="🇮🇱 Israel"
+            value="Israel"
+          />
+          <PickerItem
+            key="countryPickerItem95"
+            label="🇮🇹 Italy"
+            value="Italy"
+          />
+          <PickerItem
+            key="countryPickerItem96"
+            label="🇯🇲 Jamaica"
+            value="Jamaica"
+          />
+          <PickerItem
+            key="countryPickerItem97"
+            label="🇯🇵 Japan"
+            value="Japan"
+          />
+          <PickerItem
+            key="countryPickerItem98"
+            label="🇯🇪 Jersey"
+            value="Jersey"
+          />
+          <PickerItem
+            key="countryPickerItem99"
+            label="🇯🇴 Jordan"
+            value="Jordan"
+          />
+          <PickerItem
+            key="countryPickerItem100"
+            label="🇰🇿 Kazakhstan"
+            value="Kazakhstan"
+          />
+          <PickerItem
+            key="countryPickerItem101"
+            label="🇰🇪 Kenya"
+            value="Kenya"
+          />
+          <PickerItem
+            key="countryPickerItem102"
+            label="🇰🇮 Kiribati"
+            value="Kiribati"
+          />
+          <PickerItem
+            key="countryPickerItem103"
+            label="🇰🇼 Kuwait"
+            value="Kuwait"
+          />
+          <PickerItem
+            key="countryPickerItem104"
+            label="🇱🇦 Laos"
+            value="Laos"
+          />
+          <PickerItem
+            key="countryPickerItem105"
+            label="🇱🇻 Latvia"
+            value="Latvia"
+          />
+          <PickerItem
+            key="countryPickerItem106"
+            label="🇱🇧 Lebanon"
+            value="Lebanon"
+          />
+          <PickerItem
+            key="countryPickerItem107"
+            label="🇱🇸 Lesotho"
+            value="Lesotho"
+          />
+          <PickerItem
+            key="countryPickerItem108"
+            label="🇱🇷 Liberia"
+            value="Liberia"
+          />
+          <PickerItem
+            key="countryPickerItem109"
+            label="🇱🇾 Libya"
+            value="Libya"
+          />
+          <PickerItem
+            key="countryPickerItem110"
+            label="🇱🇮 Liechtenstein"
+            value="Liechtenstein"
+          />
+          <PickerItem
+            key="countryPickerItem111"
+            label="🇱🇹 Lithuania"
+            value="Lithuania"
+          />
+          <PickerItem
+            key="countryPickerItem112"
+            label="🇱🇺 Luxembourg"
+            value="Luxembourg"
+          />
+          <PickerItem
+            key="countryPickerItem113"
+            label="🇲🇰 Macedonia"
+            value="Macedonia"
+          />
+          <PickerItem
+            key="countryPickerItem114"
+            label="🇲🇬 Madagascar"
+            value="Madagascar"
+          />
+          <PickerItem
+            key="countryPickerItem115"
+            label="🇲🇼 Malawi"
+            value="Malawi"
+          />
+          <PickerItem
+            key="countryPickerItem116"
+            label="🇲🇾 Malaysia"
+            value="Malaysia"
+          />
+          <PickerItem
+            key="countryPickerItem117"
+            label="🇲🇻 Maldives"
+            value="Maldives"
+          />
+          <PickerItem
+            key="countryPickerItem118"
+            label="🇲🇱 Mali"
+            value="Mali"
+          />
+          <PickerItem
+            key="countryPickerItem119"
+            label="🇲🇹 Malta"
+            value="Malta"
+          />
+          <PickerItem
+            key="countryPickerItem120"
+            label="🇲🇭 Marshall Islands"
+            value="Marshall Islands"
+          />
+          <PickerItem
+            key="countryPickerItem121"
+            label="🇲🇶 Martinique"
+            value="Martinique"
+          />
+          <PickerItem
+            key="countryPickerItem122"
+            label="🇲🇷 Mauritania"
+            value="Mauritania"
+          />
+          <PickerItem
+            key="countryPickerItem123"
+            label="🇲🇺 Mauritius"
+            value="Mauritius"
+          />
+          <PickerItem
+            key="countryPickerItem124"
+            label="🇾🇹 Mayotte"
+            value="Mayotte"
+          />
+          <PickerItem
+            key="countryPickerItem125"
+            label="🇲🇽 Mexico"
+            value="Mexico"
+          />
+          <PickerItem
+            key="countryPickerItem126"
+            label="🇫🇲 Micronesia"
+            value="Micronesia"
+          />
+          <PickerItem
+            key="countryPickerItem127"
+            label="🇲🇩 Moldova"
+            value="Moldova"
+          />
+          <PickerItem
+            key="countryPickerItem128"
+            label="🇲🇨 Monaco"
+            value="Monaco"
+          />
+          <PickerItem
+            key="countryPickerItem129"
+            label="🇲🇳 Mongolia"
+            value="Mongolia"
+          />
+          <PickerItem
+            key="countryPickerItem130"
+            label="🇲🇪 Montenegro"
+            value="Montenegro"
+          />
+          <PickerItem
+            key="countryPickerItem131"
+            label="🇲🇸 Montserrat"
+            value="Montserrat"
+          />
+          <PickerItem
+            key="countryPickerItem132"
+            label="🇲🇦 Morocco"
+            value="Morocco"
+          />
+          <PickerItem
+            key="countryPickerItem133"
+            label="🇲🇿 Mozambique"
+            value="Mozambique"
+          />
+          <PickerItem
+            key="countryPickerItem134"
+            label="🇲🇲 Myanmar"
+            value="Myanmar"
+          />
+          <PickerItem
+            key="countryPickerItem135"
+            label="🇳🇦 Namibia"
+            value="Namibia"
+          />
+          <PickerItem
+            key="countryPickerItem136"
+            label="🇳🇷 Nauru"
+            value="Nauru"
+          />
+          <PickerItem
+            key="countryPickerItem137"
+            label="🇳🇵 Nepal"
+            value="Nepal"
+          />
+          <PickerItem
+            key="countryPickerItem138"
+            label="🇳🇱 Netherlands"
+            value="Netherlands"
+          />
+          <PickerItem
+            key="countryPickerItem139"
+            label="🇳🇨 New Caledonia"
+            value="New Caledonia"
+          />
+          <PickerItem
+            key="countryPickerItem140"
+            label="🇳🇿 New Zealand"
+            value="New Zealand"
+          />
+          <PickerItem
+            key="countryPickerItem141"
+            label="🇳🇮 Nicaragua"
+            value="Nicaragua"
+          />
+          <PickerItem
+            key="countryPickerItem142"
+            label="🇳🇪 Niger"
+            value="Niger"
+          />
+          <PickerItem
+            key="countryPickerItem143"
+            label="🇳🇬 Nigeria"
+            value="Nigeria"
+          />
+          <PickerItem
+            key="countryPickerItem144"
+            label="🇳🇺 Niue"
+            value="Niue"
+          />
+          <PickerItem
+            key="countryPickerItem145"
+            label="🇳🇫 Norfolk Island"
+            value="Norfolk Island"
+          />
+          <PickerItem
+            key="countryPickerItem146"
+            label="🇲🇵 Northern Mariana Islands"
+            value="Northern Mariana Islands"
+          />
+          <PickerItem
+            key="countryPickerItem147"
+            label="🇳🇴 Norway"
+            value="Norway"
+          />
+          <PickerItem
+            key="countryPickerItem148"
+            label="🇴🇲 Oman"
+            value="Oman"
+          />
+          <PickerItem
+            key="countryPickerItem149"
+            label="🇵🇰 Pakistan"
+            value="Pakistan"
+          />
+          <PickerItem
+            key="countryPickerItem150"
+            label="🇵🇼 Palau"
+            value="Palau"
+          />
+          <PickerItem
+            key="countryPickerItem151"
+            label="🇵🇦 Panama"
+            value="Panama"
+          />
+          <PickerItem
+            key="countryPickerItem152"
+            label="🇵🇬 Papua New Guinea"
+            value="Papua New Guinea"
+          />
+          <PickerItem
+            key="countryPickerItem153"
+            label="🇵🇾 Paraguay"
+            value="Paraguay"
+          />
+          <PickerItem
+            key="countryPickerItem154"
+            label="🇵🇪 Peru"
+            value="Peru"
+          />
+          <PickerItem
+            key="countryPickerItem155"
+            label="🇵🇭 Philippines"
+            value="Philippines"
+          />
+          <PickerItem
+            key="countryPickerItem156"
+            label="🇵🇱 Poland"
+            value="Poland"
+          />
+          <PickerItem
+            key="countryPickerItem157"
+            label="🇵🇹 Portugal"
+            value="Portugal"
+          />
+          <PickerItem
+            key="countryPickerItem158"
+            label="🇵🇷 Puerto Rico"
+            value="Puerto Rico"
+          />
+          <PickerItem
+            key="countryPickerItem159"
+            label="🇶🇦 Qatar"
+            value="Qatar"
+          />
+          <PickerItem
+            key="countryPickerItem160"
+            label="🇷🇴 Romania"
+            value="Romania"
+          />
+          <PickerItem
+            key="countryPickerItem161"
+            label="🇷🇺 Russia"
+            value="Russia"
+          />
+          <PickerItem
+            key="countryPickerItem162"
+            label="🇷🇼 Rwanda"
+            value="Rwanda"
+          />
+          <PickerItem
+            key="countryPickerItem163"
+            label="🇼🇸 Samoa"
+            value="Samoa"
+          />
+          <PickerItem
+            key="countryPickerItem164"
+            label="🇸🇲 San Marino"
+            value="San Marino"
+          />
+          <PickerItem
+            key="countryPickerItem165"
+            label="🇸🇦 Saudi Arabia"
+            value="Saudi Arabia"
+          />
+          <PickerItem
+            key="countryPickerItem166"
+            label="🇸🇳 Senegal"
+            value="Senegal"
+          />
+          <PickerItem
+            key="countryPickerItem167"
+            label="🇷🇸 Serbia"
+            value="Serbia"
+          />
+          <PickerItem
+            key="countryPickerItem168"
+            label="🇸🇨 Seychelles"
+            value="Seychelles"
+          />
+          <PickerItem
+            key="countryPickerItem169"
+            label="🇸🇱 Sierra Leone"
+            value="Sierra Leone"
+          />
+          <PickerItem
+            key="countryPickerItem170"
+            label="🇸🇬 Singapore"
+            value="Singapore"
+          />
+          <PickerItem
+            key="countryPickerItem171"
+            label="🇸🇰 Slovakia"
+            value="Slovakia"
+          />
+          <PickerItem
+            key="countryPickerItem172"
+            label="🇸🇮 Slovenia"
+            value="Slovenia"
+          />
+          <PickerItem
+            key="countryPickerItem173"
+            label="🇸🇧 Solomon Islands"
+            value="Solomon Islands"
+          />
+          <PickerItem
+            key="countryPickerItem174"
+            label="🇸🇴 Somalia"
+            value="Somalia"
+          />
+          <PickerItem
+            key="countryPickerItem175"
+            label="🇿🇦 South Africa"
+            value="South Africa"
+          />
+          <PickerItem
+            key="countryPickerItem176"
+            label="🇰🇷 South Korea"
+            value="South Korea"
+          />
+          <PickerItem
+            key="countryPickerItem177"
+            label="🇪🇸 Spain"
+            value="Spain"
+          />
+          <PickerItem
+            key="countryPickerItem178"
+            label="🇱🇰 Sri Lanka"
+            value="Sri Lanka"
+          />
+          <PickerItem
+            key="countryPickerItem179"
+            label="🇸🇩 Sudan"
+            value="Sudan"
+          />
+          <PickerItem
+            key="countryPickerItem180"
+            label="🇸🇷 Suriname"
+            value="Suriname"
+          />
+          <PickerItem
+            key="countryPickerItem181"
+            label="🇸🇿 Swaziland"
+            value="Swaziland"
+          />
+          <PickerItem
+            key="countryPickerItem182"
+            label="🇸🇪 Sweden"
+            value="Sweden"
+          />
+          <PickerItem
+            key="countryPickerItem183"
+            label="🇨🇭 Switzerland"
+            value="Switzerland"
+          />
+          <PickerItem
+            key="countryPickerItem184"
+            label="🇸🇾 Syria"
+            value="Syria"
+          />
+          <PickerItem
+            key="countryPickerItem185"
+            label="🇹🇼 Taiwan"
+            value="Taiwan"
+          />
+          <PickerItem
+            key="countryPickerItem186"
+            label="🇹🇯 Tajikistan"
+            value="Tajikistan"
+          />
+          <PickerItem
+            key="countryPickerItem187"
+            label="🇹🇿 Tanzania"
+            value="Tanzania"
+          />
+          <PickerItem
+            key="countryPickerItem188"
+            label="🇹🇭 Thailand"
+            value="Thailand"
+          />
+          <PickerItem
+            key="countryPickerItem189"
+            label="🇹🇱 Timor-Leste"
+            value="Timor-Leste"
+          />
+          <PickerItem
+            key="countryPickerItem190"
+            label="🇹🇬 Togo"
+            value="Togo"
+          />
+          <PickerItem
+            key="countryPickerItem191"
+            label="🇹🇰 Tokelau"
+            value="Tokelau"
+          />
+          <PickerItem
+            key="countryPickerItem192"
+            label="🇹🇴 Tonga"
+            value="Tonga"
+          />
+          <PickerItem
+            key="countryPickerItem193"
+            label="🇹🇳 Tunisia"
+            value="Tunisia"
+          />
+          <PickerItem
+            key="countryPickerItem194"
+            label="🇹🇷 Turkey"
+            value="Turkey"
+          />
+          <PickerItem
+            key="countryPickerItem195"
+            label="🇹🇲 Turkmenistan"
+            value="Turkmenistan"
+          />
+          <PickerItem
+            key="countryPickerItem196"
+            label="🇹🇻 Tuvalu"
+            value="Tuvalu"
+          />
+          <PickerItem
+            key="countryPickerItem197"
+            label="🇺🇬 Uganda"
+            value="Uganda"
+          />
+          <PickerItem
+            key="countryPickerItem198"
+            label="🇺🇦 Ukraine"
+            value="Ukraine"
+          />
+          <PickerItem
+            key="countryPickerItem199"
+            label="🇦🇪 United Arab Emirates"
+            value="United Arab Emirates"
+          />
+          <PickerItem
+            key="countryPickerItem200"
+            label="🇬🇧 United Kingdom"
+            value="United Kingdom"
+          />
+          <PickerItem
+            key="countryPickerItem201"
+            label="🇺🇸 United States"
+            value="United States"
+          />
+          <PickerItem
+            key="countryPickerItem202"
+            label="🇺🇾 Uruguay"
+            value="Uruguay"
+          />
+          <PickerItem
+            key="countryPickerItem203"
+            label="🇺🇿 Uzbekistan"
+            value="Uzbekistan"
+          />
+          <PickerItem
+            key="countryPickerItem204"
+            label="🇻🇺 Vanuatu"
+            value="Vanuatu"
+          />
+          <PickerItem
+            key="countryPickerItem205"
+            label="🇻🇪 Venezuela"
+            value="Venezuela"
+          />
+          <PickerItem
+            key="countryPickerItem206"
+            label="🇪🇭 Western Sahara"
+            value="Western Sahara"
+          />
+          <PickerItem
+            key="countryPickerItem207"
+            label="🇾🇪 Yemen"
+            value="Yemen"
+          />
+          <PickerItem
+            key="countryPickerItem208"
+            label="🇿🇲 Zambia"
+            value="Zambia"
+          />
+          <PickerItem
+            key="countryPickerItem209"
+            label="🇿🇼 Zimbabwe"
+            value="Zimbabwe"
+          />
+        </Picker>
+      </Component>
+      <Button
+        onPress={[Function]}
+        primary={true}
+        title="Done"
+      />
+    </Component>
+  </Component>
+  <TouchableWithoutFeedback
+    onPress={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#FFFFFF",
+        "flex": 1,
+        "flexDirection": "row",
+        "height": 60,
+        "justifyContent": "center",
+        "paddingRight": 10,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "padding": 0,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#333333",
+            "fontSize": 22,
+            "padding": 10,
+          }
+        }
+      >
+        🇺🇸
+         +
+        1
+      </Component>
+      <Component
+        style={
+          Array [
+            undefined,
+            Object {
+              "display": "none",
+            },
+          ]
+        }
+      >
+        <LoadingCircle
+          color="purple"
+          size={20}
+        />
+      </Component>
+    </Component>
+  </TouchableWithoutFeedback>
+  <Component
+    style={
+      Object {
+        "backgroundColor": "rgba(0,0,0,0.1)",
+        "height": 60,
+        "width": 1,
+      }
+    }
+  />
+  <TextInput
+    allowFontScaling={true}
+    autoFocus={false}
+    keyboardType="number-pad"
+    maxLength={12}
+    onChangeText={[Function]}
+    placeholder="### ### ####"
+    style={
+      Object {
+        "alignItems": "center",
+        "color": "#333333",
+        "flex": 3,
+        "flexDirection": "row",
+        "fontSize": 22,
+        "height": 60,
+        "justifyContent": "center",
+        "padding": 10,
+      }
+    }
+    underlineColorAndroid="transparent"
+    value=""
+  />
+</Component>
+`;

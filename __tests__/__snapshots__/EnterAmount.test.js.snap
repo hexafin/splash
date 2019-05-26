@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Enter Amount renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "flexDirection": "column",
+      "justifyContent": "space-between",
+      "paddingBottom": 140,
+      "paddingTop": 60,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "column",
+        "justifyContent": "center",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "color": undefined,
+          "fontSize": 24,
+          "fontWeight": "600",
+          "marginBottom": 4,
+        }
+      }
+    >
+      Sending 
+      Bitcoin
+    </Component>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "center",
+        "padding": 20,
+        "position": "relative",
+      }
+    }
+  >
+    <CurrencySwitcherLight
+      activeCurrency="USD"
+      crypto="BTC"
+      fiat="USD"
+      onSwitch={[Function]}
+      style={
+        Object {
+          "left": 20,
+          "position": "absolute",
+          "top": 40,
+        }
+      }
+      switcherColor="purple"
+      textColor="#4547E0"
+      textSize={16}
+    />
+    <Component
+      pointerEvents="none"
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "column",
+          "justifyContent": "center",
+        }
+      }
+    >
+      <AnimatedComponent
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flexDirection": "row",
+              "height": 80,
+              "justifyContent": "center",
+            },
+            Object {
+              "transform": Array [
+                Object {
+                  "scale": 1,
+                },
+              ],
+            },
+          ]
+        }
+      >
+        <Component
+          style={
+            Array [
+              Object {
+                "fontWeight": "700",
+                "paddingBottom": 15,
+              },
+              Object {
+                "color": "#4547E0",
+                "fontSize": 34,
+                "paddingRight": 3,
+              },
+            ]
+          }
+        >
+          $
+        </Component>
+        <Component
+          style={
+            Array [
+              Object {
+                "fontSize": 54,
+                "fontWeight": "700",
+              },
+              Object {
+                "color": "#4547E0",
+                "opacity": 0.8,
+              },
+            ]
+          }
+        >
+          0
+        </Component>
+      </AnimatedComponent>
+      <Component
+        style={
+          Array [
+            Object {
+              "fontSize": 18,
+            },
+            Object {
+              "color": "#919191",
+            },
+          ]
+        }
+      >
+        Balance: 
+        $
+        100000.00
+      </Component>
+    </Component>
+  </Component>
+  <Keypad
+    arrow="purple"
+    decimal={true}
+    delete={true}
+    onChange={[Function]}
+    pressColor="#CFCFFF"
+    primaryColor="#EEEEFC"
+    textColor="#3F41FA"
+    value=""
+  />
+  <NextButton
+    disabled={true}
+    onPress={[Function]}
+    title="Choose recipient"
+  />
+  <CloseButton
+    color="dark"
+    onPress={[Function]}
+  />
+</Component>
+`;

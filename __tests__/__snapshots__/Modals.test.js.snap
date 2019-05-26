@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Card Modal renders correctly 1`] = `<Component />`;
+
+exports[`Info Modal renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "flex": 1,
+      "padding": 30,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "paddingBottom": 17,
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "height": 20,
+          "margin": 8,
+          "width": 20,
+        }
+      }
+    />
+    <Component
+      style={
+        Object {
+          "color": "#333333",
+          "fontSize": 20,
+          "fontWeight": "600",
+          "textAlign": "center",
+        }
+      }
+    />
+    <TouchableOpacity
+      activeOpacity={0.2}
+    >
+      <Component
+        source={
+          Object {
+            "testUri": "../../../src/assets/icons/Xbutton.png",
+          }
+        }
+        style={
+          Object {
+            "height": 20,
+            "margin": 8,
+            "width": 20,
+          }
+        }
+      />
+    </TouchableOpacity>
+  </Component>
+  <Component
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "#333333",
+        "fontSize": 18,
+        "textAlign": "center",
+      }
+    }
+  />
+</Component>
+`;
+
+exports[`Modal Root renders correctly 1`] = `""`;
+
+exports[`Raise Modal renders correctly 1`] = `<Component />`;

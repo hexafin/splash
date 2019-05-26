@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Account renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "transparent",
+      "flex": 1,
+      "paddingBottom": 20,
+      "paddingTop": 20,
+    }
+  }
+>
+  <ScrollView>
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 150,
+          "justifyContent": "center",
+          "marginBottom": 40,
+          "paddingTop": 60,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#FFFFFF",
+            "fontSize": 27,
+            "fontWeight": "700",
+          }
+        }
+      >
+        @
+      </Component>
+    </Component>
+    <Component
+      style={
+        Object {
+          "backgroundColor": "#FFFFFF",
+          "flex": 1,
+          "flexDirection": "column",
+          "padding": 20,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "paddingBottom": 30,
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#292342",
+              "fontSize": 20,
+              "fontWeight": "700",
+            }
+          }
+        >
+          Your account
+        </Component>
+        <Component
+          style={
+            Object {
+              "color": "#B3B3B3",
+              "fontSize": 16,
+              "fontWeight": "700",
+              "paddingVertical": 10,
+            }
+          }
+        >
+          Splashtag
+        </Component>
+        <TouchableOpacity
+          activeOpacity={0.2}
+          onPress={[Function]}
+        >
+          <Component
+            pointerEvents="none"
+          >
+            <Input
+              editable={false}
+              input={
+                Object {
+                  "value": undefined,
+                }
+              }
+            />
+          </Component>
+        </TouchableOpacity>
+      </Component>
+      <Component
+        style={
+          Object {
+            "paddingBottom": 30,
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#333333",
+              "fontSize": 18,
+              "fontWeight": "600",
+              "paddingBottom": 10,
+            }
+          }
+        >
+          Settings
+        </Component>
+        <Setting
+          description="On the mainnet your coins hold real value. If unselected your app will use testnet tokens."
+          title="Use undefined mainnet"
+          toggleCallback={[Function]}
+          toggleState={false}
+        />
+        <Setting
+          description="Set a four digit passcode to secure your Splash wallet."
+          help={true}
+          title="Set a PIN"
+          toggleCallback={[Function]}
+        />
+        <Setting
+          description="Secure your account with Touch ID or Face ID."
+          title="Use biometric security"
+          toggleCallback={[Function]}
+        />
+        <TouchableOpacity
+          activeOpacity={0.2}
+          onPress={[Function]}
+          style={
+            Object {
+              "marginTop": 42,
+            }
+          }
+        >
+          <Component
+            style={
+              Object {
+                "alignSelf": "center",
+                "backgroundColor": "rgba(0,0,0,0)",
+                "color": "red",
+                "fontSize": 17,
+                "fontWeight": "700",
+              }
+            }
+          >
+            Delete Account
+          </Component>
+        </TouchableOpacity>
+      </Component>
+    </Component>
+  </ScrollView>
+</Component>
+`;
+
+exports[`Setting renders correctly 1`] = `
+<Component
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "paddingVertical": 5,
+    }
+  }
+>
+  <Component
+    style={
+      Object {
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+      }
+    }
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "paddingBottom": 5,
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "color": "#333333",
+            "fontSize": 15,
+            "fontWeight": "500",
+            "paddingRight": 10,
+          }
+        }
+      />
+    </Component>
+    <Switch
+      trackColor="#5153E9"
+    />
+  </Component>
+  <Component
+    style={
+      Object {
+        "color": "#919191",
+        "fontSize": 14,
+        "paddingRight": 78,
+      }
+    }
+  />
+</Component>
+`;

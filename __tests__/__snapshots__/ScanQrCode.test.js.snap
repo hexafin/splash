@@ -1,0 +1,258 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ScanQrCode renders correctly 1`] = `
+<_default
+  bottomContent={
+    <Component>
+      <Component
+        style={
+          Object {
+            "overflow": "hidden",
+            "width": 750,
+          }
+        }
+      >
+        <Component
+          resizeMode="contain"
+          source={
+            Object {
+              "testUri": "../../../src/assets/images/headerWave.png",
+            }
+          }
+          style={
+            Object {
+              "overflow": "hidden",
+              "shadowOffset": Object {
+                "height": 5,
+                "width": 0,
+              },
+              "shadowOpacity": 0.12,
+              "shadowRadius": 12,
+              "top": -285,
+              "width": 750,
+            }
+          }
+        />
+      </Component>
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "flexDirection": "row",
+            "opacity": 0.75,
+            "position": "absolute",
+            "top": 65,
+          }
+        }
+      >
+        <Component
+          style={
+            Object {
+              "color": "#FFFFFF",
+              "fontSize": 25,
+              "paddingRight": 15,
+            }
+          }
+        >
+          Point at QR Code
+        </Component>
+        <Component
+          resizeMode="contain"
+          source={
+            Object {
+              "testUri": "../../../src/assets/icons/qrIcon.png",
+            }
+          }
+          style={
+            Object {
+              "height": 30,
+              "width": 30,
+            }
+          }
+        />
+      </Component>
+      <AnimatedComponent
+        style={
+          Array [
+            Object {
+              "alignSelf": "center",
+              "height": 270,
+              "justifyContent": "space-between",
+              "top": -275,
+              "width": 270,
+            },
+            Object {
+              "transform": Array [
+                Object {
+                  "scale": 0,
+                },
+              ],
+            },
+          ]
+        }
+      >
+        <Component>
+          <Component
+            style={
+              Object {
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+              }
+            }
+          >
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 12,
+                  "width": 50,
+                }
+              }
+            />
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 12,
+                  "width": 50,
+                }
+              }
+            />
+          </Component>
+          <Component
+            style={
+              Object {
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+              }
+            }
+          >
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 38,
+                  "width": 12,
+                }
+              }
+            />
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 38,
+                  "width": 12,
+                }
+              }
+            />
+          </Component>
+        </Component>
+        <Component>
+          <Component
+            style={
+              Object {
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+              }
+            }
+          >
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 38,
+                  "width": 12,
+                }
+              }
+            />
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 38,
+                  "width": 12,
+                }
+              }
+            />
+          </Component>
+          <Component
+            style={
+              Object {
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+              }
+            }
+          >
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 12,
+                  "width": 50,
+                }
+              }
+            />
+            <Component
+              style={
+                Object {
+                  "backgroundColor": "#FFFFFF",
+                  "height": 12,
+                  "width": 50,
+                }
+              }
+            />
+          </Component>
+        </Component>
+      </AnimatedComponent>
+      <TouchableOpacity
+        activeOpacity={0.2}
+        onPress={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "alignSelf": "center",
+            "backgroundColor": "#FFFFFF",
+            "borderRadius": 49,
+            "height": 98,
+            "justifyContent": "center",
+            "top": 359,
+            "width": 98,
+          }
+        }
+      >
+        <Component
+          resizeMode="contain"
+          source={
+            Object {
+              "testUri": "../../../src/assets/icons/crossPrimary.png",
+            }
+          }
+          style={
+            Object {
+              "height": 25,
+              "width": 25,
+            }
+          }
+        />
+      </TouchableOpacity>
+    </Component>
+  }
+  bottomViewStyle={
+    Object {
+      "position": "absolute",
+    }
+  }
+  cameraStyle={
+    Object {
+      "height": 1334,
+    }
+  }
+  containerStyle={
+    Object {
+      "backgroundColor": "#FFFFFF",
+    }
+  }
+  onRead={[Function]}
+/>
+`;

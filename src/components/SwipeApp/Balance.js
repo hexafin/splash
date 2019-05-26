@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, { Component } from "react";
 import {
 	View,
 	Text,
@@ -14,48 +14,57 @@ import {
 	Share,
 	Dimensions,
 	TextInput
-} from "react-native"
+} from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux"
-import { isIphoneX } from "react-native-iphone-x-helper"
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
-import api from '../../api'
-import firebase from "react-native-firebase"
-import LoadingCircle from "../universal/LoadingCircle"
-import CurrencySwitcher from "../universal/CurrencySwitcher"
-import { setActiveCurrency } from "../../redux/crypto/actions"
-import { decimalLengths } from "../../lib/cryptos"
+import { bindActionCreators } from "redux";
+import { isIphoneX } from "react-native-iphone-x-helper";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import api from "../../api";
+import firebase from "react-native-firebase";
+import LoadingCircle from "../universal/LoadingCircle";
+import CurrencySwitcher from "../universal/CurrencySwitcher";
+import { setActiveCurrency } from "../../redux/crypto/actions";
+import { decimalLengths } from "../../lib/cryptos";
 
 let firestore = firebase.firestore();
 
-const SCREEN_WIDTH = Dimensions.get("window").width
-const SCREEN_HEIGHT = Dimensions.get("window").height
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-class Balance extends Component {
+export class Balance extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			loading: false,
 			loadingTimeout: false
-		}
+		};
 	}
 
 	componentWillMount() {
-		this.yOffset = new Animated.Value(0)
-		this.animatedBalanceScale = new Animated.Value(1)
+		this.yOffset = new Animated.Value(0);
+		this.animatedBalanceScale = new Animated.Value(1);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (!this.state.loading && (nextProps.isLoadingBalance || nextProps.isLoadingExchangeRates || nextProps.isLoadingTransactions)) {
-			this.setState({loading: true, loadingTimeout: true})
+		if (
+			!this.state.loading &&
+			(nextProps.isLoadingBalance ||
+				nextProps.isLoadingExchangeRates ||
+				nextProps.isLoadingTransactions)
+		) {
+			this.setState({ loading: true, loadingTimeout: true });
 			setTimeout(() => {
-				this.setState({loadingTimeout: false})
-			}, 500)
-		}
-		else if (this.state.loading && !nextProps.isLoadingBalance && !nextProps.isLoadingExchangeRates && !nextProps.isLoadingTransactions) {
-			this.setState({loading: false})
+				this.setState({ loadingTimeout: false });
+			}, 500);
+		} else if (
+			this.state.loading &&
+			!nextProps.isLoadingBalance &&
+			!nextProps.isLoadingExchangeRates &&
+			!nextProps.isLoadingTransactions
+		) {
+			this.setState({ loading: false });
 		}
 	}
 
@@ -68,60 +77,57 @@ class Balance extends Component {
 		// 	return true
 		// }
 		if (nextState.loading != this.state.loading) {
-			return true
-		}
-		else if (nextState.loadingTimeout != this.state.loadingTimeout) {
-			return true
-		}
-		else if (nextProps.currency != this.props.currency) {
-			return true
-		}
-		else if (nextProps.cryptoCurrency != this.props.cryptoCurrency) {
-			return true
-		}
-		else {
-			return false
+			return true;
+		} else if (nextState.loadingTimeout != this.state.loadingTimeout) {
+			return true;
+		} else if (nextProps.currency != this.props.currency) {
+			return true;
+		} else if (nextProps.cryptoCurrency != this.props.cryptoCurrency) {
+			return true;
+		} else {
+			return false;
 		}
 	}
-  
+
 	render() {
+		const { cryptoCurrency, currency, balance, exchangeRates } = this.props;
 
-		const {cryptoCurrency, currency, balance, exchangeRates} = this.props
-
-		let relativeBalance
+		let relativeBalance;
 		if (currency == cryptoCurrency) {
-			relativeBalance = balance[cryptoCurrency].toFixed(decimalLengths[cryptoCurrency])
-		}
-		else {
+			relativeBalance = balance[cryptoCurrency].toFixed(
+				decimalLengths[cryptoCurrency]
+			);
+		} else {
 			if (exchangeRates[cryptoCurrency]) {
-				relativeBalance = (balance[cryptoCurrency] * exchangeRates[cryptoCurrency].USD).toFixed(decimalLengths["USD"])
-			}
-			else {
-				relativeBalance = 0
+				relativeBalance = (
+					balance[cryptoCurrency] * exchangeRates[cryptoCurrency].USD
+				).toFixed(decimalLengths["USD"]);
+			} else {
+				relativeBalance = 0;
 			}
 		}
 
 		const balanceTranslateY = Animated.add(
 			Animated.multiply(
 				this.props.xOffset.interpolate({
-					inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+					inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 					outputRange: [0, 1, 0]
 				}),
 				this.props.yOffsets.home.interpolate({
 					inputRange: [-1, 0, 120, 121],
 					outputRange: [0, 0, -53, -53]
-				}),
+				})
 			),
 			this.props.xOffset.interpolate({
-				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 				outputRange: [-40, 0, -40]
-			}),
-		)
+			})
+		);
 
 		const balanceScale = Animated.add(
 			Animated.multiply(
 				this.props.xOffset.interpolate({
-					inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+					inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 					outputRange: [0, 1, 0]
 				}),
 				this.props.yOffsets.home.interpolate({
@@ -130,20 +136,32 @@ class Balance extends Component {
 				})
 			),
 			this.props.xOffset.interpolate({
-				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH*2],
+				inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
 				outputRange: [0.8, 1, 0.8]
-			}),
-		)
+			})
+		);
 
 		const balanceOpacity = this.props.xOffset.interpolate({
-			inputRange: [SCREEN_WIDTH*0.7, SCREEN_WIDTH, SCREEN_WIDTH*1.3],
+			inputRange: [SCREEN_WIDTH * 0.7, SCREEN_WIDTH, SCREEN_WIDTH * 1.3],
 			outputRange: [0, 1, 0]
-		})
+		});
 
 		const balanceTranslateX = this.props.xOffset.interpolate({
-			inputRange: [0, SCREEN_WIDTH*0.6, SCREEN_WIDTH, SCREEN_WIDTH*1.4, SCREEN_WIDTH*2],
-			outputRange: [SCREEN_WIDTH*1.2, SCREEN_WIDTH*0.3, 0, -0.3*SCREEN_WIDTH, -1.2*SCREEN_WIDTH]
-		})
+			inputRange: [
+				0,
+				SCREEN_WIDTH * 0.6,
+				SCREEN_WIDTH,
+				SCREEN_WIDTH * 1.4,
+				SCREEN_WIDTH * 2
+			],
+			outputRange: [
+				SCREEN_WIDTH * 1.2,
+				SCREEN_WIDTH * 0.3,
+				0,
+				-0.3 * SCREEN_WIDTH,
+				-1.2 * SCREEN_WIDTH
+			]
+		});
 
 		const animatedBalance = {
 			transform: [
@@ -151,35 +169,42 @@ class Balance extends Component {
 					scale: balanceScale
 				},
 				{
-					translateY: balanceTranslateY,
+					translateY: balanceTranslateY
 				},
 				{
 					translateX: balanceTranslateX
 				}
 			],
-			opacity: balanceOpacity,
-		}
+			opacity: balanceOpacity
+		};
 
 		const animatedBalanceView = {
-			transform: [
-				{scale: this.animatedBalanceScale}
-			]
-		}
+			transform: [{ scale: this.animatedBalanceScale }]
+		};
 
-		const loading = this.state.loading || this.state.loadingTimeout
+		const loading = this.state.loading || this.state.loadingTimeout;
 
 		return (
-			
-			<Animated.View pointerEvents="box-none" style={[
-				animatedBalance,
-				styles.balanceWrapper
-			]}>
-				<Animated.View style={[styles.balance, animatedBalanceView]} pointerEvents="box-none">
-					<Text style={styles.balanceText}>{loading ? " " : relativeBalance}</Text>
-					<View style={[styles.balanceRefresh, {
-						opacity: loading ? 100 : 0
-					}]}>
-						<LoadingCircle size={30} restart={loading}/>
+			<Animated.View
+				pointerEvents="box-none"
+				style={[animatedBalance, styles.balanceWrapper]}
+			>
+				<Animated.View
+					style={[styles.balance, animatedBalanceView]}
+					pointerEvents="box-none"
+				>
+					<Text style={styles.balanceText}>
+						{loading ? " " : relativeBalance}
+					</Text>
+					<View
+						style={[
+							styles.balanceRefresh,
+							{
+								opacity: loading ? 100 : 0
+							}
+						]}
+					>
+						<LoadingCircle size={30} restart={loading} />
 					</View>
 					<CurrencySwitcher
 						fiat="USD"
@@ -188,25 +213,25 @@ class Balance extends Component {
 						switcherColor={"white"}
 						activeCurrencySize={24}
 						switcherBottom={32}
-						style={{marginTop: -25}}
+						style={{ marginTop: -25 }}
 						onPressIn={() => {
 							Animated.spring(this.animatedBalanceScale, {
 								toValue: 0.8,
 								bounciness: 6,
-								speed: 8,
-							}).start()
+								speed: 8
+							}).start();
 						}}
 						onPressOut={() => {
 							Animated.spring(this.animatedBalanceScale, {
 								toValue: 1,
 								bounciness: 6,
-								speed: 8,
-							}).start()
-						}}/>
+								speed: 8
+							}).start();
+						}}
+					/>
 				</Animated.View>
 			</Animated.View>
-			
-		)
+		);
 	}
 }
 
@@ -216,14 +241,14 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		position: "absolute",
-		top: (isIphoneX()) ? 90 : 70,
-		width: SCREEN_WIDTH,
+		top: isIphoneX() ? 90 : 70,
+		width: SCREEN_WIDTH
 		// backgroundColor: colors.gray,
 	},
 	balance: {
 		flexDirection: "column",
 		justifyContent: "center",
-		alignItems: "center",
+		alignItems: "center"
 	},
 	balanceRefresh: {
 		position: "absolute",
@@ -253,8 +278,8 @@ const styles = StyleSheet.create({
 	refreshIcon: {
 		width: 16,
 		height: 16
-	},
-})
+	}
+});
 
 const mapStateToProps = state => {
 	return {
@@ -264,11 +289,11 @@ const mapStateToProps = state => {
 		exchangeRates: state.crypto.exchangeRates,
 		isLoadingExchangeRates: state.crypto.isLoadingExchangeRates,
 		isLoadingTransactions: state.transactions.isLoadingTransactions,
-        isLoadingBalance: state.crypto.isLoadingBalance,
-        loadingBalanceCurrency: state.crypto.loadingBalanceCurrency,
-        successLoadingBalance: state.crypto.successLoadingBalance,
-	}
-}
+		isLoadingBalance: state.crypto.isLoadingBalance,
+		loadingBalanceCurrency: state.crypto.loadingBalanceCurrency,
+		successLoadingBalance: state.crypto.successLoadingBalance
+	};
+};
 
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
@@ -276,7 +301,10 @@ const mapDispatchToProps = dispatch => {
 			setActiveCurrency
 		},
 		dispatch
-	)
-}
+	);
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Balance)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Balance);

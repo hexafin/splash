@@ -21,17 +21,15 @@ codePush.getUpdateMetadata().then(update => {
 let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
 class App extends Component {
-
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			loggedIn: false
-		}
+		};
 	}
 
 	render() {
-
-		const Router = Routes(this.state.loggedIn)
+		const Router = Routes(this.state.loggedIn);
 
 		return (
 			<Provider store={store}>
@@ -39,15 +37,16 @@ class App extends Component {
 					loading={<Loading />}
 					persistor={persistor}
 					onBeforeLift={() => {
-						const state = store.getState()
+						const state = store.getState();
 						this.setState(prevState => {
 							return {
 								...prevState,
 								loggedIn: state.user.loggedIn
-							}
-						})
-					}}>
-					<Router/>
+							};
+						});
+					}}
+				>
+					<Router />
 				</PersistGate>
 			</Provider>
 		);
