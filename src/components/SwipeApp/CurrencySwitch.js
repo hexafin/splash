@@ -17,21 +17,21 @@ import {
 import { isIphoneX } from "react-native-iphone-x-helper";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import { connect } from "react-redux";
-import {
-  cryptoNames,
-  cryptoNameDict,
-  cryptoColors,
-  cryptoImages
-} from "../../lib/cryptos";
+import { cryptoNames, cryptoNameDict, cryptoColors, cryptoImages } from "../../lib/cryptos";
 import { bindActionCreators } from "redux";
-import {
-  setActiveCryptoCurrency,
-  setActiveCurrency,
-  Load
-} from "../../redux/crypto/actions";
+import { setActiveCryptoCurrency, setActiveCurrency, Load } from "../../redux/crypto/actions";
 import { LoadTransactions } from "../../redux/transactions/actions";
 import { colors } from "../../lib/colors";
 import Interactable from "react-native-interactable";
+
+/*
+Change the active crypto currency
+<CurrencySwitch
+  switchXOffset={animated value} 
+  yOffsets={array of animated values} 
+  xOffset={animated value} />
+*/
+
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -72,9 +72,7 @@ export class CurrencySwitch extends Component {
 
     this.props.switchXOffset.addListener(({ value }) => {
       if (this.state.initialized) {
-        const index = Math.abs(
-          Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100) / 2 - 95)))
-        );
+        const index = Math.abs(Math.round(value / (-1 * (100 + (SCREEN_WIDTH - 100) / 2 - 95))));
         if (
           currencies[index] &&
           currencies[index].code &&
@@ -104,11 +102,7 @@ export class CurrencySwitch extends Component {
           ...styles.container,
           opacity: Animated.multiply(
             this.props.xOffset.interpolate({
-              inputRange: [
-                (SCREEN_WIDTH * 2) / 3,
-                SCREEN_WIDTH,
-                (SCREEN_WIDTH * 4) / 3
-              ],
+              inputRange: [(SCREEN_WIDTH * 2) / 3, SCREEN_WIDTH, (SCREEN_WIDTH * 4) / 3],
               outputRange: [0, 1, 0]
             }),
             this.props.yOffsets.home.interpolate({
@@ -145,9 +139,7 @@ export class CurrencySwitch extends Component {
           snapPoints={snapPoints}
           animatedValueX={this.props.switchXOffset}
           initialPosition={{
-            x: snapPointFromIndex(
-              currencyIndex[this.props.activeCryptoCurrency]
-            )
+            x: snapPointFromIndex(currencyIndex[this.props.activeCryptoCurrency])
           }}
           // onSnap={event => {
           //   this.handleCurrencySwitch(currencies[event.nativeEvent.index].code)
@@ -181,13 +173,9 @@ export class CurrencySwitch extends Component {
                           }),
                           this.props.switchXOffset.interpolate({
                             inputRange: [
-                              -1 *
-                                (SCREEN_WIDTH / 2 - 45) *
-                                (currency.index + 1),
+                              -1 * (SCREEN_WIDTH / 2 - 45) * (currency.index + 1),
                               -1 * (SCREEN_WIDTH / 2 - 45) * currency.index,
-                              -1 *
-                                (SCREEN_WIDTH / 2 - 45) *
-                                (currency.index - 1)
+                              -1 * (SCREEN_WIDTH / 2 - 45) * (currency.index - 1)
                             ],
                             outputRange: [0.8, 1, 0.8]
                           })
@@ -196,11 +184,7 @@ export class CurrencySwitch extends Component {
                     ]
                   }}
                 >
-                  <Image
-                    source={currency.image}
-                    resizeMode="contain"
-                    style={styles.coinImage}
-                  />
+                  <Image source={currency.image} resizeMode="contain" style={styles.coinImage} />
                   <Text style={styles.coinText}>{currency.code}</Text>
                 </Animated.View>
               </TouchableWithoutFeedback>
