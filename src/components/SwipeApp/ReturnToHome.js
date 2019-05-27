@@ -25,6 +25,14 @@ import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
+/*
+Button in the SwipeApp that navigates you back to the center screen
+<ReturnToHome
+	yOffsets={array of animated values for page y offsets}
+	xOffset={animated value for swiped x offset}
+	onPress={function called on press}
+/>
+*/
 export class ReturnToHome extends Component {
 	shouldComponentUpdate(nextProps, nextState) {
 		return false;

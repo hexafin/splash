@@ -1,15 +1,22 @@
-import Unlock from "./Unlock"
-import {connect} from "react-redux"
-import {bindActionCreators} from "redux"
+import Unlock from "./Unlock";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-const mapStateToProps = (state) => {
-    return {
-    	biometricEnabled: state.user.biometric
-    }
-}
+/*
+Connecting Unlock to redux
+*/
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({}, dispatch)
-}
+const mapStateToProps = state => {
+	return {
+		biometricEnabled: state.user.biometric
+	};
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Unlock)
+const mapDispatchToProps = dispatch => {
+	return bindActionCreators({}, dispatch);
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Unlock);

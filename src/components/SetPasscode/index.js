@@ -1,15 +1,22 @@
-import SetPasscode from "./SetPasscode"
-import {connect} from "react-redux"
-import {bindActionCreators} from "redux"
+import SetPasscode from "./SetPasscode";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-const mapStateToProps = (state) => {
-    return {
-    	userId: state.user.id,
-    }
-}
+/*
+Connecting SetPasscode to redux
+*/
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({}, dispatch)
-}
+const mapStateToProps = state => {
+	return {
+		userId: state.user.id
+	};
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(SetPasscode)
+const mapDispatchToProps = dispatch => {
+	return bindActionCreators({}, dispatch);
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(SetPasscode);

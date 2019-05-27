@@ -1,10 +1,13 @@
-
 import SwipeApp from "./SwipeApp";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { LoadTransactions } from "../../redux/transactions/actions";
 import { Load, setActiveCurrency } from "../../redux/crypto/actions";
 import { startLockoutClock, resetLockoutClock } from "../../redux/user/actions";
+
+/*
+connecting presentational SwipeApp component to redux values and actions
+*/
 
 const notificationPermissionInfo = buttonCallback => {
 	return {

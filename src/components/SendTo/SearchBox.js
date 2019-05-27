@@ -1,10 +1,14 @@
 import React from "react";
 import { StyleSheet, View, TextInput, Text } from "react-native";
 import { colors } from "../../lib/colors";
-import {
-	connectInfiniteHits,
-	connectSearchBox
-} from "react-instantsearch/connectors";
+import { connectInfiniteHits, connectSearchBox } from "react-instantsearch/connectors";
+
+/*
+Search Entry in SendTo
+<SearchBox
+	onChange={function}
+/>
+*/
 
 export const SearchBox = ({ refine, currentRefinement, onChange }) => {
 	return (

@@ -20,12 +20,7 @@ import { defaults, icons } from "../../lib/styles";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-	cryptoNames,
-	cryptoColors,
-	cryptoImages,
-	cryptoNameDict
-} from "../../lib/cryptos";
+import { cryptoNames, cryptoColors, cryptoImages, cryptoNameDict } from "../../lib/cryptos";
 import PropTypes from "prop-types";
 import Account from "../Account";
 import Wallet from "../Wallet";
@@ -39,9 +34,14 @@ import moment from "moment";
 import ModalRoot from "../Modals/ModalRoot";
 import Header from "./Header";
 
+/*
+Application wrapper which defines swiping behavior
+*/
+
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
+// create maps for interpolation and behavior
 let currencies = [];
 let currencyIndex = {};
 let i = 0;
@@ -61,24 +61,23 @@ cryptoNames.forEach(crypto => {
 	i++;
 });
 
+// initialize animated values and events
 const xOffset = new Animated.Value(0);
 const yOffsets = {
 	home: new Animated.Value(0)
 };
-export const _onScroll = Animated.event(
-	[{ nativeEvent: { contentOffset: { x: xOffset } } }],
-	{
-		listener: event => {
-			Keyboard.dismiss();
-		},
-		useNativeDriver: true
-	}
-);
+export const _onScroll = Animated.event([{ nativeEvent: { contentOffset: { x: xOffset } } }], {
+	listener: event => {
+		Keyboard.dismiss();
+	},
+	useNativeDriver: true
+});
 
 function Page(props: { children?: ReactElement<*> }) {
 	return <View style={{ flex: 1, width: SCREEN_WIDTH }}>{props.children}</View>;
 }
 
+// function which defines icon animation
 function iconTransform(index: number) {
 	return {
 		transform: [
@@ -106,6 +105,7 @@ function iconTransform(index: number) {
 	};
 }
 
+// function which defines title animation
 function titleTransform(index: number) {
 	return {
 		transform: [
@@ -133,6 +133,7 @@ function titleTransform(index: number) {
 	};
 }
 
+// header animation
 const headerTranslateY = Animated.add(
 	xOffset.interpolate({
 		inputRange: [0, 1 * SCREEN_WIDTH, 2 * SCREEN_WIDTH],
@@ -160,8 +161,8 @@ function headerTransform() {
 	};
 }
 
+// currency switch animation intialization
 const switchXOffset = new Animated.Value(0);
-
 let switchCryptoColors = [cryptoColors[cryptoNames[0]]];
 let switchInputRange = [1];
 let j = 0;
@@ -246,10 +247,7 @@ export default class SwipeApp extends Component {
 
 	handleAppStateChange = nextAppState => {
 		// if app opens to foreground
-		if (
-			this.state.appState.match(/inactive|background/) &&
-			nextAppState === "active"
-		) {
+		if (this.state.appState.match(/inactive|background/) && nextAppState === "active") {
 			// if time is past lockout
 			if (
 				this.props.lockoutEnabled &&
@@ -281,9 +279,7 @@ export default class SwipeApp extends Component {
 
 		// initialize currency
 		switchXOffset.setValue(
-			-1 *
-				currencyIndex[this.props.activeCryptoCurrency] *
-				(100 + (SCREEN_WIDTH - 100) / 2 - 95)
+			-1 * currencyIndex[this.props.activeCryptoCurrency] * (100 + (SCREEN_WIDTH - 100) / 2 - 95)
 		);
 	}
 
@@ -356,51 +352,52 @@ export default class SwipeApp extends Component {
 								.update({ pushToken: fcmToken });
 						}
 					}
-					this.onTokenRefreshListener = firebase
-						.messaging()
-						.onTokenRefresh(async fcmToken => {
-							await firebase
-								.firestore()
-								.collection("users")
-								.doc(this.props.userId)
-								.update({ pushToken: fcmToken });
-						});
+					this.onTokenRefreshListener = firebase.messaging().onTokenRefresh(async fcmToken => {
+						await firebase
+							.firestore()
+							.collection("users")
+							.doc(this.props.userId)
+							.update({ pushToken: fcmToken });
+					});
 				}
 			})
 			.catch(e => console.log("Notification Error:", e));
 
 		// display notification if in foreground
-		this.notificationListener = firebase.notifications().onNotification((notif) => {
-			console.log(notif.data)
+		this.notificationListener = firebase.notifications().onNotification(notif => {
+			console.log(notif.data);
 			const notification = new firebase.notifications.Notification()
-			  .setNotificationId(notif.notificationId)
-			  .setTitle(notif.title)
-			  .setBody(notif.body)
+				.setNotificationId(notif.notificationId)
+				.setTitle(notif.title)
+				.setBody(notif.body);
 			if (notif.data.domain) {
 				this.props.showCardModal({
 					...notif.data,
 					exchangeRate: this.props.exchangeRate,
 					activeCryptoCurrency: this.props.activeCryptoCurrency,
 					dismissCallback: () => {
-						this.props.DismissTransaction()
-					},
-				})
+						this.props.DismissTransaction();
+					}
+				});
 			}
-			firebase.notifications().displayNotification(notification)
-			ReactNativeHapticFeedback.trigger("impactLight", true)
-			this.props.LoadTransactions(this.props.activeCryptoCurrency)
-  	    });
+			firebase.notifications().displayNotification(notification);
+			ReactNativeHapticFeedback.trigger("impactLight", true);
+			this.props.LoadTransactions(this.props.activeCryptoCurrency);
+		});
 
-  	    this.notificationOpenedListener = firebase.notifications().onNotificationOpened(() => {
-  	    	this.props.LoadTransactions(this.props.activeCryptoCurrency)
-	    });
+		this.notificationOpenedListener = firebase.notifications().onNotificationOpened(() => {
+			this.props.LoadTransactions(this.props.activeCryptoCurrency);
+		});
 
-	    firebase.notifications().getInitialNotification().then(() => {
-	    	this.props.LoadTransactions(this.props.activeCryptoCurrency)
-	    })
+		firebase
+			.notifications()
+			.getInitialNotification()
+			.then(() => {
+				this.props.LoadTransactions(this.props.activeCryptoCurrency);
+			});
 
-	    AppState.addEventListener('change', this.handleAppStateChange);	    	
-   	}
+		AppState.addEventListener("change", this.handleAppStateChange);
+	}
 
 	componentWillUnmount() {
 		xOffset.removeAllListeners();
@@ -473,10 +470,7 @@ export default class SwipeApp extends Component {
 			}
 			if (page.title) {
 				Titles.push(
-					<Animated.View
-						key={"swipe-app-title-" + i}
-						style={[styles.title, titleTransform(i)]}
-					>
+					<Animated.View key={"swipe-app-title-" + i} style={[styles.title, titleTransform(i)]}>
 						<Text style={styles.titleText}>{page.title}</Text>
 					</Animated.View>
 				);
@@ -536,11 +530,7 @@ export default class SwipeApp extends Component {
 					}}
 				/>
 				<Balance yOffsets={yOffsets} xOffset={xOffset} />
-				<CurrencySwitch
-					switchXOffset={switchXOffset}
-					yOffsets={yOffsets}
-					xOffset={xOffset}
-				/>
+				<CurrencySwitch switchXOffset={switchXOffset} yOffsets={yOffsets} xOffset={xOffset} />
 				<ModalRoot />
 			</View>
 		);

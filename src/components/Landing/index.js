@@ -1,12 +1,16 @@
-import Landing from './LandingSwipeView'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
+import Landing from "./Landing";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import {
 	InviteFriends,
 	getDeepLinkedSplashtag,
 	SmsAuthenticate
-} from '../../redux/onboarding/actions'
-import { ClaimUsername } from '../../redux/user/actions'
+} from "../../redux/onboarding/actions";
+import { ClaimUsername } from "../../redux/user/actions";
+
+/*
+Connecting Landing to redux
+*/
 
 const mapStateToProps = state => {
 	return {
@@ -15,8 +19,8 @@ const mapStateToProps = state => {
 		phoneNumber: state.onboarding.phoneNumber,
 		username: state.user.splashtag,
 		smsAuthenticated: state.onboarding.smsAuthenticated
-	}
-}
+	};
+};
 
 const mapDispatchToProps = dispatch => {
 	return bindActionCreators(
@@ -27,7 +31,10 @@ const mapDispatchToProps = dispatch => {
 			SmsAuthenticate
 		},
 		dispatch
-	)
-}
+	);
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Landing)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(Landing);

@@ -33,6 +33,11 @@ let firestore = firebase.firestore();
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
+/*
+Balance shows active crypto amount and lets you switch between crypto and fiat presentation
+<Balance yOffsets={array of animated values} xOffset={animated value} />
+*/
+
 export class Balance extends Component {
 	constructor(props) {
 		super(props);
@@ -94,14 +99,12 @@ export class Balance extends Component {
 
 		let relativeBalance;
 		if (currency == cryptoCurrency) {
-			relativeBalance = balance[cryptoCurrency].toFixed(
-				decimalLengths[cryptoCurrency]
-			);
+			relativeBalance = balance[cryptoCurrency].toFixed(decimalLengths[cryptoCurrency]);
 		} else {
 			if (exchangeRates[cryptoCurrency]) {
-				relativeBalance = (
-					balance[cryptoCurrency] * exchangeRates[cryptoCurrency].USD
-				).toFixed(decimalLengths["USD"]);
+				relativeBalance = (balance[cryptoCurrency] * exchangeRates[cryptoCurrency].USD).toFixed(
+					decimalLengths["USD"]
+				);
 			} else {
 				relativeBalance = 0;
 			}
@@ -147,13 +150,7 @@ export class Balance extends Component {
 		});
 
 		const balanceTranslateX = this.props.xOffset.interpolate({
-			inputRange: [
-				0,
-				SCREEN_WIDTH * 0.6,
-				SCREEN_WIDTH,
-				SCREEN_WIDTH * 1.4,
-				SCREEN_WIDTH * 2
-			],
+			inputRange: [0, SCREEN_WIDTH * 0.6, SCREEN_WIDTH, SCREEN_WIDTH * 1.4, SCREEN_WIDTH * 2],
 			outputRange: [
 				SCREEN_WIDTH * 1.2,
 				SCREEN_WIDTH * 0.3,
@@ -185,17 +182,9 @@ export class Balance extends Component {
 		const loading = this.state.loading || this.state.loadingTimeout;
 
 		return (
-			<Animated.View
-				pointerEvents="box-none"
-				style={[animatedBalance, styles.balanceWrapper]}
-			>
-				<Animated.View
-					style={[styles.balance, animatedBalanceView]}
-					pointerEvents="box-none"
-				>
-					<Text style={styles.balanceText}>
-						{loading ? " " : relativeBalance}
-					</Text>
+			<Animated.View pointerEvents="box-none" style={[animatedBalance, styles.balanceWrapper]}>
+				<Animated.View style={[styles.balance, animatedBalanceView]} pointerEvents="box-none">
+					<Text style={styles.balanceText}>{loading ? " " : relativeBalance}</Text>
 					<View
 						style={[
 							styles.balanceRefresh,

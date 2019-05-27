@@ -19,8 +19,11 @@ import { captureQr } from "../redux/payFlow";
 import QRCodeScanner from "react-native-qrcode-scanner";
 import CloseButton from "./universal/CloseButton";
 import Button from "./universal/Button";
-
 import api from "../api";
+
+/*
+Redux-connected QR code scanner used in Pay flow
+*/
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -62,26 +65,19 @@ export class ScanQrCode extends Component {
 					this.scanner = node;
 				}}
 				onRead={e => {
-					const address =
-						e.data.slice(0, 8) == "bitcoin:" ? e.data.slice(8) : e.data;
-					if (
-						api.IsValidAddress(address, this.props.currency, this.props.network)
-					) {
+					const address = e.data.slice(0, 8) == "bitcoin:" ? e.data.slice(8) : e.data;
+					if (api.IsValidAddress(address, this.props.currency, this.props.network)) {
 						this.props.captureQr(address);
 						this.props.navigation.goBack(null);
 					} else {
-						Alert.alert(
-							"Invalid " + cryptoNameDict[this.props.currency] + " address",
-							null,
-							[
-								{
-									text: "Dismiss",
-									onPress: () => {
-										this.scanner.reactivate();
-									}
+						Alert.alert("Invalid " + cryptoNameDict[this.props.currency] + " address", null, [
+							{
+								text: "Dismiss",
+								onPress: () => {
+									this.scanner.reactivate();
 								}
-							]
-						);
+							}
+						]);
 					}
 				}}
 				cameraStyle={styles.camera}
@@ -98,11 +94,7 @@ export class ScanQrCode extends Component {
 						</View>
 						<View style={styles.topContent}>
 							<Text style={styles.title}>Point at QR Code</Text>
-							<Image
-								source={icons.qrIcon}
-								style={styles.qrIcon}
-								resizeMode={"contain"}
-							/>
+							<Image source={icons.qrIcon} style={styles.qrIcon} resizeMode={"contain"} />
 						</View>
 						<Animated.View style={[styles.box, boxTransform()]}>
 							<View>
@@ -150,11 +142,7 @@ export class ScanQrCode extends Component {
 							style={styles.button}
 							onPress={() => this.props.navigation.goBack(null)}
 						>
-							<Image
-								source={icons.crossPrimary}
-								style={styles.closeIcon}
-								resizeMode={"contain"}
-							/>
+							<Image source={icons.crossPrimary} style={styles.closeIcon} resizeMode={"contain"} />
 						</TouchableOpacity>
 					</View>
 				}
@@ -229,8 +217,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-	const addressType =
-		state.crypto.activeCryptoCurrency == "BTC" ? "BTC" : "ETH";
+	const addressType = state.crypto.activeCryptoCurrency == "BTC" ? "BTC" : "ETH";
 	return {
 		network: state.crypto.wallets[addressType].network,
 		currency: state.crypto.activeCryptoCurrency

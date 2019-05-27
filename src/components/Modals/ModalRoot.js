@@ -10,6 +10,10 @@ import InfoModal from "./InfoModal";
 import CardModal from "./CardModal";
 import RaiseModal from "./RaiseModal";
 
+/*
+Component wrapping modals and connecting them to redux
+*/
+
 const MODAL_COMPONENTS = {
 	VIEW_TRANSACTION: CardModal(ViewTransactionModal),
 	APPROVE_TRANSACTION: RaiseModal(ApproveTransactionModal),
