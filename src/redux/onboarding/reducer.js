@@ -73,7 +73,8 @@ export default function onboardingReducer(state = initialState, action) {
         case SMS_AUTH_SUCCESS:
             return {
                 ...state,
-                isSmsAuthenticating: false
+                isSmsAuthenticating: false,
+                errorSmsAuthenticating: null,
             };
 
         case SMS_AUTH_FAILURE:

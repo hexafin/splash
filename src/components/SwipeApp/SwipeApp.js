@@ -219,9 +219,11 @@ export default class SwipeApp extends Component {
 			const page = this.pages[i];
 			this.pageIndices[page.name] = i;
 		}
-		this.goToPage = this.goToPage.bind(this);
-		this.goToPageByIndex = this.goToPageByIndex.bind(this);
-		this.handleAppStateChange = this.handleAppStateChange.bind(this);
+
+		this.goToPage = this.goToPage.bind(this)
+		this.goToPageByIndex = this.goToPageByIndex.bind(this)
+		this.handleAppStateChange = this.handleAppStateChange.bind(this)
+		this.notifListener = this.notifListener.bind(this)
 	}
 
 	goToPage = (scrollView, pageName) => {
@@ -272,6 +274,23 @@ export default class SwipeApp extends Component {
 		}
 		this.setState({ appState: nextAppState });
 	};
+
+	notifListener = (notif) => {
+		if (!!notif.data.domain) {
+			this.props.showCardModal({
+				...notif.data,
+				exchangeRate: this.props.exchangeRate,
+				activeCryptoCurrency: this.props.activeCryptoCurrency,
+				dismissCallback: () => {
+					this.props.DismissTransaction()
+				},
+			})
+		} else if (!!notif.data.pin) {
+			this.props.linkExtensionPin(notif.data.pin)
+		} else {
+	    	this.props.LoadTransactions(this.props.activeCryptoCurrency)
+		}
+	}
 
 	componentWillMount() {
 		// initialize swipe app to center page
@@ -364,37 +383,24 @@ export default class SwipeApp extends Component {
 			.catch(e => console.log("Notification Error:", e));
 
 		// display notification if in foreground
-		this.notificationListener = firebase.notifications().onNotification(notif => {
-			console.log(notif.data);
+
+		this.notificationListener = firebase.notifications().onNotification((notif) => {
 			const notification = new firebase.notifications.Notification()
-				.setNotificationId(notif.notificationId)
-				.setTitle(notif.title)
-				.setBody(notif.body);
-			if (notif.data.domain) {
-				this.props.showCardModal({
-					...notif.data,
-					exchangeRate: this.props.exchangeRate,
-					activeCryptoCurrency: this.props.activeCryptoCurrency,
-					dismissCallback: () => {
-						this.props.DismissTransaction();
-					}
-				});
-			}
-			firebase.notifications().displayNotification(notification);
-			ReactNativeHapticFeedback.trigger("impactLight", true);
-			this.props.LoadTransactions(this.props.activeCryptoCurrency);
-		});
+			  .setNotificationId(notif.notificationId)
+			  .setTitle(notif.title)
+			  .setBody(notif.body)
+			firebase.notifications().displayNotification(notification)
+			ReactNativeHapticFeedback.trigger("impactLight", true)
+			this.notifListener(notif)
+  	    });
 
-		this.notificationOpenedListener = firebase.notifications().onNotificationOpened(() => {
-			this.props.LoadTransactions(this.props.activeCryptoCurrency);
-		});
+  	    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notif) => {
+			this.notifListener(notif)
+	    });
 
-		firebase
-			.notifications()
-			.getInitialNotification()
-			.then(() => {
-				this.props.LoadTransactions(this.props.activeCryptoCurrency);
-			});
+	    firebase.notifications().getInitialNotification().then((notif) => {
+			this.notifListener(notif)
+	    })
 
 		AppState.addEventListener("change", this.handleAppStateChange);
 	}
