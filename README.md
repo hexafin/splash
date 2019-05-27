@@ -68,11 +68,10 @@ Container view for Account, Home, and Wallet screens. The shared header is defin
 
 - Modals
 
-Defines CardModal.js (left), RaiseModal.js (center), and InfoModal.js (Right) modal containers and ModalRoot.js which allows for the modals to be called in a redux action.
+Defines modal containers and ModalRoot.js which allows for the modals to be called in a redux action.
 
 - ApproveCardModal
 - ApproveTransactionModal
-
 - ViewTransactionModal
 
 #### Security and Settings
