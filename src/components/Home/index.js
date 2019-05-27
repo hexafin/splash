@@ -1,22 +1,25 @@
-import Home from "./Home"
-import {connect} from "react-redux"
-import {bindActionCreators} from "redux"
-import {LoadTransactions} from "../../redux/transactions/actions"
-import {Load} from "../../redux/crypto/actions"
+import Home from "./Home";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { LoadTransactions } from "../../redux/transactions/actions";
+import { Load } from "../../redux/crypto/actions";
 
+/*
+Connecting presentational Home component to redux
+*/
 
 const showTimeoutModal = () => {
-  return {
-    type: 'SHOW_MODAL',
-    modalType: 'INFO',
-    modalProps: {
-    	title: 'Network error',
-    	body: 'Please connect to the internet and try again.',
-    },   
-  }
-}
+    return {
+        type: "SHOW_MODAL",
+        modalType: "INFO",
+        modalProps: {
+            title: "Network error",
+            body: "Please connect to the internet and try again."
+        }
+    };
+};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         activeCryptoCurrency: state.crypto.activeCryptoCurrency,
         isLoadingTransactions: state.transactions.isLoadingTransactions,
@@ -24,14 +27,21 @@ const mapStateToProps = (state) => {
         isLoadingBalance: state.crypto.isLoadingBalance,
         errorLoadingTransactions: state.transactions.errorLoadingTransactions,
         errorLoadingExchangeRates: state.crypto.errorLoadingExchangeRates,
-        errorLoadingBalance: state.crypto.errorLoadingBalance,
-    }
-}
+        errorLoadingBalance: state.crypto.errorLoadingBalance
+    };
+};
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
-    	showTimeoutModal, Load
-    }, dispatch)
-}
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            showTimeoutModal,
+            Load
+        },
+        dispatch
+    );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Home);

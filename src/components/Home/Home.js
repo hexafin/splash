@@ -22,6 +22,10 @@ import History from "./History";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import ColoredPayButton from "./ColoredPayButton";
 
+/*
+Main screen in SwipeApp which includes transaction history and button to Send Money
+*/
+
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -52,13 +56,11 @@ class Home extends Component {
 
 		if (
 			(nextProps.errorLoadingTransactions == Errors.NETWORK_ERROR &&
-				nextProps.errorLoadingTransactions !=
-					this.props.errorLoadingTransactions) ||
+				nextProps.errorLoadingTransactions != this.props.errorLoadingTransactions) ||
 			(nextProps.errorLoadingBalance == Errors.NETWORK_ERROR &&
 				nextProps.errorLoadingBalance != this.props.errorLoadingBalance) ||
 			(nextProps.errorLoadingExchangeRates == Errors.NETWORK_ERROR &&
-				nextProps.errorLoadingExchangeRates !=
-					this.props.errorLoadingExchangeRates)
+				nextProps.errorLoadingExchangeRates != this.props.errorLoadingExchangeRates)
 		) {
 			this.props.showTimeoutModal();
 		}

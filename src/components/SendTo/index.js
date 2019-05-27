@@ -2,11 +2,12 @@ import SendTo from "./SendTo";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { showApproveModal } from "../../redux/modal";
-import {
-    LoadTransactions,
-    DismissTransaction
-} from "../../redux/transactions/actions";
+import { LoadTransactions, DismissTransaction } from "../../redux/transactions/actions";
 import { LoadContacts } from "../../redux/user/actions";
+
+/*
+Connecting SendTo to redux
+*/
 
 const addContactsInfo = buttonCallback => {
     return {

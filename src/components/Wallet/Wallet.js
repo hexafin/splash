@@ -13,29 +13,32 @@ import {
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
-import FlatBackButton from "../universal/FlatBackButton"
-import Button from "../universal/Button"
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import { cryptoNameDict } from "../../lib/cryptos"
+import FlatBackButton from "../universal/FlatBackButton";
+import Button from "../universal/Button";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+import { cryptoNameDict } from "../../lib/cryptos";
 
-const SCREEN_WIDTH = Dimensions.get("window").width
-const SCREEN_HEIGHT = Dimensions.get("window").height
+/*
+Page in SwipeApp that shows QR and your wallet details
+*/
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 class Wallet extends Component {
-
 	constructor(props) {
-		super(props)
+		super(props);
 		this.state = {
 			isCopying: false
-		}
-		this.handleCopy = this.handleCopy.bind(this)
+		};
+		this.handleCopy = this.handleCopy.bind(this);
 	}
 
 	componentWillMount() {
-        if (!this.props.loggedIn) {
-            this.props.navigation.navigate("Landing");
-        }
-        this.animatedAddressCopy = new Animated.Value(1)
+		if (!this.props.loggedIn) {
+			this.props.navigation.navigate("Landing");
+		}
+		this.animatedAddressCopy = new Animated.Value(1);
 	}
 
 	handleCopy() {
@@ -43,33 +46,34 @@ class Wallet extends Component {
 			return {
 				...prevState,
 				isCopying: true
-			}
-		})
-		
-		Clipboard.setString(this.props.activeCurrencyAddress)
-		ReactNativeHapticFeedback.trigger("impactLight", true)
+			};
+		});
+
+		Clipboard.setString(this.props.activeCurrencyAddress);
+		ReactNativeHapticFeedback.trigger("impactLight", true);
 
 		setTimeout(() => {
 			this.setState(prevState => {
 				return {
 					...prevState,
 					isCopying: false
-				}
-			})
-		}, 1000)
+				};
+			});
+		}, 1000);
 	}
 
 	render() {
-		const { splashtag, activeCryptoCurrency, activeCurrencyAddress } = this.props
+		const { splashtag, activeCryptoCurrency, activeCurrencyAddress } = this.props;
 
-		const currencyName = cryptoNameDict[activeCryptoCurrency]
+		const currencyName = cryptoNameDict[activeCryptoCurrency];
 
-		const qrCode = "https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl="+activeCurrencyAddress
+		const qrCode =
+			"https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=" + activeCurrencyAddress;
 
 		return (
 			<View style={styles.container}>
 				<ScrollView>
-					<View style={styles.header}/>
+					<View style={styles.header} />
 					<View style={styles.body}>
 						<View style={styles.bodyTitleWrapper}>
 							<Text style={styles.bodyTitle}>Receive {currencyName} here</Text>
@@ -78,22 +82,35 @@ class Wallet extends Component {
 							onPress={this.handleCopy}
 							onPressIn={() => {
 								Animated.spring(this.animatedAddressCopy, {
-									toValue: .8
-								}).start()
+									toValue: 0.8
+								}).start();
 							}}
 							onPressOut={() => {
 								Animated.spring(this.animatedAddressCopy, {
 									toValue: 1,
 									friction: 3,
 									tension: 40
-								}).start()
-							}}>
-							<Animated.View style={[styles.addressCopyWrapper, {
-								transform: [{scale: this.animatedAddressCopy}]
-							}]}>
-								<Image source={{uri: qrCode}} style={styles.qr}/>
+								}).start();
+							}}
+						>
+							<Animated.View
+								style={[
+									styles.addressCopyWrapper,
+									{
+										transform: [{ scale: this.animatedAddressCopy }]
+									}
+								]}
+							>
+								<Image source={{ uri: qrCode }} style={styles.qr} />
 								<View style={styles.addressWrapper}>
-									<Text style={[styles.addressText, {fontSize: activeCryptoCurrency == 'BTC' ? 14 : 11}]}>{activeCurrencyAddress}</Text>
+									<Text
+										style={[
+											styles.addressText,
+											{ fontSize: activeCryptoCurrency == "BTC" ? 14 : 11 }
+										]}
+									>
+										{activeCurrencyAddress}
+									</Text>
 								</View>
 								<Text style={styles.addressCopyText}>
 									{this.state.isCopying && "Copied!"}
@@ -101,15 +118,20 @@ class Wallet extends Component {
 								</Text>
 							</Animated.View>
 						</TouchableWithoutFeedback>
-						<Button small title="Share" onPress={() => {
-							Share.share({
-								title: `@${splashtag} bitcoin wallet`,
-								message: activeCurrencyAddress
-							})
-						}} style={{
-							marginTop: 30,
-							width: 200
-						}}/>
+						<Button
+							small
+							title="Share"
+							onPress={() => {
+								Share.share({
+									title: `@${splashtag} bitcoin wallet`,
+									message: activeCurrencyAddress
+								});
+							}}
+							style={{
+								marginTop: 30,
+								width: 200
+							}}
+						/>
 					</View>
 				</ScrollView>
 			</View>
@@ -134,7 +156,7 @@ const styles = StyleSheet.create({
 		padding: 20,
 		flexDirection: "column",
 		alignItems: "center",
-		justifyContent: "flex-start",
+		justifyContent: "flex-start"
 	},
 	bodyTitleWrapper: {
 		width: "100%",
@@ -155,7 +177,7 @@ const styles = StyleSheet.create({
 	},
 	addressCopyWrapper: {
 		flexDirection: "column",
-		alignItems: "center",
+		alignItems: "center"
 	},
 	addressWrapper: {
 		backgroundColor: colors.primaryLight,
@@ -177,4 +199,4 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default Wallet
+export default Wallet;

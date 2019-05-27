@@ -26,6 +26,11 @@ import TransactionLine from "../universal/TransactionLine";
 import { cryptoUnits, decimalToUnits, unitsToDecimal } from "../../lib/cryptos";
 import { showViewModal } from "../../redux/modal";
 
+/*
+History of all users' transactions
+<History />
+*/
+
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -65,9 +70,7 @@ export class History extends Component {
 			nextState.modalProps != this.state.modalProps
 		) {
 			return true;
-		} else if (
-			nextProps.transactions.length != this.props.transactions.length
-		) {
+		} else if (nextProps.transactions.length != this.props.transactions.length) {
 			return true;
 		} else if (nextProps.network != this.props.network) {
 			return true;
@@ -94,8 +97,7 @@ export class History extends Component {
 					styles.history,
 					{
 						minHeight: this.state.height,
-						paddingBottom:
-							this.props.transactions.length == 0 ? 20 : isIphoneX() ? 140 : 120
+						paddingBottom: this.props.transactions.length == 0 ? 20 : isIphoneX() ? 140 : 120
 					}
 				]}
 				onLayout={event => this.dynamicHeight(event, "height")}
@@ -110,9 +112,7 @@ export class History extends Component {
 				</View>
 				{this.props.transactions.map(transaction => {
 					const unitAmount =
-						transaction.type == "card"
-							? transaction.amount
-							: transaction.amount.subtotal;
+						transaction.type == "card" ? transaction.amount : transaction.amount.subtotal;
 					let amount;
 					if (this.props.exchangeRates[this.props.activeCryptoCurrency]) {
 						const rate = decimalToUnits(
@@ -123,11 +123,7 @@ export class History extends Component {
 							this.props.currency != "USD"
 								? unitsToDecimal(unitAmount, this.props.activeCryptoCurrency)
 								: unitsToDecimal(
-										Math.round(
-											(unitAmount /
-												cryptoUnits[this.props.activeCryptoCurrency]) *
-												rate
-										),
+										Math.round((unitAmount / cryptoUnits[this.props.activeCryptoCurrency]) * rate),
 										"USD"
 								  );
 					} else {
@@ -157,12 +153,8 @@ export class History extends Component {
 									transaction,
 									direction,
 									address:
-										transaction.type == "blockchain"
-											? transaction[direction + "Address"]
-											: null,
-									exchangeRate: this.props.exchangeRates[
-										this.props.activeCryptoCurrency
-									].USD
+										transaction.type == "blockchain" ? transaction[direction + "Address"] : null,
+									exchangeRate: this.props.exchangeRates[this.props.activeCryptoCurrency].USD
 								});
 							}}
 						/>
@@ -249,9 +241,7 @@ const mapStateToProps = state => {
 		exchangeRates: state.crypto.exchangeRates,
 		currency: state.crypto.activeCurrency,
 		activeCryptoCurrency: state.crypto.activeCryptoCurrency,
-		transactions: state.transactions.transactions[
-			state.crypto.activeCryptoCurrency
-		]
+		transactions: state.transactions.transactions[state.crypto.activeCryptoCurrency]
 			? state.transactions.transactions[state.crypto.activeCryptoCurrency]
 			: state.transactions.transactions.ETH,
 		isLoadingTransactions: state.transactions.isLoadingTransactions,

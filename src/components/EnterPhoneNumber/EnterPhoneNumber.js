@@ -1,5 +1,5 @@
-import React, {Component} from "react"
-import {isIphoneX} from "react-native-iphone-x-helper"
+import React, { Component } from "react";
+import { isIphoneX } from "react-native-iphone-x-helper";
 import {
     View,
     Text,
@@ -9,18 +9,21 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Keyboard
-} from "react-native"
-import {Input} from "../universal/Input"
-import FlatBackButton from "../universal/FlatBackButton"
-import Button from "../universal/Button"
-import {colors} from "../../lib/colors"
-import {defaults, icons} from "../../lib/styles"
-import PhoneNumberInput from "../universal/PhoneNumberInput"
+} from "react-native";
+import { Input } from "../universal/Input";
+import FlatBackButton from "../universal/FlatBackButton";
+import Button from "../universal/Button";
+import { colors } from "../../lib/colors";
+import { defaults, icons } from "../../lib/styles";
+import PhoneNumberInput from "../universal/PhoneNumberInput";
+
+/*
+Onboarding page where user enters phone number
+*/
 
 class EnterPhoneNumber extends Component {
-
     constructor(props) {
-        super(props)
+        super(props);
         this.initialState = {
             phoneNumber: {
                 countryName: "",
@@ -29,99 +32,118 @@ class EnterPhoneNumber extends Component {
                 number: ""
             },
             isLoading: false
-        }
-        this.state = this.initialState
+        };
+        this.state = this.initialState;
     }
 
     componentDidUpdate(prevProps) {
         if (this.props.smsError != prevProps.smsError && this.props.smsError) {
-          Alert.alert('An error occurred!', 'Sorry about this. Our team has been notified and we should fix this shortly!', [
-              {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel'
-              }, {
-                  text: 'Ok',
-                  onPress: () => console.log('OK Pressed')
-              }
-          ])
+            Alert.alert(
+                "An error occurred!",
+                "Sorry about this. Our team has been notified and we should fix this shortly!",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    {
+                        text: "Ok",
+                        onPress: () => console.log("OK Pressed")
+                    }
+                ]
+            );
         }
     }
 
     render() {
-        return (<KeyboardAvoidingView style={styles.container} behavior={"padding"}>
+        return (
+            <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
+                <View style={styles.body}>
+                    <Text style={styles.title}>
+                        Welcome,{"\n"}
+                        {!!this.props.splashtag && "@" + this.props.splashtag}
+                    </Text>
 
-            <View style={styles.body}>
+                    <Text style={styles.subtitle}>
+                        Verify your number to {!!this.props.splashtag ? "create" : "recover"}
+                        {"\n"}
+                        your wallet
+                    </Text>
 
-                <Text style={styles.title}>
-                    Welcome,{"\n"}
-                    {!!this.props.splashtag && '@' + this.props.splashtag}
-                </Text>
+                    <PhoneNumberInput
+                        number={this.state.phoneNumber.number}
+                        autoFocus={true}
+                        callback={phoneNumber => {
+                            this.setState(prevState => {
+                                return {
+                                    ...prevState,
+                                    phoneNumber
+                                };
+                            });
+                        }}
+                    />
 
-                <Text style={styles.subtitle}>
-                    Verify your number to {!!this.props.splashtag ? 'create' : 'recover'}{"\n"}
-                    your wallet
-                </Text>
+                    <Text style={styles.description}>
+                        We{"'"}ll text you a verification code{"\n"}
+                        to make sure it{"'"}s you
+                    </Text>
 
-                <PhoneNumberInput number={this.state.phoneNumber.number} autoFocus={true} callback={(phoneNumber) => {
-                        this.setState((prevState) => {
-                            return {
-                                ...prevState,
-                                phoneNumber
-                            }
-                        })
-                    }}/>
+                    <Button
+                        onPress={() => {
+                            // remove spaces from phone number
+                            var fullNumber =
+                                this.state.phoneNumber.countryCode + this.state.phoneNumber.number;
+                            fullNumber = fullNumber.replace(/\s/g, "");
 
-                <Text style={styles.description}>
-                    We{"'"}ll text you a verification code{"\n"}
-                    to make sure it{"'"}s you
-                </Text>
+                            // initiate animation
+                            this.setState(prevState => {
+                                return {
+                                    ...prevState,
+                                    isLoading: true
+                                };
+                            });
 
-                <Button onPress={() => {
+                            // intitiate authentication process
+                            this.props
+                                .SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName)
+                                .then(confirmResult => {
+                                    this.setState(this.initialState);
+                                    this.props.navigation.navigate("VerifyPhoneNumber", {
+                                        confirmResult
+                                    });
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    Alert.alert(
+                                        "An error occurred with SMS authentication. Please try again later"
+                                    );
+                                });
+                            Keyboard.dismiss();
+                        }}
+                        style={styles.footerButton}
+                        title={"Text me the code"}
+                        primary={true}
+                        loading={true}
+                        loading={this.state.isLoading}
+                        disabled={this.state.phoneNumber.number.length < 12}
+                    />
+                </View>
 
-                        // remove spaces from phone number
-                        var fullNumber = this.state.phoneNumber.countryCode + this.state.phoneNumber.number
-                        fullNumber = fullNumber.replace(/\s/g, '')
-
-                        // initiate animation
-                        this.setState((prevState) => {
-                            return {
-                                ...prevState,
-                                isLoading: true
-                            }
-                        })
-
-                        // intitiate authentication process
-                        this.props.SmsAuthenticate(fullNumber, this.state.phoneNumber.countryName).then(confirmResult => {
-                            this.setState(this.initialState)
-                            this.props.navigation.navigate("VerifyPhoneNumber", {confirmResult})
-                        }).catch(error => {
-                            console.log(error)
-                            Alert.alert("An error occurred with SMS authentication. Please try again later")
-                        })
-                        Keyboard.dismiss()
-
-                    }} style={styles.footerButton}
-                    title={"Text me the code"}
-                    primary={true} loading={true}
-                    loading={this.state.isLoading}
-                    disabled={this.state.phoneNumber.number.length < 12}/>
-
-            </View>
-
-            <FlatBackButton onPress={() => {
-                    // Keyboard.dismiss()
-                    this.setState(this.initialState)
-                    this.props.reset("chooseSplashtag")
-                    this.props.navigation.navigate("ChooseSplashtag")
-                }}/>
-        </KeyboardAvoidingView>)
-
+                <FlatBackButton
+                    onPress={() => {
+                        // Keyboard.dismiss()
+                        this.setState(this.initialState);
+                        this.props.reset("chooseSplashtag");
+                        this.props.navigation.navigate("ChooseSplashtag");
+                    }}
+                />
+            </KeyboardAvoidingView>
+        );
     }
-
 }
 
-const containerPaddingTop = (isIphoneX()) ? 80 : 60
+const containerPaddingTop = isIphoneX() ? 80 : 60;
 
 const styles = StyleSheet.create({
     container: {
@@ -158,6 +180,6 @@ const styles = StyleSheet.create({
         marginTop: 15,
         zIndex: 40
     }
-})
+});
 
-export default EnterPhoneNumber
+export default EnterPhoneNumber;

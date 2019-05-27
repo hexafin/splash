@@ -17,12 +17,7 @@ import {
 } from "react-native";
 import { defaults, icons } from "../../lib/styles";
 import { colors } from "../../lib/colors";
-import {
-	unitsToDecimal,
-	cryptoTitleDict,
-	cryptoNameDict,
-	erc20Names
-} from "../../lib/cryptos";
+import { unitsToDecimal, cryptoTitleDict, cryptoNameDict, erc20Names } from "../../lib/cryptos";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import ReactNativeHapticFeedback from "react-native-haptic-feedback";
 import CloseButton from "../universal/CloseButton";
@@ -42,6 +37,11 @@ import firebase from "react-native-firebase";
 import Permissions from "react-native-permissions";
 import Contacts from "react-native-contacts";
 import moment from "moment";
+
+/*
+Page in Pay flow where you choose the recipient
+*/
+
 let firestore = firebase.firestore();
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
@@ -94,18 +94,13 @@ class SendTo extends Component {
 	shouldComponentUpdate(nextProps, nextState) {
 		if (
 			(nextState.capturedQr != this.state.capturedQr && nextState.capturedQr) ||
-			(nextState.pastedAddress != this.state.pastedAddress &&
-				nextState.pastedAddress)
+			(nextState.pastedAddress != this.state.pastedAddress && nextState.pastedAddress)
 		) {
 			// just captured a QR or pasted an address, look for a user with this address
 			this.getUserFromAddress(nextState.value);
 		}
 
-		if (
-			nextState.value != this.state.value &&
-			!nextState.pastedAddress &&
-			!nextState.capturedQr
-		) {
+		if (nextState.value != this.state.value && !nextState.pastedAddress && !nextState.capturedQr) {
 			const isAddress = api.IsValidAddress(
 				nextState.value,
 				nextProps.activeCryptoCurrency,
@@ -141,8 +136,7 @@ class SendTo extends Component {
 
 	componentDidMount() {
 		let contacts = [];
-		if (typeof this.props.contacts != "undefined")
-			contacts = this.props.contacts;
+		if (typeof this.props.contacts != "undefined") contacts = this.props.contacts;
 
 		Contacts.checkPermission((err, permission) => {
 			if (err) throw err;
@@ -181,11 +175,9 @@ class SendTo extends Component {
 
 	getUserFromAddress(address) {
 		let activeCryptoCurrency = this.props.activeCryptoCurrency;
-		if (erc20Names.indexOf(activeCryptoCurrency) > -1)
-			activeCryptoCurrency = "ETH";
+		if (erc20Names.indexOf(activeCryptoCurrency) > -1) activeCryptoCurrency = "ETH";
 
-		const query =
-			"wallets." + activeCryptoCurrency + "." + this.props.network + ".address";
+		const query = "wallets." + activeCryptoCurrency + "." + this.props.network + ".address";
 		firestore
 			.collection("users")
 			.where(query, "==", address)
@@ -200,8 +192,7 @@ class SendTo extends Component {
 						userFromAddress: userData,
 						selectedId: userData.id,
 						selectedSplashtag: userData.splashtag,
-						selectedAddress:
-							userData.wallets[activeCryptoCurrency][this.props.network].address
+						selectedAddress: userData.wallets[activeCryptoCurrency][this.props.network].address
 					});
 				} else {
 					// could not find a user for this address
@@ -225,16 +216,12 @@ class SendTo extends Component {
 		} = this.props;
 
 		let contacts = [];
-		if (typeof this.props.contacts != "undefined")
-			contacts = this.props.contacts;
+		if (typeof this.props.contacts != "undefined") contacts = this.props.contacts;
 
-		if (erc20Names.indexOf(activeCryptoCurrency) > -1)
-			activeCryptoCurrency = "ETH";
+		if (erc20Names.indexOf(activeCryptoCurrency) > -1) activeCryptoCurrency = "ETH";
 
 		const isAddressEntered =
-			this.state.pastedAddress ||
-			this.state.capturedQr ||
-			this.state.typedAddress;
+			this.state.pastedAddress || this.state.capturedQr || this.state.typedAddress;
 
 		const animatedHeader = {
 			transform: [
@@ -329,13 +316,7 @@ class SendTo extends Component {
 												Alert.alert("You cannot send money to yourself");
 												return;
 											}
-											if (
-												api.IsValidAddress(
-													clipboard,
-													activeCryptoCurrency,
-													this.props.network
-												)
-											) {
+											if (api.IsValidAddress(clipboard, activeCryptoCurrency, this.props.network)) {
 												console.log(clipboard, this.props.network, true);
 												this.setState({
 													value: clipboard,
@@ -345,9 +326,7 @@ class SendTo extends Component {
 												});
 											} else {
 												Alert.alert(
-													"Invalid " +
-														cryptoNameDict[this.props.activeCryptoCurrency] +
-														" address"
+													"Invalid " + cryptoNameDict[this.props.activeCryptoCurrency] + " address"
 												);
 											}
 										})
@@ -373,9 +352,7 @@ class SendTo extends Component {
 									title={
 										this.state.userFromAddress
 											? `@${this.state.userFromAddress.splashtag}`
-											: "A  " +
-											  cryptoNameDict[this.props.activeCryptoCurrency] +
-											  "  wallet"
+											: "A  " + cryptoNameDict[this.props.activeCryptoCurrency] + "  wallet"
 									}
 									subtitle={"Valid Address"}
 									address={this.state.value}
@@ -393,9 +370,7 @@ class SendTo extends Component {
 									title={
 										this.state.userFromAddress
 											? `@${this.state.userFromAddress.splashtag}`
-											: "A  " +
-											  cryptoNameDict[this.props.activeCryptoCurrency] +
-											  "   wallet"
+											: "A  " + cryptoNameDict[this.props.activeCryptoCurrency] + "   wallet"
 									}
 									subtitle={"Valid Address"}
 									address={this.state.value}
@@ -413,9 +388,7 @@ class SendTo extends Component {
 									title={
 										this.state.userFromAddress
 											? `@${this.state.userFromAddress.splashtag}`
-											: "A  " +
-											  cryptoNameDict[this.props.activeCryptoCurrency] +
-											  "   wallet"
+											: "A  " + cryptoNameDict[this.props.activeCryptoCurrency] + "   wallet"
 									}
 									subtitle={"Valid Address"}
 									address={this.state.value}
@@ -434,19 +407,16 @@ class SendTo extends Component {
 										primary={false}
 										title={"Add Contacts"}
 										small={true}
-										onPress={() =>
-											this.props.addContactsInfo(Permissions.openSettings)
-										}
+										onPress={() => this.props.addContactsInfo(Permissions.openSettings)}
 									/>
 								</View>
 							)}
 
-						{!isAddressEntered &&
-							(contacts.length != 0 || this.state.value != "") && (
-								<View style={styles.section}>
-									<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
-								</View>
-							)}
+						{!isAddressEntered && (contacts.length != 0 || this.state.value != "") && (
+							<View style={styles.section}>
+								<Text style={styles.sectionLabel}>YOUR CONTACTS</Text>
+							</View>
+						)}
 
 						{!isAddressEntered && this.state.value != "" && (
 							<View style={styles.hits}>
@@ -460,8 +430,7 @@ class SendTo extends Component {
 										const selectedId = item.objectID;
 										const selectedSplashtag = item.splashtag;
 										const selectedAddress =
-											item.wallets[activeCryptoCurrency][this.props.network]
-												.address;
+											item.wallets[activeCryptoCurrency][this.props.network].address;
 										if (selectedId != this.state.selectedId) {
 											this.setState({
 												selectedId,
@@ -480,69 +449,62 @@ class SendTo extends Component {
 							</View>
 						)}
 
-						{!isAddressEntered &&
-							this.state.value == "" &&
-							contacts.length != 0 && (
-								<View style={styles.hits}>
-									<FlatList
-										data={contacts}
-										contentContainerStyle={{
-											overflow: "hidden",
-											paddingHorizontal: 20,
-											paddingBottom: 130
-										}}
-										keyExtractor={(item, index) => "contact-" + item.objectID}
-										renderItem={({ item }) => {
-											if (
-												item.objectID != userId &&
-												typeof item.wallets !== "undefined" &&
-												typeof item.wallets[activeCryptoCurrency] !==
-													"undefined"
-											) {
-												return (
-													<SendLineItem
-														title={`@${item.splashtag}`}
-														selected={item.objectID == this.state.selectedId}
-														subtitle={"Your Contact"}
-														onPress={() => {
-															const selectedId = item.objectID;
-															const selectedSplashtag = item.splashtag;
-															const selectedAddress =
-																item.wallets[activeCryptoCurrency][
-																	this.props.network
-																].address;
-															if (selectedId != this.state.selectedId) {
-																this.setState({
-																	selectedId,
-																	selectedAddress,
-																	selectedSplashtag
-																});
-															} else {
-																this.setState({
-																	selectedId: null,
-																	selectedAddress: null,
-																	selectedSplashtag: null
-																});
-															}
-														}}
-													/>
-												);
-											}
-										}}
-										ListFooterComponent={
-											<TouchableOpacity
-												style={styles.refreshButton}
-												onPress={this.props.LoadContacts}
-											>
-												<Text style={styles.newNumberText}>
-													Added new numbers?
-												</Text>
-												<Text style={styles.refreshText}>Refresh Contacts</Text>
-											</TouchableOpacity>
+						{!isAddressEntered && this.state.value == "" && contacts.length != 0 && (
+							<View style={styles.hits}>
+								<FlatList
+									data={contacts}
+									contentContainerStyle={{
+										overflow: "hidden",
+										paddingHorizontal: 20,
+										paddingBottom: 130
+									}}
+									keyExtractor={(item, index) => "contact-" + item.objectID}
+									renderItem={({ item }) => {
+										if (
+											item.objectID != userId &&
+											typeof item.wallets !== "undefined" &&
+											typeof item.wallets[activeCryptoCurrency] !== "undefined"
+										) {
+											return (
+												<SendLineItem
+													title={`@${item.splashtag}`}
+													selected={item.objectID == this.state.selectedId}
+													subtitle={"Your Contact"}
+													onPress={() => {
+														const selectedId = item.objectID;
+														const selectedSplashtag = item.splashtag;
+														const selectedAddress =
+															item.wallets[activeCryptoCurrency][this.props.network].address;
+														if (selectedId != this.state.selectedId) {
+															this.setState({
+																selectedId,
+																selectedAddress,
+																selectedSplashtag
+															});
+														} else {
+															this.setState({
+																selectedId: null,
+																selectedAddress: null,
+																selectedSplashtag: null
+															});
+														}
+													}}
+												/>
+											);
 										}
-									/>
-								</View>
-							)}
+									}}
+									ListFooterComponent={
+										<TouchableOpacity
+											style={styles.refreshButton}
+											onPress={this.props.LoadContacts}
+										>
+											<Text style={styles.newNumberText}>Added new numbers?</Text>
+											<Text style={styles.refreshText}>Refresh Contacts</Text>
+										</TouchableOpacity>
+									}
+								/>
+							</View>
+						)}
 					</InstantSearch>
 
 					<NextButton
@@ -557,13 +519,9 @@ class SendTo extends Component {
 						}
 						onPress={() => {
 							showApproveModal({
-								toAddress: this.state.selectedId
-									? this.state.selectedAddress
-									: this.state.value,
+								toAddress: this.state.selectedId ? this.state.selectedAddress : this.state.value,
 								toId: this.state.selectedId ? this.state.selectedId : null,
-								toSplashtag: this.state.selectedSplashtag
-									? this.state.selectedSplashtag
-									: null,
+								toSplashtag: this.state.selectedSplashtag ? this.state.selectedSplashtag : null,
 								amount: this.state.sendAmount,
 								currency: this.state.sendCurrency,
 								successCallback: () => {

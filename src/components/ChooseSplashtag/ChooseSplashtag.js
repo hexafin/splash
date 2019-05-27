@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, { Component } from "react";
 import {
     View,
     Text,
@@ -7,151 +7,159 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView,
     Keyboard
-} from "react-native"
-import {Input} from "../universal/Input"
-import FlatBackButton from "../universal/FlatBackButton"
-import Button from "../universal/Button"
-import {colors} from "../../lib/colors"
-import {defaults, icons} from "../../lib/styles"
-import { Field, reduxForm } from 'redux-form'
-import axios from "axios"
-import api from "../../api"
-import LoadingCircle from "../universal/LoadingCircle"
-import Checkmark from "../universal/Checkmark"
-import debounce from 'lodash/debounce';
+} from "react-native";
+import { Input } from "../universal/Input";
+import FlatBackButton from "../universal/FlatBackButton";
+import Button from "../universal/Button";
+import { colors } from "../../lib/colors";
+import { defaults, icons } from "../../lib/styles";
+import { Field, reduxForm } from "redux-form";
+import axios from "axios";
+import api from "../../api";
+import LoadingCircle from "../universal/LoadingCircle";
+import Checkmark from "../universal/Checkmark";
+import debounce from "lodash/debounce";
 
-const lower = value => value && value.toLowerCase()
+/*
+Onboarding page where you choose splashtag
+*/
+
+const lower = value => value && value.toLowerCase();
 
 class ChooseSplashtag extends Component {
-
     constructor(props) {
-        super(props)
+        super(props);
         this.initialState = {
-            splashtagAvailable: {available: null, validSplashtag: null},
+            splashtagAvailable: { available: null, validSplashtag: null },
             errorCheckingSplashtag: null,
             checkingSplashtag: false
-        }
-        this.state = this.initialState
+        };
+        this.state = this.initialState;
         this.checkSplashtag = this.checkSplashtag.bind(this);
         this.debouncedOnChange = debounce(this.checkSplashtag, 250);
     }
 
     checkSplashtag(splashtag) {
-        this.setState((prevState) => {
+        this.setState(prevState => {
             return {
                 ...prevState,
                 checkingSplashtag: true
-            }
-        })
-        api.UsernameExists(splashtag).then(data => {
-            this.setState((prevState) => {
-                return {
-                    ...prevState,
-                    splashtagAvailable: data,
-                    checkingSplashtag: false,
-                    errorCheckingSplashtag: false
-                }
+            };
+        });
+        api.UsernameExists(splashtag)
+            .then(data => {
+                this.setState(prevState => {
+                    return {
+                        ...prevState,
+                        splashtagAvailable: data,
+                        checkingSplashtag: false,
+                        errorCheckingSplashtag: false
+                    };
+                });
             })
-        }).catch(error => {
-            this.setState((prevState) => {
-                return {
-                    ...prevState,
-                    errorCheckingSplashtag: error,
-                    checkingSplashtag: false,
-                }
-            })
-        })
+            .catch(error => {
+                this.setState(prevState => {
+                    return {
+                        ...prevState,
+                        errorCheckingSplashtag: error,
+                        checkingSplashtag: false
+                    };
+                });
+            });
     }
 
     componentWillMount() {
-        this.checkSplashtag(this.props.splashtag)
+        this.checkSplashtag(this.props.splashtag);
     }
 
     render() {
+        const splashtagCorrectlyFormatted = /^[a-z0-9_-]{3,15}$/.test(this.props.splashtag);
 
-        const splashtagCorrectlyFormatted = /^[a-z0-9_-]{3,15}$/.test(this.props.splashtag)
+        const splashtagWorks =
+            splashtagCorrectlyFormatted && this.state.splashtagAvailable.available;
 
-        const splashtagWorks = splashtagCorrectlyFormatted && this.state.splashtagAvailable.available
-
-        let buttonTitle = "Choose your splashtag"
+        let buttonTitle = "Choose your splashtag";
         if (this.props.splashtag.length < 3 && this.props.splashtag.length > 0) {
-          buttonTitle = "Too short"
-        }
-        else if (this.props.splashtag.length > 15) {
-          buttonTitle = "Too Long"
-        }
-        else if (this.props.splashtag.length != 0){
-          if (splashtagWorks) {
-              buttonTitle = "Claim splashtag"
-          }
-          else if (!splashtagCorrectlyFormatted) {
-            buttonTitle = "Only use letters and numbers"
-          }
-          else if (!this.state.splashtagAvailable.available) {
-              buttonTitle = "Splashtag already taken"
-          }
-          else if(this.state.errorCheckingSplashtag) {
-              buttonTitle = "Ugh! There was an error 🤭"
-          }
+            buttonTitle = "Too short";
+        } else if (this.props.splashtag.length > 15) {
+            buttonTitle = "Too Long";
+        } else if (this.props.splashtag.length != 0) {
+            if (splashtagWorks) {
+                buttonTitle = "Claim splashtag";
+            } else if (!splashtagCorrectlyFormatted) {
+                buttonTitle = "Only use letters and numbers";
+            } else if (!this.state.splashtagAvailable.available) {
+                buttonTitle = "Splashtag already taken";
+            } else if (this.state.errorCheckingSplashtag) {
+                buttonTitle = "Ugh! There was an error 🤭";
+            }
         }
 
         return (
             <KeyboardAvoidingView style={styles.container} behavior={"padding"}>
-
                 <View style={styles.body}>
-
                     <View>
-                      <Text style={styles.title}>
-                          Let{"'"}s get you setup
-                      </Text>
+                        <Text style={styles.title}>Let{"'"}s get you setup</Text>
 
-                      <Text style={styles.description}>
-                          Your splashtag is your unique username, how others find you on Splash. You can change this later.
-                      </Text>
+                        <Text style={styles.description}>
+                            Your splashtag is your unique username, how others find you on Splash.
+                            You can change this later.
+                        </Text>
                     </View>
 
                     <Field
-                        name='splashtag' placeholder='Choose splashtag' component={Input}
-                        autoCapitalize="none" autoCorrect={false} spellCheck={false}
-                        autoFocus={true} normalize={lower}
-                        checkmark={this.state.splashtagAvailable.available && this.props.splashtag.length > 0 && !this.state.checkingSplashtag}
+                        name="splashtag"
+                        placeholder="Choose splashtag"
+                        component={Input}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        spellCheck={false}
+                        autoFocus={true}
+                        normalize={lower}
+                        checkmark={
+                            this.state.splashtagAvailable.available &&
+                            this.props.splashtag.length > 0 &&
+                            !this.state.checkingSplashtag
+                        }
                         onChange={this.debouncedOnChange}
-                        />
+                    />
 
                     <Button
                         onPress={() => {
-                            Keyboard.dismiss()
+                            Keyboard.dismiss();
                             if (splashtagWorks) {
-                              this.setState(this.initialState)
-                              this.props.navigation.navigate("EnterPhoneNumber")
+                                this.setState(this.initialState);
+                                this.props.navigation.navigate("EnterPhoneNumber");
                             }
                         }}
                         style={[
                             styles.footerButton,
-                            this.state.splashtagAvailable.available ? styles.posButton : styles.negButton
+                            this.state.splashtagAvailable.available
+                                ? styles.posButton
+                                : styles.negButton
                         ]}
                         title={buttonTitle}
                         primary={true}
                         loading={this.state.checkingSplashtag && splashtagCorrectlyFormatted}
-                        disabled={!this.state.splashtagAvailable.available
-                            || this.props.splashtag.length == 0
-                            || this.props.checkingSplashtag}
-                        />
-
+                        disabled={
+                            !this.state.splashtagAvailable.available ||
+                            this.props.splashtag.length == 0 ||
+                            this.props.checkingSplashtag
+                        }
+                    />
                 </View>
 
-
-                <FlatBackButton onPress={() => {
-                    Keyboard.dismiss()
-                    this.setState(this.initialState)
-                    this.props.reset('chooseSplashtag')
-                    this.props.navigation.navigate("Landing")
-                }}/>
+                <FlatBackButton
+                    onPress={() => {
+                        Keyboard.dismiss();
+                        this.setState(this.initialState);
+                        this.props.reset("chooseSplashtag");
+                        this.props.navigation.navigate("Landing");
+                    }}
+                />
             </KeyboardAvoidingView>
-        )
-
+        );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -191,16 +199,13 @@ const styles = StyleSheet.create({
         color: colors.lightGray,
         marginBottom: 20
     },
-    posButton: {
-
-    },
+    posButton: {},
     negButton: {
         backgroundColor: colors.lightGray
-    },
-})
-
+    }
+});
 
 export default reduxForm({
-   form: 'chooseSplashtag',
-   destroyOnUnmount: false,
-})(ChooseSplashtag)
+    form: "chooseSplashtag",
+    destroyOnUnmount: false
+})(ChooseSplashtag);

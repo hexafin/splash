@@ -3,233 +3,238 @@ import {
     View,
     Text,
     StyleSheet,
+    Dimensions,
     Image,
     Alert,
+    Animated,
     TouchableOpacity,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    processColor
 } from "react-native";
 import { colors } from "../../lib/colors";
 import { defaults, icons } from "../../lib/styles";
 import { Input } from "../universal/Input";
-import firebase from "react-native-firebase";
-import AnimatedWaves from "../universal/AnimatedWaves";
-import TouchID from 'react-native-touch-id'
-import Button from "../universal/Button"
+import TouchID from "react-native-touch-id";
+import Button from "../universal/Button";
+import LottieView from "lottie-react-native";
+import NextButton from "../universal/NextButton";
+import { isIphoneX } from "react-native-iphone-x-helper";
+import LinearGradient from "react-native-linear-gradient";
 
-let firestore = firebase.firestore()
+/*
+First screen in app which presents Wallet
+*/
+
+const image1 = require("../../assets/images/screen-view1.png");
+const image2 = require("../../assets/images/screen-view2.png");
+const image3 = require("../../assets/images/screen-view3.png");
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
+const xOffset = new Animated.Value(0);
 
 class Landing extends Component {
-
     constructor(props) {
-        super(props)
-        this.handlePress = this.handlePress.bind(this)
+        super(props);
     }
-
-    componentWillMount() {
-        if (this.props.loggedIn) {
-            this.props.navigation.navigate("Home");
-        }
-    }
-
-    componentDidMount() {
-
-        firebase
-            .links()
-            .getInitialLink()
-            .then(url => {
-                if (url) {
-                    this.handleDeepLink({ url: url });
-                }
-            });
-    }
-
-    handleDeepLink = event => {
-        if (event.url) {
-            const parts = event.url.split("/");
-            const splashtag = parts[3];
-            const phoneNumber = parts[4];
-
-            if (
-                !(
-                    splashtag == this.props.splashtagOnHold &&
-                    phoneNumber == this.props.phoneNumber
-                )
-            ) {
-                this.props.getDeepLinkedSplashtag(splashtag, phoneNumber);
-            }
-        }
-    };
-
-    handlePress() {
-        if (this.props.splashtagOnHold && this.props.phoneNumber) {
-            this.props.SmsAuthenticate(this.props.phoneNumber, null);
-        } else if (this.props.splashtagOnHold) {
-            this.props.navigation.navigate("EnterPhoneNumber");
-        } else {
-            this.props.navigation.navigate("ChooseSplashtag");
-        }
-    };
 
     render() {
-        return (
-            <View style={styles.container}>
-                <AnimatedWaves/>
+        const progress = xOffset.interpolate({
+            inputRange: [0, 750],
+            outputRange: [0.2, 0.8]
+        });
 
-                {!this.props.splashtagOnHold && (
-                    <View style={styles.header}>
-                        <View style={styles.logoWrapper}>
-                            <Image
-                                source={require("../../assets/images/splash-logo.png")}
-                                style={styles.logo}
-                            />
-                            <Text style={styles.logoText}>Splash</Text>
-                        </View>
-                        <View style={styles.slogan}>
-                            <Text style={styles.sloganText}>
-                                Splash is your wallet
-                            </Text>
-                            <Text style={styles.sloganSubText}>
-                                Make it personal with a splashtag
-                            </Text>
-                        </View>
-                    </View>
-                )}
+        let dots = [];
+        for (let i = 0; i < 3; i++) {
+            const dotOpacity = xOffset.interpolate({
+                inputRange: [(i - 1) * SCREEN_WIDTH, i * SCREEN_WIDTH, (i + 1) * SCREEN_WIDTH],
+                outputRange: [0.25, 1, 0.25],
+                extrapolate: "clamp"
+            });
 
-                {this.props.splashtagOnHold && (
-                    <View style={styles.claimedHeader}>
-                        <View style={styles.leftLogoWrapper}>
-                            <Image
-                                source={require("../../assets/images/splash-logo.png")}
-                                style={styles.logo}
-                            />
-                            <Text style={styles.logoText}>Splash</Text>
-                        </View>
-                        <View style={styles.slogan}>
-                            <Text style={styles.sloganText}>Welcome,</Text>
-                            <Text style={styles.sloganText}>
-                                @{this.props.splashtagOnHold}
-                            </Text>
-                            <Text style={styles.sloganSubText}>
-                                Nice to see you again!
-                            </Text>
-                        </View>
-                    </View>
-                )}
-
-                <View style={styles.footer}>
-                    <Button
-                        onPress={this.handlePress}
-                        title={"Get started"}
-                        primary={false}/>
-                </View>
-                {this.props.splashtagOnHold && (
-                    <TouchableOpacity
-                        onPress={() =>
-                            this.props.navigation.navigate("ChooseSplashtag")
+            const thisDot = (
+                <Animated.View
+                    key={`${i}-dot`}
+                    style={[
+                        styles.dot,
+                        {
+                            opacity: dotOpacity
                         }
+                    ]}
+                />
+            );
+            dots.push(thisDot);
+        }
+
+        let images = [];
+        for (let i = 0; i < 3; i++) {
+            const dotOpacity = xOffset.interpolate({
+                inputRange: [(i - 1) * SCREEN_WIDTH, i * SCREEN_WIDTH, (i + 1) * SCREEN_WIDTH],
+                outputRange: [0, 1, 0],
+                extrapolate: "clamp"
+            });
+
+            const thisImage = (
+                <Animated.View
+                    key={`${i}-dot`}
+                    style={[
+                        styles.image,
+                        {
+                            opacity: dotOpacity
+                        }
+                    ]}
+                >
+                    {i == 0 && (
+                        <Image source={image1} style={styles.imageStyle} resizeMode={"cover"} />
+                    )}
+                    {i == 1 && (
+                        <Image source={image2} style={styles.imageStyle} resizeMode={"cover"} />
+                    )}
+                    {i == 2 && (
+                        <Image source={image3} style={styles.imageStyle} resizeMode={"cover"} />
+                    )}
+                </Animated.View>
+            );
+            images.push(thisImage);
+        }
+
+        return (
+            <Animated.View style={[styles.container]}>
+                <View style={styles.imageContainer}>{images}</View>
+
+                <View style={styles.dotContainer}>{dots}</View>
+
+                <Animated.ScrollView
+                    scrollEventThrottle={16}
+                    showsHorizontalScrollIndicator={false}
+                    onScroll={Animated.event(
+                        [
+                            {
+                                nativeEvent: {
+                                    contentOffset: { x: xOffset }
+                                }
+                            }
+                        ],
+                        { useNativeDriver: true }
+                    )}
+                    horizontal
+                    pagingEnabled
+                >
+                    <Screen text="Splash is your cryptocurrency wallet." index={0} />
+                    <Screen text={`Send money to anyone.\nBuy anything.`} index={1} />
+                    <Screen text={`Bye, bye big banks.\nHello Splash.`} index={2} />
+                </Animated.ScrollView>
+
+                <View style={styles.button}>
+                    <Button
+                        onPress={() => this.props.navigation.navigate("ChooseSplashtag")}
+                        round
+                        large
+                        title="Get your wallet"
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.navigation.navigate("EnterPhoneNumber");
+                        }}
                     >
-                        <Text style={styles.newSplash}>
-                            Or choose a new one...
-                        </Text>
+                        <Text style={styles.recoverText}>Or, recover your Splash wallet</Text>
                     </TouchableOpacity>
-                )}
-            </View>
+                </View>
+            </Animated.View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        ...defaults.container,
-        justifyContent: "space-between",
-        position: "relative"
+        flex: 1,
+        backgroundColor: colors.primary
     },
-    wavesImage: {
+    scrollView: {
+        flexDirection: "row",
+        flex: 1
+    },
+    scrollPage: {
+        width: SCREEN_WIDTH,
+        padding: 20
+    },
+    dotContainer: {
         position: "absolute",
-        bottom: -50,
-        left: 0,
-        right: 0,
-        width: 400,
-        height: 400
+        zIndex: 2,
+        top: isIphoneX() ? SCREEN_HEIGHT * 0.2 : SCREEN_HEIGHT * 0.18,
+        left: 50,
+        flexDirection: "row"
     },
-    header: {
-        flex: 1,
-        padding: 30,
-        flexDirection: "column"
+    imageContainer: {
+        position: "absolute",
+        zIndex: 0,
+        bottom: 0,
+        flex: 1
     },
-    claimedHeader: {
-        flex: 1,
-        paddingVertical: 30,
-        paddingHorizontal: 20,
-        flexDirection: "column"
+    image: {
+        position: "absolute",
+        bottom: 0
     },
-    logoWrapper: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingTop: 63
+    imageStyle: {
+        height: SCREEN_HEIGHT - SCREEN_HEIGHT * 0.211,
+        width: SCREEN_WIDTH,
+        bottom: isIphoneX() ? 0 : -20,
+        right: 0
     },
-    leftLogoWrapper: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        paddingTop: 63
+    headerContainer: {
+        position: "absolute",
+        bottom: SCREEN_HEIGHT / 2.4,
+        left: 50
     },
-    logo: {
-        height: 30,
-        width: 22.5,
-        margin: 5
-    },
-    logoText: {
-        fontSize: 22,
-        paddingBottom: 4,
-        fontWeight: "400",
-        color: colors.nearBlack
-    },
-    slogan: {
-        flexDirection: "column",
-        alignItems: "center",
-        padding: 0,
-        marginTop: 30
-    },
-    sloganText: {
-        fontSize: 32,
-        fontWeight: "500",
-        color: colors.nearBlack,
-        textAlign: "center"
-    },
-    sloganSubText: {
-        marginTop: 20,
-        fontSize: 22,
-        textAlign: "center",
-        color: colors.lightGray
-    },
-    footer: {
-        padding: 20,
-        marginBottom: 10
-    },
-    footerButton: {
-        backgroundColor: colors.white,
-        borderRadius: 5,
-        flex: 1,
-        padding: 30,
-        justifyContent: "center",
+    button: {
+        marginBottom: isIphoneX() ? SCREEN_HEIGHT * 0.075 : SCREEN_HEIGHT * 0.025,
         alignItems: "center"
     },
-    footerButtonText: {
-        fontSize: 22,
-        color: colors.purple
+    dot: {
+        backgroundColor: "white",
+        height: 15,
+        width: 15,
+        borderRadius: 100,
+        marginRight: 15
     },
-    splashField: {
-        marginTop: 85
+    recoverText: {
+        fontSize: 16,
+        fontWeight: "700",
+        color: "white",
+        paddingTop: 20
+    }
+});
+
+const Screen = props => {
+    return (
+        <View style={Screenstyles.scrollPage}>
+            <View style={Screenstyles.screen}>
+                <Text style={Screenstyles.text}>{props.text}</Text>
+            </View>
+            {props.children}
+        </View>
+    );
+};
+
+const Screenstyles = StyleSheet.create({
+    scrollPage: {
+        width: SCREEN_WIDTH,
+        flex: 1,
+        justifyContent: "center"
     },
-    newSplash: {
-        textAlign: "center",
-        backgroundColor: "rgba(0,0,0,0)",
-        color: colors.white,
-        textDecorationLine: "underline",
-        fontSize: 17,
-        paddingBottom: 15
+    screen: {
+        margin: 50,
+        top: isIphoneX() ? SCREEN_HEIGHT * 0.05 : 0,
+        position: "absolute",
+        width: "70%"
+    },
+    text: {
+        fontSize: 24,
+        fontWeight: "700",
+        color: "white",
+        position: "absolute",
+        flexWrap: "wrap",
+        justifyContent: "flex-end",
+        flex: 1
     }
 });
 

@@ -1,23 +1,27 @@
-import ChooseSplashtag from "./ChooseSplashtag"
-import {connect} from "react-redux"
-import {bindActionCreators} from "redux"
+import ChooseSplashtag from "./ChooseSplashtag";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 
-const mapStateToProps = (state) => {
+/*
+Connect ChooseSplashtag to redux
+*/
 
-    let splashtag = ""
-    if (typeof state.form.chooseSplashtag !== 'undefined' && state.form.chooseSplashtag.values) {
-        splashtag = state.form.chooseSplashtag.values.splashtag
-    }
+const mapStateToProps = state => {
+	let splashtag = "";
+	if (typeof state.form.chooseSplashtag !== "undefined" && state.form.chooseSplashtag.values) {
+		splashtag = state.form.chooseSplashtag.values.splashtag;
+	}
 
-    return {
-        splashtag: splashtag
-    }
-}
+	return {
+		splashtag: splashtag
+	};
+};
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({
+const mapDispatchToProps = dispatch => {
+	return bindActionCreators({}, dispatch);
+};
 
-    }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChooseSplashtag)
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(ChooseSplashtag);

@@ -4,6 +4,17 @@ import { StyleSheet, FlatList, View, Text } from "react-native";
 import SendLineItem from "./SendLineItem";
 import { colors } from "../../lib/colors";
 
+/*
+Component that takes search entry and runs it through Algolia search indexing and returns results
+<Hits
+	currency={currency code}
+	contacts={array of contact objects}
+	userId={userId}
+	selectedId={boolean}
+	callback={function}
+	/>
+*/
+
 export const Hits = ({
 	hits,
 	hasMore,
@@ -54,11 +65,7 @@ export const Hits = ({
 							<SendLineItem
 								title={`@${item.splashtag}`}
 								selected={item.objectID == selectedId}
-								subtitle={
-									contactIds.includes(item.objectID)
-										? "Your Contact"
-										: "Valid Address"
-								}
+								subtitle={contactIds.includes(item.objectID) ? "Your Contact" : "Valid Address"}
 								onPress={() => callback(item)}
 							/>
 						);

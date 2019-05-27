@@ -5,6 +5,10 @@ import { SmsConfirm, SmsAuthenticate, SignUp } from "../../redux/onboarding/acti
 import { LogIn } from "../../redux/user/actions";
 import { OpenWallet } from "../../redux/crypto/actions";
 
+/*
+Connecting VerifyPhoneNumber to redux
+*/
+
 const mapStateToProps = state => {
 	return {
 		phoneNumber: state.onboarding.phoneNumber,
@@ -30,4 +34,7 @@ const mapDispatchToProps = dispatch => {
 	);
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifyPhoneNumber);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(VerifyPhoneNumber);
